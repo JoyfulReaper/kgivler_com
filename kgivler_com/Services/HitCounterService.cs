@@ -1,4 +1,4 @@
-/*
+﻿/*
 MIT License
 
 Copyright(c) 2021 Kyle Givler
@@ -23,29 +23,60 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using kgivler_com.Data;
+using kgivler_com.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace kgivler_com
+namespace kgivler_com.Services
 {
-    public class Program
+    public class HitCounterService
     {
-        public static void Main(string[] args)
+        private readonly ApplicationDbContext _dbContext;
+
+        public HitCounterService(ApplicationDbContext dbContext)
         {
-            CreateHostBuilder(args).Build().Run();
+            _dbContext = dbContext;
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
+        public async Task<int> PageHitIncrement(string path)
+        {
+            var hits = await _dbContext.PageHits
+                .Where(h => h.Path == path)
+                .SingleOrDefaultAsync();
+
+            if(hits == null)
+            {
+                hits = new PageHit
                 {
-                    webBuilder.UseStartup<Startup>();
-                });
+                    Path = path,
+                    Hits = 0
+                };
+
+                _dbContext.Add(hits);
+            }
+
+            hits.Hits++;
+            await _dbContext.SaveChangesAsync();
+
+            return hits.Hits;
+        }
+
+        public async Task<int> GetPageHits(string path)
+        {
+            var hits = await _dbContext.PageHits
+                .Where(h => h.Path == path)
+                .SingleOrDefaultAsync();
+
+            if (hits == null)
+            {
+                return 0;
+            }
+
+            return hits.Hits;
+        }
     }
 }

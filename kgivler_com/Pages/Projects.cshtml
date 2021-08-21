@@ -1,5 +1,9 @@
 ﻿@page
 @model kgivler_com.Pages.ProjectsModel
+
+@using kgivler_com.Services
+@inject HitCounterService hitCounter
+
 @{
     ViewData["Title"] = "Projects";
 }
@@ -99,4 +103,12 @@
 
         </div>
     </div>
+
+    <div class="row">
+        <div class="col">
+            Classic Page Hit Counter:
+            @await hitCounter.PageHitIncrement(HttpContext.Request.Path)
+        </div>
+    </div>
+
 </div>
