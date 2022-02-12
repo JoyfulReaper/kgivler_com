@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en" class="h-100">
+
+<head>
+    <title>Fizz Buzz: A Coding Project By Kyle Givler</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- Custom CSS -->
+    <link href="./css/site.css" rel="stylesheet">
+    <!-- Prism CSS -->
+    <link href="./css/prism.css" rel="stylesheet">
+    <!-- Favicon-->
+    <link rel="icon" type="image/png" href="./img/favicon-32x32.png">
+
+    <!-- Google Fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Tokyo+Zoo&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/5db21ba9c6.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="d-flex flex-column h-100">
+    <!-- Nav Section -->
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top shadow">
+        <div class="container-fluid">
+            <a class="navbar-brand logoFont" href="#"><img src="./img/kg.webp" class="d-inline-block align-text-top" width="30"
+                    height="24"> FIZZ BUZZ</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="./index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./app.html">The App</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="./code.html">The Code</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" target="_blank" href="https://github.com/JoyfulReaper/FizzBuzz">Git Repo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" target="_blank" href="https://kgivler.com">About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Section -->
+    <main class="flex-shrink-0">
+        <div class="container py-5 px-5 mt-5">
+            <h2 class="border-1 border-bottom border-dark">The Code for <span class="logoFont">FIZZ BUZZ</span>.</h2>
+            <div class="row row-cols-1 row-cols-lg-2">
+                <div class="col-lg-8">
+                    <pre class="line-numbers"><code class="language-javascript">
+                        function getInput() {
+                            let fizz = document.getElementById("fizz").value;
+                            let buzz = document.getElementById("buzz").value;
+                        
+                            fizz = parseInt(fizz);
+                            buzz = parseInt(buzz);
+                        
+                            if(!Number.isInteger(fizz) || !Number.isInteger(buzz)) {
+                                alert("You must enter integers!");
+                                return;
+                            }
+                        
+                            //let results = generateResult(fizz, buzz, 100);
+                            //let results = generateResultB(fizz, buzz, 100);
+                            let results = generateResultC(fizz, buzz, 100);
+                        
+                            displayResults(results);
+                        }
+                        
+                        function generateResult(fizz, buzz, max) {
+                            let output = [];
+                        
+                            for(let i = 1; i <= max; i++) {
+                                if(i % fizz == 0 && i % buzz == 0) {
+                                    output.push("FizzBuzz");
+                                } else if (i % fizz == 0) {
+                                    output.push("Fizz");
+                                } else if (i % buzz == 0) {
+                                    output.push("Buzz");
+                                } else {
+                                    output.push(i);
+                                }
+                            }
+                        
+                            return output;
+                        }
+                        
+                        function generateResultB(fizz, buzz, max)
+                        {
+                            let output = [];
+                            let isFizz = false;
+                            let isBuzz = false;
+                        
+                            for(let i = 1; i < max; i++) {
+                                isFizz = i % fizz == 0;
+                                isBuzz = i % buzz == 0;
+                        
+                                switch(true)
+                                {
+                                    case isFizz && isBuzz: {
+                                        output.push("FizzBuzz");
+                                        break;
+                                    }
+                                    case isFizz: {
+                                        output.push("Fizz");
+                                        break
+                                    }
+                                    case isBuzz: {
+                                        output.push("Buzz")
+                                        break;
+                                    }
+                                    default: {
+                                        output.push(i);
+                                        break;
+                                    }
+                                }
+                            }
+                        
+                            return output;
+                        }
+
+                        function generateResultC(fizz, buzz, max)
+                        {
+                            let output = [];
+                            // Empty strings evaluate to false.
+                            for(let i = 1; i <= max; i++) {
+                                output.push( ( (i % fizz == 0  ? 'Fizz' : '') 
+                                    + ( i % buzz == 0 ? 'Buzz' : '' ) || i ) );
+                            }
+
+                            return output;
+                        }
+                        
+                        function displayResults(results) {
+                            let tableBody = document.getElementById("results");
+                            let templateRow = document.getElementById("tableTemplate");
+                        
+                            tableBody.innerHTML = "";
+                        
+                            let numCols = document.importNode(templateRow.content, true)
+                                .querySelectorAll("td").length;
+                        
+                            for(let i = 0; i < results.length; i += numCols) {
+                                let tableRow = document.importNode(templateRow.content, true);
+                        
+                                let rowCols = tableRow.querySelectorAll("td");
+                                for(let j = 0; j < rowCols.length; j++)
+                                {
+                                    if(!Number.isInteger(results[i + j])) {
+                                        rowCols[j].classList.add(results[i + j])
+                                    }
+                                    rowCols[j].textContent = results[i + j]
+                                }
+                        
+                                tableBody.appendChild(tableRow);
+                            }
+                        
+                            // Alternate Solution:
+                            /*     
+                            let templateRows = "";
+                            for(let i = 0; i < results.length; i++) {
+                                let className = "";
+                        
+                                if(!Number.isInteger(results[i])) {
+                                    className = ` class="${results[i]}"`;
+                                }
+                        
+                                if(i == 0 || templateRows.endsWith("</tr>"))
+                                {
+                                    // strings with HTML don't render correctly, see GitHub for the code
+                                    templateRows += "<tr>"
+                                }
+                                // strings with HTML don't render correctly, see GitHub for the code
+                                templateRows += `<td${className}>${results[i]}</td>`;
+                        
+                                if((i + 1) % 5 == 0)
+                                {
+                                    // strings with HTML don't render correctly, see GitHub for the code
+                                    templateRows += "</tr>"
+                                }
+                            }
+                            document.getElementById("results").innerHTML = templateRows; 
+                            */
+                        }
+                        </code></pre>
+                </div>
+                <div class="col-lg-4">
+                    <p><span class="logoFont fw-bold">FizzBuzz</span> is a classic coding challenge. Here is my solution in JavaScript.
+                        We prompt for the fizz and buzz values. If a number is divisible by the fizz value we output <span class="Fizz">'Fizz'</span>, if it is divisible by
+                        the buzz value we output <span class="Buzz">'Buzz.'</span> If the number is divisible by both we output <span class="FizzBuzz">'FizzBuzz'</span>, otherwise we output the original number. 
+                    </p>
+                    <h5>getInput()</h5>
+                    <p>
+                        In this function we use the JavaScript document API to read the input for the Fizz and Buzz values that the user input in the form.
+                        Then we call generateResult() to build an array with <span class="Fizz">'Fizz'</span>, <span class="Buzz">'Buzz'</span>, <span class="FizzBuzz">'FizzBuzz'</span> or the next number. Finally we call displayOutput() to show the results in a table.
+                    </p>
+                    <h5>generateResult()</h5>
+                    <p>
+                        In this function we build then return an array with the <span class="FizzBuzz">FizzBuzz</span> results. The results are obtained using an if/else ladder and modulus division.
+                    </p>
+                    <h5>generateResultB()</h5>
+                    <p>
+                        In this function we build then return an array with the <span class="FizzBuzz">FizzBuzz</span> results using an alternate solution. The results are obtained by checking if the current value is
+                        evenly divisble by the fizz or buzz values, then using a switch statement to add the result to the output array.
+                    </p>
+                    <h5>generateResultC()</h5>
+                    <p>
+                        In this function we build then return an array with the <span class="FizzBuzz">FizzBuzz</span> results using an alternate solution. The results are obtained by using the ternary operator to check if
+                        the current number is divisible by the fizz value, this is concatenated with the results of checking if the current number is divisible with the buzz value. Either the word "Fizz", "Buzz" or an empty string results.
+                        This will result in <span class="Fizz">'Fizz'</span>, <span class="Buzz">'Buzz'</span>, <span class="FizzBuzz">'FizzBuzz'</span> or 
+                        an empty string literal. The OR operator then compares the boolean result (an empty string literal is false) of the FizzBuzz concatenatation and the current value. If the left hand side is false, due to an empty string,
+                        then the right hand side will be true (since in JavaScript any integer with a positive falue is regarded as being true).
+                    </p>
+                    <h5>displayResults()</h5>
+                    <p>
+                        In this function we use the JavaScript document API to insert the a table with the results after building up the HTML needed to display them, with the help of a template tag. The commented out solution builds the HTML output
+                        without the use of a HTML template tag.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="footer mt-auto py-3">
+        <div class="container-fluid">
+            <div class="row row-cols-1 row-cols-lg-3 gy-2">
+                <div class="col text-light order-last order-lg-first">
+                    <div>
+                        <span class="text-muted">&copy;2021</span> Kyle Givler | <a class="alight"
+                            href="https://kgivler.com">kgivler.com</a>
+                    </div>
+                </div>
+                <div class="col d-flex align-items-center justify-content-start justify-content-lg-center">
+                    <img src="./img/kyle.webp" alt="Kyle Givler Logo" height="24">
+                </div>
+                <div class="col d-flex align-items-center justify-content-start justify-content-lg-end">
+                    <div class="row">
+                        <div class="col social"><a href="https://www.linkedin.com/in/kyle-givler/" target="_blank"><i
+                                    class="fab fa-linkedin fa-2x"></i></a></div>
+                        <div class="col social"><a href="https://github.com/joyfulreaper" target="_blank"><i
+                                    class="fab fa-github fa-2x"></i></a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
+    </script>
+    <script src="./js/prism.js"></script>
+    <script>
+        Prism.plugins.NormalizeWhitespace.setDefaults({
+            'remove-trailing': true,
+            'remove-indent': true,
+            'left-trim': true,
+            'right-trim': true
+        })
+    </script>
+</body>
+</html>

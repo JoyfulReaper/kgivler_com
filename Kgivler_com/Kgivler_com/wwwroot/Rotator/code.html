@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en" class="h-100">
+
+<head>
+    <title>Rotator: A Coding Project By Kyle Givler</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- Custom CSS -->
+    <link href="./css/site.css" rel="stylesheet">
+    <!-- Prism CSS -->
+    <link href="./css/prism.css" rel="stylesheet">
+    <!-- Favicon-->
+    <link rel="icon" type="image/png" href="./img/favicon-32x32.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tourney:ital@1&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/5db21ba9c6.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="d-flex flex-column h-100">
+    <!-- Nav Section -->
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top shadow">
+        <div class="container-fluid">
+            <a class="navbar-brand logoFont" href="#"><img src="./img/kg.webp" class="d-inline-block align-text-top" width="30"
+                    height="24"> Rotator</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="./index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./app.html">The App</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="./code.html">The Code</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" target="_blank" href="https://github.com/JoyfulReaper/Rotator">Git Repo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" target="_blank" href="https://kgivler.com">About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Section -->
+    <main class="flex-shrink-0">
+        <div class="container py-5 px-5 mt-5">
+            <h2 class="border-1 border-bottom border-dark logoFont">The Code for Rotator.</h2>
+            <div class="row row-cols-1 row-cols-lg-2">
+                <div class="col-lg-8">
+                    <pre class="line-numbers"><code class="language-javascript">
+                        function getInput() {
+
+                            document.getElementById("alert").classList.add("invisible");
+                            let input = document.getElementById("userString").value;
+                        
+                            let resultObj = isPalindrome(input);
+                        
+                            displayResult(resultObj);
+                        }
+                        
+                        function preparePhrase(input)
+                        {
+                            input = input.toLowerCase(); // Lowercase
+                            input = input.replace(/\W/g, ''); // Remove non-alpha
+                            
+                            return input;
+                        }
+                        
+                        function isPalindrome(input) {
+                        
+                            let resultObj = {};
+                            let reversed = preparePhrase(input);
+                            let original = reversed;
+                        
+                            reversed = reversed.split("").reverse().join(""); // Reverse
+                        
+                            if(reversed == original) {
+                                resultObj.msg = "Well Done! You entered a palindrome!";
+                                resultObj.isPalindrome = true;
+                            }
+                            else {
+                                resultObj.msg = "Sorry! You didn't enter a palindrome!";
+                                resultObj.isPalindrome = false;
+                            }
+                        
+                            resultObj.reversed = reversed;
+                        
+                            return resultObj;
+                        }
+                        
+                        function displayResult(palindromeObj) {
+                        
+                            let message = [];
+                            if(palindromeObj.isPalindrome) {
+                                if(palindromeObj.reversed == "") {
+                                    message = "I guess an empty string is a palindrome! "
+                                }
+                            }
+                        
+                            message += `Your phrase reversed is: ${palindromeObj.reversed}`;
+                        
+                            document.getElementById("resultHeader").innerHTML = palindromeObj.msg;
+                            document.getElementById("msg").innerHTML = message;
+                            document.getElementById("alert").classList.remove("invisible");
+                        }
+                        </code></pre>
+                </div>
+                <div class="col-lg-4">
+                    <p><span class="logoFont">Rotator</span> is a JavaScript coding challenge to detect palindromes.</p>
+                    <h5>getInput()</h5>
+                    <p>Controller function that is called when the button is pressed. Used the JavaScript document API to get the string that the user inputted.
+                        It then called isPalindrome() with the user's input. The resulting object is then passed to displayResult() which outputs the results.
+                    </p>
+                    <h5>preparePhrase()</h5>
+                    <p>
+                        converts the parameter to lowercase and strips out any non-alpha characters.
+                    </p>
+                    <h5>isPalindrome()</h5>
+                    <p>
+                        Returns an object representing the entered phrase and wether or not it is a palindrome. It uses preparePhrase() to convert the user's input
+                        to lowercase, strip out non-alpha characters. Reverse the prepared input, then builds a result object.
+                    </p>
+                    <h5>displayResults()</h5>
+                    <p>
+                        Access the properties of the object returned by isPalindrome() to display a message indicating if the inputted string was a
+                        palindrome or not, as well as displaying the reversed input regardless.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="footer mt-auto py-3">
+        <div class="container-fluid">
+            <div class="row row-cols-1 row-cols-lg-3 gy-2">
+                <div class="col text-light order-last order-lg-first">
+                    <div>
+                        <span class="text-muted">&copy;2021</span> Kyle Givler | <a class="alight"
+                            href="https://kgivler.com">kgivler.com</a>
+                    </div>
+                </div>
+                <div class="col d-flex align-items-center justify-content-start justify-content-lg-center">
+                    <img src="./img/kyle.webp" alt="Kyle Givler Logo" height="24">
+                </div>
+                <div class="col d-flex align-items-center justify-content-start justify-content-lg-end">
+                    <div class="row">
+                        <div class="col social"><a href="https://www.linkedin.com/in/kyle-givler/" target="_blank"><i
+                                    class="fab fa-linkedin fa-2x"></i></a></div>
+                        <div class="col social"><a href="https://github.com/joyfulreaper" target="_blank"><i
+                                    class="fab fa-github fa-2x"></i></a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
+    </script>
+    <script src="./js/prism.js"></script>
+    <script>
+        Prism.plugins.NormalizeWhitespace.setDefaults({
+            'remove-trailing': true,
+            'remove-indent': true,
+            'left-trim': true,
+            'right-trim': true
+        })
+    </script>
+</body>
+</html>

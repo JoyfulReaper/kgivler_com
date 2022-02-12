@@ -1,0 +1,36 @@
+
+html,
+body {
+    position: relative;
+    color: #212121;
+    height: 100%;
+    min-height: 100%;
+}
+
+body>main {
+    /* margin to account for nav bar */
+    margin-top: 85px;
+    margin-bottom: 20px;
+}
+
+.heroText {
+    font-family: modesto-open-shadow, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: rgb(195, 255, 0);
+}
+
+.bgimage {
+
+    width: 100%;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../img/GridBG.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+
+}
+
+.minHeight {
+    min-height: 80vh;
+}
