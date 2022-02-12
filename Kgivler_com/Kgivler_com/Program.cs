@@ -1,4 +1,5 @@
 using Kgivler_com.Data;
+using Kgivler_com.Infrastructure;
 using Kgivler_com.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,5 +33,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
+
+DatabaseSeeder.EnsurePopulated(app);
 
 app.Run();

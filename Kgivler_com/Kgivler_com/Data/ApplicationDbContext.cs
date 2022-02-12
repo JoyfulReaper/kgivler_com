@@ -8,5 +8,6 @@ namespace Kgivler_com.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         public DbSet<PageHit> PageHits { get; set; }
+        public DbSet<ExceptionRecord> ExceptionRecords { get; set; }
     }
 }

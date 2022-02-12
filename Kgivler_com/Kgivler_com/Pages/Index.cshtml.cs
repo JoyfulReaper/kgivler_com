@@ -14,7 +14,6 @@ namespace Kgivler_com.Pages
 
         public void OnGet()
         {
-
         }
     }
 }
