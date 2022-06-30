@@ -1,5 +1,6 @@
 using Kgivler_com.Data;
 using Kgivler_com.Infrastructure;
+using Kgivler_com.Middleware;
 using Kgivler_com.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,6 +30,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseMiddleware<UAMiddleware>();
 
 app.UseAuthorization();
 
