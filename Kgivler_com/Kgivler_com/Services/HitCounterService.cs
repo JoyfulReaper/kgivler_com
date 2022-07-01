@@ -16,13 +16,13 @@ public class HitCounterService
         _connectionString = _config.GetConnectionString("DefaultConnection");
     }
     
-    public async Task<int> PageHitIncrement(string path)
+    public async Task<int> PageHitIncrementAsync(string path)
     {
         using var connection = new SqlConnection(_connectionString);
         return await connection.QuerySingleAsync<int>("spPageHit_Increment", path, commandType: CommandType.StoredProcedure);
     }
 
-    public async Task<int> GetPageHits(string path)
+    public async Task<int> GetPageHitsAsync(string path)
     {
         using var connection = new SqlConnection(_connectionString);
         return (await connection.QuerySingleOrDefaultAsync<PageHit>("spPageHit_Get", path, commandType: CommandType.StoredProcedure)).Hits;

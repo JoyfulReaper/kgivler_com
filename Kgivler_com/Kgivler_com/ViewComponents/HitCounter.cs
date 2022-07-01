@@ -14,6 +14,6 @@ public class HitCounter : ViewComponent
 
     public async Task<IViewComponentResult> InvokeAsync()
     {
-        return View(await _hitCounter.PageHitIncrement(HttpContext.Request.Path));
+        return View(await _hitCounter.PageHitIncrementAsync(HttpContext.Request.Path));
     }
 }

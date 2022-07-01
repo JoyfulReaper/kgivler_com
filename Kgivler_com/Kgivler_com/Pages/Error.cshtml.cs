@@ -1,4 +1,5 @@
 using kgivler_com.Models;
+using kgivler_com.Services;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -14,28 +15,32 @@ public class ErrorModel : PageModel
     public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 
     private readonly ILogger<ErrorModel> _logger;
+    private readonly ExceptionService _exceptionService;
 
-    public ErrorModel(ILogger<ErrorModel> logger)
+    public ErrorModel(ILogger<ErrorModel> logger,
+        ExceptionService exceptionService)
     {
         _logger = logger;
+        _exceptionService = exceptionService;
     }
 
-    public void OnGet()
+    public async void OnGet()
     {
         RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
 
         var exceptionHandlerPathFeature =
                 HttpContext.Features.Get<IExceptionHandlerPathFeature>();
 
-        var exception = exceptionHandlerPathFeature?.Error;
+        var exception = exceptionHandlerPathFeature?.Error ?? new Exception("Exception was null");
+        string stackTrace = exception.StackTrace ?? "StackTrack was null";
 
         ExceptionRecord record = new ExceptionRecord
         {
             Message = exception.Message.Length > 1000 ? exception.Message.Substring(0, 1000) : exception.Message,
-            StackTrace = exception.StackTrace.Length > 3000 ? exception.StackTrace.Substring(0, 3000) : exception.StackTrace,
+            StackTrace = stackTrace.Length > 3000 ? stackTrace.Substring(0, 3000) : stackTrace,
         };
 
-        // TODO: Save the exception record
+        await _exceptionService.SaveAsync(record);
     }
 }
 

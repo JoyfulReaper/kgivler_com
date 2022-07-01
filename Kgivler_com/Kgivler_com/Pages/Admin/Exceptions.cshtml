@@ -1,0 +1,38 @@
+﻿@page
+@model kgivler_com.Pages.Admin.ExceptionsModel
+@{
+}
+
+<div class="row">
+    <div class="col">
+        <table class="table table-sm table-bordered table-striped" id="exceptionTable">
+            <thead>
+                <tr>
+                    <th>
+                        Message
+                    </th>
+                    <th>
+                        Stack Trace
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var e in Model.Exceptions)
+                {
+                    <tr>
+						<td>
+							@e.Message
+						</td>
+						<td>
+							@e.StackTrace
+						</td>
+					</tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript" src="/lib/datatables/datatables.min.js"></script>
+}

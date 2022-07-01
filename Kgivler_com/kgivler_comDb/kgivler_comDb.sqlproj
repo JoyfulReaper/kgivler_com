@@ -66,6 +66,8 @@
     <Build Include="dbo\Tables\ExceptionRecords.sql" />
     <Build Include="dbo\Stored Procedures\spPageHit_Get.sql" />
     <Build Include="dbo\Stored Procedures\spPageHit_Increment.sql" />
+    <Build Include="dbo\Stored Procedures\spExceptionRecord_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\spExceptionRecord_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="kgivler_comDb.refactorlog" />
