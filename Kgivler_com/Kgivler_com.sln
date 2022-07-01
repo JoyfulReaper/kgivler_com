@@ -5,7 +5,7 @@ VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "kgivler_comDb", "kgivler_comDb\kgivler_comDb.sqlproj", "{BBD9CC66-EC5D-46BE-B16C-B83D0B89A8E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kgivler_com", "kgivler_com\kgivler_com.csproj", "{88489895-6E17-48E3-ACBD-DF801F9D1572}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "kgivler_com", "kgivler_com\kgivler_com.csproj", "{88489895-6E17-48E3-ACBD-DF801F9D1572}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

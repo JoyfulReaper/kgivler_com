@@ -1,10 +1,74 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+	ViewData["Title"] = "Full Stack Developer";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row">
+	<div class="col">
+		<h1 class="mt-2 display-3 logoFont text-center">Welcome to kgivler.com</h1>
+		<p class="lead">
+			Hello! I am Kyle Givler, a full-stack .NET developer in the Harrisburg, PA area. Thank you for taking the time to visit my homepage. Here you will find some information about myself and
+			my projects. Please feel free to have a look at my <a href="https://www.linkedin.com/in/kyle-givler/" target="_blank">LinkedIn</a> and explore my website. If you would like to get
+			in touch with me please send me a message on LinkedIn.
+		</p>
+	</div>
 </div>
+
+<div class="row">
+	<div class="col">
+		<h1 class="display-5 mt-3 logoFont text-center">About Me</h1>
+		<p>
+			I am a full stack .NET developer and I have a chihuahua named Shelly. I am extremely passionate about development and technology.
+			I enjoy backend development, while striving to also have the ability to effectively utilize frontend technologies.
+		</p>
+		<p>
+			I am genuinely fond of working with C#/.NET/ASP.NET. Most of my expereince with ASP.NET is using MVC and Razor Pages, however I am excited to continue
+			learning more about REST API and Blazor. Recently I have also had the opportunity to work with VB.NET and Web Forms legacy applications, mostly porting them
+			from Visual Basic to C#/.NET 6.
+		</p>
+
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-12 col-lg-5 mb-4 mt-2">
+		<ul class="list-group shadow">
+			<li class="list-group-item list-group-item-dark"><strong>Expereince with:</strong></li>
+			<li class="list-group-item list-group-item-light">C#, .NET, ASP.NET Core, Java</li>
+			<li class="list-group-item list-group-item-dark">ASP.NET MVC and Razor Pages</li>
+			<li class="list-group-item list-group-item-light">HTML5, Bootstrap 5, JavaScript, jQuery</li>
+			<li class="list-group-item list-group-item-dark">Visual Studio, IntelliJ, Git, SSMS</li>
+			<li class="list-group-item list-group-item-ligh">SQL Server, SQLite, Dapper, and SQL Developer</li>
+		</ul>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col">
+		<p>
+			I also have some familiarity with other technologies and programming languages to a lesser
+			extent. This includes
+			C, C++, PowerShell, and Bash among others. I have experience in both Windows and Linux
+			environments.
+		</p>
+		<p>
+			My resume can be found on my <a href="https://www.linkedin.com/in/kyle-givler/" target="_blank">LinkedIn</a>.
+		</p>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col">
+		<hr />
+		<p>
+			Shelly thanks you for stopping by my website!
+			<br />
+			<a href="/Images/Shelly/shelly.jpg">
+				<img src="/Images/Shelly/shelly.webp" class="img-fluid w-25" alt="Shelly!" />
+			</a>
+		</p>
+	</div>
+</div>
+
+<vc:hit-counter />

@@ -16,3 +16,43 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+
+:root {
+    --primary-color: #1d5888;
+    --secondary-color: #ff993b;
+    --dark-color: #292929;
+    --white-color: #dff3e4;
+}
+
+body {
+    margin-bottom: 60px;
+    color: var(--dark-color);
+}
+
+.logoFont {
+    font-family: 'Racing Sans One', cursive;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--primary-color);
+}
+
+nav {
+    background-color: var(--dark-color);
+}
+
+footer {
+    background-color: var(--dark-color);
+    padding-right: 1rem;
+}
+
+    footer .social > a {
+        color: var(--white-color);
+        opacity: 0.75;
+    }
+
+        footer .social > a:hover {
+            opacity: 0.90;
+            color: var(--secondary-color);
+        }
