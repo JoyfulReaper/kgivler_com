@@ -1,20 +1,11 @@
-using Kgivler_com.Data;
-using Kgivler_com.Infrastructure;
-using Kgivler_com.Middleware;
-using Kgivler_com.Services;
-using Microsoft.EntityFrameworkCore;
+using kgivler_com.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddDbContext<ApplicationDbContext>(opts =>
-{
-    opts.UseSqlServer(
-        builder.Configuration.GetConnectionString("Default"));
-});
 
-builder.Services.AddScoped<IHitCounterService, HitCounterService>();
+builder.Services.AddScoped<HitCounterService>();
 
 var app = builder.Build();
 
@@ -31,12 +22,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseMiddleware<UAMiddleware>();
-
 app.UseAuthorization();
 
 app.MapRazorPages();
-
-DatabaseSeeder.EnsurePopulated(app);
 
 app.Run();

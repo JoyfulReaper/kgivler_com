@@ -1,0 +1,6 @@
+﻿CREATE TABLE [dbo].[PageHits]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [Path] NVARCHAR(500) NOT NULL, 
+    [Hits] INT NOT NULL
+)

@@ -1,13 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace kgivler_com.Models;
 
-namespace Kgivler_com.Models
+public class PageHit
 {
-    public class PageHit
-    {
-        public int Id { get; set; }
-
-        [StringLength(500)]
-        public string Path { get; set; }
-        public int Hits { get; set; }
-    }
+    public int Id { get; set; }
+    public string Path { get; set; } = null!;
+    public int Hits { get; set; }
 }

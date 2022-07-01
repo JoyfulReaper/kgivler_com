@@ -1,115 +1,51 @@
-﻿@using Kgivler_com.Extensions
-
-<!DOCTYPE html>
-<html lang="en" class="h-100">
+﻿<!DOCTYPE html>
+<html lang="en">
 <head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Kyle Givler: @ViewData["Title"]</title>
-
-	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-	<link rel="stylesheet" href="~/Kgivler_com.styles.css" asp-append-version="true" />
-
-	<!-- Favicon -->
-	<link rel="icon" type="image/png" href="./Images/favicon-32x32.png">
-
-	<!-- Google Fonts Racing Sans One -->
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Racing+Sans+One&display=swap" rel="stylesheet">
-
-	<!-- Font Awesome -->
-	<script src="https://kit.fontawesome.com/5db21ba9c6.js" crossorigin="anonymous"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - kgivler_com</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/kgivler_com.styles.css" asp-append-version="true" />
 </head>
-<body class="d-flex flex-column h-100">
-	<header>
-		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark  border-bottom box-shadow mb-3">
-			<div class="container">
-				<a class="navbar-brand logoFont" asp-area="" asp-page="/Index">
-					<img src="./Images/kg.webp" class="d-inline-block align-text-top"
-						 width="30" height="24">Kyle's Homepage
-				</a>
-				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-						aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-					<ul class="navbar-nav flex-grow-1">
-						<li class="nav-item">
-							<a class="nav-link @Html.ActiveClass("/Index")" asp-area="" asp-page="/Index">Home</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link @Html.ActiveClass("/Projects")" asp-area="" asp-page="/Projects">My Projects</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link @Html.ActiveClass("/Demos")" asp-area="" asp-page="/Demos">Demos</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="https://www.linkedin.com/in/kyle-givler/" target="_blank">LinkedIn</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="https://github.com/joyfulreaper" target="_blank">Personal GitHub</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="https://github.com/Kyle-Givler" target="_blank">Portfolio GitHub</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="https://blog.kgivler.com" target="_blank">Blog</a>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</nav>
-	</header>
-	<div class="container">
-		<main role="main" class="pb-3">
-			@RenderBody()
-		</main>
-	</div>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-page="/Index">kgivler_com</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
 
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2022 - kgivler_com - <a asp-area="" asp-page="/Privacy">Privacy</a>
+        </div>
+    </footer>
 
-    <!-- Footer Section -->
-	<footer class="footer mt-auto py-3">
-		<div class="container-fluid">
-			<div class="row row-cols-1 row-cols-lg-3 gy-2">
-				<div class="col text-light order-last order-lg-first">
-					<div>
-						<span class="text-muted">&copy;2021</span> Kyle Givler | <a class="alight"
-																			  href="https://kgivler.com">kgivler.com</a>
-					</div>
-				</div>
-				<div class="col d-flex align-items-center justify-content-start justify-content-lg-center">
-					<img src="./Images/kyle.webp" alt="Kyle Givler Logo" height="24">
-				</div>
-				<div class="col d-flex align-items-center justify-content-start justify-content-lg-end">
-					<div class="row">
-						<div class="col social">
-							<a href="https://www.linkedin.com/in/kyle-givler/" target="_blank">
-								<i class="fab fa-linkedin fa-2x"></i>
-							</a>
-						</div>
-						<div class="col social">
-							<a href="https://github.com/joyfulreaper" target="_blank">
-								<i class="fab fa-github fa-2x"></i>
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 
-@*	<footer class="border-top footer text-muted">
-		<div class="container">
-			&copy; 2022 - Kgivler_com - <a asp-area="" asp-page="/Privacy">Privacy</a>
-		</div>
-	</footer>*@
-
-	<script src="~/lib/jquery/dist/jquery.min.js"></script>
-	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="~/js/site.js" asp-append-version="true"></script>
-
-	@await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
