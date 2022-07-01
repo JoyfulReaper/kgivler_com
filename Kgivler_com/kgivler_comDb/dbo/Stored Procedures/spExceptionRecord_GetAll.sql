@@ -6,7 +6,8 @@ BEGIN
 	SELECT 
 		[ExceptionRecordId],
 		[Message],
-		[StackTrace] 
+		[StackTrace],
+		[Date]
 	FROM 
 		[dbo].[ExceptionRecords]
 END

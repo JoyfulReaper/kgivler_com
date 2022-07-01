@@ -1,3 +1,4 @@
+using kgivler_com.MiddleWare;
 using kgivler_com.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 
 builder.Services.AddScoped<HitCounterService>();
+builder.Services.AddScoped<ExceptionService>();
 
 var app = builder.Build();
 
@@ -16,11 +18,13 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
+app.UseExceptionHandler("/Error");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseMiddleware<UAMiddleware>();
 
 app.UseAuthorization();
 

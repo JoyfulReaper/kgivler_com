@@ -14,25 +14,38 @@
                     <th>
                         Stack Trace
                     </th>
+                    <th>
+                        Date (UTC)
+                    </th>
                 </tr>
             </thead>
             <tbody>
-                @foreach(var e in Model.Exceptions)
+                @foreach (var e in Model.Exceptions)
                 {
                     <tr>
-						<td>
-							@e.Message
-						</td>
-						<td>
-							@e.StackTrace
-						</td>
-					</tr>
+                        <td>
+                            @e.Message
+                        </td>
+                        <td>
+                            @e.StackTrace
+                        </td>
+                        <td>
+                            @e.Date
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
     </div>
 </div>
 
+<vc:hit-counter />
+
 @section Scripts {
     <script type="text/javascript" src="/lib/datatables/datatables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#exceptionTable').DataTable();
+        });
+    </script>
 }

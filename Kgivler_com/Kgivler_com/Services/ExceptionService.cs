@@ -19,7 +19,11 @@ public class ExceptionService
     public async Task SaveAsync(ExceptionRecord exceptionRecord)
     {
         using var connection = new SqlConnection(_connectionString);
-        await connection.ExecuteAsync("spExceptionRecord_Insert", exceptionRecord, commandType: CommandType.StoredProcedure);
+        await connection.ExecuteAsync("spExceptionRecord_Insert", new
+        {
+            exceptionRecord.Message,
+            exceptionRecord.StackTrace
+        }, commandType: CommandType.StoredProcedure);
     }
 
     public async Task<IEnumerable<ExceptionRecord>> GetAllAsync()
