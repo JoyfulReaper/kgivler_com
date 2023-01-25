@@ -1,35 +1,51 @@
 ﻿@page
-@model Kgivler_com.Pages.Admin.ExceptionsModel
+@model kgivler_com.Pages.Admin.ExceptionsModel
 @{
-	ViewData["Title"] = "Exceptions";
 }
 
 <div class="row">
-	<div class="col">
-		<table class="table table-bordered table-striped">
-			<thead>
-				<tr>
-					<th>
-						Message
-					</th>
-					<th>
-						Stack Trace
-					</th>
-				</tr>
-			</thead>
-			<tbody>
-				@foreach(var e in Model.Exceptions)
-				{
-					<tr>
-						<td>
-							@e.Message
-						</td>
-						<td>
-							@e.StackTrace
-						</td>
-					</tr>
-				}
-			</tbody>
-		</table>
-	</div>
+    <div class="col">
+        <table class="table table-sm table-bordered table-striped" id="exceptionTable">
+            <thead>
+                <tr>
+                    <th>
+                        Message
+                    </th>
+                    <th>
+                        Stack Trace
+                    </th>
+                    <th>
+                        Date (UTC)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var e in Model.Exceptions)
+                {
+                    <tr>
+                        <td>
+                            @e.Message
+                        </td>
+                        <td>
+                            @e.StackTrace
+                        </td>
+                        <td>
+                            @e.Date
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
+
+<vc:hit-counter />
+
+@section Scripts {
+    <script type="text/javascript" src="/lib/datatables/datatables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#exceptionTable').DataTable();
+        });
+    </script>
+}

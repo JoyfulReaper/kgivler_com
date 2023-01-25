@@ -1,11 +1,3 @@
-:root {
-    --primary-color: #1d5888;
-    --secondary-color: #ff993b;
-    --dark-color: #292929;
-    --white-color: #dff3e4;
-}
-
-
 html {
   font-size: 14px;
 }
@@ -19,6 +11,18 @@ html {
 html {
   position: relative;
   min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+
+:root {
+    --primary-color: #1d5888;
+    --secondary-color: #ff993b;
+    --dark-color: #292929;
+    --white-color: #dff3e4;
 }
 
 body {

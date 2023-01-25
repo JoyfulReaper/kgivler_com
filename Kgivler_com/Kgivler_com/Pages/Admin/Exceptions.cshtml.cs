@@ -1,22 +1,24 @@
-using Kgivler_com.Data;
-using Kgivler_com.Models;
+using kgivler_com.Models;
+using kgivler_com.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Kgivler_com.Pages.Admin
+namespace kgivler_com.Pages.Admin
 {
     public class ExceptionsModel : PageModel
     {
-        public IEnumerable<ExceptionRecord> Exceptions { get; set; }
-        private readonly ApplicationDbContext _dbContext;
+        private readonly ExceptionService _exceptionService;
 
-        public ExceptionsModel(ApplicationDbContext dbContext)
+        public IEnumerable<ExceptionRecord> Exceptions { get; set; } = Enumerable.Empty<ExceptionRecord>();
+
+        public ExceptionsModel(ExceptionService exceptionService)
         {
-            _dbContext = dbContext;
+            _exceptionService = exceptionService;
         }
-        public PageResult OnGet()
+
+        public async Task<PageResult> OnGetAsync()
         {
-            Exceptions = _dbContext.ExceptionRecords.Take(100);
+            Exceptions = await _exceptionService.GetAllAsync();
             return Page();
         }
     }
