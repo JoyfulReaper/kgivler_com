@@ -9,17 +9,17 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/kgivler_com.styles.css" asp-append-version="true" />
 </head>
-<body class="h-100 text-center text-white bg-dark">
+<body class="h-100 text-white bg-dark">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">kgivler.com</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-center">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">kgivler.com</a>
+                    <ul class="navbar-nav">
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
@@ -31,9 +31,6 @@
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" href="https://github.com/Kyle-Givler" target="_blank">Portfolio GitHub</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="https://blog.kgivler.com" target="_blank">Blog</a>
 						</li>
                     </ul>
                 </div>
