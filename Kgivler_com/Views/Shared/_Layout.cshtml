@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kyle Givler: @ViewData["Title"]</title>
+    <script src="https://kit.fontawesome.com/188164b3b1.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/kgivler_com.styles.css" asp-append-version="true" />
+</head>
+<body class="h-100 text-center text-white bg-dark">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">kgivler.com</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+							<a class="nav-link" href="https://www.linkedin.com/in/kyle-givler/" target="_blank">LinkedIn</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="https://github.com/joyfulreaper" target="_blank">Personal GitHub</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="https://github.com/Kyle-Givler" target="_blank">Portfolio GitHub</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="https://blog.kgivler.com" target="_blank">Blog</a>
+						</li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted bg-dark">
+        <div class="container-fluid">
+            <div class="row row-cols-1 gy-1">
+                <div class="col d-flex align-items-center">
+                    <div class="col d-flex justify-content-start">
+                        &copy;2023 Kyle Givler
+                    </div>
+                    <div class="col social d-flex justify-content-end me-4">
+                        <a href="https://www.linkedin.com/in/kyle-givler/" target="_blank">
+                            <span class="fab fa-linkedin fa-2x"></span>
+                        </a>
+                        <a href="https://github.com/joyfulreaper" target="_blank">
+                            <span class="ms-3 fab fa-github fa-2x"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
