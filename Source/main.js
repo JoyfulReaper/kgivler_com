@@ -81,6 +81,8 @@ async function processCommand(input) {
 <span style="color: #ffffff;">Weather:</span>   ${data.weather}
 <span style="color: #ffffff;">Traffic:</span>   ${data.totalRequestsHandled}
 </pre>`;
+                
+                // Pipeline cached response data into framework context to kill double hit
                 await initHostTelemetry(data); 
             }
             catch {
@@ -101,7 +103,7 @@ async function initHostTelemetry(existingData = null) {
     try {
         let data = existingData;
 
-        // Only hit the network infrastructure if we don't already have data in scope
+        // Only hit network layer if frames aren't already locally accessible
         if (!data) {
             const response = await fetch(`${TELEMETRY_API_BASE}/api/system/usage`);
             if (!response.ok) throw new Error();
@@ -122,7 +124,7 @@ async function initHostTelemetry(existingData = null) {
                     <div><span style="color: #38bdf8;"><i class="fas fa-tasks me-2"></i>Kernel Tasks:</span> ${data.processCount} running PIDs</div>
                     <div><span style="color: #38bdf8;"><i class="fas fa-cloud-sun me-2"></i>Environment:</span> ${data.weather}</div>
                 </div>
-                <div class="col-12 mt-2 pt-2 border-top" style="border-color: #222226 !important; font-size: 0.8rem; color: #888892; display: flex; justify-content: space-between;">
+                <div class="col-12 mt-2 pt-2 border-top d-flex flex-column flex-sm-row justify-content-between gap-2" style="border-color: #222226 !important; font-size: 0.8rem; color: #888892;">
                     <span>STARDATE: ${data.stardate}</span>
                     <span>RUNTIME: ${data.framework}</span>
                     <span>HITS: ${data.totalRequestsHandled}</span>
