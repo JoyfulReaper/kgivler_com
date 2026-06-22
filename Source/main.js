@@ -62,27 +62,26 @@ async function processCommand(input) {
                 const res = await fetch(`${TELEMETRY_API_BASE}/api/system/usage`);
                 if (!res.ok) throw new Error();
 
-                const d = await res.json();
+                const data = await res.json();
 
                 terminalOutput.innerHTML = `
 <pre style="color: #38bdf8; font-family: monospace; line-height: 1.4; margin: 0;">
 <span style="color: #39ff14; font-weight: bold;">kyle@kgivler</span>
 ------------
-<span style="color: #ffffff;">OS:</span>        ${d.os}
-<span style="color: #ffffff;">Arch:</span>      ${d.architecture}
-<span style="color: #ffffff;">Runtime:</span>   ${d.framework}
-<span style="color: #ffffff;">Uptime:</span>    ${d.uptime}
-<span style="color: #ffffff;">Host CPU:</span>  ${d.cpuUsage}
-<span style="color: #ffffff;">Tasks:</span>     ${d.processCount}
-<span style="color: #ffffff;">RAM:</span>       ${d.ram}
-<span style="color: #ffffff;">GPU:</span>       ${d.gpu}
-<span style="color: #ffffff;">Storage:</span>   ${d.storage}
-<span style="color: #ffffff;">Stardate:</span>  ${d.stardate}
-<span style="color: #ffffff;">Weather:</span>   ${d.weather}
-<span style="color: #ffffff;">Traffic:</span>   ${d.totalRequestsHandled}
+<span style="color: #ffffff;">OS:</span>        ${data.os}
+<span style="color: #ffffff;">Arch:</span>      ${data.architecture}
+<span style="color: #ffffff;">Runtime:</span>   ${data.framework}
+<span style="color: #ffffff;">Uptime:</span>    ${data.uptime}
+<span style="color: #ffffff;">Host CPU:</span>  ${data.cpuUsage}
+<span style="color: #ffffff;">Tasks:</span>     ${data.processCount}
+<span style="color: #ffffff;">RAM:</span>       ${data.ram}
+<span style="color: #ffffff;">GPU:</span>       ${data.gpu}
+<span style="color: #ffffff;">Storage:</span>   ${data.storage}
+<span style="color: #ffffff;">Stardate:</span>  ${data.stardate}
+<span style="color: #ffffff;">Weather:</span>   ${data.weather}
+<span style="color: #ffffff;">Traffic:</span>   ${data.totalRequestsHandled}
 </pre>`;
-
-                await initHostTelemetry();
+                await initHostTelemetry(data); 
             }
             catch {
                 terminalOutput.innerHTML =
@@ -94,15 +93,20 @@ async function processCommand(input) {
     }
 }
 
-
-async function initHostTelemetry() {
+// Accept optional payload to re-use active data frames 
+async function initHostTelemetry(existingData = null) {
     if (!hostTelemetry) return;
     hostTelemetry.classList.remove('d-none');
     
     try {
-        const response = await fetch(`${TELEMETRY_API_BASE}/api/system/usage`);
-        if (!response.ok) throw new Error();
-        const data = await response.json();
+        let data = existingData;
+
+        // Only hit the network infrastructure if we don't already have data in scope
+        if (!data) {
+            const response = await fetch(`${TELEMETRY_API_BASE}/api/system/usage`);
+            if (!response.ok) throw new Error();
+            data = await response.json();
+        }
         
         hostTelemetry.innerHTML = `
             <div class="row g-3 font-monospace" style="color: #e2e8f0; font-size: 0.9rem;">
