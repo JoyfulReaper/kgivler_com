@@ -8,6 +8,8 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
+namespace Kgivler.Api.BackgroundServices;
+
 public class SystemCpuMonitor : BackgroundService
 {
     private static string _currentCpuUsage = "Initializing...";

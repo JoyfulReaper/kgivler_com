@@ -63,26 +63,30 @@ async function processCommand(input) {
                 if (!res.ok) throw new Error();
 
                 const data = await res.json();
+                
+                // Format the new GPU object payload
+                const gpuText = data.gpu.name 
+                    ? `${data.gpu.name} (Load: ${data.gpu.loadPercentage}%, VRAM: ${data.gpu.vramUsedMB}MB / ${data.gpu.vramTotalMB}MB)`
+                    : (data.gpu.error || data.gpu);
 
                 terminalOutput.innerHTML = `
-<pre style="color: #38bdf8; font-family: monospace; line-height: 1.4; margin: 0;">
-<span style="color: #39ff14; font-weight: bold;">kyle@kgivler</span>
-------------
-<span style="color: #ffffff;">OS:</span>        ${data.os}
-<span style="color: #ffffff;">Arch:</span>      ${data.architecture}
-<span style="color: #ffffff;">Runtime:</span>   ${data.framework}
-<span style="color: #ffffff;">Uptime:</span>    ${data.uptime}
-<span style="color: #ffffff;">Host CPU:</span>  ${data.cpuUsage}
-<span style="color: #ffffff;">Tasks:</span>     ${data.processCount}
-<span style="color: #ffffff;">RAM:</span>       ${data.ram}
-<span style="color: #ffffff;">GPU:</span>       ${data.gpu}
-<span style="color: #ffffff;">Storage:</span>   ${data.storage}
-<span style="color: #ffffff;">Stardate:</span>  ${data.stardate}
-<span style="color: #ffffff;">Weather:</span>   ${data.weather}
-<span style="color: #ffffff;">Traffic:</span>   ${data.totalRequestsHandled}
-</pre>`;
+    <pre style="color: #38bdf8; font-family: monospace; line-height: 1.4; margin: 0;">
+    <span style="color: #39ff14; font-weight: bold;">kyle@kgivler</span>
+    ------------
+    <span style="color: #ffffff;">OS:</span>        ${data.os}
+    <span style="color: #ffffff;">Arch:</span>      ${data.architecture}
+    <span style="color: #ffffff;">Runtime:</span>   ${data.framework}
+    <span style="color: #ffffff;">Uptime:</span>    ${data.uptime}
+    <span style="color: #ffffff;">Host CPU:</span>  ${data.cpuUsage}
+    <span style="color: #ffffff;">Tasks:</span>     ${data.processCount}
+    <span style="color: #ffffff;">RAM:</span>       ${data.ram}
+    <span style="color: #ffffff;">GPU:</span>       ${gpuText}
+    <span style="color: #ffffff;">Storage:</span>   ${data.storage}
+    <span style="color: #ffffff;">Stardate:</span>  ${data.stardate}
+    <span style="color: #ffffff;">Weather:</span>   ${data.weather}
+    <span style="color: #ffffff;">Traffic:</span>   ${data.totalRequestsHandled}
+    </pre>`;
                 
-                // Pipeline cached response data into framework context to kill double hit
                 await initHostTelemetry(data); 
             }
             catch {
@@ -103,20 +107,23 @@ async function initHostTelemetry(existingData = null) {
     try {
         let data = existingData;
 
-        // Only hit network layer if frames aren't already locally accessible
         if (!data) {
             const response = await fetch(`${TELEMETRY_API_BASE}/api/system/usage`);
             if (!response.ok) throw new Error();
             data = await response.json();
         }
         
+        const gpuText = data.gpu.name 
+            ? `${data.gpu.name} | Load: ${data.gpu.loadPercentage}% | VRAM: ${data.gpu.vramUsedMB}/${data.gpu.vramTotalMB}MB`
+            : (data.gpu.error || data.gpu);
+        
         hostTelemetry.innerHTML = `
-            <div class="row g-3 font-monospace" style="color: #e2e8f0; font-size: 0.9rem;">
+            <div class="row g-0 g-md-3 font-monospace" style="color: #e2e8f0; font-size: 0.9rem;">
                 <div class="col-md-6">
                     <div><span style="color: #38bdf8;"><i class="fab fa-windows me-2"></i>Host System:</span> ${data.os} (${data.architecture})</div>
                     <div><span style="color: #38bdf8;"><i class="fas fa-microchip me-2"></i>CPU Load:</span> ${data.cpuUsage} <small class="text-muted">(${data.cpuCores} Cores)</small></div>
                     <div><span style="color: #38bdf8;"><i class="fas fa-memory me-2"></i>System RAM:</span> ${data.ram}</div>
-                    <div><span style="color: #38bdf8;"><i class="fas fa-desktop me-2"></i>Graphics:</span> ${data.gpu}</div>
+                    <div><span style="color: #38bdf8;"><i class="fas fa-desktop me-2"></i>Graphics:</span> ${gpuText}</div>
                 </div>
                 <div class="col-md-6">
                     <div><span style="color: #38bdf8;"><i class="fas fa-clock me-2"></i>Node Uptime:</span> ${data.uptime}</div>
