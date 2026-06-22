@@ -17,7 +17,7 @@ public class SystemCpuMonitor : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        // 1. Initialize the persistent Windows counter once if on Windows
+        // Initialize the persistent Windows counter once if on Windows
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             try
@@ -34,7 +34,7 @@ public class SystemCpuMonitor : BackgroundService
         // Linux tracking metrics
         long lastUser = 0, lastNice = 0, lastSys = 0, lastIdle = 0, lastIowait = 0, lastIrq = 0, lastSoftIrq = 0;
 
-        // 2. Continuous lightweight polling loop
+        // Continuous lightweight polling loop
         while (!stoppingToken.IsCancellationRequested)
         {
             try
