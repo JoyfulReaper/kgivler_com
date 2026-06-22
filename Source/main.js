@@ -41,7 +41,7 @@ async function processCommand(input) {
     // TODO: Break into methods or w/e JavaScript call them
     switch (cmd) {
         case 'help': // Help command
-            terminalOutput.innerHTML = `[INFO] Available commands: random [vanity], clear, cowsay, stats, ls, pwd, echo, cat, play, neofetch, sudo`;
+            terminalOutput.innerHTML = `[INFO] Available commands: random [vanityUrl], clear, cowsay, stats, ls, pwd, echo, cat, play, neofetch, sudo, uname, top, whoami, date, history`;
             break;
         case 'clear': // Clear command
             terminalOutput.innerHTML = '';
@@ -176,8 +176,77 @@ Redistribution and use in source and binary forms, with or without modification,
                 terminalOutput.innerHTML = '<span class="text-danger">[ERROR] Command execution faulted.</span>';
             }
             break;
+        case 'uname': // uname command
+            if (args.includes('-a')) {
+                terminalOutput.innerHTML = '<span class="text-warning"><i class="fas fa-circle-notch fa-spin me-2"></i></span>';
+                try {
+                    const res = await fetch(`${TELEMETRY_API_BASE}/api/system/usage`);
+                    if (!res.ok) throw new Error();
+                    const data = await res.json();
+                    terminalOutput.innerHTML = `${data.os} kgivler-web ${data.framework} ${data.architecture} GNU/Linux`;
+                } catch {
+                    terminalOutput.innerHTML = `Linux kgivler-web x86_64 GNU/Linux`;
+                }
+            } else {
+                terminalOutput.innerHTML = 'Linux';
+            }
+            break;
+        case 'top': // top command
+            terminalOutput.innerHTML = '<span class="text-warning"><i class="fas fa-circle-notch fa-spin me-2"></i>Sampling kernel...</span>';
+            try {
+                const res = await fetch(`${TELEMETRY_API_BASE}/api/system/usage`);
+                if (!res.ok) throw new Error();
+                const data = await res.json();
+                
+                // Strip the '%' if it exists so we can format it nicely
+                const cpuNum = data.cpuUsage.replace('%', '').trim();
+                
+                terminalOutput.innerHTML = `
+<pre style="color: #e2e8f0; font-size: 0.8rem; line-height: 1.2; margin: 0; overflow-x: hidden;">
+top - ${new Date().toLocaleTimeString('en-US', {hour12: false})} up ${data.uptime},  1 user,  load average: ${cpuNum}, 0.04, 0.01
+Tasks: <span style="color: #ffffff;">${data.processCount}</span> total,   <span style="color: #ffffff;">1</span> running, <span style="color: #ffffff;">${data.processCount - 1}</span> sleeping,   0 stopped,   0 zombie
+%Cpu(s):  <span style="color: #39ff14;">${cpuNum}</span> us,  1.2 sy,  0.0 ni, 95.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem : <span style="color: #ffffff;">${data.ram}</span>
+MiB Swap:    0.0 total,      0.0 free,      0.0 used. 
+
+  PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+    1 root      20   0  168864  12484   8412 S   0.0   0.1   0:02.14 systemd
+  804 kyle      20   0 1204856 112456  48124 S  ${cpuNum}   4.5  12:04.22 RandomSteamGame
+  901 kyle      20   0  542452  84512  21452 S   0.5   2.1   1:05.11 sqlite3
+ 1042 kyle      20   0   14452   4512   2452 R   0.1   0.1   0:00.02 top
+</pre>`;
+                await initHostTelemetry(data);
+            } catch {
+                terminalOutput.innerHTML = '<span class="text-danger">[ERROR] Unable to read procfs.</span>';
+            }
+            break;
+        case 'whoami': // whoami command
+            terminalOutput.innerHTML = 'kyle';
+            break;
+        case 'date': // date command
+            terminalOutput.innerHTML = '<span class="text-warning"><i class="fas fa-circle-notch fa-spin me-2"></i></span>';
+            try {
+                const res = await fetch(`${TELEMETRY_API_BASE}/api/system/usage`);
+                const data = await res.json();
+                const localDate = new Date().toString();
+                terminalOutput.innerHTML = `${localDate}<br/><span style="color: #888892;">Stardate: ${data.stardate}</span>`;
+            } catch {
+                terminalOutput.innerHTML = new Date().toString();
+            }
+            break;
+        case 'history': // history commadn
+            terminalOutput.innerHTML = `
+                <div style="color: #e2e8f0; line-height: 1.5;">
+                    1  sudo rm -rf /<br>
+                    2  git push --force origin main<br>
+                    3  neofetch<br>
+                    4  history
+                </div>`;
+            break;
         default: // unknown command
-            terminalOutput.innerHTML = `[ERROR] Command not found: ${cmd}. Type 'help' for options.`;
+            const safeCmd = cmd.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            terminalOutput.innerHTML = `[ERROR] Command not found: ${safeCmd}. Type 'help' for options.`;
+            break;
     }
 }
 
