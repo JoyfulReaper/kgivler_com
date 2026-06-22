@@ -72,7 +72,7 @@ Redistribution and use in source and binary forms, with or without modification,
     neofetch: () => runNeofetch(),
     top: () => runTop(),
     status: () => runStatus(),
-    uptime: () => runStatus(),
+    uptime: () => runUptime(),
     stats: () => runStatus(),
     date: () => runDate(),
     uname: (args) => runUname(args),
@@ -112,6 +112,7 @@ async function getSystemData() {
         isFetching = false;
     }
 }
+
 function initHostTelemetry(data) {
     if (!elements.telemetry) return;
     
@@ -281,6 +282,23 @@ async function runUname(args) {
     } else {
         render('Linux');
     }
+}
+
+async function runUptime() {
+    showLoading('Querying system timers...');
+    const data = await getSystemData();
+    if (!data) return showError("[ERROR] Unable to fetch system initialization timers.");
+
+    // Format current local time as HH:MM:SS
+    const currentTime = new Date().toLocaleTimeString('en-US', { hour12: false });
+    
+    // Extract the raw CPU percentage to simulate a load average
+    const cpuNum = data.cpuUsage.replace('%', '').trim();
+    const loadAvg = (parseFloat(cpuNum) / 100).toFixed(2);
+
+    // Standard Linux uptime format: 
+    // 16:45:22 up 5 days, 22:34,  1 user,  load average: 0.08, 0.04, 0.01
+    render(`${currentTime} up ${data.uptime},  1 user,  load average: ${loadAvg}, 0.05, 0.01`);
 }
 
 // --- INITIALIZATION ---
