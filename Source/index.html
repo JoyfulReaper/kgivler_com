@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="styles.css?v=1.5">
 </head>
 <body class="terminal-theme">
+    
     <div class="main-container">
         <div class="terminal-window">
             <div class="terminal-header">
@@ -31,13 +32,17 @@
                     <p class="cmd-line"><span class="prompt">kyle@kgivler:~$</span> systemctl status local-host.service</p>
                     <div class="system-warning-box">
                         <i class="fas fa-server me-2"></i>
-                        <span>[NOTICE] Hosted locally via home workstation tunnel. Minimal downtime may occur during host maintenance periods.</span>
+                        <span>[NOTICE] This website is hosted on my personal workstation via a cloudflare tunnel. 
+                            Unexpected downtime may occur during host maintenance or when the workstation is off for any other reason.
+                        </span>
                     </div>
                 </div>
 
                 <hr class="terminal-divider">
                     <div class="my-4" id="demo-section">
-                        <p class="cmd-line"><span class="prompt">kyle@kgivler:~$</span> ./get-random-game <input type="text" id="steamIdInput" placeholder="Steam VanityURL" class="terminal-input" /></p>
+                        <p class="cmd-line"><span class="prompt">kyle@kgivler:~$</span> ./get-random-game -vanity 
+                            <input type="text" id="steamIdInput" placeholder="Mister_God" class="terminal-input" />
+                        </p>
                         <button onclick="fetchRandomGame()" class="terminal-btn-inline">Run</button>
                         <a href="https://randomsteam.kgivler.com/" class="terminal-btn-inline text-decoration-none">
                             Full Site
@@ -134,37 +139,7 @@
             </div>
         </div>
     </div>
+    <script src="main.js"></script>
+
 </body>
-
-<script>
-async function fetchRandomGame() {
-    const input = document.getElementById('steamIdInput').value;
-    const output = document.getElementById('demo-output');
-    
-    if (!input) return;
-    output.innerHTML = '<span class="text-warning">Connecting to Steam...</span>';
-
-    try {
-        const response = await fetch(`https://randomsteam.kgivler.com/api/Steam/RandomGameByVanityUrl/${input}`);
-        
-        if (!response.ok) {
-            console.error(`Fetch failed with status: ${response.status}`);
-            throw new Error(`Server returned ${response.status}`);
-        }
-        
-        const data = await response.json();
-        console.log("API Response Data:", data);
-        
-        output.innerHTML = `
-            <div class="output-line">
-                [SUCCESS] Game Selected: <strong>${data.name}</strong><br/>
-                <small>AppID: ${data.steam_appid}</small>
-            </div>
-        `;
-    } catch (err) {
-        console.error("Fetch error:", err);
-        output.innerHTML = '<span class="text-danger">[ERROR] Could not resolve SteamID or service is down.</span>';
-    }
-}
-</script>
 </html>
