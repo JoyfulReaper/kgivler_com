@@ -9,6 +9,8 @@ using Kgivler.Api;
 using Kgivler.Api.BackgroundServices;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Microsoft.Data.Sqlite;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,17 +44,66 @@ builder.Services.AddCors(options =>
     });
 });
 
+// App Configuration
 var app = builder.Build();
+
+// Cloudfare Configuration
+var forwardedOptions = new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+};
+
+forwardedOptions.KnownIPNetworks.Clear();
+forwardedOptions.KnownProxies.Clear();
+
+// Explicitly trust the local loopback adapters so local proxy headers are respected
+forwardedOptions.KnownProxies.Add(System.Net.IPAddress.Loopback);
+forwardedOptions.KnownProxies.Add(System.Net.IPAddress.IPv6Loopback);
+
+// Cloudflare CF-Visitor parsing middleware
+app.Use((context, next) =>
+{
+    if (context.Request.Headers.TryGetValue("CF-Visitor", out var cfVisitor))
+    {
+        if (cfVisitor.ToString().Contains("\"scheme\":\"https\""))
+        {
+            context.Request.Headers["X-Forwarded-Proto"] = "https";
+        }
+    }
+    return next();
+});
+
+// Sqlite Configuration
+var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+var dataFolder = Path.Combine(baseDirectory, "Data");
+Directory.CreateDirectory(dataFolder);
+
+var dbFile = "hitcounter.db";
+var dbPath = Path.Combine(dataFolder, dbFile);
+
+
+var connectionString = $"Data Source={dbPath};Mode=ReadWriteCreate;Cache=Shared;";
+using (var connection = new SqliteConnection(connectionString))
+{
+    connection.Open();
+    var command = connection.CreateCommand();
+    command.CommandText = @"
+        CREATE TABLE IF NOT EXISTS Visitors (
+            IpAddress TEXT PRIMARY KEY,
+            Hits INTEGER DEFAULT 1,
+            LastSeen TEXT
+        );
+    ";
+    command.ExecuteNonQuery();
+}
+
 app.UseCors("MainSiteCorsPolicy");
+app.UseForwardedHeaders(forwardedOptions);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-}
-
-if (app.Environment.IsDevelopment())
-{
     app.UseDeveloperExceptionPage();
 }
 else
@@ -62,10 +113,16 @@ else
 }
 
 // Routes
-long globalTrafficCounter = 0;
-app.MapGet("/api/system/usage", async () =>
+app.MapGet("/api/system/usage", async (HttpContext context) =>
 {
-    long currentHits = Interlocked.Increment(ref globalTrafficCounter);
+    // Extract the real IP address
+    var forwardedHeader = context.Request.Headers["CF-Connecting-IP"].FirstOrDefault() 
+                       ?? context.Request.Headers["X-Forwarded-For"].FirstOrDefault() 
+                       ?? context.Connection.RemoteIpAddress?.ToString() 
+                       ?? "unknown";
+    
+    // If multiple IPs are in X-Forwarded-For, take the first one
+    var ip = forwardedHeader.Split(',')[0].Trim();
 
     var currentProcess = Process.GetCurrentProcess();
     var uptimeSpan = TimeSpan.FromMilliseconds(Environment.TickCount64);
@@ -76,6 +133,8 @@ app.MapGet("/api/system/usage", async () =>
     var cpuUsage = TelemetricsHelper.GetCpuUsage();
     var stardate = TelemetricsHelper.GetStarDate();
     var weather = await TelemetricsHelper.GetLocalWeather();
+    var hitResults = await ProcessHitCounts(connectionString, ip);
+
 
     var telemetry = new
     {
@@ -97,10 +156,49 @@ app.MapGet("/api/system/usage", async () =>
         // Meta Metrics
         Stardate = stardate,
         Weather = weather,
-        TotalRequestsHandled = currentHits
+        TotalRequestsHandled = hitResults.totalHits,
+        UniqueVisitors = hitResults.uniqueVisitors
     };
 
     return Results.Ok(telemetry);
 });
 
 app.Run();
+
+
+async static Task<(long totalHits, long uniqueVisitors)> ProcessHitCounts(string connectionString, string ip)
+{
+    
+    long totalHits = 0;
+    long uniqueVisitors = 0;
+
+    // SQLite Upsert and Count
+    using var connection = new SqliteConnection(connectionString);
+    await connection.OpenAsync();
+
+    // Update the hit count
+    var upsertCmd = connection.CreateCommand();
+    upsertCmd.CommandText = @"
+            INSERT INTO Visitors (IpAddress, Hits, LastSeen)
+            VALUES ($ip, 1, $date)
+            ON CONFLICT(IpAddress) DO UPDATE SET
+                Hits = Hits + 1,
+                LastSeen = $date;
+        ";
+    upsertCmd.Parameters.AddWithValue("$ip", ip);
+    upsertCmd.Parameters.AddWithValue("$date", DateTime.UtcNow.ToString("o"));
+    await upsertCmd.ExecuteNonQueryAsync();
+
+    // Get Totals
+    var statsCmd = connection.CreateCommand();
+    statsCmd.CommandText = "SELECT COUNT(IpAddress), SUM(Hits) FROM Visitors;";
+    using var reader = await statsCmd.ExecuteReaderAsync();
+
+    if (await reader.ReadAsync())
+    {
+        uniqueVisitors = reader.IsDBNull(0) ? 0 : reader.GetInt64(0);
+        totalHits = reader.IsDBNull(1) ? 0 : reader.GetInt64(1);
+    }
+    
+    return (totalHits, uniqueVisitors);
+}
