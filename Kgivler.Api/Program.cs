@@ -5,9 +5,12 @@
  * Licensed under the MIT License.
  */
 
+using Kgivler.Api;
+using Kgivler.Api.BackgroundServices;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
+using Microsoft.Data.Sqlite;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,30 +44,97 @@ builder.Services.AddCors(options =>
     });
 });
 
+// App Configuration
 var app = builder.Build();
+
+// Cloudfare Configuration
+var forwardedOptions = new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+};
+
+forwardedOptions.KnownIPNetworks.Clear();
+forwardedOptions.KnownProxies.Clear();
+
+// Explicitly trust the local loopback adapters so local proxy headers are respected
+forwardedOptions.KnownProxies.Add(System.Net.IPAddress.Loopback);
+forwardedOptions.KnownProxies.Add(System.Net.IPAddress.IPv6Loopback);
+
+// Cloudflare CF-Visitor parsing middleware
+app.Use((context, next) =>
+{
+    if (context.Request.Headers.TryGetValue("CF-Visitor", out var cfVisitor))
+    {
+        if (cfVisitor.ToString().Contains("\"scheme\":\"https\""))
+        {
+            context.Request.Headers["X-Forwarded-Proto"] = "https";
+        }
+    }
+    return next();
+});
+
+// Sqlite Configuration
+var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+var dataFolder = Path.Combine(baseDirectory, "Data");
+Directory.CreateDirectory(dataFolder);
+
+var dbFile = "hitcounter.db";
+var dbPath = Path.Combine(dataFolder, dbFile);
+
+
+var connectionString = $"Data Source={dbPath};Mode=ReadWriteCreate;Cache=Shared;";
+using (var connection = new SqliteConnection(connectionString))
+{
+    connection.Open();
+    var command = connection.CreateCommand();
+    command.CommandText = @"
+        CREATE TABLE IF NOT EXISTS Visitors (
+            IpAddress TEXT PRIMARY KEY,
+            Hits INTEGER DEFAULT 1,
+            LastSeen TEXT
+        );
+    ";
+    command.ExecuteNonQuery();
+}
+
 app.UseCors("MainSiteCorsPolicy");
+app.UseForwardedHeaders(forwardedOptions);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    app.UseExceptionHandler("/api/error");
+    app.UseHsts();
 }
 
 // Routes
-long globalTrafficCounter = 0;
-app.MapGet("/api/system/usage", async () =>
+app.MapGet("/api/system/usage", async (HttpContext context) =>
 {
-    long currentHits = Interlocked.Increment(ref globalTrafficCounter);
+    // Extract the real IP address
+    var forwardedHeader = context.Request.Headers["CF-Connecting-IP"].FirstOrDefault() 
+                       ?? context.Request.Headers["X-Forwarded-For"].FirstOrDefault() 
+                       ?? context.Connection.RemoteIpAddress?.ToString() 
+                       ?? "unknown";
+    
+    // If multiple IPs are in X-Forwarded-For, take the first one
+    var ip = forwardedHeader.Split(',')[0].Trim();
 
     var currentProcess = Process.GetCurrentProcess();
     var uptimeSpan = TimeSpan.FromMilliseconds(Environment.TickCount64);
 
-    var storage = GetStorageMetrics();
-    var ram = GetRamMetrics();
-    var gpu = GetGpuMetrics();
-    var cpuUsage = GetCpuUsage();
-    var stardate = GetStarDate();
-    var weather = await GetLocalWeather();
+    var storage = TelemetricsHelper.GetStorageMetrics();
+    var ram = TelemetricsHelper.GetRamMetrics();
+    var gpu = TelemetricsHelper.GetGpuMetrics();
+    var cpuUsage = TelemetricsHelper.GetCpuUsage();
+    var stardate = TelemetricsHelper.GetStarDate();
+    var weather = await TelemetricsHelper.GetLocalWeather();
+    var hitResults = await ProcessHitCounts(connectionString, ip);
+
 
     var telemetry = new
     {
@@ -86,7 +156,8 @@ app.MapGet("/api/system/usage", async () =>
         // Meta Metrics
         Stardate = stardate,
         Weather = weather,
-        TotalRequestsHandled = currentHits
+        TotalRequestsHandled = hitResults.totalHits,
+        UniqueVisitors = hitResults.uniqueVisitors
     };
 
     return Results.Ok(telemetry);
@@ -95,200 +166,39 @@ app.MapGet("/api/system/usage", async () =>
 app.Run();
 
 
-#region Telemetry Helper Methods 
-// TODO move to a helper class or something
-
-static string GetCpuUsage()
+async static Task<(long totalHits, long uniqueVisitors)> ProcessHitCounts(string connectionString, string ip)
 {
-    try
-    {
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-        {
-            var output = ExecuteCommand("wmic", "cpu get loadpercentage /Value");
-            var match = Regex.Match(output, @"LoadPercentage=(\d+)");
+    
+    long totalHits = 0;
+    long uniqueVisitors = 0;
 
-            if (match.Success)
-            {
-                return $"{match.Groups[1].Value}%";
-            }
-            return "Metrics unavailable";
-        }
-        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-        {
-            if (File.Exists("/proc/loadavg"))
-            {
-                var loadLines = File.ReadAllText("/proc/loadavg").Split(' ');
-                if (loadLines.Length >= 3)
-                {
-                    return $"Load: {loadLines[0]} {loadLines[1]} {loadLines[2]}";
-                }
-            }
-            return "Metrics unavailable";
-        }
+    // SQLite Upsert and Count
+    using var connection = new SqliteConnection(connectionString);
+    await connection.OpenAsync();
 
-        return "Unsupported OS";
-    }
-    catch
+    // Update the hit count
+    var upsertCmd = connection.CreateCommand();
+    upsertCmd.CommandText = @"
+            INSERT INTO Visitors (IpAddress, Hits, LastSeen)
+            VALUES ($ip, 1, $date)
+            ON CONFLICT(IpAddress) DO UPDATE SET
+                Hits = Hits + 1,
+                LastSeen = $date;
+        ";
+    upsertCmd.Parameters.AddWithValue("$ip", ip);
+    upsertCmd.Parameters.AddWithValue("$date", DateTime.UtcNow.ToString("o"));
+    await upsertCmd.ExecuteNonQueryAsync();
+
+    // Get Totals
+    var statsCmd = connection.CreateCommand();
+    statsCmd.CommandText = "SELECT COUNT(IpAddress), SUM(Hits) FROM Visitors;";
+    using var reader = await statsCmd.ExecuteReaderAsync();
+
+    if (await reader.ReadAsync())
     {
-        return "CPU tracking error";
+        uniqueVisitors = reader.IsDBNull(0) ? 0 : reader.GetInt64(0);
+        totalHits = reader.IsDBNull(1) ? 0 : reader.GetInt64(1);
     }
+    
+    return (totalHits, uniqueVisitors);
 }
-
-static string GetStorageMetrics()
-{
-    try
-    {
-        string rootDrive;
-
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-        {
-            rootDrive = "C:\\";
-        }
-        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-        {
-            rootDrive = "/";
-        }
-        else
-        {
-            return "Unsupported OS";
-        }
-
-        var driveInfo = new DriveInfo(rootDrive);
-
-        double totalSpaceGB = Math.Round((double)driveInfo.TotalSize / (1024 * 1024 * 1024), 1);
-        double freeSpaceGB = Math.Round((double)driveInfo.AvailableFreeSpace / (1024 * 1024 * 1024), 1);
-        double usedSpaceGB = totalSpaceGB - freeSpaceGB;
-
-        return $"{usedSpaceGB}GB / {totalSpaceGB}GB ({Math.Round((usedSpaceGB / totalSpaceGB) * 100)}%)";
-    }
-    catch
-    {
-        return "Storage metrics unavailable";
-    }
-}
-
-static string GetRamMetrics()
-{
-    try
-    {
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-        {
-            var output = ExecuteCommand("wmic", "OS get FreePhysicalMemory,TotalVisibleMemorySize /Value");
-
-            var totalMatch = Regex.Match(output, @"TotalVisibleMemorySize=(\d+)");
-            var freeMatch = Regex.Match(output, @"FreePhysicalMemory=(\d+)");
-
-            if (totalMatch.Success && freeMatch.Success)
-            {
-                double totalGB = Math.Round(double.Parse(totalMatch.Groups[1].Value) / (1024 * 1024), 1);
-                double freeKB = double.Parse(freeMatch.Groups[1].Value);
-                double totalKB = double.Parse(totalMatch.Groups[1].Value);
-                double usedGB = Math.Round((totalKB - freeKB) / (1024 * 1024), 1);
-
-                return $"{usedGB}GB / {totalGB}GB ({Math.Round((usedGB / totalGB) * 100)}%)";
-            }
-            return "Metrics unavailable";
-        }
-        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-        {
-            var meminfo = File.ReadAllText("/proc/meminfo");
-            var totalMatch = Regex.Match(meminfo, @"MemTotal:\s+(\d+)");
-            var availableMatch = Regex.Match(meminfo, @"MemAvailable:\s+(\d+)");
-
-            if (totalMatch.Success && availableMatch.Success)
-            {
-                double totalGB = Math.Round(double.Parse(totalMatch.Groups[1].Value) / (1024 * 1024), 1);
-                double availableKB = double.Parse(availableMatch.Groups[1].Value);
-                double totalKB = double.Parse(totalMatch.Groups[1].Value);
-                double usedGB = Math.Round((totalKB - availableKB) / (1024 * 1024), 1);
-
-                return $"{usedGB}GB / {totalGB}GB ({Math.Round((usedGB / totalGB) * 100)}%)";
-            }
-            return "Metrics unavailable";
-        }
-
-        return "Unsupported OS";
-    }
-    catch
-    {
-        return "RAM tracking error";
-    }
-}
-
-static string GetGpuMetrics()
-{
-    // Ensure we are on a supported host platform before shelling out to nvidia-smi
-    if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && !RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-    {
-        return "Unsupported OS";
-    }
-
-    try
-    {
-        var result = ExecuteCommand("nvidia-smi", "--query-gpu=name,utilization.gpu,utilization.memory --format=csv,noheader,nounits");
-        if (string.IsNullOrWhiteSpace(result))
-        {
-            return "GPU Sleeping or Driver Unavailable";
-        }
-
-        var components = result.Split(',');
-        if (components.Length >= 3)
-        {
-            return $"{components[0].Trim()} (Load: {components[1].Trim()}% VRAM: {components[2].Trim()}%)";
-        }
-
-        return result.Trim();
-    }
-    catch
-    {
-        return "No discrete GPU detected";
-    }
-}
-
-static string GetStarDate()
-{
-    var now = DateTime.UtcNow;
-    double stardate = 41000 + (now.Year - 1987) * 1000 + (now.DayOfYear / (DateTime.IsLeapYear(now.Year) ? 366.0 : 365.0)) * 1000;
-    return $"{stardate:F1}";
-}
-
-static async Task<string> GetLocalWeather()
-{
-    try
-    {
-        using var client = new HttpClient();
-        client.DefaultRequestHeaders.UserAgent.ParseAdd("curl");
-        var weather = await client.GetStringAsync("https://wttr.in?format=3");
-        return weather.Trim();
-    }
-    catch
-    {
-        return "Weather data offline";
-    }
-}
-
-static string ExecuteCommand(string fileName, string arguments)
-{
-    try
-    {
-        var startInfo = new ProcessStartInfo
-        {
-            FileName = fileName,
-            Arguments = arguments,
-            RedirectStandardOutput = true,
-            UseShellExecute = false,
-            CreateNoWindow = true
-        };
-
-        using var process = Process.Start(startInfo);
-        if (process == null) return string.Empty;
-
-        return process.StandardOutput.ReadToEnd();
-    }
-    catch
-    {
-        return string.Empty;
-    }
-}
-
-#endregion
