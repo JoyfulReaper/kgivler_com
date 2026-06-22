@@ -5,6 +5,26 @@ const API_CONFIG = {
     STEAM: IS_LOCAL ? 'http://localhost:5281' : 'https://randomsteam.kgivler.com'
 };
 
+// --- PLAYLIST DATA ---
+const PLAYLIST = [
+    { band: "Infant Annihilator / Rings of Saturn mix", genre: "Technical Deathcore", meta: "Blast beats: Engaged" },
+    { band: "Pat The Bunny", genre: "Folk Punk", meta: "Anarchy level: Maximum" },
+    { band: "Johnny Hobo & The Freight Trains", genre: "Folk Punk", meta: "Existential crisis: Active" },
+    { band: "Wingnut Dishwashers Union", genre: "Folk Punk", meta: "Capitalism: Questioned" },
+    { band: "Ramshackle Glory", genre: "Folk Punk", meta: "Meaning of life: Not found" },
+    { band: "Defiance, Ohio", genre: "Folk Punk", meta: "Violin violence: Enabled" },
+    { band: "Days N Daze", genre: "Folk Punk", meta: "Acoustic damage: Maximum" },
+    { band: "The Chariot", genre: "Chaotic Hardcore", meta: "Structural integrity: Compromised" },
+    { band: "Terror", genre: "Hardcore Punk", meta: "Two-step protocol: Active" },
+    { band: "Black Helicopters", genre: "Hardcore Punk", meta: "Volume knob: Insufficient" },
+    { band: "Tech N9ne", genre: "Underground Hip-Hop", meta: "CPU usage: 100%" },
+    { band: "Necro", genre: "Hardcore Hip-Hop", meta: "Subtlety: Disabled" },
+    { band: "Ill Bill", genre: "Underground Hip-Hop", meta: "Conspiracy level: Moderate" },
+    { band: "La Coka Nostra", genre: "Hardcore Hip-Hop", meta: "Threat assessment: Elevated" },
+    { band: "Onyx", genre: "Hardcore Rap", meta: "Energy level: Breaking furniture" },
+    { band: "M.O.P. / Ante Up", genre: "Aggressive Hip-Hop", meta: "Fight-or-flight: Fight" }
+];
+
 // --- STATE ---
 let isFetching = false;
 
@@ -23,7 +43,7 @@ const showLoading = () => { render('<span class="text-warning"><i class="fas fa-
 
 // --- COMMAND REGISTRY ---
 const Commands = {
-    help: () => render(`[INFO] Available commands: random [vanityUrl], clear, cowsay, stats, ls, pwd, echo, cat, play, neofetch, sudo, uname, top, whoami, date, history`),
+    help: () => render(`[INFO] Available commands: random [vanityUrl], clear, cowsay, stats, ls, pwd, echo, cat, music, neofetch, sudo, uname, top, whoami, date, history`),
     clear: () => { elements.output.innerHTML = ''; elements.demo.innerHTML = ''; },
     pwd: () => render('/home/kyle/workspace/kgivler.com'),
     whoami: () => render('kyle'),
@@ -54,12 +74,8 @@ Redistribution and use in source and binary forms, with or without modification,
         return showError(`cat: ${args[0].replace(/</g, '&lt;')}: No such file or directory`);
     },
 
-    play: () => render(`
-                <div style="color: #38bdf8;">
-                    <i class="fas fa-volume-up me-2 animate-pulse"></i>Now playing: <strong>Infant Annihilator / Rings of Saturn</strong> mix <br/>
-                    <small class="text-muted">Genre: Technical Deathcore | Blast beats: Engaged</small>
-                </div>`),
-    music: () => Commands.play(), // Alias
+    play: () => runPlay(),
+    music: () => runPlay(),
 
     cowsay: (args) => {
         const msg = args.length > 0 ? args.join(' ').replace(/</g, '&lt;') : "Moo.";
@@ -196,6 +212,17 @@ async function fetchRandomGame(vanityUrl) {
     }
 }
 
+function runPlay() {
+    const track = PLAYLIST[Math.floor(Math.random() * PLAYLIST.length)];
+    
+    render(`
+        <div style="color: #38bdf8;">
+            <i class="fas fa-volume-up me-2 animate-pulse"></i>Now playing: <strong>${track.band}</strong> <br/>
+            <small class="text-muted">Genre: ${track.genre} | ${track.meta}</small>
+        </div>
+    `);
+}
+
 async function runTop() {
     showLoading('Sampling kernel...');
     const data = await getSystemData();
@@ -240,7 +267,7 @@ async function runStatus() {
     <span style="color: #ffffff;">Storage:</span>   ${data.storage}
     <span style="color: #ffffff;">Stardate:</span>  ${data.stardate}
     <span style="color: #ffffff;">Weather:</span>   ${data.weather}
-    <span style="color: #ffffff;">Traffic:</span>   ${data.totalRequestsHandled}
+    <span style="color: #ffffff;">Total Hits:</span>   ${data.totalRequestsHandled}
     </pre>`);
     initHostTelemetry(data);
 }
