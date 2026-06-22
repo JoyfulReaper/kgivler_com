@@ -14,6 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddHostedService<SystemCpuMonitor>();
 
 // CORS Configuration
 builder.Services.AddCors(options =>
@@ -75,7 +76,7 @@ app.MapGet("/api/system/usage", async () =>
         CpuTimeSec = Math.Round(currentProcess.TotalProcessorTime.TotalSeconds, 2),
 
         // Core Performance Metrics
-        CpuUsage = cpuUsage,
+        CpuUsage = SystemCpuMonitor.CurrentCpuUsage,
         CpuCores = Environment.ProcessorCount,
         ProcessCount = Process.GetProcesses().Length,
         Storage = storage,
