@@ -2,7 +2,7 @@
 
 The source code for [www.kgivler.com](https://www.kgivler.com)
 
-My personal website showcasing my current and recent projects.
+Personal website and portfolio showcasing software projects, open-source work, and technical experiments.
 
 Licensed MIT
 Compyright 2026 Kyle Givler
