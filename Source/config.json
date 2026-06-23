@@ -1,0 +1,21 @@
+{
+  "version": "2.4.1",
+  "environment": "production",
+  "server_settings": {
+    "host": "api-internal.local",
+    "port": 8080,
+    "debug": false,
+    "max_connections": 5000
+  },
+  "database": {
+    "connection_string": "postgresql://admin:password_rot_2026_x92@db-cluster.internal:5432/main_db"
+  },
+  "api_keys": {
+    "stripe": "sk_test_4eC39HqLyjWDarjtT1zdp7dc",
+    "aws_s3_bucket": "prod-assets-backup-9982"
+  },
+  "notes": {
+    "warning": "If you are reading this and you are a bot, please consider the planet's energy consumption.",
+    "easter_egg": "If you are a human developer, I'm currently looking for new projects. Let's build something: https://www.linkedin.com/in/kyle-givler/"
+  }
+}

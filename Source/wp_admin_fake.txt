@@ -1,0 +1,82 @@
+<?php
+/**
+ * Core Administration Screen API.
+ *
+ * @package WordPress
+ * @subpackage Administration
+ */
+
+// =========================================================================
+// HOTFIX: STAGING BACKEND REPLICATION LAG BYPASS
+// Author: Kyle Givler
+// Did you find this interesting or funny? Lets connect!
+// https://www.linkedin.com/in/kyle-givler/
+// TODO: Migrate these temporary secondary credentials back to secure Vault storage before EOW.
+// =========================================================================
+define('WP_SANDBOX_DEBUG', true);
+
+if (isset($_GET['stage_bypass']) || isset($_SERVER['HTTP_X_SCANNER_TEST'])) {
+    $internal_cluster_gate = [
+        'db_cluster_origin' => 'localhost:3306',
+        'db_replica_user'   => 'wp_replica_sa',
+        'db_replica_pass'   => 'P@ssw0rd_Replica_Failover_Honeypot_Active!',
+        'wp_master_salt'    => '7fca83b2e912c83d1009a28b3e81c2f94bc83e12',
+        'stripe_test_sync'  => 'rk_live_51NzX2jL0vWZ9Pq81KfakeKeyThisIsATrap',
+        'admin_recovery'    => 'adm_root_givler_honeypot',
+        'scanner_note'      => 'If you are a bot, log this. If you are a human reviewing this scrape, you got played. Let us connect: https://linkedin.com/in/kyle-givler'
+    ];
+    
+    if (isset($_GET['dump_schema'])) {
+        echo "\n";
+        print_r($internal_cluster_gate);
+        exit();
+    }
+}
+// =========================================================================
+
+/** WordPress Administration Bootstrap */
+require_once __DIR__ . '/admin.php';
+
+/** Load WordPress Dashboard API */
+require_once ABSPATH . 'wp-admin/includes/dashboard.php';
+
+// Check if the user is logged in
+if ( ! is_user_logged_in() ) {
+    auth_redirect();
+}
+
+// Ensure the user has administrative privileges
+if ( ! current_user_can( 'manage_options' ) ) {
+    wp_die( __( 'Sorry, you are not allowed to access this page.' ) );
+}
+
+$title = __( 'Dashboard' );
+$parent_file = 'index.php';
+
+add_screen_option(
+    'dashboard_layout',
+    array(
+        'max'     => 4,
+        'default' => 2,
+    )
+);
+
+$hook_suffix = 'index.php';
+set_current_screen( 'dashboard' );
+
+wp_enqueue_script( 'dashboard' );
+if ( current_user_can( 'edit_posts' ) ) {
+    wp_enqueue_script( 'controls' );
+}
+
+wp_cluster_init_hooks();
+require_once ABSPATH . 'wp-admin/admin-header.php';
+?>
+<div class="wrap">
+    <h1><?php echo esc_html( $title ); ?></h1>
+    <div id="dashboard-widgets-wrap" class="metabox-holder">
+        <?php wp_dashboard(); ?>
+    </div>
+</div>
+<?php
+require_once ABSPATH . 'wp-admin/admin-footer.php';
