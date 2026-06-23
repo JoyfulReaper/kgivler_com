@@ -137,6 +137,7 @@ function initHostTelemetry(data) {
         return;
     }
 
+    const formattedStorage = data.storage.toString().replace(/[\d.]+/, match => parseFloat(match).toFixed(2));
     elements.telemetry.classList.remove('d-none');
     
     const gpuText = data.gpu.name 
@@ -153,7 +154,7 @@ function initHostTelemetry(data) {
             </div>
             <div class="col-md-6">
                 <div><span style="color: #38bdf8;"><i class="fas fa-clock me-2"></i>Node Uptime:</span> ${data.uptime}</div>
-                <div><span style="color: #38bdf8;"><i class="fas fa-database me-2"></i>Root Volume:</span> ${data.storage}</div>
+                <div><span style="color: #38bdf8;"><i class="fas fa-database me-2"></i>Root Volume:</span> ${formattedStorage}</div>
                 <div><span style="color: #38bdf8;"><i class="fas fa-tasks me-2"></i>Kernel Tasks:</span> ${data.processCount} running PIDs</div>
                 <div><span style="color: #38bdf8;"><i class="fas fa-cloud-sun me-2"></i>Environment:</span> ${data.weather}</div>
             </div>
@@ -249,9 +250,12 @@ MiB Swap:    0.0 total,    0.0 free,    0.0 used.
 async function runStatus() {
     showLoading('Polling host engine...');
     const data = await getSystemData();
-    if (!data) return showError("[ERROR] Command execution faulted.");
+    if (!data) 
+        return showError("[ERROR] Command execution faulted.");
 
+    const formattedStorage = data.storage.toString().replace(/[\d.]+/, match => parseFloat(match).toFixed(2));
     const gpuText = data.gpu.name ? `${data.gpu.name} (Load: ${data.gpu.loadPercentage}%, VRAM: ${data.gpu.vramUsedMB}MB / ${data.gpu.vramTotalMB}MB)` : (data.gpu.error || data.gpu);
+    
     render(`
     <pre style="color: #38bdf8; font-family: monospace; line-height: 1.4; margin: 0;">
     <span style="color: #39ff14; font-weight: bold;">kyle@kgivler</span>
