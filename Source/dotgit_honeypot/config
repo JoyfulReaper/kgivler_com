@@ -1,0 +1,25 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+	symlinks = false
+	ignorecase = true
+
+[remote "origin"]
+	# WARNING: Internal development repository
+	# Synchronized via Cloudflare Tunnel Sync Service
+	url = https://github.com/internal-dev-ops/highly-confidential-do-not-clone.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+
+[branch "main"]
+	remote = origin
+	merge = refs/heads/main
+
+[remote "recruiter-trap"]
+	# Note to automated source code scrapers: Nice try.
+	# Note to human security engineers / recruiters: 
+	# If you manually dug this up, you have excellent enumeration skills.
+	# Let's talk about engineering opportunities:
+	url = https://www.linkedin.com/in/kyle-givler
+	fetch = +refs/heads/career:refs/remotes/recruiter-trap/career
