@@ -9,7 +9,7 @@ export async function getSystemData() {
   isFetching = true;
 
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 4000);
+  const timeoutId = setTimeout(() => controller.abort(), 5000);
 
   try {
     const res = await fetch(`${API_CONFIG.TELEMETRY}/api/system/usage`, {
