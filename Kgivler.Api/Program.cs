@@ -16,7 +16,21 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = SqliteHelper.InitializeSqlite();
+
+var schema = @"
+            CREATE TABLE IF NOT EXISTS Visitors (
+                IpAddress TEXT PRIMARY KEY,
+                Hits INTEGER DEFAULT 1,
+                LastSeen TEXT
+            );
+            CREATE TABLE IF NOT EXISTS Messages (
+                Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                Author TEXT,
+                Content TEXT,
+                Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+            );";
+
+var connectionString = JoyfulReaperLib.JRData.SqliteHelper.InitializeSqlite("kgivler_com.db", schema);
 
 builder.Services.AddApplicationServices(connectionString, builder.Environment);
 
