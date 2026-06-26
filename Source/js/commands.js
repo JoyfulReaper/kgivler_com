@@ -193,7 +193,7 @@ __________________________________________
 
 // --- PUBLIC EXPORT ---
 export const Commands = {
-  help: () => render(`[INFO] Available commands: random [vanityUrl], clear, cowsay, stats, ls, pwd, echo, cat, music, neofetch, sudo, uname, top, whoami, date, history`),
+  help: () => render(`[INFO] Available commands: random [vanityUrl], clear, cowsay, stats, ls, pwd, echo, cat, bbs, music, neofetch, sudo, uname, top, whoami, date, history`),
   clear: () => {
     elements.output.innerHTML = "";
     elements.demo.innerHTML = "";

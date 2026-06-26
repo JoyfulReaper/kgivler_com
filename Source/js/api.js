@@ -7,14 +7,22 @@ export async function getSystemData() {
   if (isFetching) return null;
 
   isFetching = true;
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 4000);
+
   try {
-    const res = await fetch(`${API_CONFIG.TELEMETRY}/api/system/usage`);
-    if (!res.ok) throw new Error();
+    const res = await fetch(`${API_CONFIG.TELEMETRY}/api/system/usage`, {
+      signal: controller.signal,
+    });
+
+    if (!res.ok) throw new Error("Request failed");
     return await res.json();
   } catch (e) {
-    console.error("Fetch failed:", e);
+    console.error("Fetch failed or timed out:", e);
     return null;
   } finally {
+    clearTimeout(timeoutId);
     isFetching = false;
   }
 }
@@ -30,8 +38,8 @@ export async function fetchRandomGame(vanityUrl) {
     // return;
   }
 
-  elements.output.innerHTML = '';
-  elements.demo.innerHTML = '';
+  elements.output.innerHTML = "";
+  elements.demo.innerHTML = "";
 
   activeOutput.innerHTML = '<span class="text-warning"><i class="fas fa-circle-notch fa-spin me-2"></i>Connecting to Steam...</span>';
 
