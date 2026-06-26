@@ -1,5 +1,5 @@
 ﻿/*
- * Random Steam Game
+ * kgivler_com
  * 
  * Copyright (c) 2026 Kyle Givler
  * Licensed under the MIT License.
