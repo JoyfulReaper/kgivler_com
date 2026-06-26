@@ -186,6 +186,12 @@ async function fetchRandomGame(vanityUrl) {
     try {
         const response = await fetch(`${API_CONFIG.STEAM}/api/Steam/RandomGameByVanityUrl/${encodeURIComponent(input)}`);
         
+        if(response.status === 429)
+        {
+            activeOutput.innerHTML = '<span class="text-danger">[ERROR] 429: Too many requests. Please slow down and try again in a moment.</span>';
+            return;
+        }
+
         if (!response.ok) {
             let errorDetail = 'Could not resolve account or fetch games.';
             try {
