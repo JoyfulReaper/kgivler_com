@@ -7,6 +7,8 @@
 
 // TODO Add Rate Limiting just in case
 
+using JoyfulReaperLib.JRData;
+using JoyfulReaperLib.JRData.Web;
 using Kgivler.Api.BackgroundServices;
 using Kgivler.Api.Bbs;
 using Kgivler.Api.Extensions;
@@ -30,7 +32,7 @@ var schema = @"
                 Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
             );";
 
-var connectionString = JoyfulReaperLib.JRData.SqliteHelper.InitializeSqlite("kgivler_com.db", schema);
+var connectionString = SqliteHelper.InitializeSqlite("kgivler_com.db", schema);
 
 builder.Services.AddApplicationServices(connectionString, builder.Environment);
 
@@ -126,7 +128,6 @@ app.MapGet("/api/system/usage", async (HttpContext context) =>
     var stardate = TelemetricsHelper.GetStarDate();
     var weather = await TelemetricsHelper.GetLocalWeather();
     var hitResults = await HitCountHelper.ProcessHitCounts(connectionString, ip);
-
     var telemetry = new
     {
         OS = RuntimeInformation.OSDescription,
