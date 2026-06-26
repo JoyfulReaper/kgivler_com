@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   initHostTelemetry(data);
 
   // Terminal input
-  elements.input?.addEventListener("keypress", (e) => {
+  elements.input?.addEventListener("keydown", (e) => {
     if (e.key === "Enter") processCommand(elements.input.value.trim());
   });
 
