@@ -2,7 +2,7 @@
 const IS_LOCAL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 const API_CONFIG = {
     TELEMETRY: IS_LOCAL ? 'http://localhost:5081' : 'https://api.kgivler.com',
-    STEAM: IS_LOCAL ? 'http://localhost:5281' : 'https://randomsteam.kgivler.com'
+    STEAM: IS_LOCAL ? 'http://localhost:5182' : 'https://randomsteam.kgivler.com'
 };
 
 // --- PLAYLIST DATA ---
@@ -199,7 +199,7 @@ async function fetchRandomGame(vanityUrl) {
         const data = await response.json();
         const target = data.data || data.value || data;
         const gameName = target.name || target.Name;
-        const appId = target.steam_appid || target.steamAppId || target.appId || target.AppId;
+        const appId = target.Id || target.id || target.appId || target.AppId;
 
         if (!gameName) {
             activeOutput.innerHTML = '<span class="text-danger">[ERROR] Account has no games or the profile/library is private.</span>';
