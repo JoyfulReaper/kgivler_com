@@ -17,7 +17,7 @@ open-source work, and technical experiments.
 
 # 3.0 MAINTENANCE
 3.1 This repository is updated periodically to reflect the current status 
-    of ongoing software projects.
+    of ongoing software projects.  
 3.2 For inquiries regarding the source code or site functionality, please 
     refer to the repository issues section.
 
