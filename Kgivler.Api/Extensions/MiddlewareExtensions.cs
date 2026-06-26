@@ -12,8 +12,19 @@ namespace Kgivler.Api.Extensions;
 
 public static class MiddlewareExtensions
 {
-    public static IApplicationBuilder ConfigurePipeline(this IApplicationBuilder app)
+    public static IApplicationBuilder ConfigurePipeline(this IApplicationBuilder app, IHostEnvironment env)
     {
+        // Configure the HTTP request pipeline.
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+        else
+        {
+            app.UseExceptionHandler("/api/error");
+            app.UseHsts();
+        }
+
         // Forwarded Headers
         var forwardedOptions = new ForwardedHeadersOptions
         {

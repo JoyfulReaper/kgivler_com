@@ -6,6 +6,7 @@
  */
 
 using Kgivler.Api.BackgroundServices;
+using Kgivler.Api.Bbs;
 using Kgivler.Api.Extensions;
 using Kgivler.Api.Helpers;
 using Microsoft.Data.Sqlite;
@@ -16,45 +17,57 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplicationServices(builder.Environment);
 
 var app = builder.Build();
-app.ConfigurePipeline();
+app.ConfigurePipeline(builder.Environment);
 
-// Sqlite Configuration
-var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-var dataFolder = Path.Combine(baseDirectory, "Data");
-Directory.CreateDirectory(dataFolder);
-
-var dbFile = "hitcounter.db";
-var dbPath = Path.Combine(dataFolder, dbFile);
-
-var connectionString = $"Data Source={dbPath};Mode=ReadWriteCreate;Cache=Shared;";
-using (var connection = new SqliteConnection(connectionString))
-{
-    connection.Open();
-    var command = connection.CreateCommand();
-    command.CommandText = @"
-        CREATE TABLE IF NOT EXISTS Visitors (
-            IpAddress TEXT PRIMARY KEY,
-            Hits INTEGER DEFAULT 1,
-            LastSeen TEXT
-        );
-    ";
-    command.ExecuteNonQuery();
-}
-
-
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.UseDeveloperExceptionPage();
-}
-else
-{
-    app.UseExceptionHandler("/api/error");
-    app.UseHsts();
 }
 
+var connectionString = SqliteHelper.InitializeSqlite();
+
 // Routes
+
+// Get the last 5 BBS messages
+app.MapGet("/api/bbs", async (SqliteConnection db) =>
+{
+    using var connection = new SqliteConnection(connectionString);
+    await connection.OpenAsync();
+
+    var messageCmd = connection.CreateCommand();
+    messageCmd.CommandText = "SELECT Id, Author, Content, Timestamp FROM Messages ORDER BY Timestamp DESC LIMIT 5";
+
+    var messages = new List<Message>();
+    using var reader = await messageCmd.ExecuteReaderAsync();
+    while (await reader.ReadAsync())
+    {
+        messages.Add(new Message
+        {
+            Id = reader.GetInt32(0),
+            Author = reader.GetString(1),
+            Content = reader.GetString(2),
+            Timestamp = reader.GetDateTime(3)
+        });
+    }
+});
+
+// Post a new message
+app.MapPost("/api/bbs", async (Message msg, SqliteConnection db) =>
+{
+    // Escape HTML and truncate to 256 characters
+    var escapedContent = System.Net.WebUtility.HtmlEncode(msg.Content)[..256];
+
+    using var connection = new SqliteConnection(connectionString);
+    await connection.OpenAsync();
+
+    var messageCmd = connection.CreateCommand();
+    messageCmd.CommandText = "INSERT INTO Messages (Author, Content) VALUES ($author, $content);";
+    messageCmd.Parameters.AddWithValue("$author", msg.Author);
+    messageCmd.Parameters.AddWithValue("$content", escapedContent);
+    await messageCmd.ExecuteNonQueryAsync();
+});
+
+// System Telemetry
 app.MapGet("/api/system/usage", async (HttpContext context) =>
 {
     // Extract the real IP address
@@ -76,7 +89,6 @@ app.MapGet("/api/system/usage", async (HttpContext context) =>
     var stardate = TelemetricsHelper.GetStarDate();
     var weather = await TelemetricsHelper.GetLocalWeather();
     var hitResults = await HitCountHelper.ProcessHitCounts(connectionString, ip);
-
 
     var telemetry = new
     {
