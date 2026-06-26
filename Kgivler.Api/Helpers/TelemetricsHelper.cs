@@ -1,4 +1,11 @@
-﻿namespace Kgivler.Api;
+﻿/*
+ * kgivler_com
+ * 
+ * Copyright (c) 2026 Kyle Givler
+ * Licensed under the MIT License.
+ */
+
+namespace Kgivler.Api.Helpers;
 
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -124,39 +131,39 @@ internal static class TelemetricsHelper
     }
 
     internal static object GetGpuMetrics()
+    {
+        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && !RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && !RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                return new { Error = "Unsupported OS" };
-            }
-
-            try
-            {
-                var result = ExecuteCommand("nvidia-smi", "--query-gpu=name,memory.used,memory.total,utilization.gpu,utilization.memory --format=csv,noheader,nounits");
-                if (string.IsNullOrWhiteSpace(result))
-                {
-                    return new { Error = "GPU Sleeping or Driver Unavailable" };
-                }
-
-                var components = result.Split(',');
-                if (components.Length >= 4)
-                {
-                    return new 
-                    {
-                        Name = components[0].Trim(),
-                        VramUsedMB = components[1].Trim(),
-                        VramTotalMB = components[2].Trim(),
-                        LoadPercentage = components[3].Trim()
-                    };
-                }
-
-                return new { Error = result.Trim() };
-            }
-            catch
-            {
-                return new { Error = "No discrete GPU detected" };
-            }
+            return new { Error = "Unsupported OS" };
         }
+
+        try
+        {
+            var result = ExecuteCommand("nvidia-smi", "--query-gpu=name,memory.used,memory.total,utilization.gpu,utilization.memory --format=csv,noheader,nounits");
+            if (string.IsNullOrWhiteSpace(result))
+            {
+                return new { Error = "GPU Sleeping or Driver Unavailable" };
+            }
+
+            var components = result.Split(',');
+            if (components.Length >= 4)
+            {
+                return new
+                {
+                    Name = components[0].Trim(),
+                    VramUsedMB = components[1].Trim(),
+                    VramTotalMB = components[2].Trim(),
+                    LoadPercentage = components[3].Trim()
+                };
+            }
+
+            return new { Error = result.Trim() };
+        }
+        catch
+        {
+            return new { Error = "No discrete GPU detected" };
+        }
+    }
 
     internal static string GetStarDate()
     {

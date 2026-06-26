@@ -1,126 +1,104 @@
 /*
- * Random Steam Game
+ * kgivler_com
  * 
  * Copyright (c) 2026 Kyle Givler
  * Licensed under the MIT License.
  */
 
-using Kgivler.Api;
+// TODO Add Rate Limiting just in case
+
 using Kgivler.Api.BackgroundServices;
+using Kgivler.Api.Bbs;
+using Kgivler.Api.Extensions;
+using Kgivler.Api.Helpers;
+using Microsoft.Data.Sqlite;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using Microsoft.Data.Sqlite;
-using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = SqliteHelper.InitializeSqlite();
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-builder.Services.AddHostedService<SystemCpuMonitor>();
+builder.Services.AddApplicationServices(connectionString, builder.Environment);
 
-// CORS Configuration
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("MainSiteCorsPolicy", policy =>
-    {
-        var allowedOrigins = new List<string>
-        {
-            "https://kgivler.com",
-            "https://www.kgivler.com"
-        };
-
-        // Append local development tools if running locally
-        if (builder.Environment.IsDevelopment())
-        {
-            allowedOrigins.Add("http://localhost:5500");   // VS Code Live Server default
-            allowedOrigins.Add("http://127.0.0.1:5500");   // Alternate Live Server loopback
-            allowedOrigins.Add("http://localhost:3000");   // Typical Vite/React dev server port
-        }
-
-        policy.WithOrigins(allowedOrigins.ToArray())
-              .WithMethods("GET", "POST")
-              .WithHeaders("Content-Type", "Authorization");
-    });
-});
-
-// App Configuration
 var app = builder.Build();
+app.ConfigurePipeline(builder.Environment);
 
-// Cloudfare Configuration
-var forwardedOptions = new ForwardedHeadersOptions
-{
-    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-};
-
-forwardedOptions.KnownIPNetworks.Clear();
-forwardedOptions.KnownProxies.Clear();
-
-// Explicitly trust the local loopback adapters so local proxy headers are respected
-forwardedOptions.KnownProxies.Add(System.Net.IPAddress.Loopback);
-forwardedOptions.KnownProxies.Add(System.Net.IPAddress.IPv6Loopback);
-
-// Cloudflare CF-Visitor parsing middleware
-app.Use((context, next) =>
-{
-    if (context.Request.Headers.TryGetValue("CF-Visitor", out var cfVisitor))
-    {
-        if (cfVisitor.ToString().Contains("\"scheme\":\"https\""))
-        {
-            context.Request.Headers["X-Forwarded-Proto"] = "https";
-        }
-    }
-    return next();
-});
-
-// Sqlite Configuration
-var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-var dataFolder = Path.Combine(baseDirectory, "Data");
-Directory.CreateDirectory(dataFolder);
-
-var dbFile = "hitcounter.db";
-var dbPath = Path.Combine(dataFolder, dbFile);
-
-
-var connectionString = $"Data Source={dbPath};Mode=ReadWriteCreate;Cache=Shared;";
-using (var connection = new SqliteConnection(connectionString))
-{
-    connection.Open();
-    var command = connection.CreateCommand();
-    command.CommandText = @"
-        CREATE TABLE IF NOT EXISTS Visitors (
-            IpAddress TEXT PRIMARY KEY,
-            Hits INTEGER DEFAULT 1,
-            LastSeen TEXT
-        );
-    ";
-    command.ExecuteNonQuery();
-}
-
-app.UseCors("MainSiteCorsPolicy");
-app.UseForwardedHeaders(forwardedOptions);
-
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.UseDeveloperExceptionPage();
-}
-else
-{
-    app.UseExceptionHandler("/api/error");
-    app.UseHsts();
 }
 
 // Routes
+
+// Get the last 5 BBS messages
+app.MapGet("/api/bbs", async (SqliteConnection db) =>
+{
+    var messages = new List<Message>();
+    try
+    {
+        using var connection = new SqliteConnection(connectionString);
+        await connection.OpenAsync();
+
+        var messageCmd = connection.CreateCommand();
+        messageCmd.CommandText = "SELECT Id, Author, Content, Timestamp FROM Messages ORDER BY Timestamp DESC LIMIT 5";
+
+        using var reader = await messageCmd.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
+        {
+            messages.Add(new Message
+            {
+                Id = reader.GetInt32(0),
+                Author = reader.GetString(1),
+                Content = reader.GetString(2),
+                Timestamp = reader.GetDateTime(3)
+            });
+        }
+    }
+    catch
+    {
+        // TODO: Logging
+        Results.Problem("An error occurred while fetching messages.");
+    }
+
+    return Results.Ok(messages);
+});
+
+// Post a new message
+app.MapPost("/api/bbs", async (Message msg, SqliteConnection db) =>
+{
+    try
+    {
+        // Escape HTML and truncate to 256 characters
+        var content = msg.Content.Length > 256 ? msg.Content[..256] : msg.Content;
+        var escapedContent = System.Net.WebUtility.HtmlEncode(content);
+
+        using var connection = new SqliteConnection(connectionString);
+        await connection.OpenAsync();
+
+        var messageCmd = connection.CreateCommand();
+        messageCmd.CommandText = "INSERT INTO Messages (Author, Content) VALUES ($author, $content);";
+        messageCmd.Parameters.AddWithValue("$author", msg.Author);
+        messageCmd.Parameters.AddWithValue("$content", escapedContent);
+
+        await messageCmd.ExecuteNonQueryAsync();
+        return Results.Created("/api/bbs", new { status = "success", message = "Post received." });
+    }
+    catch (Exception ex)
+    {
+        // TODO: Logging
+        return Results.Problem("An error occurred while saving your message.");
+    }
+});
+
+// System Telemetry
 app.MapGet("/api/system/usage", async (HttpContext context) =>
 {
     // Extract the real IP address
-    var forwardedHeader = context.Request.Headers["CF-Connecting-IP"].FirstOrDefault() 
-                       ?? context.Request.Headers["X-Forwarded-For"].FirstOrDefault() 
-                       ?? context.Connection.RemoteIpAddress?.ToString() 
+    var forwardedHeader = context.Request.Headers["CF-Connecting-IP"].FirstOrDefault()
+                       ?? context.Request.Headers["X-Forwarded-For"].FirstOrDefault()
+                       ?? context.Connection.RemoteIpAddress?.ToString()
                        ?? "unknown";
-    
+
     // If multiple IPs are in X-Forwarded-For, take the first one
     var ip = forwardedHeader.Split(',')[0].Trim();
 
@@ -133,8 +111,7 @@ app.MapGet("/api/system/usage", async (HttpContext context) =>
     var cpuUsage = TelemetricsHelper.GetCpuUsage();
     var stardate = TelemetricsHelper.GetStarDate();
     var weather = await TelemetricsHelper.GetLocalWeather();
-    var hitResults = await ProcessHitCounts(connectionString, ip);
-
+    var hitResults = await HitCountHelper.ProcessHitCounts(connectionString, ip);
 
     var telemetry = new
     {
@@ -164,41 +141,3 @@ app.MapGet("/api/system/usage", async (HttpContext context) =>
 });
 
 app.Run();
-
-
-async static Task<(long totalHits, long uniqueVisitors)> ProcessHitCounts(string connectionString, string ip)
-{
-    
-    long totalHits = 0;
-    long uniqueVisitors = 0;
-
-    // SQLite Upsert and Count
-    using var connection = new SqliteConnection(connectionString);
-    await connection.OpenAsync();
-
-    // Update the hit count
-    var upsertCmd = connection.CreateCommand();
-    upsertCmd.CommandText = @"
-            INSERT INTO Visitors (IpAddress, Hits, LastSeen)
-            VALUES ($ip, 1, $date)
-            ON CONFLICT(IpAddress) DO UPDATE SET
-                Hits = Hits + 1,
-                LastSeen = $date;
-        ";
-    upsertCmd.Parameters.AddWithValue("$ip", ip);
-    upsertCmd.Parameters.AddWithValue("$date", DateTime.UtcNow.ToString("o"));
-    await upsertCmd.ExecuteNonQueryAsync();
-
-    // Get Totals
-    var statsCmd = connection.CreateCommand();
-    statsCmd.CommandText = "SELECT COUNT(IpAddress), SUM(Hits) FROM Visitors;";
-    using var reader = await statsCmd.ExecuteReaderAsync();
-
-    if (await reader.ReadAsync())
-    {
-        uniqueVisitors = reader.IsDBNull(0) ? 0 : reader.GetInt64(0);
-        totalHits = reader.IsDBNull(1) ? 0 : reader.GetInt64(1);
-    }
-    
-    return (totalHits, uniqueVisitors);
-}
