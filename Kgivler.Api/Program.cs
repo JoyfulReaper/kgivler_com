@@ -14,7 +14,9 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddApplicationServices(builder.Environment);
+var connectionString = SqliteHelper.InitializeSqlite();
+
+builder.Services.AddApplicationServices(connectionString, builder.Environment);
 
 var app = builder.Build();
 app.ConfigurePipeline(builder.Environment);
@@ -24,47 +26,66 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-var connectionString = SqliteHelper.InitializeSqlite();
-
 // Routes
 
 // Get the last 5 BBS messages
 app.MapGet("/api/bbs", async (SqliteConnection db) =>
 {
-    using var connection = new SqliteConnection(connectionString);
-    await connection.OpenAsync();
-
-    var messageCmd = connection.CreateCommand();
-    messageCmd.CommandText = "SELECT Id, Author, Content, Timestamp FROM Messages ORDER BY Timestamp DESC LIMIT 5";
-
     var messages = new List<Message>();
-    using var reader = await messageCmd.ExecuteReaderAsync();
-    while (await reader.ReadAsync())
+    try
     {
-        messages.Add(new Message
+        using var connection = new SqliteConnection(connectionString);
+        await connection.OpenAsync();
+
+        var messageCmd = connection.CreateCommand();
+        messageCmd.CommandText = "SELECT Id, Author, Content, Timestamp FROM Messages ORDER BY Timestamp DESC LIMIT 5";
+
+        using var reader = await messageCmd.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
         {
-            Id = reader.GetInt32(0),
-            Author = reader.GetString(1),
-            Content = reader.GetString(2),
-            Timestamp = reader.GetDateTime(3)
-        });
+            messages.Add(new Message
+            {
+                Id = reader.GetInt32(0),
+                Author = reader.GetString(1),
+                Content = reader.GetString(2),
+                Timestamp = reader.GetDateTime(3)
+            });
+        }
     }
+    catch
+    {
+        // TODO: Logging
+        Results.Problem("An error occurred while fetching messages.");
+    }
+
+    return Results.Ok(messages);
 });
 
 // Post a new message
 app.MapPost("/api/bbs", async (Message msg, SqliteConnection db) =>
 {
-    // Escape HTML and truncate to 256 characters
-    var escapedContent = System.Net.WebUtility.HtmlEncode(msg.Content)[..256];
+    try
+    {
+        // Escape HTML and truncate to 256 characters
+        var content = msg.Content.Length > 256 ? msg.Content[..256] : msg.Content;
+        var escapedContent = System.Net.WebUtility.HtmlEncode(content);
 
-    using var connection = new SqliteConnection(connectionString);
-    await connection.OpenAsync();
+        using var connection = new SqliteConnection(connectionString);
+        await connection.OpenAsync();
 
-    var messageCmd = connection.CreateCommand();
-    messageCmd.CommandText = "INSERT INTO Messages (Author, Content) VALUES ($author, $content);";
-    messageCmd.Parameters.AddWithValue("$author", msg.Author);
-    messageCmd.Parameters.AddWithValue("$content", escapedContent);
-    await messageCmd.ExecuteNonQueryAsync();
+        var messageCmd = connection.CreateCommand();
+        messageCmd.CommandText = "INSERT INTO Messages (Author, Content) VALUES ($author, $content);";
+        messageCmd.Parameters.AddWithValue("$author", msg.Author);
+        messageCmd.Parameters.AddWithValue("$content", escapedContent);
+
+        await messageCmd.ExecuteNonQueryAsync();
+        return Results.Created("/api/bbs", new { status = "success", message = "Post received." });
+    }
+    catch (Exception ex)
+    {
+        // TODO: Logging
+        return Results.Problem("An error occurred while saving your message.");
+    }
 });
 
 // System Telemetry

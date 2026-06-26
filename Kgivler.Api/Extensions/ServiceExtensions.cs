@@ -6,15 +6,21 @@
  */
 
 using Kgivler.Api.BackgroundServices;
+using Microsoft.Data.Sqlite;
 
 namespace Kgivler.Api.Extensions;
 
 public static class ServiceExtensions
 {
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services, IWebHostEnvironment env)
+    public static IServiceCollection AddApplicationServices(
+        this IServiceCollection services,
+        string connectionString,
+        IWebHostEnvironment env)
     {
-        // Add your background services
         services.AddHostedService<SystemCpuMonitor>();
+
+        services.AddScoped<SqliteConnection>(_ =>
+            new SqliteConnection(connectionString));
 
         // CORS Configuration
         services.AddCors(options =>

@@ -18,7 +18,7 @@ internal static class SqliteHelper
         var dataFolder = Path.Combine(baseDirectory, "Data");
         Directory.CreateDirectory(dataFolder);
 
-        var dbPath = Path.Combine(dataFolder, "hitcounter.db"); // TODO appsettings
+        var dbPath = Path.Combine(dataFolder, "kgivler_com.db"); // TODO appsettings
         var connectionString = $"Data Source={dbPath};Mode=ReadWriteCreate;Cache=Shared;";
 
         using var connection = new SqliteConnection(connectionString);

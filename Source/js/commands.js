@@ -1,8 +1,9 @@
-// TODO: Create a virtual filesystem files.js 
+// TODO: Create a virtual filesystem files.js
 
 import { PLAYLIST } from "./config.js";
 import { elements, render, showError, showLoading, initHostTelemetry } from "./ui.js";
 import { getSystemData, fetchRandomGame } from "./api.js";
+import { API_CONFIG } from "./config.js";
 
 // Private helpers
 function runPlay() {
@@ -68,12 +69,12 @@ async function runStatus() {
 }
 
 async function runNeofetch() {
-    showLoading('Gathering system info...');
-    const data = await getSystemData();
-    if (!data) return showError("[ERROR] Could not retrieve system data. Host unreachable.");
+  showLoading("Gathering system info...");
+  const data = await getSystemData();
+  if (!data) return showError("[ERROR] Could not retrieve system data. Host unreachable.");
 
-    const gpuName = data.gpu.name ? data.gpu.name : (data.gpu.error || "Unknown GPU");
-    render(`<pre style="color: #39ff14; font-size: 0.8rem; line-height: 1.2; margin: 0;">
+  const gpuName = data.gpu.name ? data.gpu.name : data.gpu.error || "Unknown GPU";
+  render(`<pre style="color: #39ff14; font-size: 0.8rem; line-height: 1.2; margin: 0;">
       /\\        <span style="color: #38bdf8; font-weight: bold;">kyle@kgivler</span>
      /  \\       ------------
     /____\\      <span style="color: #ffffff;">OS:</span>     ${data.os} (${data.architecture})
@@ -83,57 +84,127 @@ async function runNeofetch() {
 /____________\\  <span style="color: #ffffff;">RAM:</span>    ${data.ram}
                 <span style="color: #ffffff;">GPU:</span>    ${gpuName}
 </pre>`);
-    initHostTelemetry(data);
+  initHostTelemetry(data);
 }
 
 async function runDate() {
-    showLoading('Caluclating stardate...');
-    const data = await getSystemData();
-    // Fallback to local date if API is down
-    const dateStr = data ? data.stardate : new Date().toString();
-    render(`${new Date().toString()}<br/><span style="color: #888892;">Stardate: ${dateStr}</span>`);
+  showLoading("Caluclating stardate...");
+  const data = await getSystemData();
+  // Fallback to local date if API is down
+  const dateStr = data ? data.stardate : new Date().toString();
+  render(`${new Date().toString()}<br/><span style="color: #888892;">Stardate: ${dateStr}</span>`);
 }
 
 async function runUname(args) {
-    showLoading('Looking up name...');
-    if (args.includes('-a')) {
-        const data = await getSystemData();
-        if (data) {
-             render(`${data.os} kgivler-web ${data.framework} ${data.architecture} GNU/Linux`);
-        } else {
-             render(`Linux kgivler-web x86_64 GNU/Linux`);
-        }
+  showLoading("Looking up name...");
+  if (args.includes("-a")) {
+    const data = await getSystemData();
+    if (data) {
+      render(`${data.os} kgivler-web ${data.framework} ${data.architecture} GNU/Linux`);
     } else {
-        render('Linux');
+      render(`Linux kgivler-web x86_64 GNU/Linux`);
     }
+  } else {
+    render("Linux");
+  }
 }
 
 async function runUptime() {
-    showLoading('Querying system timers...');
-    const data = await getSystemData();
-    if (!data) return showError("[ERROR] Unable to fetch system initialization timers.");
+  showLoading("Querying system timers...");
+  const data = await getSystemData();
+  if (!data) return showError("[ERROR] Unable to fetch system initialization timers.");
 
-    // Format current local time as HH:MM:SS
-    const currentTime = new Date().toLocaleTimeString('en-US', { hour12: false });
-    
-    // Extract the raw CPU percentage to simulate a load average
-    const cpuNum = data.cpuUsage.replace('%', '').trim();
-    const loadAvg = (parseFloat(cpuNum) / 100).toFixed(2);
+  // Format current local time as HH:MM:SS
+  const currentTime = new Date().toLocaleTimeString("en-US", { hour12: false });
 
-    // Standard Linux uptime format: 
-    // 16:45:22 up 5 days, 22:34,  1 user,  load average: 0.08, 0.04, 0.01
-    render(`${currentTime} up ${data.uptime},  1 user,  load average: ${loadAvg}, 0.05, 0.01`);
+  // Extract the raw CPU percentage to simulate a load average
+  const cpuNum = data.cpuUsage.replace("%", "").trim();
+  const loadAvg = (parseFloat(cpuNum) / 100).toFixed(2);
+
+  // Standard Linux uptime format:
+  // 16:45:22 up 5 days, 22:34,  1 user,  load average: 0.08, 0.04, 0.01
+  render(`${currentTime} up ${data.uptime},  1 user,  load average: ${loadAvg}, 0.05, 0.01`);
+}
+
+async function runBbs(args) {
+  showLoading("Dialing KGIVLER BBS node...");
+  await new Promise((r) => setTimeout(r, 800)); // Takes awhile to dail ya feel me?
+
+  // --- Show Command ---
+  if (args.length > 0 && args[0].toLowerCase() === "show") {
+    try {
+      const response = await fetch(`${API_CONFIG.TELEMETRY}/api/bbs`);
+
+      if (!response.ok) throw new Error("Busy");
+
+      const messages = await response.json();
+
+      if (messages.length === 0) {
+        return render(`<pre style="color: #888;">[BOARD EMPTY: No messages found]</pre>`);
+      }
+
+      let output = `<pre style="color: #38bdf8; font-family: monospace; line-height: 1.4; margin: 0;">
+__________________________________________
+|                                          |
+|         --- KGIVLER BBS v1.0 ---         |
+|__________________________________________|
+`;
+      messages.forEach((m) => {
+        const date = new Date(m.timestamp).toLocaleDateString();
+        output += `[${date}] <strong>${m.author}</strong>: ${m.content}\n`;
+      });
+      output += `</pre>`;
+
+      render(output);
+      return;
+    } catch (err) {
+      // THE "BUSY TONE" AESTHETIC
+      render(`<pre style="color: #ff3131; font-family: monospace; margin: 0;">
+[!] CONNECT 2400 / ARQ
+[!] ERROR: NO CARRIER
+[!] BUSY TONE... (BBS currently offline)</pre>`);
+      return;
+    }
+  }
+
+  // --- Post Command ---
+  if (args.length > 0) {
+    try {
+      const content = args.join(" ");
+      const response = await fetch(`${API_CONFIG.TELEMETRY}/api/bbs`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ author: "Visitor", content: content }),
+      });
+
+      if (response.ok) {
+        render('<pre style="color: #39ff14; font-family: monospace; margin: 0;">Message transmitted and acknowledged.</pre>');
+      } else {
+        throw new Error("Post Failed");
+      }
+    } catch (e) {
+      render(`<pre style="color: #ff3131; font-family: monospace; margin: 0;">[!] CONNECTION LOST. Message failed to send.</pre>`);
+    }
+    return;
+  }
+
+  render('<pre style="color: #e2e8f0; font-family: monospace; margin: 0;">Usage: bbs show | bbs [message]</pre>');
 }
 
 // --- PUBLIC EXPORT ---
 export const Commands = {
-    help: () => render(`[INFO] Available commands: random [vanityUrl], clear, cowsay, stats, ls, pwd, echo, cat, music, neofetch, sudo, uname, top, whoami, date, history`),
-    clear: () => { elements.output.innerHTML = ''; elements.demo.innerHTML = ''; },
-    pwd: () => render('/home/kyle/workspace/kgivler.com'),
-    whoami: () => render('kyle'),
-    echo: (args) => render(args.join(' ').replace(/</g, '&lt;').replace(/>/g, '&gt;')),
-    
-    ls: () => render(`
+  help: () => render(`[INFO] Available commands: random [vanityUrl], clear, cowsay, stats, ls, pwd, echo, cat, music, neofetch, sudo, uname, top, whoami, date, history`),
+  clear: () => {
+    elements.output.innerHTML = "";
+    elements.demo.innerHTML = "";
+  },
+  pwd: () => render("/home/kyle/workspace/kgivler.com"),
+  whoami: () => render("kyle"),
+  bbs: (args) => runBbs(args),
+  echo: (args) => render(args.join(" ").replace(/</g, "&lt;").replace(/>/g, "&gt;")),
+
+  ls: () =>
+    render(`
         <div style="color: #e2e8f0; line-height: 1.5;">
             <span style="color: #38bdf8;">drwxr-xr-x</span> ./<br>
             <span style="color: #38bdf8;">drwxr-xr-x</span> ../<br>
@@ -143,9 +214,10 @@ export const Commands = {
             <span style="color: #39ff14;">-rwxr-xr-x</span> RandomSteamGame.dll
         </div>`),
 
-    cat: (args) => {
-        if (args.length === 0) return showError('cat: missing file operand');
-        if (args[0] === 'LICENSE.txt') return render(`<pre style="color: #888892; font-size: 0.8rem; white-space: pre-wrap; margin:0;">
+  cat: (args) => {
+    if (args.length === 0) return showError("cat: missing file operand");
+    if (args[0] === "LICENSE.txt")
+      return render(`<pre style="color: #888892; font-size: 0.8rem; white-space: pre-wrap; margin:0;">
 The MIT License (MIT)
 
 Copyright 2026 Kyle Givler
@@ -164,27 +236,32 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMA
 WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 USE OR OTHER DEALINGS IN THE SOFTWARE.
 </pre>`);
-        if (args[0] === 'Far_Cry_Play_Order.md') return render(`<span style="color: #e2e8f0;"># Playthrough List<br/>1. Far Cry 6<br/>2. Far Cry New Dawn<br/>3. Far Cry 5<br/>4. Far Cry Primal<br/>5. Far Cry 4<br/>6. Far Cry 3<br/>7. Far Cry 2 (in progress)<br />WHY CAN I NEVER BEAT Far Cry 1????!</span>`);
-        return showError(`cat: ${args[0].replace(/</g, '&lt;')}: No such file or directory`);
-    },
+    if (args[0] === "Far_Cry_Play_Order.md")
+      return render(
+        `<span style="color: #e2e8f0;"># Playthrough List<br/>1. Far Cry 6<br/>2. Far Cry New Dawn<br/>3. Far Cry 5<br/>4. Far Cry Primal<br/>5. Far Cry 4<br/>6. Far Cry 3<br/>7. Far Cry 2 (in progress)<br />WHY CAN I NEVER BEAT Far Cry 1????!</span>`,
+      );
+    return showError(`cat: ${args[0].replace(/</g, "&lt;")}: No such file or directory`);
+  },
 
-    play: () => runPlay(),
-    music: () => runPlay(),
+  play: () => runPlay(),
+  music: () => runPlay(),
 
-    cowsay: (args) => {
-        const msg = args.length > 0 ? args.join(' ').replace(/</g, '&lt;') : "Moo.";
-        render(`<pre style="color: #e2e8f0;"> ${'_'.repeat(msg.length + 2)}<br>< ${msg} ><br> ${'-'.repeat(msg.length + 2)}<br>        \\   ^__^<br>         \\  (oo)\\_______<br>            (__)\\       )\\/\\<br>                ||----w |<br>                ||     ||</pre>`);
-    },
+  cowsay: (args) => {
+    const msg = args.length > 0 ? args.join(" ").replace(/</g, "&lt;") : "Moo.";
+    render(
+      `<pre style="color: #e2e8f0;"> ${"_".repeat(msg.length + 2)}<br>< ${msg} ><br> ${"-".repeat(msg.length + 2)}<br>        \\   ^__^<br>         \\  (oo)\\_______<br>            (__)\\       )\\/\\<br>                ||----w |<br>                ||     ||</pre>`,
+    );
+  },
 
-    sudo: () => render('<span class="text-danger">[SECURITY] User kyle is not in the sudoers file. Incident reported.</span>'),
-    
-    random: (args) => fetchRandomGame(args[0]),
-    neofetch: () => runNeofetch(),
-    top: () => runTop(),
-    status: () => runStatus(),
-    uptime: () => runUptime(),
-    stats: () => runStatus(),
-    date: () => runDate(),
-    uname: (args) => runUname(args),
-    history: () => render(`<div style="color: #e2e8f0; line-height: 1.5;">1  sudo rm -rf /<br>2  git push --force origin main<br>3  neofetch<br>4  history</div>`)
+  sudo: () => render('<span class="text-danger">[SECURITY] User kyle is not in the sudoers file. Incident reported.</span>'),
+
+  random: (args) => fetchRandomGame(args[0]),
+  neofetch: () => runNeofetch(),
+  top: () => runTop(),
+  status: () => runStatus(),
+  uptime: () => runUptime(),
+  stats: () => runStatus(),
+  date: () => runDate(),
+  uname: (args) => runUname(args),
+  history: () => render(`<div style="color: #e2e8f0; line-height: 1.5;">1  sudo rm -rf /<br>2  git push --force origin main<br>3  neofetch<br>4  history</div>`),
 };
