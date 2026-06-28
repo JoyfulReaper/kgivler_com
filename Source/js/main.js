@@ -7,28 +7,41 @@ async function processCommand(input) {
 
   elements.input.value = "";
 
-  const parts = input.match(/(?:[^\s"']+|"[^"]*"|'[^']*')+/g) || [];
-  const cmd = parts[0].toLowerCase();
-  const args = parts.slice(1).map((arg) => arg.replace(/^["'](.*)["']$/, "$1"));
+try {
+    const parts = input.match(/(?:[^\s"']+|"[^"]*"|'[^']*')+/g) || [];
+    const cmd = parts[0].toLowerCase();
+    const args = parts.slice(1).map((arg) => arg.replace(/^["'](.*)["']$/, "$1"));
 
-  if (Commands[cmd]) {
-    await Commands[cmd](args);
-  } else {
-    showError(`Command not found: ${cmd}. Type 'help' for options.`);
+    if (Commands[cmd]) {
+      await Commands[cmd](args);
+    } else {
+      showError(`bash: command not found: ${cmd}`);
+    }
+  } catch (err) {
+    console.error("Execution error:", err);
+    showError(`Runtime error: ${err.message}`);
+  } finally {
+    elements.input.focus();
   }
 }
 
 // --- INITIALIZATION ---
 document.addEventListener("DOMContentLoaded", async () => {
-  const data = await getSystemData();
-  initHostTelemetry(data);
+  try {
+    const data = await getSystemData();
+    initHostTelemetry(data);
+  } catch (err) {
+    console.error("Telemetry failed to init:", err);
+  }
 
-  // Terminal input
-  elements.input?.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") processCommand(elements.input.value.trim());
-  });
+  // Terminal input listener
+  if (elements.input) {
+    elements.input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") processCommand(elements.input.value.trim());
+    });
+  }
 
-  // steam widget run button
+  // Steam widget button
   const randomBtn = document.getElementById("btn-random-game");
   if (randomBtn) {
     randomBtn.addEventListener("click", () => fetchRandomGame());

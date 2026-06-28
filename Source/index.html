@@ -12,199 +12,198 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <meta name="description" content="Kyle Givler's personal terminal-themed portfolio. Software Developer, Modder, and Creator of the Random Steam Game Picker.">
+    <meta name="description" content="Kyle Givler's personal terminal-themed portfolio. Software Developer, Modder, and Creator of the Random Steam Game Picker." />
   </head>
   <body class="terminal-theme">
-    <div class="main-container">
-      <div class="terminal-window">
-        <div class="terminal-header">
-          <span class="terminal-dot close-dot"></span>
-          <span class="terminal-dot minimize-dot"></span>
-          <span class="terminal-dot expand-dot"></span>
-          <span class="terminal-title">bash — kyle@kgivler.com</span>
+    <main class="main-container">
+        <div class="terminal-window">
+          <header class="terminal-header">
+            <span class="terminal-dot close-dot"></span>
+            <span class="terminal-dot minimize-dot"></span>
+            <span class="terminal-dot expand-dot"></span>
+            <span class="terminal-title">bash — kyle@kgivler.com</span>
+          </header>
+
+          <div class="terminal-body">
+            <header class="mb-4">
+              <div class="cmd-line">
+                <span class="prompt">kyle@kgivler:~$</span>
+                whoami
+              </div>
+              <h1 class="display-5 fw-bold terminal-header-text">Kyle Givler</h1>
+              <div class="terminal-lead">Software Developer & Video Game Enthusiast</div>
+            </header>
+
+            <hr class="terminal-divider" />
+            <section class="my-4">
+              <div class="cmd-line">
+                <span class="prompt">kyle@kgivler:~$</span>
+                systemctl status local-host.service
+              </div>
+              <div class="system-warning-box">
+                <i class="fas fa-server me-2"></i>
+                <span>
+                  [NOTICE] This website runs on my personal workstation via a Cloudflare tunnel.
+                  <br />
+                  Unexpected downtime may occur during host maintenance or if the workstation is off.
+                </span>
+              </div>
+              <div id="host-telemetry" class="mt-3 project-terminal-badge">
+                <div class="text-warning animate-pulse">
+                  <i class="fas fa-spinner fa-spin me-2"></i>
+                  Establishing connection to host...
+                </div>
+              </div>
+            </section>
+
+            <hr class="terminal-divider" />
+            <section class="my-4" id="demo-section">
+              <div class="cmd-line">
+                <span class="prompt">kyle@kgivler:~$</span>
+                ./get-random-game -vanity
+                <input type="text" id="demoSteamInput" placeholder="Mister_God" class="terminal-input" />
+              </div>
+              <button id="btn-random-game" class="terminal-btn-inline">Run</button>
+              <a href="https://randomsteam.kgivler.com/" class="terminal-btn-inline text-decoration-none">Full Site</a>
+
+              <div id="demo-output" class="mt-3"></div>
+            </section>
+
+            <hr class="terminal-divider" />
+            <section class="my-4">
+              <div class="cmd-line">
+                <span class="prompt">kyle@kgivler:~$</span>
+                ./get_recent_projects.sh
+              </div>
+              <div class="d-flex flex-column gap-3">
+                <article class="project-terminal-badge d-flex flex-column gap-2 w-100">
+                  <div>
+                    <i class="fas fa-code-branch me-2 text-accent"></i>
+                    Status:
+                    <span class="text-success">Stable</span>
+                  </div>
+                  <div>
+                    <i class="fas fa-file-lines me-2 text-accent"></i>
+                    Description:
+                    <span class="text-white-50">Stop scrolling you Steam Library. Play something random instead.</span>
+                  </div>
+                  <div>
+                    <i class="fas fa-terminal me-2 animate-pulse"></i>
+                    GitHub:
+                    <a href="https://github.com/JoyfulReaper/RandomSteamGame" target="_blank" rel="noopener noreferrer">Random Steam Game Picker</a>
+                  </div>
+                </article>
+
+                <article class="project-terminal-badge d-flex flex-column gap-2 w-100">
+                  <div>
+                    <i class="fas fa-code-branch me-2 text-accent"></i>
+                    Status:
+                    <span class="text-danger">Pre-Alpha</span>
+                  </div>
+                  <div>
+                    <i class="fas fa-file-lines me-2 text-accent"></i>
+                    Description:
+                    <span class="text-white-50">Complete overhaul and modernization of Replace Stuff. Bug fixes and new features. Not yet in a usable state.</span>
+                  </div>
+                  <div>
+                    <i class="fas fa-terminal me-2 animate-pulse"></i>
+                    GitHub:
+                    <a href="https://github.com/JoyfulReaper/RimWorld-ReplaceStuff" target="_blank" rel="noopener noreferrer">RimWorld: Replace Stuff: Performance Edition</a>
+                  </div>
+                </article>
+
+                <article class="project-terminal-badge d-flex flex-column gap-2 w-100">
+                  <div>
+                    <i class="fas fa-code-branch me-2 text-accent"></i>
+                    Status:
+                    <span class="text-success">Stable Minimum Viable Product</span>
+                  </div>
+                  <div>
+                    <i class="fas fa-file-lines me-2 text-accent"></i>
+                    Description:
+                    <span class="text-white-50">High-performance RimWorld mod for item label colorization. No-Regex, 66% faster than Quality Colors.</span>
+                  </div>
+                  <div>
+                    <i class="fas fa-terminal me-2 animate-pulse"></i>
+                    GitHub:
+                    <a href="https://github.com/JoyfulReaper/BetterTradeColors" target="_blank" rel="noopener noreferrer">Better Trade Colors (High Performance RimWorld Mod)</a>
+                  </div>
+                </article>
+
+                <article class="project-terminal-badge d-flex flex-column gap-2 w-100">
+                  <div>
+                    <i class="fas fa-code-branch me-2 text-accent"></i>
+                    Status:
+                    <span class="text-success">Stable</span>
+                  </div>
+                  <div>
+                    <i class="fas fa-file-lines me-2 text-accent"></i>
+                    Description:
+                    <span class="text-white-50">QOL RimWorld mod to force all pawns, mech and animals to a specified zone on button press, and return to previous zone on button press.</span>
+                  </div>
+                  <div>
+                    <i class="fas fa-terminal me-2 animate-pulse"></i>
+                    GitHub Repo:
+                    <a href="https://github.com/JoyfulReaper/PanicZoneToggler" target="_blank" rel="noopener noreferrer">Panic Zone Toggler (QOL RimWorld Mod)</a>
+                  </div>
+                </article>
+
+                <article class="project-terminal-badge d-flex flex-column gap-2 w-100">
+                  <div>
+                    <i class="fas fa-code-branch me-2 text-accent"></i>
+                    Status:
+                    <span class="text-danger">Pre-Alpha</span>
+                  </div>
+                  <div>
+                    <i class="fas fa-file-lines me-2 text-accent"></i>
+                    Description:
+                    <span class="text-white-50">RimWorld mod for Ideology DLC that makes the gods come alive! Early development, stable favor system in place</span>
+                  </div>
+                  <div>
+                    <i class="fas fa-terminal me-2 animate-pulse"></i>
+                    GitHub Repo:
+                    <a href="https://github.com/JoyfulReaper/TheGodsAreReal" target="_blank" rel="noopener noreferrer">The Gods Are Real (Ideology RimWorld Mod)</a>
+                  </div>
+              </article>
+            </section>
+
+            <hr class="terminal-divider" />
+            <div class="mt-4">
+              <div class="cmd-line">
+                <span class="prompt">kyle@kgivler:~$</span>
+                ls -la ./links/
+              </div>
+
+              <div class="d-flex justify-content-start flex-wrap gap-3 mt-3">
+                <a href="https://www.linkedin.com/in/kyle-givler/" class="terminal-btn" target="_blank" rel="noopener noreferrer">
+                  <i class="fab fa-linkedin me-2"></i>
+                  linkedin.lnk
+                </a>
+                <a href="https://github.com/JoyfulReaper" class="terminal-btn" target="_blank" rel="noopener noreferrer">
+                  <i class="fab fa-github me-2"></i>
+                  github.lnk
+                </a>
+                <a href="https://steamcommunity.com/id/Mister_God/" class="terminal-btn" target="_blank" rel="noopener noreferrer">
+                  <i class="fab fa-steam me-2"></i>
+                  steam_profile.lnk
+                </a>
+                <a href="https://steamcommunity.com/id/Mister_God/myworkshopfiles/?appid=294100" class="terminal-btn btn-highlight" target="_blank" rel="noopener noreferrer">
+                  <i class="fas fa-hammer me-2"></i>
+                  rimworld_mods.exe
+                </a>
+              </div>
+            </div>
+
+            <hr class="terminal-divider" />
+            <div class="cmd-line">
+              <label for="terminalCommandInput" class="prompt">kyle@kgivler:~$</label>
+              <input type="text" aria-label="terminal input" autocomplete="off" spellcheck="false" id="terminalCommandInput" placeholder="type 'help'..." class="terminal-input" />
+            </div>
+
+            <div id="terminal-output" aria-live="polite" class="mt-3 terminal-output-container"></div>
+          </div>
         </div>
-
-        <div class="terminal-body">
-          <div class="mb-4">
-            <div class="cmd-line">
-              <span class="prompt">kyle@kgivler:~$</span>
-              whoami
-            </div>
-            <h1 class="display-5 fw-bold terminal-header-text">Kyle Givler</h1>
-            <div class="terminal-lead">Software Developer & Video Game Enthusiast</div>
-          </div>
-
-          <hr class="terminal-divider" />
-          <div class="my-4">
-            <div class="cmd-line">
-              <span class="prompt">kyle@kgivler:~$</span>
-              systemctl status local-host.service
-            </div>
-            <div class="system-warning-box">
-              <i class="fas fa-server me-2"></i>
-              <span>
-                [NOTICE] This website runs on my personal workstation via a Cloudflare tunnel.
-                <br />
-                Unexpected downtime may occur during host maintenance or if the workstation is off.
-              </span>
-            </div>
-            <div id="host-telemetry" class="mt-3 project-terminal-badge">
-              <div class="text-warning animate-pulse">
-                <i class="fas fa-spinner fa-spin me-2"></i>
-                Establishing connection to host...
-              </div>
-            </div>
-          </div>
-
-          <hr class="terminal-divider" />
-          <div class="my-4" id="demo-section">
-            <div class="cmd-line">
-              <span class="prompt">kyle@kgivler:~$</span>
-              ./get-random-game -vanity
-              <input type="text" id="demoSteamInput" placeholder="Mister_God" class="terminal-input" />
-            </div>
-            <button id="btn-random-game" class="terminal-btn-inline">Run</button>
-            <a href="https://randomsteam.kgivler.com/" class="terminal-btn-inline text-decoration-none">Full Site</a>
-
-            <div id="demo-output" class="mt-3"></div>
-          </div>
-
-          <hr class="terminal-divider" />
-          <div class="my-4">
-            <div class="cmd-line">
-              <span class="prompt">kyle@kgivler:~$</span>
-              ./get_recent_projects.sh
-            </div>
-            <div class="d-flex flex-column gap-3">
-              <div class="project-terminal-badge d-flex flex-column gap-2 w-100">
-                <div>
-                  <i class="fas fa-code-branch me-2 text-accent"></i>
-                  Status:
-                  <span class="text-success">Stable</span>
-                </div>
-                <div>
-                  <i class="fas fa-file-lines me-2 text-accent"></i>
-                  Description:
-                  <span class="text-white-50">Stop scrolling you Steam Library. Play something random instead.</span>
-                </div>
-                <div>
-                  <i class="fas fa-terminal me-2 animate-pulse"></i>
-                  GitHub:
-                  <a href="https://github.com/JoyfulReaper/RandomSteamGame" target="_blank" rel="noopener noreferrer">Random Steam Game Picker</a>
-                </div>
-              </div>
-
-              <div class="project-terminal-badge d-flex flex-column gap-2 w-100">
-                <div>
-                  <i class="fas fa-code-branch me-2 text-accent"></i>
-                  Status:
-                  <span class="text-danger">Pre-Alpha</span>
-                </div>
-                <div>
-                  <i class="fas fa-file-lines me-2 text-accent"></i>
-                  Description:
-                  <span class="text-white-50">Complete overhaul and modernization of Replace Stuff. Bug fixes and new features. Not yet in a usable state.</span>
-                </div>
-                <div>
-                  <i class="fas fa-terminal me-2 animate-pulse"></i>
-                  GitHub:
-                  <a href="https://github.com/JoyfulReaper/RimWorld-ReplaceStuff" target="_blank" rel="noopener noreferrer">RimWorld: Replace Stuff: Performance Edition</a>
-                </div>
-              </div>
-
-              <div class="project-terminal-badge d-flex flex-column gap-2 w-100">
-                <div>
-                  <i class="fas fa-code-branch me-2 text-accent"></i>
-                  Status:
-                  <span class="text-success">Stable Minimum Viable Product</span>
-                </div>
-                <div>
-                  <i class="fas fa-file-lines me-2 text-accent"></i>
-                  Description:
-                  <span class="text-white-50">High-performance RimWorld mod for item label colorization. No-Regex, 66% faster than Quality Colors.</span>
-                </div>
-                <div>
-                  <i class="fas fa-terminal me-2 animate-pulse"></i>
-                  GitHub:
-                  <a href="https://github.com/JoyfulReaper/BetterTradeColors" target="_blank" rel="noopener noreferrer">Better Trade Colors (High Performance RimWorld Mod)</a>
-                </div>
-              </div>
-
-              <div class="project-terminal-badge d-flex flex-column gap-2 w-100">
-                <div>
-                  <i class="fas fa-code-branch me-2 text-accent"></i>
-                  Status:
-                  <span class="text-success">Stable</span>
-                </div>
-                <div>
-                  <i class="fas fa-file-lines me-2 text-accent"></i>
-                  Description:
-                  <span class="text-white-50">QOL RimWorld mod to force all pawns, mech and animals to a specified zone on button press, and return to previous zone on button press.</span>
-                </div>
-                <div>
-                  <i class="fas fa-terminal me-2 animate-pulse"></i>
-                  GitHub Repo:
-                  <a href="https://github.com/JoyfulReaper/PanicZoneToggler" target="_blank" rel="noopener noreferrer">Panic Zone Toggler (QOL RimWorld Mod)</a>
-                </div>
-              </div>
-
-              <div class="project-terminal-badge d-flex flex-column gap-2 w-100">
-                <div>
-                  <i class="fas fa-code-branch me-2 text-accent"></i>
-                  Status:
-                  <span class="text-danger">Pre-Alpha</span>
-                </div>
-                <div>
-                  <i class="fas fa-file-lines me-2 text-accent"></i>
-                  Description:
-                  <span class="text-white-50">RimWorld mod for Ideology DLC that makes the gods come alive! Early development, stable favor system in place</span>
-                </div>
-                <div>
-                  <i class="fas fa-terminal me-2 animate-pulse"></i>
-                  GitHub Repo:
-                  <a href="https://github.com/JoyfulReaper/TheGodsAreReal" target="_blank" rel="noopener noreferrer">The Gods Are Real (Ideology RimWorld Mod)</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <hr class="terminal-divider" />
-          <div class="mt-4">
-            <div class="cmd-line">
-              <span class="prompt">kyle@kgivler:~$</span>
-              ls -la ./links/
-            </div>
-
-            <div class="d-flex justify-content-start flex-wrap gap-3 mt-3">
-              <a href="https://www.linkedin.com/in/kyle-givler/" class="terminal-btn" target="_blank" rel="noopener noreferrer">
-                <i class="fab fa-linkedin me-2"></i>
-                linkedin.lnk
-              </a>
-              <a href="https://github.com/JoyfulReaper" class="terminal-btn" target="_blank" rel="noopener noreferrer">
-                <i class="fab fa-github me-2"></i>
-                github.lnk
-              </a>
-              <a href="https://steamcommunity.com/id/Mister_God/" class="terminal-btn" target="_blank" rel="noopener noreferrer">
-                <i class="fab fa-steam me-2"></i>
-                steam_profile.lnk
-              </a>
-              <a href="https://steamcommunity.com/id/Mister_God/myworkshopfiles/?appid=294100" class="terminal-btn btn-highlight" target="_blank" rel="noopener noreferrer">
-                <i class="fas fa-hammer me-2"></i>
-                rimworld_mods.exe
-              </a>
-            </div>
-          </div>
-
-          <hr class="terminal-divider" />
-          <div class="cmd-line">
-            <span class="prompt">kyle@kgivler:~$</span>
-            <input type="text" aria-label="terminal input" autocomplete="off" spellcheck="false" id="terminalCommandInput" placeholder="type 'help'..." class="terminal-input" />
-          </div>
-
-          <div id="terminal-output" aria-live="polite" class="mt-3 terminal-output-container"></div>
-        </div>
-      </div>
-    </div>
-    <script type="module" src="./js/main.js"></script>
+      <script type="module" src="./js/main.js"></script>
+    </main>
   </body>
 </html>
