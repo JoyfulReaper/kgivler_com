@@ -1,36 +1,60 @@
 import { Commands } from "./commands.js";
-import { elements, showError, initHostTelemetry } from "./ui.js";
+import { elements, Terminal, initHostTelemetry } from "./ui.js";
 import { getSystemData, fetchRandomGame } from "./api.js";
+import { parseCommandLine } from "./parser.js";
+
+// Helper to create UI-agnostic terminal contexts
+const createTerminalContext = (element) => ({
+  print: (html) => {
+    element.innerHTML = html;
+  },
+  error: (msg) => {
+    element.innerHTML = `<span class="text-danger">${msg}</span>`;
+  },
+  loading: (msg) => {
+    element.innerHTML = `<span class="text-warning">${msg}</span>`;
+  },
+  clear: () => {
+    element.innerHTML = "";
+  },
+});
+
+const demoTerminal = createTerminalContext(elements.demo);
 
 async function processCommand(input) {
   if (!input) return;
-
   elements.input.value = "";
 
-  const parts = input.match(/(?:[^\s"']+|"[^"]*"|'[^']*')+/g) || [];
-  const cmd = parts[0].toLowerCase();
-  const args = parts.slice(1).map((arg) => arg.replace(/^["'](.*)["']$/, "$1"));
+  const [cmd, ...args] = parseCommandLine(input);
 
-  if (Commands[cmd]) {
-    await Commands[cmd](args);
-  } else {
-    showError(`Command not found: ${cmd}. Type 'help' for options.`);
+  try {
+    if (Commands[cmd]) {
+      await Commands[cmd](args, Terminal);
+    } else {
+      Terminal.error(`bash: command not found: ${cmd}`);
+    }
+  } catch (err) {
+    console.error(`Execution error in ${cmd}:`, err);
+    Terminal.error(`[CRITICAL] Error executing command: ${cmd}`);
   }
 }
 
 // --- INITIALIZATION ---
-document.addEventListener("DOMContentLoaded", async () => {
-  const data = await getSystemData();
-  initHostTelemetry(data);
+document.addEventListener("DOMContentLoaded", () => {
+  // Telemetry
+  getSystemData().then(initHostTelemetry).catch(console.error);
 
-  // Terminal input
-  elements.input?.addEventListener("keypress", (e) => {
+  // Terminal input listener
+  elements.input?.addEventListener("keydown", (e) => {
     if (e.key === "Enter") processCommand(elements.input.value.trim());
   });
 
-  // steam widget run button
+  // Steam widget button
   const randomBtn = document.getElementById("btn-random-game");
   if (randomBtn) {
-    randomBtn.addEventListener("click", () => fetchRandomGame());
+    randomBtn.addEventListener("click", () => {
+      const input = document.getElementById("demoSteamInput")?.value.trim();
+      fetchRandomGame(input, demoTerminal);
+    });
   }
 });

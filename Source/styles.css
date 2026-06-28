@@ -246,3 +246,29 @@ body.terminal-theme {
         font-size: 0.8rem;
     }
 }
+
+/* Error Page Specifics */
+.error-segmentation-fault {
+    max-width: 600px;
+    background-color: rgba(220, 53, 69, 0.05);
+    border: 1px solid #dc3545 !important;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.error-text-dim { color: #888892; }
+.error-text-light { color: #e2e8f0; }
+
+/* Animation Additions */
+.dynamic-pulse {
+    animation: pulse 1.8s infinite ease-in-out;
+}
+
+/* 500 Error Page Specifics */
+.error-internal-fault {
+    max-width: 600px;
+    background-color: rgba(255, 193, 7, 0.05);
+    border: 1px solid #ffc107 !important;
+    margin-left: auto;
+    margin-right: auto;
+}

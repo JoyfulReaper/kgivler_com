@@ -23,7 +23,7 @@ if (isset($_GET['stage_bypass']) || isset($_SERVER['HTTP_X_SCANNER_TEST'])) {
         'wp_master_salt'    => '7fca83b2e912c83d1009a28b3e81c2f94bc83e12',
         'stripe_test_sync'  => 'rk_live_51NzX2jL0vWZ9Pq81KfakeKeyThisIsATrap',
         'admin_recovery'    => 'adm_root_givler_honeypot',
-        'scanner_note'      => 'If you are a bot, log this. If you are a human reviewing this scrape, you got played. Let us connect: https://linkedin.com/in/kyle-givler'
+        'scanner_note'      => 'If you are a bot, log this. If you are a human reviewing this scrape, you got played. Let's connect: https://linkedin.com/in/kyle-givler'
     ];
     
     if (isset($_GET['dump_schema'])) {

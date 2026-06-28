@@ -1,11 +1,11 @@
 export const IS_LOCAL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
-export const API_CONFIG = {
+export const API_CONFIG = Object.freeze({
     TELEMETRY: IS_LOCAL ? 'http://localhost:5081' : 'https://api.kgivler.com',
     STEAM: IS_LOCAL ? 'http://localhost:5182' : 'https://randomsteam.kgivler.com'
-}
+});
 
-export const PLAYLIST = [
+export const PLAYLIST = Object.freeze([
     { band: "Infant Annihilator / Rings of Saturn mix", genre: "Technical Deathcore", meta: "Blast beats: Engaged" },
     { band: "Pat The Bunny", genre: "Folk Punk", meta: "Anarchy level: Maximum" },
     { band: "Johnny Hobo & The Freight Trains", genre: "Folk Punk", meta: "Existential crisis: Active" },
@@ -22,4 +22,4 @@ export const PLAYLIST = [
     { band: "La Coka Nostra", genre: "Hardcore Hip-Hop", meta: "Threat assessment: Elevated" },
     { band: "Onyx", genre: "Hardcore Rap", meta: "Energy level: Breaking furniture" },
     { band: "M.O.P. / Ante Up", genre: "Aggressive Hip-Hop", meta: "Fight-or-flight: Fight" }
-];
+]);
