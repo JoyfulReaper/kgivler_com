@@ -1,6 +1,8 @@
 import { Commands } from "./commands.js";
 import { elements, showError, initHostTelemetry } from "./ui.js";
 import { getSystemData, fetchRandomGame } from "./api.js";
+import { parseCommandLine } from "./parser.js";
+
 
 async function processCommand(input) {
   if (!input) return;
@@ -8,9 +10,9 @@ async function processCommand(input) {
   elements.input.value = "";
 
 try {
-    const parts = input.match(/(?:[^\s"']+|"[^"]*"|'[^']*')+/g) || [];
-    const cmd = parts[0].toLowerCase();
-    const args = parts.slice(1).map((arg) => arg.replace(/^["'](.*)["']$/, "$1"));
+    const [cmd, ...args] = parseCommandLine(input);
+
+    if (!cmd) return;
 
     if (Commands[cmd]) {
       await Commands[cmd](args);
