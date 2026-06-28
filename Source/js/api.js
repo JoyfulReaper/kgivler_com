@@ -28,7 +28,7 @@ export async function getSystemData() {
 export async function fetchRandomGame(input, ctx) {
   if (!input) input = "Mister_God";
 
-  ctx.loading('<i class="fas fa-circle-notch fa-spin me-2"></i>Connecting to Steam...');
+  ctx.loading('Connecting to Steam...');
 
   try {
     const response = await fetch(`${API_CONFIG.STEAM}/api/Steam/RandomGameByVanityUrl/${encodeURIComponent(input)}`);
