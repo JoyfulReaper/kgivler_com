@@ -5,27 +5,19 @@
  * Licensed under the MIT License.
  */
 
-// TODO Add Rate Limiting just in case
-
 using JoyfulReaperLib.JRData;
 using JoyfulReaperLib.JRData.Web;
 using Kgivler.Api.BackgroundServices;
 using Kgivler.Api.Bbs;
 using Kgivler.Api.Extensions;
 using Kgivler.Api.Helpers;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Data.Sqlite;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = SqliteHelper.InitializeSqlite();
-
 var schema = @"
-            CREATE TABLE IF NOT EXISTS Visitors (
-                IpAddress TEXT PRIMARY KEY,
-                Hits INTEGER DEFAULT 1,
-                LastSeen TEXT
-            );
             CREATE TABLE IF NOT EXISTS Messages (
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
                 Author TEXT,
@@ -36,6 +28,14 @@ var schema = @"
 var connectionString = SqliteHelper.InitializeSqlite("kgivler_com.db", schema);
 
 builder.Services.AddApplicationServices(connectionString, builder.Environment);
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter("BbsPolicy", opt =>
+    {
+        opt.Window = TimeSpan.FromMinutes(1);
+        opt.PermitLimit = 5;
+    });
+});
 
 var app = builder.Build();
 app.ConfigurePipeline(builder.Environment);
@@ -53,10 +53,8 @@ app.MapGet("/api/bbs", async (SqliteConnection db) =>
     var messages = new List<Message>();
     try
     {
-        using var connection = new SqliteConnection(connectionString);
-        await connection.OpenAsync();
-
-        var messageCmd = connection.CreateCommand();
+        await db.OpenAsync();
+        var messageCmd = db.CreateCommand();
         messageCmd.CommandText = "SELECT Id, Author, Content, Timestamp FROM Messages ORDER BY Timestamp DESC LIMIT 5";
 
         using var reader = await messageCmd.ExecuteReaderAsync();
@@ -89,10 +87,8 @@ app.MapPost("/api/bbs", async (Message msg, SqliteConnection db) =>
         var content = msg.Content.Length > 256 ? msg.Content[..256] : msg.Content;
         var escapedContent = System.Net.WebUtility.HtmlEncode(content);
 
-        using var connection = new SqliteConnection(connectionString);
-        await connection.OpenAsync();
-
-        var messageCmd = connection.CreateCommand();
+        await db.OpenAsync();
+        var messageCmd = db.CreateCommand();
         messageCmd.CommandText = "INSERT INTO Messages (Author, Content) VALUES ($author, $content);";
         messageCmd.Parameters.AddWithValue("$author", msg.Author);
         messageCmd.Parameters.AddWithValue("$content", escapedContent);
@@ -105,7 +101,7 @@ app.MapPost("/api/bbs", async (Message msg, SqliteConnection db) =>
         // TODO: Logging
         return Results.Problem("An error occurred while saving your message.");
     }
-});
+}).RequireRateLimiting("BbsPolicy");
 
 // System Telemetry
 app.MapGet("/api/system/usage", async (HttpContext context) =>
