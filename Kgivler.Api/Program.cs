@@ -18,6 +18,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = SqliteHelper.InitializeSqlite();
 
 var schema = @"
             CREATE TABLE IF NOT EXISTS Visitors (
