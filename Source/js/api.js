@@ -25,16 +25,21 @@ export async function getSystemData() {
   }
 }
 
-export async function fetchRandomGame(input, ctx) {
+/**
+ * @param {string} input - Vanity URL
+ * @param {object} ctx - Context object with .loading(), .error(), .print()
+ * @param {string} provider - Default "steam"
+ */
+export async function fetchRandomGame(input, ctx, provider = "steam") {
   if (!input) input = "Mister_God";
 
-  ctx.loading('Connecting to Steam...');
+  ctx.loading(`Connecting to ${provider}...`);
 
   try {
-    const response = await fetch(`${API_CONFIG.STEAM}/api/Steam/RandomGameByVanityUrl/${encodeURIComponent(input)}`);
+    const response = await fetch(`${API_CONFIG.STEAM}/api/${provider}/random-game?vanityUrl=${encodeURIComponent(input)}`);
 
     if (response.status === 429) {
-      ctx.error('<span class="text-danger">[ERROR] 429: Too many requests. Please slow down and try again in a moment.</span>');
+      ctx.error('<span class="text-danger">[ERROR] 429: Too many requests. Please slow down and try again in a few seconds.</span>');
       return;
     }
 
@@ -49,9 +54,8 @@ export async function fetchRandomGame(input, ctx) {
     }
 
     const data = await response.json();
-    const target = data.data || data.value || data;
-    const gameName = target.name || target.Name;
-    const appId = target.Id || target.id || target.appId || target.AppId;
+    const gameName = data.appInformation?.name;
+    const appId = data.appId;
 
     if (!gameName) {
       ctx.error('<span class="text-danger">[ERROR] Account has no games or the profile/library is private.</span>');
@@ -60,6 +64,7 @@ export async function fetchRandomGame(input, ctx) {
 
     ctx.print(`[SUCCESS] Game Selected: <strong>${gameName}</strong> <br /><small>AppID: ${appId}</small>`);
   } catch (err) {
+    console.error("Fetch Error:", err);
     ctx.error('<span class="text-danger">[ERROR] Network error: Could not reach the API server.</span>');
   }
 }
