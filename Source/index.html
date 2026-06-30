@@ -180,16 +180,15 @@
             <section class="my-4" id="qwen-review-section">
               <div class="cmd-line">
                 <span class="prompt">kyle@kgivler:~$</span>
-                ./code_review.sh --ShowHealth true
+                ./qwen_review.sh --health
               </div>
               <div class="project-terminal-badge qwen-review-panel">
                 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
                   <div class="text-white-50">
-                    [EXPERIMENTAL] Local QwenCoder review
-                    <div class="small text-muted">Local best-effort review powered by qwen2.5-coder-3b-instruct@q6_k + simple static hints.
-                      Small model. Small brain. Still sometimes useful.
-                      Not a security scanner. Not a formal audit. Just a local AI widget toy. All the cool kids are doing AI stuff these days right?
-                    </div>
+                    [Experimental] Local QwenCoder review
+                    <div class="small text-muted">Best-effort reviews powered by qwen2.5-coder-3b-instruct@q6_k plus a few simple static hints.</div>
+                    <div class="small text-muted">Small model, small expectations. Not a security scanner. Not a formal audit. Local AI widget for fun demos.</div>
+                    <div class="small text-muted">If the endpoint is offline, Kyle is probably playing a video game or something.</div>
                     <div class="small text-muted">Single-pass reviews up to 12k chars; larger files are auto-chunked up to 48k chars total.</div>
                   </div>
                   <span id="qwen-health-badge" class="qwen-health-pill badge rounded-pill text-warning">Checking...</span>
