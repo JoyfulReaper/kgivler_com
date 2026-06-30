@@ -249,4 +249,42 @@ app.MapGet("/api/system/usage", async (HttpContext context, SqliteConnection db)
     return Results.Ok(telemetry);
 });
 
+app.MapGet("/api/system/status", async () =>
+{
+    var currentProcess = Process.GetCurrentProcess();
+    var uptimeSpan = TimeSpan.FromMilliseconds(Environment.TickCount64);
+
+    var storage = TelemetricsHelper.GetStorageMetrics();
+    var ram = TelemetricsHelper.GetRamMetrics();
+    var gpu = TelemetricsHelper.GetGpuMetrics();
+    var stardate = TelemetricsHelper.GetStarDate();
+    var weather = await TelemetricsHelper.GetLocalWeather();
+
+    var telemetry = new
+    {
+        OS = RuntimeInformation.OSDescription,
+        Architecture = RuntimeInformation.OSArchitecture.ToString(),
+        Framework = RuntimeInformation.FrameworkDescription,
+        Uptime = $"{uptimeSpan.Days}d {uptimeSpan.Hours}h {uptimeSpan.Minutes}m",
+        AppMemoryUsageMB = currentProcess.WorkingSet64 / (1024 * 1024),
+        CpuTimeSec = Math.Round(currentProcess.TotalProcessorTime.TotalSeconds, 2),
+
+        // Core Performance Metrics
+        CpuUsage = SystemCpuMonitor.CurrentCpuUsage,
+        CpuCores = Environment.ProcessorCount,
+        ProcessCount = Process.GetProcesses().Length,
+        Storage = storage,
+        RAM = ram,
+        GPU = gpu,
+
+        // Meta Metrics
+        Stardate = stardate,
+        Weather = weather,
+        TotalRequestsHandled = (int?)null,
+        UniqueVisitors = (int?)null
+    };
+
+    return Results.Ok(telemetry);
+});
+
 app.Run();
