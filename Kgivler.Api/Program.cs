@@ -51,6 +51,12 @@ builder.Services.AddRateLimiter(options =>
         opt.PermitLimit = 3;
         opt.QueueLimit = 0;
     });
+    options.AddFixedWindowLimiter("TelemetryPolicy", opt =>
+    {
+        opt.Window = TimeSpan.FromMinutes(1);
+        opt.PermitLimit = 10;
+        opt.QueueLimit = 0;
+    });
 });
 
 // HttpClient for LM Studio
@@ -247,7 +253,7 @@ app.MapGet("/api/system/usage", async (HttpContext context, SqliteConnection db)
     };
 
     return Results.Ok(telemetry);
-});
+}).RequireRateLimiting("TelemetryPolicy");
 
 app.MapGet("/api/system/status", async (SqliteConnection db) =>
 {
@@ -286,6 +292,6 @@ app.MapGet("/api/system/status", async (SqliteConnection db) =>
     };
 
     return Results.Ok(telemetry);
-});
+}).RequireRateLimiting("TelemetryPolicy");
 
 app.Run();
