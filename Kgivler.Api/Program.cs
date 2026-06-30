@@ -17,6 +17,8 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// BBS Database
 var schema = @"
             CREATE TABLE IF NOT EXISTS Messages (
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -48,7 +50,7 @@ if (app.Environment.IsDevelopment())
 // Routes
 
 // Get the last 5 BBS messages
-app.MapGet("/api/bbs", async (SqliteConnection db) =>
+app.MapGet("/api/bbs", async (SqliteConnection db, ILogger<Program> logger) =>
 {
     var messages = new List<Message>();
     try
@@ -69,9 +71,9 @@ app.MapGet("/api/bbs", async (SqliteConnection db) =>
             });
         }
     }
-    catch
+    catch (Exception ex)
     {
-        // TODO: Logging
+        logger.LogError("An error occurred while fetching messages: {Message}", ex.Message);
         Results.Problem("An error occurred while fetching messages.");
     }
 
@@ -79,7 +81,7 @@ app.MapGet("/api/bbs", async (SqliteConnection db) =>
 });
 
 // Post a new message
-app.MapPost("/api/bbs", async (Message msg, SqliteConnection db) =>
+app.MapPost("/api/bbs", async (Message msg, SqliteConnection db, ILogger<Program> logger) =>
 {
     try
     {
@@ -98,13 +100,13 @@ app.MapPost("/api/bbs", async (Message msg, SqliteConnection db) =>
     }
     catch (Exception ex)
     {
-        // TODO: Logging
+        logger.LogError("An error occurred while fetching messages: {Message}", ex.Message);
         return Results.Problem("An error occurred while saving your message.");
     }
 }).RequireRateLimiting("BbsPolicy");
 
 // System Telemetry
-app.MapGet("/api/system/usage", async (HttpContext context) =>
+app.MapGet("/api/system/usage", async (HttpContext context, SqliteConnection db) =>
 {
     // Extract the real IP address
     var forwardedHeader = context.Request.Headers["CF-Connecting-IP"].FirstOrDefault()
@@ -124,7 +126,7 @@ app.MapGet("/api/system/usage", async (HttpContext context) =>
     var cpuUsage = TelemetricsHelper.GetCpuUsage();
     var stardate = TelemetricsHelper.GetStarDate();
     var weather = await TelemetricsHelper.GetLocalWeather();
-    var hitResults = await HitCountHelper.ProcessHitCounts(connectionString, ip);
+    var hitResults = await HitCountHelper.ProcessHitCounts(db, ip);
     var telemetry = new
     {
         OS = RuntimeInformation.OSDescription,
