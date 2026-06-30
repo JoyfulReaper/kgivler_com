@@ -38,6 +38,131 @@ public sealed class QwenCoderReviewService
         _logger = logger;
     }
 
+    private static List<string> DetectReviewHints(string code)
+    {
+        var hints = new List<string>();
+
+        if ((code.Contains(".substring(0, count)", StringComparison.Ordinal) ||
+             code.Contains(".Substring(0, count)", StringComparison.Ordinal) ||
+             code.Contains(".substring(0, length)", StringComparison.Ordinal) ||
+             code.Contains(".Substring(0, length)", StringComparison.Ordinal)) &&
+            !code.Contains("Math.Min", StringComparison.Ordinal) &&
+            !code.Contains("Math.min", StringComparison.Ordinal))
+        {
+            hints.Add("Possible substring bounds bug: caller-provided count/length may exceed the string length.");
+        }
+
+        if (code.Contains("innerHTML", StringComparison.Ordinal))
+            hints.Add("Possible unsafe DOM rendering: code contains innerHTML.");
+
+        if (code.Contains("localStorage.setItem", StringComparison.Ordinal))
+            hints.Add("Possible sensitive persistence: code stores data in localStorage.");
+
+        if (code.Contains("console.log", StringComparison.Ordinal))
+            hints.Add("Possible debug/user-data logging: code contains console.log.");
+
+        if (code.Contains("response.json()", StringComparison.Ordinal) &&
+            !code.Contains("response.ok", StringComparison.Ordinal))
+            hints.Add("Possible missing fetch status check: response.json() appears without response.ok.");
+
+        if (code.Contains("ReadAsStringAsync", StringComparison.Ordinal) &&
+            !code.Contains("IsSuccessStatusCode", StringComparison.Ordinal))
+            hints.Add("Possible missing HTTP status check: response body is read without IsSuccessStatusCode.");
+
+        if (code.Contains("CommandText = $", StringComparison.Ordinal) ||
+            code.Contains("CommandText = \"", StringComparison.Ordinal) && code.Contains(" + "))
+            hints.Add("Possible SQL injection: SQL command text may be built with string interpolation/concatenation.");
+
+        if ((code.Contains("SELECT", StringComparison.OrdinalIgnoreCase) ||
+             code.Contains("DELETE", StringComparison.OrdinalIgnoreCase) ||
+             code.Contains("INSERT", StringComparison.OrdinalIgnoreCase) ||
+             code.Contains("UPDATE", StringComparison.OrdinalIgnoreCase)) &&
+            (code.Contains("$_GET", StringComparison.Ordinal) ||
+             code.Contains("$\"", StringComparison.Ordinal) ||
+             code.Contains("'$'", StringComparison.Ordinal) ||
+             code.Contains(" + ", StringComparison.Ordinal)))
+        {
+            hints.Add("Possible SQL injection: SQL appears to be built with user-controlled values.");
+        }
+
+        if (code.Contains("Substring(", StringComparison.Ordinal) &&
+            code.Contains("<=", StringComparison.Ordinal))
+            hints.Add("Possible substring bounds bug: loop with <= and Substring may read past the end.");
+
+        if (code.Contains("Authorization", StringComparison.Ordinal) &&
+            code.Contains("Bearer", StringComparison.Ordinal))
+            hints.Add("Possible hardcoded bearer token or auth header.");
+
+        if (code.Contains("127.0.0.1", StringComparison.Ordinal) ||
+            code.Contains("localhost", StringComparison.Ordinal))
+            hints.Add("Possible hardcoded local service URL.");
+
+        if (code.Contains("os.popen", StringComparison.Ordinal) ||
+            code.Contains("subprocess", StringComparison.Ordinal))
+        {
+            hints.Add("Possible command injection: shell command execution is used.");
+        }
+
+        if ((code.Contains("request.args", StringComparison.Ordinal) ||
+             code.Contains("request.GET", StringComparison.Ordinal) ||
+             code.Contains("$_GET", StringComparison.Ordinal)) &&
+            (code.Contains("os.popen", StringComparison.Ordinal) ||
+             code.Contains("subprocess", StringComparison.Ordinal) ||
+             code.Contains("exec(", StringComparison.Ordinal)))
+        {
+            hints.Add("Possible command injection: request input may flow into shell execution.");
+        }
+
+        if (code.Contains("$_GET", StringComparison.Ordinal) ||
+            code.Contains("$_POST", StringComparison.Ordinal))
+        {
+            hints.Add("Possible unsanitized user input: PHP request data is used.");
+        }
+
+        if (code.Contains("echo", StringComparison.Ordinal) &&
+            (code.Contains("$_GET", StringComparison.Ordinal) ||
+             code.Contains("$row", StringComparison.Ordinal)))
+        {
+            hints.Add("Possible XSS: PHP output may include unsanitized user/database content.");
+        }
+
+        if (code.Contains("new mysqli", StringComparison.Ordinal) &&
+            (code.Contains("\"root\"", StringComparison.Ordinal) ||
+             code.Contains("\"password", StringComparison.Ordinal) ||
+             code.Contains("password123", StringComparison.Ordinal)))
+        {
+            hints.Add("Possible hardcoded database credentials.");
+        }
+
+        if (code.Contains(".substring(", StringComparison.Ordinal) &&
+            code.Contains("<=", StringComparison.Ordinal))
+        {
+            hints.Add("Possible substring bounds bug: loop with <= and substring may read past the end.");
+        }
+
+        if (code.Contains("File.ReadAllBytesAsync", StringComparison.Ordinal) &&
+            (code.Contains("+ fileName", StringComparison.Ordinal) ||
+             code.Contains("uploads/", StringComparison.Ordinal)))
+        {
+            hints.Add("Possible path traversal: user-controlled filename may be used to read files.");
+        }
+
+        if (code.Contains("http.Get(", StringComparison.Ordinal) &&
+            code.Contains("_,", StringComparison.Ordinal))
+        {
+            hints.Add("Possible ignored HTTP error: Go code ignores the error returned by http.Get.");
+        }
+
+        if (code.Contains("fmt.Fprintf", StringComparison.Ordinal) &&
+            code.Contains("%s", StringComparison.Ordinal) &&
+            code.Contains("Query().Get", StringComparison.Ordinal))
+        {
+            hints.Add("Possible unsafe HTML output: request query value is written into the response.");
+        }
+
+        return hints;
+    }
+
     public async Task<IResult> ReviewAsync(
         CodeReviewRequest request,
         CancellationToken cancellationToken)
@@ -233,137 +358,131 @@ public sealed class QwenCoderReviewService
     {
         var numberedCode = NumberLines(code);
 
+        var hints = DetectReviewHints(code);
+        var detectedHints = hints.Count == 0
+            ? "No static hints detected."
+            : string.Join("\n", hints.Select(hint => $"- {hint}"));
+
         return
         [
             new LmStudioMessage
-            {
-                Role = "system",
-                Content = """
-                You are QwenCoder, a small best-effort code review assistant.
+        {
+            Role = "system",
+            Content = """
+            You are QwenCoder, a small best-effort code review assistant.
 
-                This is a rough review, not a formal audit.
-                Look for only obvious issues:
-                - syntax mistakes
-                - runtime bugs
-                - missing null/empty checks
-                - missing response/status checks
-                - hardcoded keys, tokens, secrets, bearer tokens, or localhost URLs
-                - unsafe HTML or DOM injection
-                - logging user input or code
-                - storing sensitive data in localStorage
-                - simple best-practice mistakes that are easy to fix
+            This is a rough review, not a formal audit.
+            Look for only obvious issues:
+            - syntax mistakes
+            - runtime bugs
+            - missing null/empty checks
+            - missing response/status checks
+            - hardcoded keys, tokens, secrets, bearer tokens, or localhost URLs
+            - unsafe HTML or DOM injection
+            - logging user input or code
+            - storing sensitive data in localStorage
+            - simple best-practice mistakes that are easy to fix
 
-                Secrets are high priority:
-                - Always flag hardcoded tokens, API keys, passwords, bearer tokens, auth headers, or obvious secret strings.
-                - Always flag localhost service URLs or local API endpoints if they look like production code.
-                - If you see an Authorization header built from a hardcoded token, call that out.
-                - If you see a string that looks like SUPER_SECRET_ADMIN_TOKEN or similar, flag it as a secret.
+            Static hints may be provided by a simple pre-scan.
+            Treat static hints as leads to verify against the code.
+            Do not blindly report a hint unless the code supports it.
+            Do not say "No obvious issues found" if a static hint is clearly supported by the code.
 
-                Example findings:
-                - L2-L2: hardcoded bearer token is in source code.
-                  Fix: move the token to an environment variable or secret store.
-                - L3-L3: localhost API URL is hardcoded in the client.
-                  Fix: read the base URL from config instead.
-                - L9-L9: innerHTML is used with untrusted model output.
-                  Fix: use textContent or sanitize the HTML first.
-                - L6-L10: response.json() is called without checking response.ok.
-                  Fix: check response.ok before parsing the body.
+            Keep it short and practical.
+            Use bullet points.
+            Use line numbers if you can.
+            If nothing obvious stands out, say exactly: No obvious issues found.
+            """
+        },
+        new LmStudioMessage
+        {
+            Role = "user",
+            Content = $"""
+            Language hint: {language ?? "auto"}
 
-                Keep it short and practical.
-                Use bullet points.
-                Use line numbers if you can.
-                If nothing obvious stands out, say exactly: No obvious issues found.
-                """
-            },
-            new LmStudioMessage
-            {
-                Role = "user",
-                Content = $"""
-                Language hint: {language ?? "auto"}
+            Static hints from a simple pre-scan:
+            {detectedHints}
 
-                Review the code below for obvious issues only.
-                Mention only the most obvious problems.
-                Secrets and localhost URLs should be called out if you see them.
-                Use line numbers if possible.
-                If nothing obvious stands out, say exactly: No obvious issues found.
+            Use the hints as things to verify against the code.
+            Do not blindly report a hint unless the code supports it.
+            Do not say "No obvious issues found" if any hint is supported by the code.
 
-                ```text
-                {numberedCode}
-                ```
-                """
-            }
+            Review the code below for obvious issues only.
+
+            ```text
+            {numberedCode}
+            ```
+            """
+        }
         ];
     }
 
     private static List<LmStudioMessage> BuildChunkMessages(
-    string? language,
-    CodeChunk chunk,
-    int chunkNumber,
-    int chunkCount)
+        string? language,
+        CodeChunk chunk,
+        int chunkNumber,
+        int chunkCount)
     {
         var numberedChunk = NumberLines(chunk.Content, chunk.StartLine);
+
+        var hints = DetectReviewHints(chunk.Content);
+        var detectedHints = hints.Count == 0
+            ? "No static hints detected."
+            : string.Join("\n", hints.Select(hint => $"- {hint}"));
 
         return
         [
             new LmStudioMessage
-            {
-                Role = "system",
-                Content = """
-                You are reviewing one excerpt from a larger file.
+        {
+            Role = "system",
+            Content = """
+            You are reviewing one excerpt from a larger file.
 
-                This is a rough pass.
-                Look for only obvious issues:
-                - syntax mistakes
-                - runtime bugs
-                - missing null/empty checks
-                - missing response/status checks
-                - hardcoded keys, tokens, secrets, bearer tokens, or localhost URLs
-                - unsafe HTML or DOM injection
-                - logging user input or code
-                - storing sensitive data in localStorage
-                - simple best-practice mistakes that are easy to fix
+            This is a rough pass.
+            Look for only obvious issues:
+            - syntax mistakes
+            - runtime bugs
+            - missing null/empty checks
+            - missing response/status checks
+            - hardcoded keys, tokens, secrets, bearer tokens, or localhost URLs
+            - unsafe HTML or DOM injection
+            - logging user input or code
+            - storing sensitive data in localStorage
+            - simple best-practice mistakes that are easy to fix
 
-                Secrets are high priority:
-                - Always flag hardcoded tokens, API keys, passwords, bearer tokens, auth headers, or obvious secret strings.
-                - Always flag localhost service URLs or local API endpoints if they look like production code.
-                - If you see an Authorization header built from a hardcoded token, call that out.
-                - If you see a string that looks like SUPER_SECRET_ADMIN_TOKEN or similar, flag it as a secret.
+            Static hints may be provided by a simple pre-scan.
+            Treat static hints as leads to verify against the excerpt.
+            Do not blindly report a hint unless the excerpt supports it.
+            Do not say "No obvious issues found" if a static hint is clearly supported by the excerpt.
 
-                Example findings:
-                - L2-L2: hardcoded API key is visible in the code.
-                  Fix: load it from config instead of source.
-                - L3-L3: localhost API URL is hardcoded in the client.
-                  Fix: read the base URL from config instead.
-                - L7-L7: localStorage is used for sensitive data.
-                  Fix: avoid storing secrets in localStorage.
-                - L12-L14: fetch response is parsed without checking response.ok.
-                  Fix: guard the parse behind a success check.
+            Keep it short and practical.
+            Use bullet points.
+            Use line numbers if you can.
+            If nothing obvious stands out, say exactly: No obvious issues found.
+            """
+        },
+        new LmStudioMessage
+        {
+            Role = "user",
+            Content = $"""
+            Language hint: {language ?? "auto"}
+            Chunk: {chunkNumber} of {chunkCount}
+            Lines: {chunk.StartLine}-{chunk.EndLine}
 
-                Keep it short and practical.
-                Use bullet points.
-                Use line numbers if you can.
-                If nothing obvious stands out, say exactly: No obvious issues found.
-                """
-            },
-            new LmStudioMessage
-            {
-                Role = "user",
-                Content = $"""
-                Language hint: {language ?? "auto"}
-                Chunk: {chunkNumber} of {chunkCount}
-                Lines: {chunk.StartLine}-{chunk.EndLine}
+            Static hints from a simple pre-scan:
+            {detectedHints}
 
-                Review this excerpt for obvious issues only.
-                Mention only the most obvious problems.
-                Secrets and localhost URLs should be called out if you see them.
-                Use line numbers if possible.
-                If nothing obvious stands out, say exactly: No obvious issues found.
+            Use the hints as things to verify against this excerpt.
+            Do not blindly report a hint unless the excerpt supports it.
+            Do not say "No obvious issues found" if any hint is supported by the excerpt.
 
-                ```text
-                {numberedChunk}
-                ```
-                """
-            }
+            Review this excerpt for obvious issues only.
+
+            ```text
+            {numberedChunk}
+            ```
+            """
+        }
         ];
     }
 
