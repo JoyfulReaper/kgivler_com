@@ -17,9 +17,9 @@ public sealed class QwenCoderReviewService
     private const int SinglePassMaxChars = 12_000;
     private const int ChunkedMaxChars = 48_000;
     private const int ChunkTargetChars = 5_500;
-    private const int SinglePassMaxTokens = 1_500;
-    private const int ChunkReviewMaxTokens = 700;
-    private const int SynthesisMaxTokens = 1_200;
+    private const int SinglePassMaxTokens = 800;
+    private const int ChunkReviewMaxTokens = 550;
+    private const int SynthesisMaxTokens = 650;
     private static readonly TimeSpan SinglePassTimeout = TimeSpan.FromSeconds(90);
     private static readonly TimeSpan ChunkReviewTimeout = TimeSpan.FromSeconds(45);
     private static readonly TimeSpan SynthesisTimeout = TimeSpan.FromSeconds(60);
@@ -98,10 +98,7 @@ public sealed class QwenCoderReviewService
                     statusCode: StatusCodes.Status502BadGateway);
             }
 
-            chunkReviews.Add($"""
-            Chunk {i + 1}/{chunks.Count} (lines {chunk.StartLine}-{chunk.EndLine}):
-            {review.Trim()}
-            """);
+            chunkReviews.Add(review.Trim());
         }
 
         var synthesis = await SynthesizeChunkReviewsAsync(
@@ -182,7 +179,7 @@ public sealed class QwenCoderReviewService
         var lmRequest = new LmStudioChatRequest
         {
             Model = model,
-            Temperature = 0.15,
+            Temperature = 0.0,
             MaxTokens = maxTokens,
             Stream = false,
             Messages = messages
@@ -234,30 +231,48 @@ public sealed class QwenCoderReviewService
 
     private static List<LmStudioMessage> BuildSinglePassMessages(string? language, string code)
     {
+        var numberedCode = NumberLines(code);
+
         return
         [
             new LmStudioMessage
             {
                 Role = "system",
                 Content = """
-                You are QwenCoder running a concise code review for Kyle's personal website.
+                You are QwenCoder, a small best-effort code review assistant.
 
-                Review the code like a practical senior C#, JavaScript, and web developer.
+                This is a rough review, not a formal audit.
+                Look for only obvious issues:
+                - syntax mistakes
+                - runtime bugs
+                - missing null/empty checks
+                - missing response/status checks
+                - hardcoded keys, tokens, secrets, bearer tokens, or localhost URLs
+                - unsafe HTML or DOM injection
+                - logging user input or code
+                - storing sensitive data in localStorage
+                - simple best-practice mistakes that are easy to fix
 
-                Focus on:
-                - actual bugs
-                - security problems
-                - performance problems
-                - error handling
-                - readability
-                - concrete fixes
+                Secrets are high priority:
+                - Always flag hardcoded tokens, API keys, passwords, bearer tokens, auth headers, or obvious secret strings.
+                - Always flag localhost service URLs or local API endpoints if they look like production code.
+                - If you see an Authorization header built from a hardcoded token, call that out.
+                - If you see a string that looks like SUPER_SECRET_ADMIN_TOKEN or similar, flag it as a secret.
 
-                Do not rewrite the entire file.
-                Use short headings and bullet points.
-                When you suggest a fix, include only the smallest relevant code snippet or diff hunk.
-                Prefer 1 to 5 lines per snippet.
-                Never paste a full file or a full function unless it is already tiny.
-                Keep the response tight and stop after the highest-value findings.
+                Example findings:
+                - L2-L2: hardcoded bearer token is in source code.
+                  Fix: move the token to an environment variable or secret store.
+                - L3-L3: localhost API URL is hardcoded in the client.
+                  Fix: read the base URL from config instead.
+                - L9-L9: innerHTML is used with untrusted model output.
+                  Fix: use textContent or sanitize the HTML first.
+                - L6-L10: response.json() is called without checking response.ok.
+                  Fix: check response.ok before parsing the body.
+
+                Keep it short and practical.
+                Use bullet points.
+                Use line numbers if you can.
+                If nothing obvious stands out, say exactly: No obvious issues found.
                 """
             },
             new LmStudioMessage
@@ -266,10 +281,14 @@ public sealed class QwenCoderReviewService
                 Content = $"""
                 Language hint: {language ?? "auto"}
 
-                Review this code and return concise findings with small code snippets only:
+                Review the code below for obvious issues only.
+                Mention only the most obvious problems.
+                Secrets and localhost URLs should be called out if you see them.
+                Use line numbers if possible.
+                If nothing obvious stands out, say exactly: No obvious issues found.
 
                 ```text
-                {code}
+                {numberedCode}
                 ```
                 """
             }
@@ -277,24 +296,53 @@ public sealed class QwenCoderReviewService
     }
 
     private static List<LmStudioMessage> BuildChunkMessages(
-        string? language,
-        CodeChunk chunk,
-        int chunkNumber,
-        int chunkCount)
+    string? language,
+    CodeChunk chunk,
+    int chunkNumber,
+    int chunkCount)
     {
+        var numberedChunk = NumberLines(chunk.Content, chunk.StartLine);
+
         return
         [
             new LmStudioMessage
             {
                 Role = "system",
                 Content = """
-                You are reviewing one chunk of a larger code file.
+                You are reviewing one excerpt from a larger file.
 
-                Focus only on issues that are visible in this excerpt.
-                Be concise and practical.
-                Use short headings and bullet points.
-                When suggesting a fix, quote only the relevant lines as a tiny snippet or diff hunk.
-                Never restate the whole chunk.
+                This is a rough pass.
+                Look for only obvious issues:
+                - syntax mistakes
+                - runtime bugs
+                - missing null/empty checks
+                - missing response/status checks
+                - hardcoded keys, tokens, secrets, bearer tokens, or localhost URLs
+                - unsafe HTML or DOM injection
+                - logging user input or code
+                - storing sensitive data in localStorage
+                - simple best-practice mistakes that are easy to fix
+
+                Secrets are high priority:
+                - Always flag hardcoded tokens, API keys, passwords, bearer tokens, auth headers, or obvious secret strings.
+                - Always flag localhost service URLs or local API endpoints if they look like production code.
+                - If you see an Authorization header built from a hardcoded token, call that out.
+                - If you see a string that looks like SUPER_SECRET_ADMIN_TOKEN or similar, flag it as a secret.
+
+                Example findings:
+                - L2-L2: hardcoded API key is visible in the code.
+                  Fix: load it from config instead of source.
+                - L3-L3: localhost API URL is hardcoded in the client.
+                  Fix: read the base URL from config instead.
+                - L7-L7: localStorage is used for sensitive data.
+                  Fix: avoid storing secrets in localStorage.
+                - L12-L14: fetch response is parsed without checking response.ok.
+                  Fix: guard the parse behind a success check.
+
+                Keep it short and practical.
+                Use bullet points.
+                Use line numbers if you can.
+                If nothing obvious stands out, say exactly: No obvious issues found.
                 """
             },
             new LmStudioMessage
@@ -305,13 +353,15 @@ public sealed class QwenCoderReviewService
                 Chunk: {chunkNumber} of {chunkCount}
                 Lines: {chunk.StartLine}-{chunk.EndLine}
 
-                Review this chunk and answer with only the most important findings and tiny code snippets:
+                Review this excerpt for obvious issues only.
+                Mention only the most obvious problems.
+                Secrets and localhost URLs should be called out if you see them.
+                Use line numbers if possible.
+                If nothing obvious stands out, say exactly: No obvious issues found.
 
                 ```text
-                {chunk.Content}
+                {numberedChunk}
                 ```
-
-                If you need more room, prioritize the highest-impact issues over minor style notes.
                 """
             }
         ];
@@ -334,11 +384,10 @@ public sealed class QwenCoderReviewService
                 Content = """
                 You are consolidating partial code review notes for one file.
 
-                Merge duplicates, keep the most important findings, and organize the final answer by severity.
-                Keep it concise and actionable.
-                Use tiny code snippets only when they clarify the fix.
-                Do not paste entire files, large functions, or long blocks of code.
-                Do not mention that the notes came from chunks.
+                Merge duplicates and keep only obvious issues.
+                Keep it short and practical.
+                Use bullet points.
+                If the notes do not contain any obvious issues, return exactly: No obvious issues found.
                 """
             },
             new LmStudioMessage
@@ -348,15 +397,37 @@ public sealed class QwenCoderReviewService
                 Language hint: {language ?? "auto"}
 
                 Consolidate these review notes into a single final review.
-                Use short bullets and tiny code snippets only where needed.
-                Do not include long code blocks or full-file rewrites.
+                Keep only the obvious findings.
+                Remove duplicates.
+                Keep the answer short.
+                If the notes are empty or only contain generic advice, say exactly: No obvious issues found.
 
                 {joinedReviews}
 
-                Keep the final response tight, but complete enough that it does not trail off mid-thought.
+                Return the final answer as clean markdown with bullet points only.
                 """
             }
         ];
+    }
+
+    private static string NumberLines(string text, int startLine = 1)
+    {
+        var lines = text.Replace("\r\n", "\n").Split('\n');
+        var builder = new StringBuilder();
+
+        for (var i = 0; i < lines.Length; i++)
+        {
+            if (i > 0)
+            {
+                builder.Append('\n');
+            }
+
+            builder.Append(startLine + i);
+            builder.Append(" | ");
+            builder.Append(lines[i]);
+        }
+
+        return builder.ToString();
     }
 
     private static List<CodeChunk> SplitIntoChunks(string code, int targetChars)
