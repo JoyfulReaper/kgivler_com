@@ -249,7 +249,7 @@ app.MapGet("/api/system/usage", async (HttpContext context, SqliteConnection db)
     return Results.Ok(telemetry);
 });
 
-app.MapGet("/api/system/status", async () =>
+app.MapGet("/api/system/status", async (SqliteConnection db) =>
 {
     var currentProcess = Process.GetCurrentProcess();
     var uptimeSpan = TimeSpan.FromMilliseconds(Environment.TickCount64);
@@ -259,6 +259,7 @@ app.MapGet("/api/system/status", async () =>
     var gpu = TelemetricsHelper.GetGpuMetrics();
     var stardate = TelemetricsHelper.GetStarDate();
     var weather = await TelemetricsHelper.GetLocalWeather();
+    var hitResults = await HitCountHelper.GetHitCounts(db);
 
     var telemetry = new
     {
@@ -280,8 +281,8 @@ app.MapGet("/api/system/status", async () =>
         // Meta Metrics
         Stardate = stardate,
         Weather = weather,
-        TotalRequestsHandled = (int?)null,
-        UniqueVisitors = (int?)null
+        TotalRequestsHandled = hitResults.totalHits,
+        UniqueVisitors = hitResults.uniqueVisitors
     };
 
     return Results.Ok(telemetry);
