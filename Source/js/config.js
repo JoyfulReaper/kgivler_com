@@ -2,7 +2,8 @@ export const IS_LOCAL = window.location.hostname === 'localhost' || window.locat
 
 export const API_CONFIG = Object.freeze({
     TELEMETRY: IS_LOCAL ? 'http://localhost:5081' : 'https://api.kgivler.com',
-    STEAM: IS_LOCAL ? 'http://localhost:5182' : 'https://randomsteam.kgivler.com'
+    STEAM: IS_LOCAL ? 'http://localhost:5182' : 'https://randomsteam.kgivler.com',
+    QWENCODER: IS_LOCAL ? 'http://localhost:5081' : 'https://api.kgivler.com'
 });
 
 export const PLAYLIST = Object.freeze([

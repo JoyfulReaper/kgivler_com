@@ -1,6 +1,7 @@
 import { Commands } from "./commands.js";
 import { elements, Terminal, initHostTelemetry } from "./ui.js";
 import { getSystemData, fetchRandomGame } from "./api.js";
+import { initQwenPanel } from "./qwen-panel.js";
 import { parseCommandLine } from "./parser.js";
 
 // Helper to create UI-agnostic terminal contexts
@@ -43,6 +44,7 @@ async function processCommand(input) {
 document.addEventListener("DOMContentLoaded", () => {
   // Telemetry
   getSystemData().then(initHostTelemetry).catch(console.error);
+  initQwenPanel();
 
   // Terminal input listener
   elements.input?.addEventListener("keydown", (e) => {
@@ -57,4 +59,5 @@ document.addEventListener("DOMContentLoaded", () => {
       fetchRandomGame(input, demoTerminal);
     });
   }
+
 });

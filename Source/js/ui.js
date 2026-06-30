@@ -2,7 +2,14 @@ export const elements = {
   input: document.getElementById('terminalCommandInput'),
   output: document.getElementById('terminal-output'),
   demo: document.getElementById('demo-output'),
-  telemetry: document.getElementById('host-telemetry')
+  telemetry: document.getElementById('host-telemetry'),
+  qwenReviewOutput: document.getElementById('qwen-review-output'),
+  qwenHealthBadge: document.getElementById('qwen-health-badge'),
+  qwenCodeInput: document.getElementById('qwenCodeInput'),
+  qwenLanguage: document.getElementById('qwenLanguage'),
+  qwenHealthButton: document.getElementById('btn-qwen-health'),
+  qwenReviewButton: document.getElementById('btn-qwen-review'),
+  qwenClearButton: document.getElementById('btn-qwen-clear')
 };
 
 export const Terminal = {
