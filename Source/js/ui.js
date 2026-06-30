@@ -9,7 +9,8 @@ export const elements = {
   qwenLanguage: document.getElementById('qwenLanguage'),
   qwenHealthButton: document.getElementById('btn-qwen-health'),
   qwenReviewButton: document.getElementById('btn-qwen-review'),
-  qwenClearButton: document.getElementById('btn-qwen-clear')
+  qwenClearButton: document.getElementById('btn-qwen-clear'),
+  workstationRefreshButton: document.getElementById('btn-workstation-refresh')
 };
 
 export const Terminal = {
@@ -37,6 +38,11 @@ const formatStorage = (storage) => {
   return storage.toString().replace(/[\d.]+/, match => parseFloat(match).toFixed(2));
 };
 
+const lastTelemetryCounters = {
+  totalRequestsHandled: null,
+  uniqueVisitors: null
+};
+
 export function initHostTelemetry(data) {
   if (!elements.telemetry) return;
 
@@ -46,6 +52,23 @@ export function initHostTelemetry(data) {
   }
 
   elements.telemetry.classList.remove('d-none');
+
+  if (data.totalRequestsHandled !== undefined && data.totalRequestsHandled !== null) {
+    lastTelemetryCounters.totalRequestsHandled = data.totalRequestsHandled;
+  }
+
+  if (data.uniqueVisitors !== undefined && data.uniqueVisitors !== null) {
+    lastTelemetryCounters.uniqueVisitors = data.uniqueVisitors;
+  }
+
+  const totalRequestsHandled = data.totalRequestsHandled ?? lastTelemetryCounters.totalRequestsHandled;
+  const uniqueVisitors = data.uniqueVisitors ?? lastTelemetryCounters.uniqueVisitors;
+  const hitCounterText =
+    totalRequestsHandled !== null && totalRequestsHandled !== undefined &&
+    uniqueVisitors !== null && uniqueVisitors !== undefined
+      ? `<span>${totalRequestsHandled} Hits / ${uniqueVisitors} Unique</span>`
+      : `<span>HIT COUNTER: unavailable</span>`;
+
   elements.telemetry.innerHTML = `
     <div class="row g-0 g-md-3 font-monospace" style="color: #e2e8f0; font-size: 0.9rem;">
         <div class="col-md-6">
@@ -63,7 +86,7 @@ export function initHostTelemetry(data) {
         <div class="col-12 mt-2 pt-2 border-top d-flex flex-column flex-sm-row justify-content-between gap-2" style="border-color: #222226 !important; font-size: 0.8rem; color: #888892;">
             <span>STARDATE: ${data.stardate}</span>
             <span>RUNTIME: ${data.framework}</span>
-            <span>${data.totalRequestsHandled} Hits / ${data.uniqueVisitors} Unique</span>
+            ${hitCounterText}
         </div>
     </div>`;
 }

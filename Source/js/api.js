@@ -60,6 +60,22 @@ export async function getQwenCoderHealth() {
   }
 }
 
+export async function getWorkstationStatus() {
+  try {
+    const response = await fetchJsonWithTimeout(`${API_CONFIG.TELEMETRY}/api/system/status`, {}, 5000);
+
+    if (!response.ok) {
+      const detail = await readProblemDetail(response, "Workstation refresh failed.");
+      return { ok: false, error: detail, status: response.status };
+    }
+
+    return await response.json();
+  } catch (e) {
+    console.error("Workstation status fetch failed or timed out:", e);
+    return { ok: false, error: "Could not reach the workstation status endpoint.", status: 0 };
+  }
+}
+
 export async function submitQwenCoderReview(code, language = "auto") {
   const trimmedCode = (code || "").trim();
   if (!trimmedCode) {
