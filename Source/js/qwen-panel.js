@@ -21,6 +21,30 @@ const qwenReviewTerminal = elements.qwenReviewOutput
   ? createTerminalContext(elements.qwenReviewOutput)
   : null;
 
+const badSampleCode = `const API_URL = "http://localhost:5000/api/code-review";
+const TOKEN = "SUPER_SECRET_ADMIN_TOKEN_123";
+
+export async function submitReview() {
+    const code = document.getElementById("codeReviewInput").value;
+    const output = document.getElementById("code-review-output");
+
+    const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+            "Authorization": "Bearer " + TOKEN,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ code })
+    });
+
+    const data = await response.json();
+
+    output.innerHTML = data.review;
+
+    localStorage.setItem("lastCode", code);
+    console.log("Submitted code:", code);
+}`;
+
 function setQwenHealthBadge(state, text) {
   if (!elements.qwenHealthBadge) return;
 
@@ -101,12 +125,23 @@ function clearQwenReview() {
   }
 }
 
+function loadBadSample() {
+  if (!elements.qwenCodeInput) return;
+
+  elements.qwenCodeInput.value = badSampleCode;
+  if (elements.qwenLanguage) {
+    elements.qwenLanguage.value = "javascript";
+  }
+  elements.qwenCodeInput.focus();
+}
+
 export function initQwenPanel() {
   if (!elements.qwenReviewOutput) return;
 
   refreshQwenHealth().catch(console.error);
 
   elements.qwenHealthButton?.addEventListener("click", () => refreshQwenHealth());
+  elements.qwenLoadBadSampleButton?.addEventListener("click", () => loadBadSample());
   elements.qwenReviewButton?.addEventListener("click", () => runQwenReview());
   elements.qwenClearButton?.addEventListener("click", () => clearQwenReview());
   elements.qwenCodeInput?.addEventListener("keydown", (e) => {

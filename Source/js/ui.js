@@ -8,6 +8,7 @@ export const elements = {
   qwenCodeInput: document.getElementById('qwenCodeInput'),
   qwenLanguage: document.getElementById('qwenLanguage'),
   qwenHealthButton: document.getElementById('btn-qwen-health'),
+  qwenLoadBadSampleButton: document.getElementById('btn-load-bad-sample'),
   qwenReviewButton: document.getElementById('btn-qwen-review'),
   qwenClearButton: document.getElementById('btn-qwen-clear'),
   workstationRefreshButton: document.getElementById('btn-workstation-refresh')
