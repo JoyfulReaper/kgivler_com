@@ -1,6 +1,7 @@
 import { Commands } from "./commands.js";
 import { elements, Terminal, initHostTelemetry } from "./ui.js";
-import { getSystemData, fetchRandomGame } from "./api.js";
+import { getSystemData, getWorkstationStatus, fetchRandomGame } from "./api.js";
+import { initQwenPanel } from "./qwen-panel.js";
 import { parseCommandLine } from "./parser.js";
 
 // Helper to create UI-agnostic terminal contexts
@@ -20,6 +21,26 @@ const createTerminalContext = (element) => ({
 });
 
 const demoTerminal = createTerminalContext(elements.demo);
+
+async function refreshWorkstation() {
+  if (!elements.workstationRefreshButton || !elements.telemetry) return;
+
+  elements.workstationRefreshButton.disabled = true;
+  elements.telemetry.innerHTML = `<div class="text-warning animate-pulse"><i class="fas fa-spinner fa-spin me-2"></i>Refreshing workstation data...</div>`;
+
+  try {
+    const data = await getWorkstationStatus();
+
+    if (!data || data.ok === false) {
+      elements.telemetry.innerHTML = `<div class="text-danger">[OFFLINE] ${data?.error || "Workstation refresh failed."}</div>`;
+      return;
+    }
+
+    initHostTelemetry(data);
+  } finally {
+    elements.workstationRefreshButton.disabled = false;
+  }
+}
 
 async function processCommand(input) {
   if (!input) return;
@@ -43,6 +64,8 @@ async function processCommand(input) {
 document.addEventListener("DOMContentLoaded", () => {
   // Telemetry
   getSystemData().then(initHostTelemetry).catch(console.error);
+  initQwenPanel();
+  elements.workstationRefreshButton?.addEventListener("click", () => refreshWorkstation());
 
   // Terminal input listener
   elements.input?.addEventListener("keydown", (e) => {
@@ -57,4 +80,5 @@ document.addEventListener("DOMContentLoaded", () => {
       fetchRandomGame(input, demoTerminal);
     });
   }
+
 });

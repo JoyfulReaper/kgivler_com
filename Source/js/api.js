@@ -2,17 +2,37 @@ import { API_CONFIG } from "./config.js";
 
 let isFetching = false;
 
+async function fetchJsonWithTimeout(url, options = {}, timeoutMs = 5000) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal,
+    });
+
+    return response;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+async function readProblemDetail(response, fallbackMessage) {
+  try {
+    const problemJson = await response.json();
+    return problemJson.title || problemJson.detail || fallbackMessage;
+  } catch (_) {
+    return fallbackMessage;
+  }
+}
+
 export async function getSystemData() {
   if (isFetching) return null;
   isFetching = true;
 
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 5000);
-
   try {
-    const res = await fetch(`${API_CONFIG.TELEMETRY}/api/system/usage`, {
-      signal: controller.signal,
-    });
+    const res = await fetchJsonWithTimeout(`${API_CONFIG.TELEMETRY}/api/system/usage`, {}, 5000);
 
     if (!res.ok) throw new Error("Request failed");
     return await res.json();
@@ -20,8 +40,64 @@ export async function getSystemData() {
     console.error("Fetch failed or timed out:", e);
     return null;
   } finally {
-    clearTimeout(timeoutId);
     isFetching = false;
+  }
+}
+
+export async function getQwenCoderHealth() {
+  try {
+    const response = await fetchJsonWithTimeout(`${API_CONFIG.QWENCODER}/api/code-review/health`, {}, 5000);
+
+    if (!response.ok) {
+      const detail = await readProblemDetail(response, "QwenCoder health check failed.");
+      return { ok: false, error: detail, status: response.status };
+    }
+
+    return await response.json();
+  } catch (e) {
+    console.error("QwenCoder health fetch failed or timed out:", e);
+    return { ok: false, error: "Could not reach QwenCoder.", status: 0 };
+  }
+}
+
+export async function getWorkstationStatus() {
+  try {
+    const response = await fetchJsonWithTimeout(`${API_CONFIG.TELEMETRY}/api/system/status`, {}, 5000);
+
+    if (!response.ok) {
+      const detail = await readProblemDetail(response, "Workstation refresh failed.");
+      return { ok: false, error: detail, status: response.status };
+    }
+
+    return await response.json();
+  } catch (e) {
+    console.error("Workstation status fetch failed or timed out:", e);
+    return { ok: false, error: "Could not reach the workstation status endpoint.", status: 0 };
+  }
+}
+
+export async function submitQwenCoderReview(code, language = "auto") {
+  const trimmedCode = (code || "").trim();
+  if (!trimmedCode) {
+    return { ok: false, error: "Paste some code first." };
+  }
+
+  try {
+    const response = await fetchJsonWithTimeout(`${API_CONFIG.QWENCODER}/api/code-review`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code: trimmedCode, language }),
+    }, 90_000);
+
+    if (!response.ok) {
+      const detail = await readProblemDetail(response, "Code review failed.");
+      return { ok: false, error: detail, status: response.status };
+    }
+
+    return await response.json();
+  } catch (e) {
+    console.error("QwenCoder review fetch failed or timed out:", e);
+    return { ok: false, error: "Could not reach QwenCoder.", status: 0 };
   }
 }
 

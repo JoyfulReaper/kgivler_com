@@ -131,6 +131,172 @@ body.terminal-theme {
     color: #ffffff !important;
 }
 
+.qwen-review-panel {
+    border-style: solid;
+    border-color: rgba(56, 189, 248, 0.6);
+}
+
+.qwen-health-pill {
+    min-width: 9rem;
+    border: 1px solid currentColor;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.qwen-health-pill[data-state="pending"] {
+    color: #fbbf24;
+}
+
+.qwen-health-pill[data-state="online"] {
+    color: #39ff14;
+}
+
+.qwen-health-pill[data-state="warning"] {
+    color: #38bdf8;
+}
+
+.qwen-health-pill[data-state="offline"] {
+    color: #f87171;
+}
+
+.terminal-select,
+.terminal-textarea {
+    width: 100%;
+    background-color: #0b0b0f;
+    color: #e2e8f0;
+    border: 1px solid #222226;
+    border-radius: 4px;
+    padding: 0.65rem 0.8rem;
+    font-family: 'Courier New', Courier, monospace;
+    outline: none;
+}
+
+.terminal-select:focus,
+.terminal-textarea:focus {
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 0.15rem rgba(56, 189, 248, 0.2);
+}
+
+.terminal-textarea {
+    resize: vertical;
+    min-height: 180px;
+}
+
+#qwen-review-output {
+    max-height: min(60vh, 34rem);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 0.35rem;
+    scrollbar-gutter: stable;
+    overscroll-behavior: contain;
+}
+
+.qwen-review-output {
+    margin-top: 0;
+}
+
+.qwen-review-output p {
+    margin-bottom: 0.75rem;
+}
+
+.qwen-review-output p:last-child {
+    margin-bottom: 0;
+}
+
+.markdown-output h1,
+.markdown-output h2,
+.markdown-output h3,
+.markdown-output h4,
+.markdown-output h5,
+.markdown-output h6 {
+    color: #ffffff;
+    font-weight: 700;
+    margin: 0 0 0.65rem;
+    line-height: 1.2;
+}
+
+.markdown-output h1 {
+    font-size: 1.4rem;
+}
+
+.markdown-output h2 {
+    font-size: 1.2rem;
+}
+
+.markdown-output h3 {
+    font-size: 1.08rem;
+}
+
+.markdown-output p {
+    margin: 0 0 0.75rem;
+    line-height: 1.55;
+}
+
+.markdown-output p:last-child,
+.markdown-output ul:last-child,
+.markdown-output ol:last-child,
+.markdown-output blockquote:last-child,
+.markdown-output pre:last-child {
+    margin-bottom: 0;
+}
+
+.markdown-output ul,
+.markdown-output ol {
+    margin: 0 0 0.85rem 1.35rem;
+    padding-left: 1rem;
+}
+
+.markdown-output li + li {
+    margin-top: 0.35rem;
+}
+
+.markdown-output blockquote {
+    margin: 0 0 0.85rem;
+    padding: 0.75rem 1rem;
+    border-left: 3px solid #38bdf8;
+    background: rgba(56, 189, 248, 0.08);
+    color: #dbeafe;
+    border-radius: 0 4px 4px 0;
+}
+
+.markdown-output code {
+    background: rgba(255, 255, 255, 0.08);
+    color: #f8fafc;
+    padding: 0.15rem 0.35rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.markdown-output pre {
+    margin: 0 0 0.85rem;
+    padding: 0.9rem 1rem;
+    background: #08090d;
+    border: 1px solid #222226;
+    border-radius: 6px;
+    overflow-x: auto;
+}
+
+.markdown-output pre code {
+    background: transparent;
+    color: #e2e8f0;
+    padding: 0;
+    border-radius: 0;
+    font-size: 0.88rem;
+    white-space: pre;
+    word-break: normal;
+}
+
+.markdown-output a {
+    color: #38bdf8 !important;
+    text-decoration: underline;
+}
+
+.markdown-output a:hover {
+    color: #ffffff !important;
+}
+
 /* Command-Line Terminal Buttons */
 .terminal-btn {
     display: inline-flex;
