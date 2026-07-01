@@ -26,6 +26,8 @@ var connectionString = SqliteHelper.InitializeSqlite("kgivler_com.db", schema);
 
 builder.Services.AddApplicationServices(connectionString, builder.Environment);
 builder.Services.AddScoped<QwenCoderReviewService>();
+builder.Services.AddMemoryCache();
+builder.Services.AddScoped<SteamPresenceService>();
 builder.Services.Configure<SteamOptions>(builder.Configuration.GetSection("Steam"));
 
 // Rate limiting
