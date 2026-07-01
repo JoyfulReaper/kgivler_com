@@ -3,6 +3,7 @@ import { elements, Terminal, initHostTelemetry } from "./ui.js";
 import { getSystemData, getWorkstationStatus, fetchRandomGame } from "./api.js";
 import { initQwenPanel } from "./qwen-panel.js";
 import { parseCommandLine } from "./parser.js";
+import { initSteamPresence, refreshSteamPresence } from "./steam.js";
 
 // Helper to create UI-agnostic terminal contexts
 const createTerminalContext = (element) => ({
@@ -26,7 +27,7 @@ async function refreshWorkstation() {
   if (!elements.workstationRefreshButton || !elements.telemetry) return;
 
   elements.workstationRefreshButton.disabled = true;
-  elements.telemetry.innerHTML = `<div class="text-warning animate-pulse"><i class="fas fa-spinner fa-spin me-2"></i>Refreshing workstation data...</div>`;
+  elements.telemetry.innerHTML = `<div class="text-warning animate-pulse"><i class="fas fa-spinner fa-spin me-2"></i>Refreshing telemetry...</div>`;
 
   try {
     const data = await getWorkstationStatus();
@@ -64,8 +65,10 @@ async function processCommand(input) {
 document.addEventListener("DOMContentLoaded", () => {
   // Telemetry
   getSystemData().then(initHostTelemetry).catch(console.error);
+  initSteamPresence();
   initQwenPanel();
   elements.workstationRefreshButton?.addEventListener("click", () => refreshWorkstation());
+  elements.steamRefreshButton?.addEventListener("click", () => refreshSteamPresence().catch(console.error));
 
   // Terminal input listener
   elements.input?.addEventListener("keydown", (e) => {

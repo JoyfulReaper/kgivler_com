@@ -76,6 +76,22 @@ export async function getWorkstationStatus() {
   }
 }
 
+export async function getSteamPresence() {
+  try {
+    const response = await fetchJsonWithTimeout(`${API_CONFIG.TELEMETRY}/api/steam/presence`, {}, 5000);
+
+    if (!response.ok) {
+      const detail = await readProblemDetail(response, "Steam presence check failed.");
+      return { ok: false, error: detail, status: response.status };
+    }
+
+    return await response.json();
+  } catch (e) {
+    console.error("Steam presence fetch failed or timed out:", e);
+    return { ok: false, error: "Could not reach the Steam presence endpoint.", status: 0 };
+  }
+}
+
 export async function submitQwenCoderReview(code, language = "auto") {
   const trimmedCode = (code || "").trim();
   if (!trimmedCode) {
