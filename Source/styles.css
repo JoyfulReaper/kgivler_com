@@ -122,6 +122,50 @@ body.terminal-theme {
     display: flex !important;
 }
 
+.steam-presence-badge {
+    border-color: rgba(56, 189, 248, 0.75);
+    color: #e2e8f0;
+}
+
+.steam-presence-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.steam-presence-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    padding: 0.22rem 0.7rem;
+    font-size: 0.74rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.steam-presence-pill[data-state="online"] {
+    color: #39ff14;
+}
+
+.steam-presence-pill[data-state="in-game"] {
+    color: #fbbf24;
+}
+
+.steam-presence-pill[data-state="busy"] {
+    color: #fb7185;
+}
+
+.steam-presence-pill[data-state="offline"] {
+    color: #94a3b8;
+}
+
+.steam-presence-pill[data-state="unavailable"] {
+    color: #38bdf8;
+}
+
 .project-terminal-badge a {
     color: #39ff14 !important;
     text-decoration: underline;

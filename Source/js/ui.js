@@ -3,6 +3,7 @@ export const elements = {
   output: document.getElementById('terminal-output'),
   demo: document.getElementById('demo-output'),
   telemetry: document.getElementById('host-telemetry'),
+  steamPresence: document.getElementById('steam-presence'),
   qwenReviewOutput: document.getElementById('qwen-review-output'),
   qwenHealthBadge: document.getElementById('qwen-health-badge'),
   qwenCodeInput: document.getElementById('qwenCodeInput'),
@@ -11,7 +12,8 @@ export const elements = {
   qwenLoadBadSampleButton: document.getElementById('btn-load-bad-sample'),
   qwenReviewButton: document.getElementById('btn-qwen-review'),
   qwenClearButton: document.getElementById('btn-qwen-clear'),
-  workstationRefreshButton: document.getElementById('btn-workstation-refresh')
+  workstationRefreshButton: document.getElementById('btn-workstation-refresh'),
+  steamRefreshButton: document.getElementById('btn-steam-refresh')
 };
 
 export const Terminal = {

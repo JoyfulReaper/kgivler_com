@@ -67,7 +67,7 @@ async function refreshQwenHealth() {
   if (!data || data.ok === false) {
     setQwenHealthBadge("offline", "Offline");
     if (elements.qwenReviewOutput && qwenReviewTerminal) {
-      qwenReviewTerminal.print(`<span class="text-danger">QwenCoder health check failed: ${escapeHtml(data?.error || "unknown error")}</span>`);
+      qwenReviewTerminal.print(`<span class="text-danger">QwenCoder health check failed: ${escapeHtml(data?.error || "unknown error")}. Kyle is probably playing a video game or something...</span>`);
     }
     return data;
   }

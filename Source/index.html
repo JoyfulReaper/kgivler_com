@@ -38,7 +38,7 @@
             <section class="my-4">
               <div class="cmd-line">
                 <span class="prompt">kyle@kgivler:~$</span>
-                systemctl status local-host.service
+                ./show_status.sh
               </div>
               <div class="system-warning-box">
                 <i class="fas fa-server me-2"></i>
@@ -55,7 +55,20 @@
                 </div>
               </div>
               <div class="mt-3 d-flex flex-wrap gap-2">
-                <button id="btn-workstation-refresh" class="terminal-btn-inline" type="button">Refresh Workstation</button>
+                <button id="btn-workstation-refresh" class="terminal-btn-inline" type="button">Refresh Telemetry</button>
+              </div>
+              <div class="cmd-line mt-3">
+                <span class="prompt">kyle@kgivler:~$</span>
+                ./show_steam.sh
+              </div>
+              <div id="steam-presence" class="mt-3 project-terminal-badge steam-presence-badge">
+                <div class="text-warning animate-pulse">
+                  <i class="fab fa-steam me-2"></i>
+                  Checking Steam presence...
+                </div>
+              </div>
+              <div class="mt-3 d-flex flex-wrap gap-2">
+                <button id="btn-steam-refresh" class="terminal-btn-inline" type="button">Refresh Steam</button>
               </div>
             </section>
 
@@ -82,7 +95,7 @@
                   <div>
                     <i class="fas fa-code-branch me-2 text-accent"></i>
                     Status:
-                    <span class="text-success">Stable. Known Issue</span>
+                    <span class="text-success">Stable</span>
                   </div>
                   <div>
                     <i class="fas fa-file-lines me-2 text-accent"></i>
@@ -91,7 +104,7 @@
                   </div>
                    <div>
                     <i class="fas fa-bug me-2 text-warning"></i>
-                    <span class="text-warning">Known Issues / Report Bug:</span>
+                    <span>Report Bug:</span>
                     <a href="https://github.com/JoyfulReaper/RandomSteamGame/issues" target="_blank" rel="noopener noreferrer">
                       GitHub Issues
                     </a>
@@ -99,7 +112,7 @@
                   <div>
                     <i class="fas fa-terminal me-2 animate-pulse"></i>
                     GitHub:
-                    <a href="https://github.com/JoyfulReaper/RandomSteamGame" target="_blank" rel="noopener noreferrer">Random Steam Game Picker</a>
+                    <a href="https://github.com/JoyfulReaper/RandomSteamGame" target="_blank" rel="noopener noreferrer">Random Steam Game Picker</a> | <a href="https://randomsteam.kgivler.com" target="_blank" rel="noopener noreferrer">Live Site</a>
                   </div>
                 </article>
 
@@ -180,16 +193,15 @@
             <section class="my-4" id="qwen-review-section">
               <div class="cmd-line">
                 <span class="prompt">kyle@kgivler:~$</span>
-                ./code_review.sh --ShowHealth true
+                ./qwen_review.sh --health
               </div>
               <div class="project-terminal-badge qwen-review-panel">
                 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
                   <div class="text-white-50">
-                    [EXPERIMENTAL] Local QwenCoder review
-                    <div class="small text-muted">Local best-effort review powered by qwen2.5-coder-3b-instruct@q6_k + simple static hints.
-                      Small model. Small brain. Still sometimes useful.
-                      Not a security scanner. Not a formal audit. Just a local AI widget toy. All the cool kids are doing AI stuff these days right?
-                    </div>
+                    [Experimental] Local QwenCoder review
+                    <div class="small text-muted">Best-effort reviews powered by qwen2.5-coder-3b-instruct@q6_k plus a few simple static hints.</div>
+                    <div class="small text-muted">Small model, small expectations. Not a security scanner. Not a formal audit. Local AI widget for fun demos.</div>
+                    <div class="small text-muted">If the endpoint is offline, Kyle is probably playing a video game or something.</div>
                     <div class="small text-muted">Single-pass reviews up to 12k chars; larger files are auto-chunked up to 48k chars total.</div>
                   </div>
                   <span id="qwen-health-badge" class="qwen-health-pill badge rounded-pill text-warning">Checking...</span>
