@@ -122,11 +122,6 @@ body.terminal-theme {
     display: flex !important;
 }
 
-.steam-presence-badge {
-    border-color: rgba(56, 189, 248, 0.75);
-    color: #e2e8f0;
-}
-
 .steam-presence-line {
     display: flex;
     flex-wrap: wrap;
@@ -173,11 +168,6 @@ body.terminal-theme {
 
 .project-terminal-badge a:hover {
     color: #ffffff !important;
-}
-
-.qwen-review-panel {
-    border-style: solid;
-    border-color: rgba(56, 189, 248, 0.6);
 }
 
 .qwen-health-pill {
@@ -372,16 +362,6 @@ body.terminal-theme {
     color: #000000 !important;
 }
 
-/* Animations */
-.blink-cursor {
-    animation: blinker 1s linear infinite;
-    color: #39ff14;
-}
-
-@keyframes blinker {
-    50% { opacity: 0; }
-}
-
 .terminal-input {
     background: transparent;
     border: none;
@@ -468,11 +448,6 @@ body.terminal-theme {
 
 .error-text-dim { color: #888892; }
 .error-text-light { color: #e2e8f0; }
-
-/* Animation Additions */
-.dynamic-pulse {
-    animation: pulse 1.8s infinite ease-in-out;
-}
 
 /* 500 Error Page Specifics */
 .error-internal-fault {
