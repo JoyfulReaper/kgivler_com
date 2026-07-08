@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// BBS Schema
 var schemaSql = @"
             CREATE TABLE IF NOT EXISTS Messages (
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -25,6 +26,7 @@ var schemaSql = @"
 var connectionString = SqliteAppDatabaseInitializer.Initialize("kgivler_com.db", schemaSql);
 
 builder.Services.AddApplicationServices(connectionString, builder.Environment);
+
 builder.Services.AddScoped<QwenCoderReviewService>();
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<SteamPresenceService>();

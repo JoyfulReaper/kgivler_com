@@ -8,7 +8,6 @@
 using JoyfulReaperLib.WebStats.Sqlite;
 using Kgivler.Api.BackgroundServices;
 using Kgivler.Api.Helpers;
-using Microsoft.Data.Sqlite;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
@@ -18,7 +17,7 @@ public static class TelemetryRoutes
 {
     public static WebApplication MapTelemetryRoutes(this WebApplication app)
     {
-        app.MapGet("/api/system/usage", async (HttpContext context, SqliteConnection db, IHitCounter hitCounter) =>
+        app.MapGet("/api/system/usage", async (HttpContext context, IHitCounter hitCounter) =>
         {
             var forwardedHeader = context.Request.Headers["CF-Connecting-IP"].FirstOrDefault()
                                ?? context.Request.Headers["X-Forwarded-For"].FirstOrDefault()
@@ -60,7 +59,7 @@ public static class TelemetryRoutes
             return Results.Ok(telemetry);
         }).RequireRateLimiting("TelemetryPolicy");
 
-        app.MapGet("/api/system/status", async (SqliteConnection db, IHitCounter hitCounter) =>
+        app.MapGet("/api/system/status", async (IHitCounter hitCounter) =>
         {
             var currentProcess = Process.GetCurrentProcess();
             var uptimeSpan = TimeSpan.FromMilliseconds(Environment.TickCount64);
