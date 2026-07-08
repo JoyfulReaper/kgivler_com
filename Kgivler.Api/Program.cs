@@ -5,16 +5,16 @@
  * Licensed under the MIT License.
  */
 
-using JoyfulReaperLib.JRData;
 using Kgivler.Api.CodeReview;
 using Kgivler.Api.Extensions;
+using Kgivler.Api.Persistence;
 using Kgivler.Api.Routes;
 using Kgivler.Api.Steam;
 using Microsoft.AspNetCore.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var schema = @"
+var schemaSql = @"
             CREATE TABLE IF NOT EXISTS Messages (
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
                 Author TEXT,
@@ -22,7 +22,7 @@ var schema = @"
                 Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
             );";
 
-var connectionString = SqliteHelper.InitializeSqlite("kgivler_com.db", schema);
+var connectionString = SqliteAppDatabaseInitializer.Initialize("kgivler_com.db", schemaSql);
 
 builder.Services.AddApplicationServices(connectionString, builder.Environment);
 builder.Services.AddScoped<QwenCoderReviewService>();

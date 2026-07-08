@@ -5,9 +5,9 @@
  * Licensed under the MIT License.
  */
 
+using JoyfulReaperLib.WebStats.Sqlite;
 using Kgivler.Api.BackgroundServices;
 using Microsoft.Data.Sqlite;
-
 namespace Kgivler.Api.Extensions;
 
 public static class ServiceExtensions
@@ -21,6 +21,11 @@ public static class ServiceExtensions
 
         services.AddScoped<SqliteConnection>(_ =>
             new SqliteConnection(connectionString));
+
+        services.AddJoyfulReaperSqliteHitCounter(options =>
+        {
+            options.ConnectionString = connectionString;
+        });
 
         // CORS Configuration
         services.AddCors(options =>
