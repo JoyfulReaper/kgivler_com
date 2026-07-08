@@ -5,9 +5,9 @@
  * Licensed under the MIT License.
  */
 
+using JoyfulReaperLib.Sqlite;
 using Kgivler.Api.CodeReview;
 using Kgivler.Api.Extensions;
-using Kgivler.Api.Persistence;
 using Kgivler.Api.Routes;
 using Kgivler.Api.Steam;
 using Microsoft.AspNetCore.RateLimiting;
@@ -23,7 +23,7 @@ var schemaSql = @"
                 Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
             );";
 
-var connectionString = SqliteAppDatabaseInitializer.Initialize("kgivler_com.db", schemaSql);
+var connectionString = SqliteDatabaseInitializer.Initialize("kgivler_com.db", schemaSql);
 
 builder.Services.AddApplicationServices(connectionString, builder.Environment);
 
