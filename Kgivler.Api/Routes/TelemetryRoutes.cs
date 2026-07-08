@@ -5,12 +5,9 @@
  * Licensed under the MIT License.
  */
 
+using JoyfulReaperLib.WebStats.Sqlite;
 using Kgivler.Api.BackgroundServices;
 using Kgivler.Api.Helpers;
-using JoyfulReaperLib.JRData;
-using JoyfulReaperLib.JRData.Web;
-using Microsoft.AspNetCore.RateLimiting;
-using Microsoft.Data.Sqlite;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
@@ -20,7 +17,7 @@ public static class TelemetryRoutes
 {
     public static WebApplication MapTelemetryRoutes(this WebApplication app)
     {
-        app.MapGet("/api/system/usage", async (HttpContext context, SqliteConnection db) =>
+        app.MapGet("/api/system/usage", async (HttpContext context, IHitCounter hitCounter) =>
         {
             var forwardedHeader = context.Request.Headers["CF-Connecting-IP"].FirstOrDefault()
                                ?? context.Request.Headers["X-Forwarded-For"].FirstOrDefault()
@@ -38,7 +35,7 @@ public static class TelemetryRoutes
             var cpuUsage = TelemetricsHelper.GetCpuUsage();
             var stardate = TelemetricsHelper.GetStarDate();
             var weather = await TelemetricsHelper.GetLocalWeather();
-            var hitResults = await HitCountHelper.ProcessHitCounts(db, ip);
+            var hitResults = await hitCounter.RecordHitAsync(ip);
             var telemetry = new
             {
                 OS = RuntimeInformation.OSDescription,
@@ -55,14 +52,14 @@ public static class TelemetryRoutes
                 GPU = gpu,
                 Stardate = stardate,
                 Weather = weather,
-                TotalRequestsHandled = hitResults.totalHits,
-                UniqueVisitors = hitResults.uniqueVisitors
+                TotalRequestsHandled = hitResults.TotalHits,
+                UniqueVisitors = hitResults.UniqueVisitors
             };
 
             return Results.Ok(telemetry);
         }).RequireRateLimiting("TelemetryPolicy");
 
-        app.MapGet("/api/system/status", async (SqliteConnection db) =>
+        app.MapGet("/api/system/status", async (IHitCounter hitCounter) =>
         {
             var currentProcess = Process.GetCurrentProcess();
             var uptimeSpan = TimeSpan.FromMilliseconds(Environment.TickCount64);
@@ -72,7 +69,7 @@ public static class TelemetryRoutes
             var gpu = TelemetricsHelper.GetGpuMetrics();
             var stardate = TelemetricsHelper.GetStarDate();
             var weather = await TelemetricsHelper.GetLocalWeather();
-            var hitResults = await HitCountHelper.GetHitCounts(db);
+            var hitResults = await hitCounter.GetHitCountsAsync();
 
             var telemetry = new
             {
@@ -90,8 +87,8 @@ public static class TelemetryRoutes
                 GPU = gpu,
                 Stardate = stardate,
                 Weather = weather,
-                TotalRequestsHandled = hitResults.totalHits,
-                UniqueVisitors = hitResults.uniqueVisitors
+                TotalRequestsHandled = hitResults.TotalHits,
+                UniqueVisitors = hitResults.UniqueVisitors
             };
 
             return Results.Ok(telemetry);

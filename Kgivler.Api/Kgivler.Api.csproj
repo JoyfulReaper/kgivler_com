@@ -7,9 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="JoyfulReaperLib" Version="0.0.5" />
+    <PackageReference Include="JoyfulReaperLib" Version="0.0.8" />
+    <PackageReference Include="JoyfulReaperLib.WebStats.Sqlite" Version="0.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.9" />
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.9" />
+    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="10.0.9" />
+    <PackageReference Include="Microsoft.OpenApi" Version="2.10.0" />
     <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="10.0.9" />
   </ItemGroup>
 
