@@ -6,8 +6,6 @@
  */
 
 using Kgivler.Api.CodeReview;
-using Microsoft.AspNetCore.RateLimiting;
-using System.Net.Http.Json;
 
 namespace Kgivler.Api.Routes;
 
