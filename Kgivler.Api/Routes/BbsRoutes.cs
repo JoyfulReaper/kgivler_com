@@ -5,9 +5,11 @@
  * Licensed under the MIT License.
  */
 
+using JoyfulReaperLib.MissionControl;
 using Kgivler.Api.Bbs;
-using Microsoft.AspNetCore.RateLimiting;
+using Kgivler.Api.Events;
 using Microsoft.Data.Sqlite;
+using System.Diagnostics;
 
 namespace Kgivler.Api.Routes;
 
@@ -15,7 +17,8 @@ public static class BbsRoutes
 {
     public static WebApplication MapBbsRoutes(this WebApplication app)
     {
-        app.MapGet("/api/bbs", async (SqliteConnection db, ILogger<Program> logger) =>
+        app.MapGet("/api/bbs", async (SqliteConnection db,
+            ILogger<Program> logger) =>
         {
             var messages = new List<Message>();
             try
@@ -45,10 +48,19 @@ public static class BbsRoutes
             return Results.Ok(messages);
         });
 
-        app.MapPost("/api/bbs", async (Message msg, SqliteConnection db, ILogger<Program> logger) =>
+        app.MapPost("/api/bbs", async (Message msg,
+            SqliteConnection db,
+            IMissionControlClient missionControlClient,
+            CancellationToken cancellationToken,
+            ILogger<Program> logger) =>
         {
+            var occurredAt = DateTimeOffset.UtcNow;
+            var stopwatch = Stopwatch.StartNew();
+            var correlationId = Guid.NewGuid().ToString("N");
+
             try
             {
+                var originalContentLength = msg.Content.Length;
                 var content = msg.Content.Length > 256 ? msg.Content[..256] : msg.Content;
                 var escapedContent = System.Net.WebUtility.HtmlEncode(content);
 
@@ -59,6 +71,20 @@ public static class BbsRoutes
                 messageCmd.Parameters.AddWithValue("$content", escapedContent);
 
                 await messageCmd.ExecuteNonQueryAsync();
+                stopwatch.Stop();
+
+                await missionControlClient.TryPublishAsync(
+                    eventType: KgivlerEventTypes.BbsMessageCreated,
+                    payload: new BbsMessageCreatedEvent(
+                        AuthorLength: msg.Author?.Length ?? 0,
+                        OriginalContentLength: originalContentLength,
+                        StoredContentLength: content.Length,
+                        ContentTruncated: originalContentLength > content.Length,
+                        DurationMilliseconds: stopwatch.ElapsedMilliseconds),
+                    occurredAt: occurredAt,
+                    correlationId: correlationId,
+                    cancellationToken: cancellationToken);
+
                 return Results.Created("/api/bbs", new { status = "success", message = "Post received." });
             }
             catch (Exception ex)

@@ -5,6 +5,7 @@
  * Licensed under the MIT License.
  */
 
+using JoyfulReaperLib.MissionControl;
 using JoyfulReaperLib.Sqlite;
 using Kgivler.Api.CodeReview;
 using Kgivler.Api.Extensions;
@@ -31,6 +32,9 @@ builder.Services.AddScoped<QwenCoderReviewService>();
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<SteamPresenceService>();
 builder.Services.Configure<SteamOptions>(builder.Configuration.GetSection("Steam"));
+builder.Services.AddMissionControlClient(
+    builder.Configuration.GetSection(
+        MissionControlClientOptions.SectionName));
 
 // Rate limiting
 builder.Services.AddRateLimiter(options =>

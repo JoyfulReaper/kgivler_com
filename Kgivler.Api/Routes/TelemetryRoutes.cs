@@ -5,9 +5,12 @@
  * Licensed under the MIT License.
  */
 
+using JoyfulReaperLib.MissionControl;
 using JoyfulReaperLib.WebStats.Sqlite;
 using Kgivler.Api.BackgroundServices;
+using Kgivler.Api.Events;
 using Kgivler.Api.Helpers;
+using Kgivler.Api.Telemetry;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
@@ -17,7 +20,10 @@ public static class TelemetryRoutes
 {
     public static WebApplication MapTelemetryRoutes(this WebApplication app)
     {
-        app.MapGet("/api/system/usage", async (HttpContext context, IHitCounter hitCounter) =>
+        app.MapGet("/api/system/usage", async (HttpContext context,
+            ILogger<Program> logger,
+            IMissionControlClient missionControlClient,
+            IHitCounter hitCounter) =>
         {
             var forwardedHeader = context.Request.Headers["CF-Connecting-IP"].FirstOrDefault()
                                ?? context.Request.Headers["X-Forwarded-For"].FirstOrDefault()
@@ -35,7 +41,35 @@ public static class TelemetryRoutes
             var cpuUsage = TelemetricsHelper.GetCpuUsage();
             var stardate = TelemetricsHelper.GetStarDate();
             var weather = await TelemetricsHelper.GetLocalWeather();
+
+            var occurredAt = DateTimeOffset.UtcNow;
+            var correlationId = Guid.NewGuid().ToString("N");
+            var hitStopwatch = Stopwatch.StartNew();
+
             var hitResults = await hitCounter.RecordHitAsync(ip);
+
+            hitStopwatch.Stop();
+
+            try
+            {
+                await missionControlClient.TryPublishAsync(
+                    eventType: KgivlerEventTypes.SiteVisitRecorded,
+                    payload: new SiteVisitRecordedEvent(
+                        TotalHits: hitResults.TotalHits,
+                        UniqueVisitors: hitResults.UniqueVisitors,
+                        DurationMilliseconds: hitStopwatch.ElapsedMilliseconds),
+                    occurredAt: occurredAt,
+                    correlationId: correlationId,
+                    cancellationToken: CancellationToken.None);
+            }
+            catch (Exception exception)
+            {
+                logger.LogWarning(
+                    exception,
+                    "Failed to publish site visit event {CorrelationId}.",
+                    correlationId);
+            }
+
             var telemetry = new
             {
                 OS = RuntimeInformation.OSDescription,

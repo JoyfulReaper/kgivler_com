@@ -7,6 +7,9 @@
  * This class was created with the assistance of Codex :p
  */
 
+using JoyfulReaperLib.MissionControl;
+using Kgivler.Api.Events;
+using System.Diagnostics;
 using System.Text;
 
 namespace Kgivler.Api.CodeReview;
@@ -27,15 +30,18 @@ public sealed class QwenCoderReviewService
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IConfiguration _configuration;
     private readonly ILogger<QwenCoderReviewService> _logger;
+    private readonly IMissionControlClient _missionControlClient;
 
     public QwenCoderReviewService(
         IHttpClientFactory httpClientFactory,
         IConfiguration configuration,
+        IMissionControlClient missionControlClient,
         ILogger<QwenCoderReviewService> logger)
     {
         _httpClientFactory = httpClientFactory;
         _configuration = configuration;
         _logger = logger;
+        _missionControlClient = missionControlClient;
     }
 
     private static List<string> DetectReviewHints(string code)
@@ -164,25 +170,62 @@ public sealed class QwenCoderReviewService
     }
 
     public async Task<IResult> ReviewAsync(
-        CodeReviewRequest request,
-        CancellationToken cancellationToken)
+    CodeReviewRequest request,
+    CancellationToken cancellationToken)
     {
+        var occurredAt = DateTimeOffset.UtcNow;
+        var stopwatch = Stopwatch.StartNew();
+        var correlationId = Guid.NewGuid().ToString("N");
+
         var code = request.Code?.Trim();
+        var language = string.IsNullOrWhiteSpace(request.Language)
+            ? null
+            : request.Language.Trim();
+
+        var model = _configuration["LmStudio:Model"] ?? DefaultModel;
 
         if (string.IsNullOrWhiteSpace(code))
         {
-            return Results.BadRequest(new { title = "Paste some code first." });
+            await PublishCodeReviewEventAsync(
+                language,
+                codeLength: 0,
+                reviewMode: "not-started",
+                chunkCount: 0,
+                reviewLength: 0,
+                model,
+                stopwatch,
+                outcome: "validation-error",
+                succeeded: false,
+                occurredAt,
+                correlationId);
+
+            return Results.BadRequest(new
+            {
+                title = "Paste some code first."
+            });
         }
 
         if (code.Length > ChunkedMaxChars)
         {
+            await PublishCodeReviewEventAsync(
+                language,
+                code.Length,
+                reviewMode: "not-started",
+                chunkCount: 0,
+                reviewLength: 0,
+                model,
+                stopwatch,
+                outcome: "code-too-large",
+                succeeded: false,
+                occurredAt,
+                correlationId);
+
             return Results.BadRequest(new
             {
                 title = $"Code is too large. Keep it under {ChunkedMaxChars:N0} characters."
             });
         }
 
-        var model = _configuration["LmStudio:Model"] ?? DefaultModel;
         var lmStudio = _httpClientFactory.CreateClient("LmStudio");
 
         if (code.Length <= SinglePassMaxChars)
@@ -190,15 +233,46 @@ public sealed class QwenCoderReviewService
             var review = await ReviewSinglePassAsync(
                 lmStudio,
                 model,
-                request.Language,
+                language,
                 code,
                 cancellationToken);
 
-            return string.IsNullOrWhiteSpace(review)
-                ? Results.Problem(
+            if (string.IsNullOrWhiteSpace(review))
+            {
+                await PublishCodeReviewEventAsync(
+                    language,
+                    code.Length,
+                    reviewMode: "single-pass",
+                    chunkCount: 1,
+                    reviewLength: 0,
+                    model,
+                    stopwatch,
+                    outcome: "empty-review",
+                    succeeded: false,
+                    occurredAt,
+                    correlationId);
+
+                return Results.Problem(
                     title: "LM Studio returned an empty review.",
-                    statusCode: StatusCodes.Status502BadGateway)
-                : Results.Ok(new CodeReviewResponse(review.Trim()));
+                    statusCode: StatusCodes.Status502BadGateway);
+            }
+
+            var finalReview = review.Trim();
+
+            await PublishCodeReviewEventAsync(
+                language,
+                code.Length,
+                reviewMode: "single-pass",
+                chunkCount: 1,
+                reviewLength: finalReview.Length,
+                model,
+                stopwatch,
+                outcome: "served",
+                succeeded: true,
+                occurredAt,
+                correlationId);
+
+            return Results.Ok(new CodeReviewResponse(finalReview));
         }
 
         var chunks = SplitIntoChunks(code, ChunkTargetChars);
@@ -207,10 +281,11 @@ public sealed class QwenCoderReviewService
         for (var i = 0; i < chunks.Count; i++)
         {
             var chunk = chunks[i];
+
             var review = await ReviewChunkAsync(
                 lmStudio,
                 model,
-                request.Language,
+                language,
                 chunk,
                 i + 1,
                 chunks.Count,
@@ -218,6 +293,19 @@ public sealed class QwenCoderReviewService
 
             if (string.IsNullOrWhiteSpace(review))
             {
+                await PublishCodeReviewEventAsync(
+                    language,
+                    code.Length,
+                    reviewMode: "chunked",
+                    chunkCount: chunks.Count,
+                    reviewLength: 0,
+                    model,
+                    stopwatch,
+                    outcome: "chunk-review-failed",
+                    succeeded: false,
+                    occurredAt,
+                    correlationId);
+
                 return Results.Problem(
                     title: $"LM Studio returned an empty review for chunk {i + 1}.",
                     statusCode: StatusCodes.Status502BadGateway);
@@ -229,15 +317,74 @@ public sealed class QwenCoderReviewService
         var synthesis = await SynthesizeChunkReviewsAsync(
             lmStudio,
             model,
-            request.Language,
+            language,
             chunkReviews,
             cancellationToken);
 
-        var finalReview = string.IsNullOrWhiteSpace(synthesis)
-            ? string.Join("\n\n", chunkReviews)
-            : synthesis.Trim();
+        var synthesisSucceeded = !string.IsNullOrWhiteSpace(synthesis);
 
-        return Results.Ok(new CodeReviewResponse(finalReview));
+        var finalChunkedReview = synthesisSucceeded
+            ? synthesis!.Trim()
+            : string.Join("\n\n", chunkReviews);
+
+        await PublishCodeReviewEventAsync(
+            language,
+            code.Length,
+            reviewMode: "chunked",
+            chunkCount: chunks.Count,
+            reviewLength: finalChunkedReview.Length,
+            model,
+            stopwatch,
+            outcome: synthesisSucceeded
+                ? "served"
+                : "served-without-synthesis",
+            succeeded: true,
+            occurredAt,
+            correlationId);
+
+        return Results.Ok(new CodeReviewResponse(finalChunkedReview));
+    }
+
+    private async Task PublishCodeReviewEventAsync(
+        string? language,
+        int codeLength,
+        string reviewMode,
+        int chunkCount,
+        int reviewLength,
+        string model,
+        Stopwatch stopwatch,
+        string outcome,
+        bool succeeded,
+        DateTimeOffset occurredAt,
+        string correlationId)
+    {
+        stopwatch.Stop();
+
+        try
+        {
+            await _missionControlClient.TryPublishAsync(
+                eventType: KgivlerEventTypes.CodeReviewCompleted,
+                payload: new CodeReviewCompletedEvent(
+                    Language: language ?? "auto",
+                    CodeLength: codeLength,
+                    ReviewMode: reviewMode,
+                    ChunkCount: chunkCount,
+                    ReviewLength: reviewLength,
+                    Model: model,
+                    DurationMilliseconds: stopwatch.ElapsedMilliseconds,
+                    Outcome: outcome,
+                    Succeeded: succeeded),
+                occurredAt: occurredAt,
+                correlationId: correlationId,
+                cancellationToken: CancellationToken.None);
+        }
+        catch (Exception exception)
+        {
+            _logger.LogWarning(
+                exception,
+                "Failed to publish code-review telemetry event {CorrelationId}.",
+                correlationId);
+        }
     }
 
     private async Task<string?> ReviewSinglePassAsync(
