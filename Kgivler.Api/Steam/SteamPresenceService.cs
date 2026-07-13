@@ -60,11 +60,6 @@ public sealed class SteamPresenceService
             return null;
         }
 
-        if (string.IsNullOrWhiteSpace(_options.ApiKey) || string.IsNullOrWhiteSpace(_options.OwnerSteamId))
-        {
-            return null;
-        }
-
         var cacheKey = $"steam-presence:{_options.OwnerSteamId}";
 
         if (_memoryCache.TryGetValue(
