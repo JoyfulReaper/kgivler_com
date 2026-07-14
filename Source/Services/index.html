@@ -1,0 +1,1560 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+
+    <title>KGIVLER.EXE: SERVICES</title>
+
+    <meta
+      name="description"
+      content="Public services, classic internet protocols, APIs, monitoring tools, and backend infrastructure operated by Kyle Givler."
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="../styles.css?v=2"
+    />
+
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/apple-touch-icon.png"
+    />
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/favicon-32x32.png"
+    />
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/favicon-16x16.png"
+    />
+
+    <link
+      rel="manifest"
+      href="/site.webmanifest"
+    />
+
+    <link
+      rel="stylesheet"
+      href="./services.css"
+    />
+  </head>
+
+  <body class="terminal-theme">
+    <main class="main-container">
+      <div class="terminal-window">
+        <header class="terminal-header">
+          <span class="terminal-dot close-dot"></span>
+          <span class="terminal-dot minimize-dot"></span>
+          <span class="terminal-dot expand-dot"></span>
+
+          <span class="terminal-title">
+            bash — services@kgivler.com
+          </span>
+        </header>
+
+        <div class="terminal-body">
+          <header class="mb-4">
+            <div class="cmd-line">
+              <span class="prompt">kyle@kgivler:~$</span>
+              ./list_services.sh --all
+            </div>
+
+            <h1 class="display-5 fw-bold terminal-header-text">
+              Services &amp; Infrastructure
+            </h1>
+
+            <p class="terminal-lead mb-0">
+              Public applications, classic internet protocols, APIs,
+              event-driven services, and operational tooling running across
+              my Linux VPS and personal workstation.
+            </p>
+          </header>
+
+          <div class="d-flex flex-wrap gap-2 mb-4">
+            <a
+              href="/"
+              class="terminal-btn-inline text-decoration-none"
+            >
+              <i class="fas fa-arrow-left me-2"></i>
+              Return Home
+            </a>
+
+            <a
+              href="https://github.com/JoyfulReaper"
+              class="terminal-btn-inline text-decoration-none"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <i class="fab fa-github me-2"></i>
+              GitHub Profile
+            </a>
+          </div>
+
+          <div class="system-warning-box">
+            <i class="fas fa-circle-info me-2"></i>
+
+            <span>
+              [INFO] Public services are exposed selectively. Administrative
+              dashboards and internal infrastructure remain private or
+              loopback-only.
+            </span>
+          </div>
+
+          <div class="services-summary-grid mt-3">
+            <div class="services-summary-card">
+              <span class="services-summary-value">12</span>
+
+              <span class="services-summary-label">
+                Running containers
+              </span>
+            </div>
+
+            <div class="services-summary-card">
+              <span class="services-summary-value">5</span>
+
+              <span class="services-summary-label">
+                Public apps and protocols
+              </span>
+            </div>
+
+            <div class="services-summary-card">
+              <span class="services-summary-value">4</span>
+
+              <span class="services-summary-label">
+                Mission Control services
+              </span>
+            </div>
+
+            <div class="services-summary-card">
+              <span class="services-summary-value">3</span>
+
+              <span class="services-summary-label">
+                Operations and monitoring tools
+              </span>
+            </div>
+          </div>
+
+          <hr class="terminal-divider" />
+
+          <section class="my-4">
+            <div class="cmd-line">
+              <label
+                for="service-filter"
+                class="prompt"
+              >
+                kyle@kgivler:~$
+              </label>
+
+              grep -i
+
+              <input
+                id="service-filter"
+                class="terminal-input services-filter"
+                type="search"
+                autocomplete="off"
+                placeholder="service, protocol, container, or technology..."
+                aria-label="Filter services"
+              />
+            </div>
+          </section>
+
+          <div
+            id="services-empty"
+            class="services-empty"
+            role="status"
+          >
+            [INFO] No services matched that filter.
+          </div>
+
+          <section
+            class="service-section"
+            data-service-section
+          >
+            <div class="cmd-line mb-3">
+              <span class="prompt">kyle@kgivler:~$</span>
+              ls -la ./public-services/
+            </div>
+
+            <div class="service-list">
+              <details
+                class="service-entry"
+                data-service-entry
+                data-search="random steam game randomsteam steam picker web application api public docker healthy"
+              >
+                <summary>
+                  <span class="service-summary-main">
+                    <i class="fas fa-dice service-icon"></i>
+
+                    <span class="service-summary-text">
+                      <span class="service-name">
+                        Random Steam Game
+                      </span>
+
+                      <span class="service-tagline">
+                        Stops library paralysis by choosing a game for you.
+                      </span>
+                    </span>
+                  </span>
+
+                  <span class="service-summary-badges">
+                    <span
+                      class="service-chip"
+                      data-type="public"
+                    >
+                      PUBLIC
+                    </span>
+
+                    <span
+                      class="service-chip"
+                      data-type="healthy"
+                    >
+                      HEALTHY
+                    </span>
+
+                    <span
+                      class="service-chip"
+                      data-type="protocol"
+                    >
+                      HTTPS
+                    </span>
+                  </span>
+                </summary>
+
+                <div class="service-body">
+                  <div class="service-meta-grid">
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Container</span>
+
+                      <span class="service-meta-value">
+                        joyful-stack-randomsteam-1
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Image</span>
+
+                      <span class="service-meta-value">
+                        joyful/randomsteam
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Hostname</span>
+
+                      <span class="service-meta-value">
+                        randomsteam.kgivler.com
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Protocol</span>
+
+                      <span class="service-meta-value">
+                        HTTPS / JSON API
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">
+                        Observed memory
+                      </span>
+
+                      <span class="service-meta-value">
+                        Approximately 163 MB
+                      </span>
+                    </div>
+                  </div>
+
+                  <p class="service-description">
+                    A fast random game picker for public Steam libraries. It
+                    resolves a Steam account, loads the user's owned games,
+                    applies exclusions and filters, and returns a random game
+                    without making the visitor wait through a slow picker.
+                  </p>
+
+                  <p class="service-note">
+                    Includes a public website, API endpoints, Steam data
+                    caching, rate limiting, and persistent user preferences.
+                  </p>
+
+                  <div class="d-flex flex-wrap gap-2 mt-3">
+                    <a
+                      href="https://randomsteam.kgivler.com/"
+                      class="terminal-btn-inline text-decoration-none"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Open Application
+                    </a>
+
+                    <a
+                      href="https://github.com/JoyfulReaper/RandomSteamGame"
+                      class="terminal-btn-inline text-decoration-none"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View Source
+                    </a>
+                  </div>
+                </div>
+              </details>
+
+              <details
+                class="service-entry"
+                data-service-entry
+                data-search="happyecho echo protocol tcp port 7 networking rfc public dotnet"
+              >
+                <summary>
+                  <span class="service-summary-main">
+                    <i class="fas fa-right-left service-icon"></i>
+
+                    <span class="service-summary-text">
+                      <span class="service-name">
+                        HappyEcho
+                      </span>
+
+                      <span class="service-tagline">
+                        A modern implementation of the classic Echo protocol.
+                      </span>
+                    </span>
+                  </span>
+
+                  <span class="service-summary-badges">
+                    <span
+                      class="service-chip"
+                      data-type="public"
+                    >
+                      PUBLIC
+                    </span>
+
+                    <span
+                      class="service-chip"
+                      data-type="protocol"
+                    >
+                      TCP :7
+                    </span>
+                  </span>
+                </summary>
+
+                <div class="service-body">
+                  <div class="service-meta-grid">
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Container</span>
+
+                      <span class="service-meta-value">
+                        joyful-stack-happyecho-1
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Port</span>
+
+                      <span class="service-meta-value">
+                        TCP 7
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Hostname</span>
+
+                      <span class="service-meta-value">
+                        echo.kgivler.com
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Role</span>
+
+                      <span class="service-meta-value">
+                        Classic protocol experiment
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">
+                        Observed memory
+                      </span>
+
+                      <span class="service-meta-value">
+                        Approximately 40 MB
+                      </span>
+                    </div>
+                  </div>
+
+                  <p class="service-description">
+                    HappyEcho accepts a TCP connection and sends received data
+                    back to the client. The service is intentionally simple:
+                    what you send is what you get back.
+                  </p>
+
+                  <p class="service-note">
+                    It exists as a practical networking exercise and as a
+                    working example of one of the original small Internet
+                    services.
+                  </p>
+                </div>
+              </details>
+
+              <details
+                class="service-entry"
+                data-service-entry
+                data-search="happyfinger finger protocol tcp port 79 networking steam steamid random game picker rfc public dotnet"
+              >
+                <summary>
+                  <span class="service-summary-main">
+                    <i class="fas fa-fingerprint service-icon"></i>
+
+                    <span class="service-summary-text">
+                      <span class="service-name">
+                        HappyFinger
+                      </span>
+
+                      <span class="service-tagline">
+                        Finger a Steam ID to receive a random game recommendation.
+                      </span>
+                    </span>
+                  </span>
+
+                  <span class="service-summary-badges">
+                    <span
+                      class="service-chip"
+                      data-type="public"
+                    >
+                      PUBLIC
+                    </span>
+
+                    <span
+                      class="service-chip"
+                      data-type="protocol"
+                    >
+                      TCP :79
+                    </span>
+                  </span>
+                </summary>
+
+                <div class="service-body">
+                  <div class="service-meta-grid">
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Container</span>
+
+                      <span class="service-meta-value">
+                        joyful-stack-happyfinger-1
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Port</span>
+
+                      <span class="service-meta-value">
+                        TCP 79
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Hostname</span>
+
+                      <span class="service-meta-value">
+                        finger.kgivler.com
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Protocol</span>
+
+                      <span class="service-meta-value">
+                        Gopher
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">
+                        Observed memory
+                      </span>
+
+                      <span class="service-meta-value">
+                        Approximately 41 MB
+                      </span>
+                    </div>
+                  </div>
+
+                  <p class="service-description">
+                    HappyFinger is a modern .NET implementation of the classic
+                    Finger protocol with a Steam-powered twist. Supply a Steam
+                    ID as the Finger username and the service will choose a
+                    random game from that public Steam library.
+                  </p>
+
+                  <div class="service-command mt-3">
+                    <div class="text-accent font-monospace mb-2">
+                      Try it:
+                    </div>
+
+                    <code>
+                      finger STEAM_ID@finger.kgivler.com
+                    </code>
+                  </div>
+
+                  <p class="service-note mt-3">
+                    The Steam profile and owned-games list must be public. This
+                    is a real TCP Finger service listening on the protocol's
+                    assigned port, not an HTTP simulation.
+                  </p>
+                </div>
+              </details>
+
+              <details
+                class="service-entry"
+                data-service-entry
+                data-search="happygopher gopher protocol tcp port 70 menu text old internet public dotnet"
+              >
+                <summary>
+                  <span class="service-summary-main">
+                    <i class="fas fa-folder-tree service-icon"></i>
+
+                    <span class="service-summary-text">
+                      <span class="service-name">
+                        HappyGopher
+                      </span>
+
+                      <span class="service-tagline">
+                        A real Gopher server for text-first browsing.
+                      </span>
+                    </span>
+                  </span>
+
+                  <span class="service-summary-badges">
+                    <span
+                      class="service-chip"
+                      data-type="public"
+                    >
+                      PUBLIC
+                    </span>
+
+                    <span
+                      class="service-chip"
+                      data-type="protocol"
+                    >
+                      TCP :70
+                    </span>
+                  </span>
+                </summary>
+
+                <div class="service-body">
+                  <div class="service-meta-grid">
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Container</span>
+
+                      <span class="service-meta-value">
+                        joyful-stack-happygopher-1
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Port</span>
+
+                      <span class="service-meta-value">
+                        TCP 70
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Hostname</span>
+
+                      <span class="service-meta-value">
+                        gopher.kgivler.com
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Protocol</span>
+
+                      <span class="service-meta-value">
+                        Gopher
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">
+                        Observed memory
+                      </span>
+
+                      <span class="service-meta-value">
+                        Approximately 36 MB
+                      </span>
+                    </div>
+                  </div>
+
+                  <p class="service-description">
+                    HappyGopher serves hierarchical menus and text resources
+                    using the Gopher protocol. It is a lightweight alternative
+                    view of publishing content without the modern web stack.
+                  </p>
+
+                  <p class="service-note">
+                    The result is closer to navigating a remote text filesystem
+                    than browsing a typical website.
+                  </p>
+                </div>
+              </details>
+
+              <details
+                class="service-entry"
+                data-service-entry
+                data-search="it tools utilities converters encoders developer toolbox public browser cloudflare tunnel"
+              >
+                <summary>
+                  <span class="service-summary-main">
+                    <i class="fas fa-screwdriver-wrench service-icon"></i>
+
+                    <span class="service-summary-text">
+                      <span class="service-name">
+                        IT-Tools
+                      </span>
+
+                      <span class="service-tagline">
+                        A public collection of browser-based developer utilities.
+                      </span>
+                    </span>
+                  </span>
+
+                  <span class="service-summary-badges">
+                    <span
+                      class="service-chip"
+                      data-type="public"
+                    >
+                      PUBLIC
+                    </span>
+
+                    <span
+                      class="service-chip"
+                      data-type="protocol"
+                    >
+                      HTTPS
+                    </span>
+                  </span>
+                </summary>
+
+                <div class="service-body">
+                  <div class="service-meta-grid">
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Container</span>
+
+                      <span class="service-meta-value">
+                        it-tools
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Origin</span>
+
+                      <span class="service-meta-value">
+                        127.0.0.1:8080
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Hostname</span>
+
+                      <span class="service-meta-value">
+                        tools.kgivler.com
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Image</span>
+
+                      <span class="service-meta-value">
+                        ghcr.io/corentinth/it-tools:latest
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Exposure</span>
+
+                      <span class="service-meta-value">
+                        Public through Cloudflare Tunnel
+                      </span>
+                    </div>
+                  </div>
+
+                  <p class="service-description">
+                    IT-Tools provides convenient encoders, decoders,
+                    converters, formatters, generators, networking helpers,
+                    and other small developer utilities from one
+                    browser-based interface.
+                  </p>
+
+                  <p class="service-note">
+                    The service is publicly available for now. Access may be
+                    restricted later if it attracts abusive traffic or
+                    excessive resource usage.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </section>
+
+          <section
+            class="service-section"
+            data-service-section
+          >
+            <hr class="terminal-divider" />
+
+            <div class="cmd-line mb-3">
+              <span class="prompt">kyle@kgivler:~$</span>
+              ls -la ./mission-control/
+            </div>
+
+            <div class="service-list">
+              <details
+                class="service-entry"
+                data-service-entry
+                data-search="mission control gateway github webhook integration events rabbitmq ingress api port 5190 internal"
+              >
+                <summary>
+                  <span class="service-summary-main">
+                    <i class="fas fa-tower-broadcast service-icon"></i>
+
+                    <span class="service-summary-text">
+                      <span class="service-name">
+                        Mission Control Gateway
+                      </span>
+
+                      <span class="service-tagline">
+                        Receives external events and publishes them internally.
+                      </span>
+                    </span>
+                  </span>
+
+                  <span class="service-summary-badges">
+                    <span
+                      class="service-chip"
+                      data-type="internal"
+                    >
+                      SYSTEM
+                    </span>
+
+                    <span
+                      class="service-chip"
+                      data-type="protocol"
+                    >
+                      HTTP
+                    </span>
+                  </span>
+                </summary>
+
+                <div class="service-body">
+                  <div class="service-meta-grid">
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Container</span>
+
+                      <span class="service-meta-value">
+                        joyful-stack-gateway-1
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Loopback port</span>
+
+                      <span class="service-meta-value">
+                        127.0.0.1:5190
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Role</span>
+
+                      <span class="service-meta-value">
+                        Event ingress
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">
+                        Observed memory
+                      </span>
+
+                      <span class="service-meta-value">
+                        Approximately 61 MB
+                      </span>
+                    </div>
+                  </div>
+
+                  <p class="service-description">
+                    The Gateway accepts generic integration events and signed
+                    GitHub webhooks. Validated events are wrapped in a common
+                    envelope and published to RabbitMQ for downstream
+                    processing.
+                  </p>
+
+                  <p class="service-note">
+                    This keeps external HTTP concerns separate from storage,
+                    projections, and other event consumers.
+                  </p>
+
+                  <div class="d-flex flex-wrap gap-2 mt-3">
+                    <a
+                      href="https://github.com/JoyfulReaper/MissionControl"
+                      class="terminal-btn-inline text-decoration-none"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View Mission Control
+                    </a>
+                  </div>
+                </div>
+              </details>
+
+              <details
+                class="service-entry"
+                data-service-entry
+                data-search="mission control archive sqlite event store rabbitmq durable queue history port 5191 internal"
+              >
+                <summary>
+                  <span class="service-summary-main">
+                    <i class="fas fa-box-archive service-icon"></i>
+
+                    <span class="service-summary-text">
+                      <span class="service-name">
+                        Mission Control Archive
+                      </span>
+
+                      <span class="service-tagline">
+                        Maintains a durable SQLite history of integration events.
+                      </span>
+                    </span>
+                  </span>
+
+                  <span class="service-summary-badges">
+                    <span
+                      class="service-chip"
+                      data-type="internal"
+                    >
+                      SYSTEM
+                    </span>
+
+                    <span
+                      class="service-chip"
+                      data-type="protocol"
+                    >
+                      SQLITE
+                    </span>
+                  </span>
+                </summary>
+
+                <div class="service-body">
+                  <div class="service-meta-grid">
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Container</span>
+
+                      <span class="service-meta-value">
+                        joyful-stack-archive-1
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Loopback port</span>
+
+                      <span class="service-meta-value">
+                        127.0.0.1:5191
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Storage</span>
+
+                      <span class="service-meta-value">
+                        SQLite named volume
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">
+                        Observed memory
+                      </span>
+
+                      <span class="service-meta-value">
+                        Approximately 61 MB
+                      </span>
+                    </div>
+                  </div>
+
+                  <p class="service-description">
+                    Archive subscribes to the complete Mission Control event
+                    stream and writes each event to SQLite. It provides a
+                    durable history independent of specialized consumers.
+                  </p>
+
+                  <p class="service-note">
+                    Specialized projections can change without losing the
+                    original integration-event record.
+                  </p>
+                </div>
+              </details>
+
+              <details
+                class="service-entry"
+                data-service-entry
+                data-search="mission control gitactivity github commits projection sqlite api recent activity port 5192 internal public proxy"
+              >
+                <summary>
+                  <span class="service-summary-main">
+                    <i class="fas fa-code-commit service-icon"></i>
+
+                    <span class="service-summary-text">
+                      <span class="service-name">
+                        Mission Control GitActivity
+                      </span>
+
+                      <span class="service-tagline">
+                        Turns GitHub push events into a website-friendly feed.
+                      </span>
+                    </span>
+                  </span>
+
+                  <span class="service-summary-badges">
+                    <span
+                      class="service-chip"
+                      data-type="internal"
+                    >
+                      SYSTEM
+                    </span>
+
+                    <span
+                      class="service-chip"
+                      data-type="healthy"
+                    >
+                      SQLITE READY
+                    </span>
+
+                    <span
+                      class="service-chip"
+                      data-type="protocol"
+                    >
+                      JSON API
+                    </span>
+                  </span>
+                </summary>
+
+                <div class="service-body">
+                  <div class="service-meta-grid">
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Container</span>
+
+                      <span class="service-meta-value">
+                        joyful-stack-gitactivity-1
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Loopback port</span>
+
+                      <span class="service-meta-value">
+                        127.0.0.1:5192
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Consumes</span>
+
+                      <span class="service-meta-value">
+                        github.push.received
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">
+                        Observed memory
+                      </span>
+
+                      <span class="service-meta-value">
+                        Approximately 46 MB
+                      </span>
+                    </div>
+                  </div>
+
+                  <p class="service-description">
+                    GitActivity consumes GitHub push events, filters them by
+                    allowed repositories and branches, and stores a sanitized
+                    commit projection in SQLite.
+                  </p>
+
+                  <p class="service-note">
+                    The public website reaches this data through kgivler.api,
+                    which keeps the GitActivity service key out of browser code.
+                  </p>
+
+                  <div class="d-flex flex-wrap gap-2 mt-3">
+                    <a
+                      href="https://api.kgivler.com/api/github/activity?limit=5"
+                      class="terminal-btn-inline text-decoration-none"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View Recent Activity JSON
+                    </a>
+                  </div>
+                </div>
+              </details>
+
+              <details
+                class="service-entry"
+                data-service-entry
+                data-search="rabbitmq message broker topic exchange durable queues mission control event routing internal healthy"
+              >
+                <summary>
+                  <span class="service-summary-main">
+                    <i class="fas fa-diagram-project service-icon"></i>
+
+                    <span class="service-summary-text">
+                      <span class="service-name">
+                        RabbitMQ
+                      </span>
+
+                      <span class="service-tagline">
+                        Routes Mission Control events to durable consumers.
+                      </span>
+                    </span>
+                  </span>
+
+                  <span class="service-summary-badges">
+                    <span
+                      class="service-chip"
+                      data-type="internal"
+                    >
+                      INTERNAL
+                    </span>
+
+                    <span
+                      class="service-chip"
+                      data-type="healthy"
+                    >
+                      HEALTHY
+                    </span>
+
+                    <span
+                      class="service-chip"
+                      data-type="protocol"
+                    >
+                      AMQP
+                    </span>
+                  </span>
+                </summary>
+
+                <div class="service-body">
+                  <div class="service-meta-grid">
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Container</span>
+
+                      <span class="service-meta-value">
+                        joyful-stack-rabbitmq-1
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Image</span>
+
+                      <span class="service-meta-value">
+                        rabbitmq:4-management
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Virtual host</span>
+
+                      <span class="service-meta-value">
+                        /mission-control
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">
+                        Observed memory
+                      </span>
+
+                      <span class="service-meta-value">
+                        Approximately 322 MB
+                      </span>
+                    </div>
+                  </div>
+
+                  <p class="service-description">
+                    RabbitMQ is the message broker behind Mission Control. A
+                    topic exchange routes each integration event to matching
+                    durable queues, allowing Archive, GitActivity, and future
+                    services to process events independently.
+                  </p>
+
+                  <p class="service-note">
+                    It currently has the largest memory footprint in this stack,
+                    but provides durable queueing and reliable separation
+                    between publishers and consumers.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </section>
+
+          <section
+            class="service-section"
+            data-service-section
+          >
+            <hr class="terminal-divider" />
+
+            <div class="cmd-line mb-3">
+              <span class="prompt">kyle@kgivler:~$</span>
+              ls -la ./operations/
+            </div>
+
+            <div class="service-list">
+              <details
+                class="service-entry"
+                data-service-entry
+                data-search="beszel monitoring dashboard docker containers cpu memory network host internal port 8090"
+              >
+                <summary>
+                  <span class="service-summary-main">
+                    <i class="fas fa-chart-line service-icon"></i>
+
+                    <span class="service-summary-text">
+                      <span class="service-name">
+                        Beszel
+                      </span>
+
+                      <span class="service-tagline">
+                        Lightweight host and container resource monitoring.
+                      </span>
+                    </span>
+                  </span>
+
+                  <span class="service-summary-badges">
+                    <span
+                      class="service-chip"
+                      data-type="internal"
+                    >
+                      PRIVATE
+                    </span>
+
+                    <span
+                      class="service-chip"
+                      data-type="protocol"
+                    >
+                      HTTP :8090
+                    </span>
+                  </span>
+                </summary>
+
+                <div class="service-body">
+                  <div class="service-meta-grid">
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Container</span>
+
+                      <span class="service-meta-value">
+                        beszel
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Loopback port</span>
+
+                      <span class="service-meta-value">
+                        127.0.0.1:8090
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Image</span>
+
+                      <span class="service-meta-value">
+                        henrygd/beszel:latest
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">
+                        Observed memory
+                      </span>
+
+                      <span class="service-meta-value">
+                        Approximately 18 MB
+                      </span>
+                    </div>
+                  </div>
+
+                  <p class="service-description">
+                    Beszel provides the container list, CPU, memory, network,
+                    uptime, and status information used to inspect this stack.
+                  </p>
+
+                  <p class="service-note">
+                    The dashboard is administrative and is not exposed as a
+                    public service.
+                  </p>
+                </div>
+              </details>
+
+              <details
+                class="service-entry"
+                data-service-entry
+                data-search="beszel agent monitoring telemetry host docker metrics private internal"
+              >
+                <summary>
+                  <span class="service-summary-main">
+                    <i class="fas fa-satellite-dish service-icon"></i>
+
+                    <span class="service-summary-text">
+                      <span class="service-name">
+                        Beszel Agent
+                      </span>
+
+                      <span class="service-tagline">
+                        Collects host and container metrics for Beszel.
+                      </span>
+                    </span>
+                  </span>
+
+                  <span class="service-summary-badges">
+                    <span
+                      class="service-chip"
+                      data-type="internal"
+                    >
+                      INTERNAL
+                    </span>
+                  </span>
+                </summary>
+
+                <div class="service-body">
+                  <div class="service-meta-grid">
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Container</span>
+
+                      <span class="service-meta-value">
+                        beszel-agent
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Image</span>
+
+                      <span class="service-meta-value">
+                        henrygd/beszel-agent:latest
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Role</span>
+
+                      <span class="service-meta-value">
+                        Metrics collector
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">
+                        Observed memory
+                      </span>
+
+                      <span class="service-meta-value">
+                        Approximately 5 MB
+                      </span>
+                    </div>
+                  </div>
+
+                  <p class="service-description">
+                    The Beszel agent reads host and container statistics and
+                    reports them to the private Beszel dashboard.
+                  </p>
+                </div>
+              </details>
+
+              <details
+                class="service-entry"
+                data-service-entry
+                data-search="uptime kuma monitoring health checks alerts uptime dashboard private port 3001 healthy"
+              >
+                <summary>
+                  <span class="service-summary-main">
+                    <i class="fas fa-heart-pulse service-icon"></i>
+
+                    <span class="service-summary-text">
+                      <span class="service-name">
+                        Uptime Kuma
+                      </span>
+
+                      <span class="service-tagline">
+                        Checks whether public services are actually reachable.
+                      </span>
+                    </span>
+                  </span>
+
+                  <span class="service-summary-badges">
+                    <span
+                      class="service-chip"
+                      data-type="internal"
+                    >
+                      PRIVATE
+                    </span>
+
+                    <span
+                      class="service-chip"
+                      data-type="healthy"
+                    >
+                      HEALTHY
+                    </span>
+
+                    <span
+                      class="service-chip"
+                      data-type="protocol"
+                    >
+                      HTTP :3001
+                    </span>
+                  </span>
+                </summary>
+
+                <div class="service-body">
+                  <div class="service-meta-grid">
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Container</span>
+
+                      <span class="service-meta-value">
+                        uptime-kuma
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Loopback port</span>
+
+                      <span class="service-meta-value">
+                        127.0.0.1:3001
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Image</span>
+
+                      <span class="service-meta-value">
+                        louislam/uptime-kuma:2
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">
+                        Observed memory
+                      </span>
+
+                      <span class="service-meta-value">
+                        Approximately 144 MB
+                      </span>
+                    </div>
+                  </div>
+
+                  <p class="service-description">
+                    Uptime Kuma performs scheduled availability checks against
+                    selected websites, APIs, and network services. It provides
+                    a clearer answer than container status alone because a
+                    running process is not always a working service.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </section>
+
+          <section class="service-section">
+            <hr class="terminal-divider" />
+
+            <div class="cmd-line mb-3">
+              <span class="prompt">kyle@kgivler:~$</span>
+              docker compose ps --snapshot
+            </div>
+
+            <div class="system-warning-box mb-3">
+              <i class="fas fa-camera me-2"></i>
+
+              <span>
+                [SNAPSHOT] The table below reflects one Beszel observation. It
+                is not a live status dashboard, and memory or uptime values
+                will change.
+              </span>
+            </div>
+
+            <div class="table-responsive project-terminal-badge">
+              <table class="table services-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Container</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Memory</th>
+                    <th scope="col">Exposure</th>
+                    <th scope="col">Health</th>
+                    <th scope="col">Observed uptime</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr>
+                    <td><code>beszel</code></td>
+                    <td>Monitoring dashboard</td>
+                    <td>18.1 MB</td>
+                    <td>127.0.0.1:8090</td>
+                    <td>Not configured</td>
+                    <td>3 days</td>
+                  </tr>
+
+                  <tr>
+                    <td><code>beszel-agent</code></td>
+                    <td>Metrics collector</td>
+                    <td>5.18 MB</td>
+                    <td>Internal</td>
+                    <td>Not configured</td>
+                    <td>3 days</td>
+                  </tr>
+
+                  <tr>
+                    <td><code>it-tools</code></td>
+                    <td>Developer utilities</td>
+                    <td>3.34 MB</td>
+                    <td>Cloudflare Tunnel</td>
+                    <td>Not configured</td>
+                    <td>3 days</td>
+                  </tr>
+
+                  <tr>
+                    <td><code>joyful-stack-archive-1</code></td>
+                    <td>Integration-event archive</td>
+                    <td>60.7 MB</td>
+                    <td>127.0.0.1:5191</td>
+                    <td>Application readiness</td>
+                    <td>19 hours</td>
+                  </tr>
+
+                  <tr>
+                    <td><code>joyful-stack-gateway-1</code></td>
+                    <td>Webhook and event ingress</td>
+                    <td>60.5 MB</td>
+                    <td>127.0.0.1:5190</td>
+                    <td>Application readiness</td>
+                    <td>19 hours</td>
+                  </tr>
+
+                  <tr>
+                    <td><code>joyful-stack-gitactivity-1</code></td>
+                    <td>GitHub activity projection</td>
+                    <td>46.3 MB</td>
+                    <td>127.0.0.1:5192</td>
+                    <td>RabbitMQ + SQLite readiness</td>
+                    <td>1 hour</td>
+                  </tr>
+
+                  <tr>
+                    <td><code>joyful-stack-happyecho-1</code></td>
+                    <td>Echo protocol server</td>
+                    <td>40.4 MB</td>
+                    <td>TCP 7</td>
+                    <td>Not configured</td>
+                    <td>24 hours</td>
+                  </tr>
+
+                  <tr>
+                    <td><code>joyful-stack-happyfinger-1</code></td>
+                    <td>Finger protocol server</td>
+                    <td>41.3 MB</td>
+                    <td>TCP 79</td>
+                    <td>Not configured</td>
+                    <td>22 hours</td>
+                  </tr>
+
+                  <tr>
+                    <td><code>joyful-stack-happygopher-1</code></td>
+                    <td>Gopher protocol server</td>
+                    <td>35.6 MB</td>
+                    <td>TCP 70</td>
+                    <td>Not configured</td>
+                    <td>44 hours</td>
+                  </tr>
+
+                  <tr>
+                    <td><code>joyful-stack-rabbitmq-1</code></td>
+                    <td>Event message broker</td>
+                    <td>322.1 MB</td>
+                    <td>Internal Docker network</td>
+                    <td class="text-success">Healthy</td>
+                    <td>45 hours</td>
+                  </tr>
+
+                  <tr>
+                    <td><code>joyful-stack-randomsteam-1</code></td>
+                    <td>Random Steam Game application</td>
+                    <td>162.5 MB</td>
+                    <td>Cloudflare Tunnel</td>
+                    <td class="text-success">Healthy</td>
+                    <td>22 hours</td>
+                  </tr>
+
+                  <tr>
+                    <td><code>uptime-kuma</code></td>
+                    <td>Availability monitoring</td>
+                    <td>144.3 MB</td>
+                    <td>127.0.0.1:3001</td>
+                    <td class="text-success">Healthy</td>
+                    <td>43 hours</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <hr class="terminal-divider" />
+
+          <div class="d-flex flex-wrap gap-2 mt-4">
+            <a
+              href="/"
+              class="terminal-btn-inline text-decoration-none"
+            >
+              <i class="fas fa-arrow-left me-2"></i>
+              Return Home
+            </a>
+
+            <a
+              href="https://github.com/JoyfulReaper"
+              class="terminal-btn-inline text-decoration-none"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <i class="fab fa-github me-2"></i>
+              Browse Source Code
+            </a>
+          </div>
+
+          <div class="cmd-line mt-4">
+            <span class="prompt">kyle@kgivler:~$</span>
+            <span class="animate-pulse">_</span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="./services.js"></script>
+  </body>
+</html>
