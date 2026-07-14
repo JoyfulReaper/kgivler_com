@@ -133,8 +133,10 @@ async function runBbs(args, ctx) {
   ctx.print("Dialing KGIVLER BBS node...");
   await new Promise((r) => setTimeout(r, 800));
 
+  const subcommand = args[0]?.toLowerCase();
+
   // --- Show Command ---
-  if (args.length > 0 && args[0].toLowerCase() === "show") {
+  if (subcommand === "show") {
     try {
       const response = await fetch(`${API_CONFIG.TELEMETRY}/api/bbs`);
 
@@ -172,9 +174,14 @@ __________________________________________
   }
 
   // --- Post Command ---
-  if (args.length > 0) {
+  if (subcommand === "message") {
+    if (args.length < 2) {
+      ctx.print('<pre style="color: #e2e8f0; font-family: monospace; margin: 0;">Usage: bbs message [message]</pre>');
+      return;
+    }
+
     try {
-      const content = args.join(" ");
+      const content = args.slice(1).join(" ");
       const response = await fetch(`${API_CONFIG.TELEMETRY}/api/bbs`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -192,12 +199,12 @@ __________________________________________
     return;
   }
 
-  ctx.print('<pre style="color: #e2e8f0; font-family: monospace; margin: 0;">Usage: bbs show | bbs [message]</pre>');
+  ctx.print('<pre style="color: #e2e8f0; font-family: monospace; margin: 0;">Usage: bbs show | bbs message [message]</pre>');
 }
 
 // --- PUBLIC EXPORT ---
 export const Commands = {
-  help: (_, ctx) => ctx.print(`[INFO] Available commands: random [vanityUrl], clear, cowsay, stats, ls, pwd, echo, cat, bbs, music, neofetch, sudo, uname, top, whoami, date, history`),
+  help: (_, ctx) => ctx.print(`[INFO] Available commands: random [steamId|vanityUrl|profileUrl], get-random-game [steamId|vanityUrl|profileUrl], clear, cowsay, stats, ls, pwd, echo, cat, bbs, music, neofetch, sudo, uname, top, whoami, date, history`),
   clear: (_, ctx) => {
     ctx.clear();
   },
@@ -240,6 +247,8 @@ export const Commands = {
   sudo: (_, ctx) => ctx.print('<span class="text-danger">[SECURITY] User kyle is not in the sudoers file. Incident reported.</span>'),
 
   random: (args, ctx) => fetchRandomGame(args[0], ctx),
+  "get-random-game": (args, ctx) => fetchRandomGame(args[0], ctx),
+  "./get-random-game": (args, ctx) => fetchRandomGame(args[0], ctx),
   neofetch: (args, ctx) => runNeofetch(args, ctx),
   top: (args, ctx) => runTop(args, ctx),
   status: (args, ctx) => runStatus(args, ctx),
