@@ -76,6 +76,16 @@ builder.Services.AddHttpClient("LmStudio", client =>
     client.Timeout = TimeSpan.FromSeconds(90);
 });
 
+builder.Services.AddHttpClient("GitActivity", client =>
+{
+    var baseUrl =
+        builder.Configuration["GitActivity:BaseUrl"]
+        ?? "https://activity.kgivler.com/";
+
+    client.BaseAddress = new Uri(baseUrl);
+    client.Timeout = TimeSpan.FromSeconds(5);
+});
+
 // Steam HttpClients
 builder.Services.AddHttpClient("SteamApi", client =>
 {
@@ -96,6 +106,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+app.MapGitActivityRoutes();
 app.MapCodeReviewRoutes();
 app.MapSteamRoutes();
 app.MapBbsRoutes();
