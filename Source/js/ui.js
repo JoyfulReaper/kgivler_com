@@ -4,6 +4,10 @@ export const elements = {
   demo: document.getElementById('demo-output'),
   telemetry: document.getElementById('host-telemetry'),
   steamPresence: document.getElementById('steam-presence'),
+
+  gitActivity: document.getElementById('recent-git-activity'),
+  gitActivityRefreshButton: document.getElementById('btn-git-activity-refresh'),
+
   qwenReviewOutput: document.getElementById('qwen-review-output'),
   qwenHealthBadge: document.getElementById('qwen-health-badge'),
   qwenCodeInput: document.getElementById('qwenCodeInput'),

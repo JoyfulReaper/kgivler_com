@@ -117,6 +117,52 @@ export async function submitQwenCoderReview(code, language = "auto") {
   }
 }
 
+export async function getRecentGitActivity(limit = 5) {
+  const effectiveLimit = Math.min(
+    Math.max(Number(limit) || 5, 1),
+    20
+  );
+
+  try {
+    const response = await fetchJsonWithTimeout(
+      `${API_CONFIG.GIT_ACTIVITY}/api/github/activity?limit=${effectiveLimit}`,
+      {},
+      5000
+    );
+
+    if (!response.ok) {
+      const detail = await readProblemDetail(
+        response,
+        "Git activity request failed."
+      );
+
+      return {
+        ok: false,
+        error: detail,
+        status: response.status,
+      };
+    }
+
+    const activity = await response.json();
+
+    return {
+      ok: true,
+      items: Array.isArray(activity) ? activity : [],
+    };
+  } catch (error) {
+    console.error(
+      "Git activity fetch failed or timed out:",
+      error
+    );
+
+    return {
+      ok: false,
+      error: "Could not reach the Git activity endpoint.",
+      status: 0,
+    };
+  }
+}
+
 /**
  * @param {string} input - Vanity URL
  * @param {object} ctx - Context object with .loading(), .error(), .print()
