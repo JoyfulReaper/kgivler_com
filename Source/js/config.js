@@ -4,7 +4,8 @@ export const API_CONFIG = Object.freeze({
     TELEMETRY: IS_LOCAL ? 'http://localhost:5081' : 'https://api.kgivler.com',
     GIT_ACTIVITY: IS_LOCAL ? 'http://localhost:5081' : 'https://api.kgivler.com',
     STEAM: IS_LOCAL ? 'http://localhost:5182' : 'https://randomsteam.kgivler.com',
-    QWENCODER: IS_LOCAL ? 'http://localhost:5081' : 'https://api.kgivler.com'
+    QWENCODER: IS_LOCAL ? 'http://localhost:5081' : 'https://api.kgivler.com',
+    QOTD: IS_LOCAL ? 'http://localhost:5269' : 'https://qotd-api.kgivler.com'
 });
 
 export const PLAYLIST = Object.freeze([

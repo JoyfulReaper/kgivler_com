@@ -163,6 +163,47 @@ export async function getRecentGitActivity(limit = 5) {
   }
 }
 
+export async function getQuoteOfTheDay() {
+  try {
+    const response = await fetchJsonWithTimeout(
+      `${API_CONFIG.QOTD}/api/quotes/today`,
+      {},
+      5000
+    );
+
+    if (!response.ok) {
+      const detail = await readProblemDetail(
+        response,
+        "Quote of the day request failed."
+      );
+
+      return {
+        ok: false,
+        error: detail,
+        status: response.status,
+      };
+    }
+
+    const quote = await response.json();
+
+    return {
+      ok: true,
+      quote,
+    };
+  } catch (error) {
+    console.error(
+      "Quote of the day fetch failed or timed out:",
+      error
+    );
+
+    return {
+      ok: false,
+      error: "Could not reach the Quote of the Day endpoint.",
+      status: 0,
+    };
+  }
+}
+
 function parseSteamIdentityInput(input) {
   const trimmed = (input || "").trim();
 
