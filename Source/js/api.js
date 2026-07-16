@@ -22,7 +22,16 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = 5000) {
 async function readProblemDetail(response, fallbackMessage) {
   try {
     const problemJson = await response.json();
-    return problemJson.title || problemJson.detail || fallbackMessage;
+    const title =
+      typeof problemJson?.title === "string"
+        ? problemJson.title.trim()
+        : "";
+    const detail =
+      typeof problemJson?.detail === "string"
+        ? problemJson.detail.trim()
+        : "";
+
+    return title || detail || fallbackMessage;
   } catch (_) {
     return fallbackMessage;
   }
@@ -30,7 +39,11 @@ async function readProblemDetail(response, fallbackMessage) {
 
 async function loadSystemData() {
   try {
-    const res = await fetchWithTimeout(`${API_CONFIG.TELEMETRY}/api/system/usage`, {}, 5000);
+    const res = await fetchWithTimeout(
+      `${API_CONFIG.TELEMETRY}/api/system/usage`,
+      { cache: "no-store" },
+      5000
+    );
 
     if (!res.ok) throw new Error("Request failed");
     return await res.json();
@@ -55,7 +68,11 @@ export function getSystemData() {
 
 export async function getQwenCoderHealth() {
   try {
-    const response = await fetchWithTimeout(`${API_CONFIG.QWENCODER}/api/code-review/health`, {}, 5000);
+    const response = await fetchWithTimeout(
+      `${API_CONFIG.QWENCODER}/api/code-review/health`,
+      { cache: "no-store" },
+      5000
+    );
 
     if (!response.ok) {
       const detail = await readProblemDetail(response, "QwenCoder health check failed.");
@@ -71,7 +88,11 @@ export async function getQwenCoderHealth() {
 
 export async function getWorkstationStatus() {
   try {
-    const response = await fetchWithTimeout(`${API_CONFIG.TELEMETRY}/api/system/status`, {}, 5000);
+    const response = await fetchWithTimeout(
+      `${API_CONFIG.TELEMETRY}/api/system/status`,
+      { cache: "no-store" },
+      5000
+    );
 
     if (!response.ok) {
       const detail = await readProblemDetail(response, "Workstation refresh failed.");
@@ -87,7 +108,11 @@ export async function getWorkstationStatus() {
 
 export async function getSteamPresence() {
   try {
-    const response = await fetchWithTimeout(`${API_CONFIG.TELEMETRY}/api/steam/presence`, {}, 5000);
+    const response = await fetchWithTimeout(
+      `${API_CONFIG.TELEMETRY}/api/steam/presence`,
+      { cache: "no-store" },
+      5000
+    );
 
     if (!response.ok) {
       const detail = await readProblemDetail(response, "Steam presence check failed.");
@@ -110,6 +135,7 @@ export async function submitQwenCoderReview(code, language = "auto") {
   try {
     const response = await fetchWithTimeout(`${API_CONFIG.QWENCODER}/api/code-review`, {
       method: "POST",
+      cache: "no-store",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ code: trimmedCode, language }),
     }, 90_000);
@@ -135,7 +161,7 @@ export async function getRecentGitActivity(limit = 5) {
   try {
     const response = await fetchWithTimeout(
       `${API_CONFIG.GIT_ACTIVITY}/api/github/activity?limit=${effectiveLimit}`,
-      {},
+      { cache: "no-store" },
       5000
     );
 
@@ -217,7 +243,7 @@ export async function getBbsMessages() {
   try {
     const response = await fetchWithTimeout(
       `${API_CONFIG.TELEMETRY}/api/bbs`,
-      {},
+      { cache: "no-store" },
       5000
     );
 
@@ -268,6 +294,7 @@ export async function postBbsMessage(content) {
       `${API_CONFIG.TELEMETRY}/api/bbs`,
       {
         method: "POST",
+        cache: "no-store",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           author: "Visitor",
@@ -360,7 +387,7 @@ export async function fetchRandomGame(input, ctx, provider = "steam") {
   try {
     const response = await fetchWithTimeout(
       `${API_CONFIG.STEAM}/api/${provider}/random-game/details?${query.toString()}`,
-      {},
+      { cache: "no-store" },
       10000
     );
 
@@ -380,8 +407,15 @@ export async function fetchRandomGame(input, ctx, provider = "steam") {
     }
 
     const data = await response.json();
-    const gameName = data?.name;
-    const appId = data?.id;
+    const gameName =
+      typeof data?.name === "string"
+        ? data.name
+        : "";
+    const appId =
+      typeof data?.id === "string" ||
+        typeof data?.id === "number"
+        ? String(data.id)
+        : "unknown";
     const playtimeHours =
       Number.isFinite(data?.playtimeForever)
         ? (data.playtimeForever / 60).toFixed(1)
@@ -394,7 +428,7 @@ export async function fetchRandomGame(input, ctx, provider = "steam") {
 
     ctx.printTrustedHtml(
       `[SUCCESS] Game Selected: <strong>${escapeHtml(gameName)}</strong>` +
-      ` <br /><small>AppID: ${escapeHtml(String(appId ?? "unknown"))}</small>` +
+      ` <br /><small>AppID: ${escapeHtml(appId)}</small>` +
       ` <br /><small>Provider: ${safeProvider}</small>` +
       (playtimeHours !== null
         ? ` <br /><small>Playtime: ${playtimeHours} hours</small>`

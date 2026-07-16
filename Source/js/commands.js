@@ -7,7 +7,11 @@ import { escapeHtml } from "./markdown.js";
 const asText = (value, fallback = "Unknown") =>
   value === null || value === undefined
     ? fallback
-    : String(value);
+    : typeof value === "string" ||
+        typeof value === "number" ||
+        typeof value === "boolean"
+      ? String(value)
+      : fallback;
 
 const safe = (value, fallback = "Unknown") =>
   escapeHtml(asText(value, fallback));
@@ -195,8 +199,16 @@ __________________________________________
 `;
     messages.forEach((m) => {
       const date = formatBbsTimestamp(m?.timestamp);
-      const safeAuthor = escapeHtml(m?.author || "Visitor");
-      const safeContent = escapeHtml(m?.content || "");
+      const safeAuthor = escapeHtml(
+        typeof m?.author === "string" && m.author.trim()
+          ? m.author
+          : "Visitor"
+      );
+      const safeContent = escapeHtml(
+        typeof m?.content === "string"
+          ? m.content
+          : ""
+      );
       output += `[${escapeHtml(date)}] <strong>${safeAuthor}</strong>: ${safeContent}\n`;
     });
     output += `</pre>`;

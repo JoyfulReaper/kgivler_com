@@ -21,7 +21,11 @@ function renderSteamPresenceBadge(presence) {
   if (!elements.steamPresence) return;
 
   if (!presence || presence.ok === false) {
-    const detail = escapeHtml(presence?.error || "Steam privacy settings or the Web API may be hiding activity.");
+    const detail = escapeHtml(
+      typeof presence?.error === "string" && presence.error.trim()
+        ? presence.error
+        : "Steam privacy settings or the Web API may be hiding activity."
+    );
     elements.steamPresence.innerHTML = `
       <div class="steam-presence-line">
         <span class="steam-presence-pill" data-state="unavailable">
@@ -34,11 +38,25 @@ function renderSteamPresenceBadge(presence) {
     return;
   }
 
-  const actorName = escapeHtml(presence.personaName || "Steam profile");
-  const statusText = escapeHtml(presence.statusText || "Unknown");
+  const actorName = escapeHtml(
+    typeof presence.personaName === "string" && presence.personaName.trim()
+      ? presence.personaName
+      : "Steam profile"
+  );
+  const statusText = escapeHtml(
+    typeof presence.statusText === "string" && presence.statusText.trim()
+      ? presence.statusText
+      : "Unknown"
+  );
 
-  if (presence.isInGame) {
-    const gameName = escapeHtml(presence.gameName || presence.gameId || "Unknown Game");
+  if (presence.isInGame === true) {
+    const gameName = escapeHtml(
+      typeof presence.gameName === "string" && presence.gameName.trim()
+        ? presence.gameName
+        : typeof presence.gameId === "string" && presence.gameId.trim()
+          ? presence.gameId
+          : "Unknown Game"
+    );
 
     elements.steamPresence.innerHTML = `
       <div class="steam-presence-line">
@@ -52,8 +70,8 @@ function renderSteamPresenceBadge(presence) {
     return;
   }
 
-  const state = presence.isOnline ? "online" : "offline";
-  const summary = presence.isOnline
+  const state = presence.isOnline === true ? "online" : "offline";
+  const summary = presence.isOnline === true
     ? `${actorName} is online`
     : `${actorName} is offline`;
 

@@ -425,6 +425,24 @@
     }
   }
 
+  function renderUnavailableTableRow() {
+    if (!dashboard.tableBody) {
+      return;
+    }
+
+    const row =
+      document.createElement("tr");
+    const cell =
+      document.createElement("td");
+
+    cell.colSpan = 6;
+    cell.textContent =
+      "Live Mission Control data is unavailable. Static service details remain visible above.";
+
+    row.append(cell);
+    dashboard.tableBody.replaceChildren(row);
+  }
+
   function renderDashboardSummary(snapshot) {
     const containers = Array.isArray(
       snapshot?.containers
@@ -688,6 +706,44 @@
     renderServiceEntries(snapshot);
   }
 
+  function renderInitialUnavailableState() {
+    if (dashboard.runningContainers) {
+      dashboard.runningContainers.textContent =
+        "—";
+    }
+
+    for (const entry of liveServiceEntries) {
+      setChipState(
+        entry.querySelector("[data-live-status]"),
+        "UNAVAILABLE",
+        "unavailable"
+      );
+
+      const memoryValue =
+        entry.querySelector("[data-live-memory]");
+      if (memoryValue) {
+        memoryValue.textContent =
+          "Unavailable";
+      }
+
+      const containerStateValue =
+        entry.querySelector("[data-live-container-state]");
+      if (containerStateValue) {
+        containerStateValue.textContent =
+          "Unavailable";
+      }
+
+      const protocolLatencyValue =
+        entry.querySelector("[data-live-protocol-latency]");
+      if (protocolLatencyValue) {
+        protocolLatencyValue.textContent =
+          "No recent probe";
+      }
+    }
+
+    renderUnavailableTableRow();
+  }
+
   function renderUnavailableState(error) {
     console.warn(
       "Unable to refresh Mission Control snapshot.",
@@ -702,6 +758,8 @@
     }
 
     if (!lastRenderedSnapshot) {
+      renderInitialUnavailableState();
+
       if (dashboard.node) {
         dashboard.node.textContent =
           "Unavailable";
@@ -856,7 +914,7 @@
     activeController = controller;
     setDashboardBusy(true);
 
-    refreshInFlight = fetch(
+    const request = fetch(
       snapshotUrl,
       {
         method: "GET",
@@ -905,10 +963,13 @@
           activeController = null;
         }
 
-        refreshInFlight = null;
-        setDashboardBusy(false);
+        if (refreshInFlight === request) {
+          refreshInFlight = null;
+          setDashboardBusy(false);
+        }
       });
 
+    refreshInFlight = request;
     return refreshInFlight;
   }
 
@@ -940,13 +1001,28 @@
 
   }
 
+  async function refreshAfterPageRestore() {
+    const previousRequest = refreshInFlight;
+
+    if (previousRequest) {
+      await previousRequest;
+    }
+
+    await fetchSnapshot();
+  }
+
   function handlePageShow(event) {
     if (!event.persisted) {
       return;
     }
 
     startPolling();
-    void fetchSnapshot();
+    void refreshAfterPageRestore().catch((error) => {
+      console.error(
+        "Unable to refresh restored services page.",
+        error
+      );
+    });
   }
 
   if (filterInput) {

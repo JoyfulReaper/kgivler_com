@@ -4,7 +4,9 @@ import { elements } from "./ui.js";
 let isRefreshingGitActivity = false;
 
 function formatRepository(repository) {
-  if (!repository) return "unknown";
+  if (typeof repository !== "string" || !repository.trim()) {
+    return "unknown";
+  }
 
   const parts = repository.split("/");
   return parts.at(-1) || repository;
@@ -24,7 +26,7 @@ function formatTimestamp(timestamp) {
 }
 
 function getValidGitHubUrl(value) {
-  if (!value) return null;
+  if (typeof value !== "string" || !value.trim()) return null;
 
   try {
     const parsed = new URL(value);
@@ -42,7 +44,61 @@ function getValidGitHubUrl(value) {
   return null;
 }
 
-function createActivityItem(item) {
+function normalizeActivityItem(item) {
+  if (!item || typeof item !== "object") {
+    return null;
+  }
+
+  const sha =
+    typeof item.sha === "string" && item.sha.trim()
+      ? item.sha.trim()
+      : "unknown";
+  const repository =
+    typeof item.repository === "string"
+      ? item.repository.trim()
+      : "";
+  const branch =
+    typeof item.branch === "string" && item.branch.trim()
+      ? item.branch.trim()
+      : "unknown";
+  const message =
+    typeof item.message === "string" && item.message.trim()
+      ? item.message.trim()
+      : "(no commit message)";
+  const author =
+    typeof item.author === "string" && item.author.trim()
+      ? item.author.trim()
+      : typeof item.authorUsername === "string" && item.authorUsername.trim()
+        ? item.authorUsername.trim()
+        : "Unknown author";
+  const timestamp =
+    typeof item.timestamp === "string" ||
+      typeof item.timestamp === "number"
+      ? item.timestamp
+      : null;
+  const url =
+    typeof item.url === "string"
+      ? item.url
+      : "";
+
+  return {
+    sha,
+    repository,
+    branch,
+    message,
+    author,
+    timestamp,
+    url,
+  };
+}
+
+function createActivityItem(rawItem) {
+  const item = normalizeActivityItem(rawItem);
+
+  if (!item) {
+    return null;
+  }
+
   const container = document.createElement("div");
   container.className = "py-2 border-bottom";
   container.style.borderColor = "#222226";
@@ -59,7 +115,7 @@ function createActivityItem(item) {
   commitTarget.className = validUrl
     ? "font-monospace text-decoration-none"
     : "font-monospace";
-  commitTarget.textContent = (item.sha || "unknown").slice(0, 7);
+  commitTarget.textContent = item.sha.slice(0, 7);
 
   if (validUrl) {
     commitTarget.href = validUrl;
@@ -70,11 +126,10 @@ function createActivityItem(item) {
   const context = document.createElement("span");
   context.className = "text-accent font-monospace";
   context.textContent =
-    `[${formatRepository(item.repository)}:${item.branch || "unknown"}]`;
+    `[${formatRepository(item.repository)}:${item.branch}]`;
 
   const message = document.createElement("span");
-  message.textContent =
-    item.message || "(no commit message)";
+  message.textContent = item.message;
 
   commitLine.append(
     commitTarget,
@@ -85,7 +140,7 @@ function createActivityItem(item) {
   const metadata = document.createElement("div");
   metadata.className = "small text-muted mt-1";
   metadata.textContent =
-    `${item.author || item.authorUsername || "Unknown author"} · ` +
+    `${item.author} · ` +
     formatTimestamp(item.timestamp);
 
   container.append(
@@ -119,10 +174,19 @@ function renderError(message) {
 function renderActivity(items) {
   if (!elements.gitActivity) return;
 
-  if (!items.length) {
+  const safeItems = Array.isArray(items)
+    ? items
+    : [];
+  const activityItems = safeItems
+    .map(createActivityItem)
+    .filter(Boolean);
+
+  if (!activityItems.length) {
     const empty = document.createElement("div");
     empty.className = "text-muted";
-    empty.textContent = "[INFO] No recent Git activity found.";
+    empty.textContent = safeItems.length
+      ? "[INFO] Git activity data was malformed."
+      : "[INFO] No recent Git activity found.";
 
     elements.gitActivity.replaceChildren(empty);
     return;
@@ -130,8 +194,8 @@ function renderActivity(items) {
 
   const fragment = document.createDocumentFragment();
 
-  for (const item of items) {
-    fragment.append(createActivityItem(item));
+  for (const item of activityItems) {
+    fragment.append(item);
   }
 
   elements.gitActivity.replaceChildren(fragment);
@@ -164,7 +228,12 @@ export async function refreshGitActivity() {
       return;
     }
 
-    renderActivity(result.items);
+    try {
+      renderActivity(result.items);
+    } catch (error) {
+      console.error("Git activity render failed:", error);
+      renderError("Git activity data could not be rendered.");
+    }
   } finally {
     isRefreshingGitActivity = false;
 

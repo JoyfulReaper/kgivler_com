@@ -1,7 +1,7 @@
-export function escapeHtml(str) {
-  if (!str) return "";
+export function escapeHtml(value) {
+  const text = String(value ?? "");
 
-  return str
+  return text
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")

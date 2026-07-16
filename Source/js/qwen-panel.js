@@ -5,6 +5,8 @@ import { getQwenCoderHealth, submitQwenCoderReview } from "./api.js";
 const qwenReviewTerminal = elements.qwenReviewOutput
   ? createTerminalContext(elements.qwenReviewOutput)
   : null;
+let isRunningQwenReview = false;
+let isCheckingQwenHealth = false;
 
 const badSampleCode = `const API_URL = "http://localhost:5000/api/code-review";
 const TOKEN = "SUPER_SECRET_ADMIN_TOKEN_123";
@@ -44,37 +46,95 @@ function renderQwenReview(review) {
   return `<div class="project-terminal-badge qwen-review-output markdown-output">${markdown || `<pre class="mb-0">${escapeHtml(review)}</pre>`}</div>`;
 }
 
-async function refreshQwenHealth() {
-  setQwenHealthBadge("pending", "Checking...");
+function getMessage(value, fallback) {
+  return typeof value === "string" && value.trim()
+    ? value
+    : fallback;
+}
 
-  const data = await getQwenCoderHealth();
+function setReviewOutputKind(kind) {
+  if (!elements.qwenReviewOutput) return;
 
-  if (!data || data.ok === false) {
-    setQwenHealthBadge("offline", "Offline");
-    if (elements.qwenReviewOutput && qwenReviewTerminal) {
-      qwenReviewTerminal.printTrustedHtml(`<span class="text-danger">QwenCoder health check failed: ${escapeHtml(data?.error || "unknown error")}. Kyle is probably playing a video game or something...</span>`);
-    }
-    return data;
+  elements.qwenReviewOutput.dataset.qwenOutputKind =
+    kind;
+}
+
+function canShowHealthMessage() {
+  if (!elements.qwenReviewOutput) {
+    return false;
   }
 
-  const state = data.modelAvailable ? "online" : "warning";
-  const label = data.modelAvailable ? "Online" : "Model Missing";
-  setQwenHealthBadge(state, label);
-  return data;
+  const kind =
+    elements.qwenReviewOutput.dataset.qwenOutputKind;
+
+  return (
+    !elements.qwenReviewOutput.textContent.trim() ||
+    kind === "health" ||
+    kind === "loading"
+  );
+}
+
+async function refreshQwenHealth() {
+  if (isCheckingQwenHealth) {
+    return null;
+  }
+
+  isCheckingQwenHealth = true;
+  setQwenHealthBadge("pending", "Checking...");
+
+  try {
+    const data = await getQwenCoderHealth();
+
+    if (!data || data.ok === false) {
+      setQwenHealthBadge("offline", "Offline");
+      if (
+        qwenReviewTerminal &&
+        canShowHealthMessage()
+      ) {
+        qwenReviewTerminal.printTrustedHtml(`<span class="text-danger">QwenCoder health check failed: ${escapeHtml(getMessage(data?.error, "unknown error"))}. Kyle is probably playing a video game or something...</span>`);
+        setReviewOutputKind("health");
+      }
+      return data;
+    }
+
+    const state = data.modelAvailable ? "online" : "warning";
+    const label = data.modelAvailable ? "Online" : "Model Missing";
+    setQwenHealthBadge(state, label);
+    return data;
+  } catch (error) {
+    console.error("QwenCoder health check failed:", error);
+    setQwenHealthBadge("offline", "Offline");
+
+    if (
+      qwenReviewTerminal &&
+      canShowHealthMessage()
+    ) {
+      qwenReviewTerminal.errorText("QwenCoder health check failed.");
+      setReviewOutputKind("health");
+    }
+
+    return null;
+  } finally {
+    isCheckingQwenHealth = false;
+  }
 }
 
 async function runQwenReview() {
   if (!elements.qwenCodeInput || !qwenReviewTerminal) return;
+  if (isRunningQwenReview) return;
 
   const code = elements.qwenCodeInput.value || "";
   const language = elements.qwenLanguage?.value || "auto";
 
   if (!code.trim()) {
     qwenReviewTerminal.errorText("Paste some code first.");
+    setReviewOutputKind("error");
     return;
   }
 
+  isRunningQwenReview = true;
   qwenReviewTerminal.loadingText("Sending code to QwenCoder... Please wait, this can take a long time...");
+  setReviewOutputKind("loading");
   if (elements.qwenReviewButton) elements.qwenReviewButton.disabled = true;
   if (elements.qwenHealthButton) elements.qwenHealthButton.disabled = true;
 
@@ -82,19 +142,37 @@ async function runQwenReview() {
     const result = await submitQwenCoderReview(code, language);
 
     if (!result || result.ok === false) {
-      qwenReviewTerminal.errorText(result?.error || "Code review failed.");
+      qwenReviewTerminal.errorText(
+        getMessage(
+          result?.error,
+          "Code review failed."
+        )
+      );
+      setReviewOutputKind("error");
       return;
     }
 
-    const review = result.review || result.Review || "";
+    const review =
+      typeof result.review === "string"
+        ? result.review
+        : typeof result.Review === "string"
+          ? result.Review
+          : "";
 
     if (!review.trim()) {
       qwenReviewTerminal.errorText("QwenCoder returned an empty review.");
+      setReviewOutputKind("error");
       return;
     }
 
     qwenReviewTerminal.printTrustedHtml(renderQwenReview(review));
+    setReviewOutputKind("review");
+  } catch (error) {
+    console.error("QwenCoder review failed:", error);
+    qwenReviewTerminal.errorText("Code review failed unexpectedly.");
+    setReviewOutputKind("error");
   } finally {
+    isRunningQwenReview = false;
     if (elements.qwenReviewButton) elements.qwenReviewButton.disabled = false;
     if (elements.qwenHealthButton) elements.qwenHealthButton.disabled = false;
   }
@@ -104,6 +182,7 @@ function clearQwenReview() {
   if (!qwenReviewTerminal) return;
 
   qwenReviewTerminal.clear();
+  setReviewOutputKind("");
   if (elements.qwenCodeInput) {
     elements.qwenCodeInput.value = "";
     elements.qwenCodeInput.focus();
@@ -123,15 +202,20 @@ function loadBadSample() {
 export function initQwenPanel() {
   if (!elements.qwenReviewOutput) return;
 
-  refreshQwenHealth().catch(console.error);
+  void refreshQwenHealth().catch(console.error);
 
-  elements.qwenHealthButton?.addEventListener("click", () => refreshQwenHealth());
+  elements.qwenHealthButton?.addEventListener("click", () => {
+    void refreshQwenHealth().catch(console.error);
+  });
   elements.qwenLoadBadSampleButton?.addEventListener("click", () => loadBadSample());
-  elements.qwenReviewButton?.addEventListener("click", () => runQwenReview());
+  elements.qwenReviewButton?.addEventListener("click", () => {
+    void runQwenReview().catch(console.error);
+  });
   elements.qwenClearButton?.addEventListener("click", () => clearQwenReview());
   elements.qwenCodeInput?.addEventListener("keydown", (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
-      runQwenReview();
+      e.preventDefault();
+      void runQwenReview().catch(console.error);
     }
   });
 }
