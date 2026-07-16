@@ -5,6 +5,9 @@ public static class KgivlerEventTypes
     public const string BbsMessageCreated =
         "kgivler.bbs.message.created";
 
+    public const string BbsMessagesRetrieved =
+        "kgivler.bbs.message.retrieved";
+
     public const string CodeReviewCompleted =
         "kgivler.code-review.completed";
 

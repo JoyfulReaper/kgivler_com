@@ -20,9 +20,13 @@ public static class BbsRoutes
         app.MapGet("/api/bbs", async (
             SqliteConnection db,
             ILogger<Program> logger,
+            IMissionControlClient missionControlClient,
             CancellationToken cancellationToken) =>
         {
             var messages = new List<Message>();
+            var occurredAt = DateTimeOffset.UtcNow;
+            var stopwatch = Stopwatch.StartNew();
+            var correlationId = Guid.NewGuid().ToString("N");
 
             try
             {
@@ -64,6 +68,28 @@ public static class BbsRoutes
 
                 return Results.Problem(
                     "An error occurred while fetching messages.");
+            }
+
+            stopwatch.Stop();
+
+            try
+            {
+                await missionControlClient.TryPublishAsync(
+                    eventType: KgivlerEventTypes.BbsMessagesRetrieved,
+                    payload: new BbsMessagesShownEvent(
+                        TotalMessagesShown: messages.Count,
+                        DurationMilliseconds:
+                            stopwatch.ElapsedMilliseconds),
+                    occurredAt: occurredAt,
+                    correlationId: correlationId,
+                    cancellationToken: CancellationToken.None);
+            }
+            catch (Exception exception)
+            {
+                logger.LogWarning(
+                    exception,
+                    "Failed to publish BBS event {CorrelationId}.",
+                    correlationId);
             }
 
             return Results.Ok(messages);

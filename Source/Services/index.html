@@ -124,7 +124,7 @@
 
           <div class="services-summary-grid mt-3">
             <div class="services-summary-card">
-              <span class="services-summary-value">12</span>
+              <span class="services-summary-value">13</span>
 
               <span class="services-summary-label">
                 Running containers
@@ -132,7 +132,7 @@
             </div>
 
             <div class="services-summary-card">
-              <span class="services-summary-value">5</span>
+              <span class="services-summary-value">6</span>
 
               <span class="services-summary-label">
                 Public apps and protocols
@@ -616,6 +616,132 @@
                     The result is closer to navigating a remote text filesystem
                     than browsing a typical website.
                   </p>
+                </div>
+              </details>
+
+              <details
+                class="service-entry"
+                data-service-entry
+                data-search="happyqotd qotd quote of the day tcp port 17 api json public dotnet classic internet quotes"
+              >
+                <summary>
+                  <span class="service-summary-main">
+                    <i class="fas fa-quote-left service-icon"></i>
+
+                    <span class="service-summary-text">
+                      <span class="service-name">
+                        HappyQOTD
+                      </span>
+
+                      <span class="service-tagline">
+                        Classic Quote of the Day over TCP with a matching HTTP API.
+                      </span>
+                    </span>
+                  </span>
+
+                  <span class="service-summary-badges">
+                    <span
+                      class="service-chip"
+                      data-type="public"
+                    >
+                      PUBLIC
+                    </span>
+
+                    <span
+                      class="service-chip"
+                      data-type="protocol"
+                    >
+                      TCP :17
+                    </span>
+                  </span>
+                </summary>
+
+                <div class="service-body">
+                  <div class="service-meta-grid">
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Container</span>
+
+                      <span class="service-meta-value">
+                        joyful-stack-happyqotd-1
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Port</span>
+
+                      <span class="service-meta-value">
+                        TCP 17
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Hostname</span>
+
+                      <span class="service-meta-value">
+                        qotd.kgivler.com
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Protocol</span>
+
+                      <span class="service-meta-value">
+                        QOTD / HTTPS JSON API
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">
+                        Observed memory
+                      </span>
+
+                      <span class="service-meta-value">
+                        Approximately 36 MB
+                      </span>
+                    </div>
+                  </div>
+
+                  <p class="service-description">
+                    HappyQOTD serves a single persisted quote for the current
+                    UTC day through the classic Quote of the Day protocol on
+                    TCP port 17 and through a companion HTTP API.
+                  </p>
+
+                  <div class="service-command mt-3">
+                    <div class="text-accent font-monospace mb-2">
+                      Try it:
+                    </div>
+
+                    <code>
+                      ncat qotd.kgivler.com 17
+                    </code>
+                  </div>
+
+                  <p class="service-note mt-3">
+                    The TCP service and the API return the same quote of the
+                    day, which makes it useful both as a classic protocol demo
+                    and as a lightweight integration endpoint.
+                  </p>
+
+                  <div class="d-flex flex-wrap gap-2 mt-3">
+                    <a
+                      href="https://qotd-api.kgivler.com/api/quotes/today"
+                      class="terminal-btn-inline text-decoration-none"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Open Quote API
+                    </a>
+
+                    <a
+                      href="https://github.com/JoyfulReaper/HappyQOTD"
+                      class="terminal-btn-inline text-decoration-none"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View Source
+                    </a>
+                  </div>
                 </div>
               </details>
 
@@ -1416,109 +1542,118 @@
                   <tr>
                     <td><code>beszel</code></td>
                     <td>Monitoring dashboard</td>
-                    <td>18.1 MB</td>
+                    <td>18.4 MB</td>
                     <td>127.0.0.1:8090</td>
                     <td>Not configured</td>
-                    <td>3 days</td>
+                    <td>4 days</td>
                   </tr>
 
                   <tr>
                     <td><code>beszel-agent</code></td>
                     <td>Metrics collector</td>
-                    <td>5.18 MB</td>
+                    <td>5.73 MB</td>
                     <td>Internal</td>
                     <td>Not configured</td>
-                    <td>3 days</td>
+                    <td>4 days</td>
                   </tr>
 
                   <tr>
                     <td><code>it-tools</code></td>
                     <td>Developer utilities</td>
-                    <td>3.34 MB</td>
+                    <td>3.32 MB</td>
                     <td>Cloudflare Tunnel</td>
                     <td>Not configured</td>
-                    <td>3 days</td>
+                    <td>4 days</td>
                   </tr>
 
                   <tr>
                     <td><code>joyful-stack-archive-1</code></td>
                     <td>Integration-event archive</td>
-                    <td>60.7 MB</td>
+                    <td>61.8 MB</td>
                     <td>127.0.0.1:5191</td>
                     <td>Application readiness</td>
-                    <td>19 hours</td>
+                    <td>27 hours</td>
                   </tr>
 
                   <tr>
                     <td><code>joyful-stack-gateway-1</code></td>
                     <td>Webhook and event ingress</td>
-                    <td>60.5 MB</td>
+                    <td>60.7 MB</td>
                     <td>127.0.0.1:5190</td>
                     <td>Application readiness</td>
-                    <td>19 hours</td>
+                    <td>2 hours</td>
                   </tr>
 
                   <tr>
                     <td><code>joyful-stack-gitactivity-1</code></td>
                     <td>GitHub activity projection</td>
-                    <td>46.3 MB</td>
+                    <td>59.4 MB</td>
                     <td>127.0.0.1:5192</td>
                     <td>RabbitMQ + SQLite readiness</td>
-                    <td>1 hour</td>
+                    <td>9 hours</td>
                   </tr>
 
                   <tr>
                     <td><code>joyful-stack-happyecho-1</code></td>
                     <td>Echo protocol server</td>
-                    <td>40.4 MB</td>
+                    <td>38.1 MB</td>
                     <td>TCP 7</td>
                     <td>Not configured</td>
-                    <td>24 hours</td>
+                    <td>32 hours</td>
                   </tr>
 
                   <tr>
                     <td><code>joyful-stack-happyfinger-1</code></td>
                     <td>Finger protocol server</td>
-                    <td>41.3 MB</td>
+                    <td>34.0 MB</td>
                     <td>TCP 79</td>
                     <td>Not configured</td>
-                    <td>22 hours</td>
+                    <td>30 hours</td>
                   </tr>
 
                   <tr>
                     <td><code>joyful-stack-happygopher-1</code></td>
                     <td>Gopher protocol server</td>
-                    <td>35.6 MB</td>
+                    <td>41.4 MB</td>
                     <td>TCP 70</td>
                     <td>Not configured</td>
-                    <td>44 hours</td>
+                    <td>2 days</td>
+                  </tr>
+
+                  <tr>
+                    <td><code>joyful-stack-happyqotd-1</code></td>
+                    <td>Quote of the Day server + API</td>
+                    <td>36.3 MB</td>
+                    <td>TCP 17</td>
+                    <td>Not configured</td>
+                    <td>7 minutes</td>
                   </tr>
 
                   <tr>
                     <td><code>joyful-stack-rabbitmq-1</code></td>
                     <td>Event message broker</td>
-                    <td>322.1 MB</td>
+                    <td>106.9 MB</td>
                     <td>Internal Docker network</td>
                     <td class="text-success">Healthy</td>
-                    <td>45 hours</td>
+                    <td>2 days</td>
                   </tr>
 
                   <tr>
                     <td><code>joyful-stack-randomsteam-1</code></td>
                     <td>Random Steam Game application</td>
-                    <td>162.5 MB</td>
+                    <td>162.6 MB</td>
                     <td>Cloudflare Tunnel</td>
                     <td class="text-success">Healthy</td>
-                    <td>22 hours</td>
+                    <td>30 hours</td>
                   </tr>
 
                   <tr>
                     <td><code>uptime-kuma</code></td>
                     <td>Availability monitoring</td>
-                    <td>144.3 MB</td>
+                    <td>138.0 MB</td>
                     <td>127.0.0.1:3001</td>
                     <td class="text-success">Healthy</td>
-                    <td>43 hours</td>
+                    <td>2 days</td>
                   </tr>
                 </tbody>
               </table>

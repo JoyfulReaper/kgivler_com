@@ -4,6 +4,7 @@ export const elements = {
   demo: document.getElementById('demo-output'),
   telemetry: document.getElementById('host-telemetry'),
   steamPresence: document.getElementById('steam-presence'),
+  qotdOutput: document.getElementById('qotd-output'),
 
   gitActivity: document.getElementById('recent-git-activity'),
   gitActivityRefreshButton: document.getElementById('btn-git-activity-refresh'),

@@ -5,6 +5,7 @@ import { initQwenPanel } from "./qwen-panel.js";
 import { parseCommandLine } from "./parser.js";
 import { initSteamPresence, refreshSteamPresence } from "./steam.js";
 import { initGitActivity } from "./git-activity.js";
+import { initQotd } from "./qotd.js";
 
 // Helper to create UI-agnostic terminal contexts
 const createTerminalContext = (element) => ({
@@ -68,6 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
   getSystemData().then(initHostTelemetry).catch(console.error);
   initSteamPresence();
   initGitActivity();
+  initQotd();
   initQwenPanel();
   elements.workstationRefreshButton?.addEventListener("click", () => refreshWorkstation());
   elements.steamRefreshButton?.addEventListener("click", () => refreshSteamPresence().catch(console.error));
