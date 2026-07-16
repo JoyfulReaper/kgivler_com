@@ -123,6 +123,8 @@ function renderSteamPresenceBadge(presence) {
       </span>
       <span><strong>[STEAM]</strong> ${summary}</span>
     </div>`;
+}
+
 async function loadSteamPresence(options = {}) {
   const { showLoading = false } = options;
 
