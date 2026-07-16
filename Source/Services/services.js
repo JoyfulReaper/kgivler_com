@@ -1,4 +1,13 @@
 (() => {
+  const snapshotUrl =
+    "https://status-api.kgivler.com/api/snapshot";
+
+  const refreshIntervalMilliseconds =
+    60_000;
+
+  const requestTimeoutMilliseconds =
+    7_000;
+
   const filterInput =
     document.getElementById("service-filter");
 
@@ -13,11 +22,64 @@
   const emptyState =
     document.getElementById("services-empty");
 
-  if (!filterInput) {
-    return;
-  }
+  const dashboard = {
+    runningContainers:
+      document.querySelector(
+        "[data-live-running-containers]"
+      ),
+    banner: document.querySelector(
+      "[data-live-banner]"
+    ),
+    summary: document.querySelector(
+      "[data-live-status-summary]"
+    ),
+    node: document.querySelector(
+      "[data-live-node]"
+    ),
+    capturedAt:
+      document.querySelector(
+        "[data-live-captured-at]"
+      ),
+    age: document.querySelector(
+      "[data-live-age]"
+    ),
+    freshness:
+      document.querySelector(
+        "[data-live-freshness]"
+      ),
+    lastRefresh:
+      document.querySelector(
+        "[data-live-last-refresh]"
+      ),
+    refreshButton:
+      document.querySelector(
+        "[data-live-refresh]"
+      ),
+    tableBody:
+      document.querySelector(
+        "[data-live-table-body]"
+      ),
+  };
+
+  const liveServiceEntries =
+    serviceEntries.filter(
+      (entry) =>
+        entry.dataset.containerName ||
+        entry.dataset.protocolService
+    );
+
+  let refreshTimerId = null;
+  let activeController = null;
+  let refreshInFlight = null;
+  let lastRenderedSnapshot = null;
+  let lastSuccessfulRefreshAt = null;
+  let isCleaningUp = false;
 
   function applyFilter() {
+    if (!filterInput) {
+      return;
+    }
+
     const query = filterInput.value
       .trim()
       .toLowerCase();
@@ -55,8 +117,693 @@
     }
   }
 
-  filterInput.addEventListener(
-    "input",
-    applyFilter
+  function normalizeContainerState(value) {
+    return (value ?? "")
+      .trim()
+      .toLowerCase();
+  }
+
+  function isRunningState(value) {
+    return (
+      normalizeContainerState(value) ===
+      "running"
+    );
+  }
+
+  function formatBytes(bytes) {
+    if (
+      !Number.isFinite(bytes) ||
+      bytes < 0
+    ) {
+      return "Unavailable";
+    }
+
+    if (bytes === 0) {
+      return "0 B";
+    }
+
+    const units = [
+      "B",
+      "KB",
+      "MB",
+      "GB",
+      "TB",
+    ];
+
+    let unitIndex = 0;
+    let value = bytes;
+
+    while (
+      value >= 1024 &&
+      unitIndex < units.length - 1
+    ) {
+      value /= 1024;
+      unitIndex += 1;
+    }
+
+    const fractionDigits =
+      value >= 100 || unitIndex === 0
+        ? 0
+        : value >= 10
+          ? 1
+          : 2;
+
+    return `${value.toFixed(
+      fractionDigits
+    )} ${units[unitIndex]}`;
+  }
+
+  function formatPercent(value) {
+    if (!Number.isFinite(value)) {
+      return "Unavailable";
+    }
+
+    return `${value.toFixed(2)}%`;
+  }
+
+  function formatTimestamp(value) {
+    if (!value) {
+      return "Unavailable";
+    }
+
+    const timestamp = new Date(value);
+
+    if (Number.isNaN(timestamp.getTime())) {
+      return "Unavailable";
+    }
+
+    return timestamp.toLocaleString([], {
+      dateStyle: "medium",
+      timeStyle: "medium",
+    });
+  }
+
+  function formatAgeSeconds(value) {
+    if (
+      !Number.isFinite(value) ||
+      value < 0
+    ) {
+      return "Unavailable";
+    }
+
+    if (value < 60) {
+      return `${Math.floor(value)}s`;
+    }
+
+    const minutes =
+      Math.floor(value / 60);
+
+    if (minutes < 60) {
+      const seconds =
+        Math.floor(value % 60);
+      return `${minutes}m ${seconds}s`;
+    }
+
+    const hours =
+      Math.floor(minutes / 60);
+    const remainingMinutes =
+      minutes % 60;
+
+    if (hours < 24) {
+      return `${hours}h ${remainingMinutes}m`;
+    }
+
+    const days =
+      Math.floor(hours / 24);
+    const remainingHours =
+      hours % 24;
+
+    return `${days}d ${remainingHours}h`;
+  }
+
+  function setChipState(
+    chip,
+    text,
+    type
+  ) {
+    if (!chip) {
+      return;
+    }
+
+    chip.textContent = text;
+    chip.dataset.type = type;
+  }
+
+  function setBannerState(
+    state,
+    summaryText
+  ) {
+    if (dashboard.banner) {
+      dashboard.banner.dataset.state =
+        state;
+    }
+
+    if (dashboard.summary) {
+      dashboard.summary.textContent =
+        summaryText;
+    }
+  }
+
+  function buildProtocolMap(protocols) {
+    return new Map(
+      (protocols ?? []).map((protocol) => [
+        protocol.service,
+        protocol,
+      ])
+    );
+  }
+
+  function buildContainerMap(containers) {
+    return new Map(
+      (containers ?? []).map((container) => [
+        container.name,
+        container,
+      ])
+    );
+  }
+
+  function renderContainerTable(snapshot) {
+    if (!dashboard.tableBody) {
+      return;
+    }
+
+    const containers = Array.isArray(
+      snapshot?.containers
+    )
+      ? [...snapshot.containers]
+      : [];
+
+    containers.sort((left, right) =>
+      left.name.localeCompare(right.name)
+    );
+
+    dashboard.tableBody.textContent = "";
+
+    if (containers.length === 0) {
+      const row =
+        document.createElement("tr");
+      const cell =
+        document.createElement("td");
+
+      cell.colSpan = 6;
+      cell.textContent =
+        "No containers were included in the latest snapshot.";
+
+      row.append(cell);
+      dashboard.tableBody.append(row);
+      return;
+    }
+
+    for (const container of containers) {
+      const row =
+        document.createElement("tr");
+      const normalizedState =
+        normalizeContainerState(
+          container.state
+        );
+      const isRunning =
+        isRunningState(normalizedState);
+
+      const nameCell =
+        document.createElement("td");
+      const code =
+        document.createElement("code");
+      code.textContent =
+        container.name ?? "Unknown";
+      nameCell.append(code);
+
+      const stateCell =
+        document.createElement("td");
+      const chip =
+        document.createElement("span");
+      chip.className = "service-chip";
+      setChipState(
+        chip,
+        (
+          normalizedState ||
+          "unknown"
+        ).toUpperCase(),
+        isRunning
+          ? snapshot.stale
+            ? "warning"
+            : "running"
+          : "unhealthy"
+      );
+      stateCell.append(chip);
+
+      const memoryCell =
+        document.createElement("td");
+      memoryCell.textContent =
+        formatBytes(
+          container.memoryUsageBytes
+        );
+
+      const memoryPercentCell =
+        document.createElement("td");
+      memoryPercentCell.textContent =
+        formatPercent(
+          container.memoryPercent
+        );
+
+      const cpuCell =
+        document.createElement("td");
+      cpuCell.textContent =
+        formatPercent(
+          container.cpuPercent
+        );
+
+      const restartsCell =
+        document.createElement("td");
+      restartsCell.textContent =
+        Number.isFinite(
+          container.restartCount
+        )
+          ? String(
+              container.restartCount
+            )
+          : "Unavailable";
+
+      row.append(
+        nameCell,
+        stateCell,
+        memoryCell,
+        memoryPercentCell,
+        cpuCell,
+        restartsCell
+      );
+
+      dashboard.tableBody.append(row);
+    }
+  }
+
+  function renderDashboardSummary(snapshot) {
+    const containers = Array.isArray(
+      snapshot?.containers
+    )
+      ? snapshot.containers
+      : [];
+
+    const runningContainers =
+      containers.filter((container) =>
+        isRunningState(container.state)
+      ).length;
+
+    if (dashboard.runningContainers) {
+      dashboard.runningContainers.textContent =
+        String(runningContainers);
+    }
+
+    if (dashboard.node) {
+      dashboard.node.textContent =
+        snapshot?.node || "Unavailable";
+    }
+
+    if (dashboard.capturedAt) {
+      dashboard.capturedAt.textContent =
+        formatTimestamp(
+          snapshot?.capturedAt
+        );
+    }
+
+    if (dashboard.age) {
+      dashboard.age.textContent =
+        formatAgeSeconds(
+          snapshot?.ageSeconds
+        );
+    }
+
+    if (dashboard.freshness) {
+      dashboard.freshness.textContent =
+        snapshot?.stale
+          ? "STALE"
+          : "FRESH";
+    }
+
+    if (dashboard.lastRefresh) {
+      dashboard.lastRefresh.textContent =
+        formatTimestamp(
+          lastSuccessfulRefreshAt
+        );
+    }
+
+    const protocolCount = Array.isArray(
+      snapshot?.protocols
+    )
+      ? snapshot.protocols.length
+      : 0;
+
+    const healthyProtocols = (
+      snapshot?.protocols ?? []
+    ).filter(
+      (protocol) =>
+        protocol.succeeded === true
+    ).length;
+
+    const freshnessLabel =
+      snapshot?.stale
+        ? "STALE"
+        : "FRESH";
+
+    setBannerState(
+      snapshot?.stale
+        ? "stale"
+        : "healthy",
+      `[${freshnessLabel}] ${
+        snapshot?.node || "Mission Control"
+      } reported ${runningContainers} running container${
+        runningContainers === 1
+          ? ""
+          : "s"
+      } and ${healthyProtocols}/${protocolCount} healthy protocol probe${
+        protocolCount === 1
+          ? ""
+          : "s"
+      }.`
+    );
+  }
+
+  function renderServiceEntries(snapshot) {
+    const containerMap =
+      buildContainerMap(
+        snapshot?.containers
+      );
+    const protocolMap =
+      buildProtocolMap(
+        snapshot?.protocols
+      );
+
+    for (const entry of liveServiceEntries) {
+      const containerName =
+        entry.dataset.containerName;
+      const protocolService =
+        entry.dataset.protocolService;
+      const container =
+        containerName
+          ? containerMap.get(
+              containerName
+            )
+          : null;
+      const protocol =
+        protocolService
+          ? protocolMap.get(
+              protocolService
+            )
+          : null;
+
+      const chip =
+        entry.querySelector(
+          "[data-live-status]"
+        );
+      const memoryValue =
+        entry.querySelector(
+          "[data-live-memory]"
+        );
+      const containerStateValue =
+        entry.querySelector(
+          "[data-live-container-state]"
+        );
+      const protocolLatencyValue =
+        entry.querySelector(
+          "[data-live-protocol-latency]"
+        );
+
+      if (memoryValue && container) {
+        memoryValue.textContent =
+          formatBytes(
+            container.memoryUsageBytes
+          );
+      }
+
+      if (containerStateValue) {
+        containerStateValue.textContent =
+          container
+            ? (
+                normalizeContainerState(
+                  container.state
+                ) || "unknown"
+              ).toUpperCase()
+            : "Unavailable";
+      }
+
+      if (protocolLatencyValue) {
+        if (protocol) {
+          protocolLatencyValue.textContent =
+            protocol.succeeded
+              ? `${protocol.durationMilliseconds} ms${
+                  snapshot.stale
+                    ? " (stale snapshot)"
+                    : ""
+                }`
+              : `Probe failed${
+                  snapshot.stale
+                    ? " (stale snapshot)"
+                    : ""
+                }`;
+        } else {
+          protocolLatencyValue.textContent =
+            "No recent probe";
+        }
+      }
+
+      if (protocol && chip) {
+        if (snapshot.stale) {
+          setChipState(
+            chip,
+            protocol.succeeded
+              ? "HEALTHY"
+              : "UNHEALTHY",
+            "warning"
+          );
+        } else {
+          setChipState(
+            chip,
+            protocol.succeeded
+              ? "HEALTHY"
+              : "UNHEALTHY",
+            protocol.succeeded
+              ? "healthy"
+              : "unhealthy"
+          );
+        }
+
+        continue;
+      }
+
+      if (container && chip) {
+        const running =
+          isRunningState(
+            container.state
+          );
+
+        setChipState(
+          chip,
+          (
+            normalizeContainerState(
+              container.state
+            ) || "unknown"
+          ).toUpperCase(),
+          snapshot.stale
+            ? "warning"
+            : running
+              ? "running"
+              : "unhealthy"
+        );
+      } else if (chip) {
+        setChipState(
+          chip,
+          "UNAVAILABLE",
+          "unavailable"
+        );
+      }
+    }
+  }
+
+  function renderSnapshot(snapshot) {
+    lastRenderedSnapshot = snapshot;
+    lastSuccessfulRefreshAt =
+      new Date().toISOString();
+
+    renderDashboardSummary(snapshot);
+    renderContainerTable(snapshot);
+    renderServiceEntries(snapshot);
+  }
+
+  function renderUnavailableState(error) {
+    console.warn(
+      "Unable to refresh Mission Control snapshot.",
+      error
+    );
+
+    if (dashboard.lastRefresh) {
+      dashboard.lastRefresh.textContent =
+        formatTimestamp(
+          lastSuccessfulRefreshAt
+        );
+    }
+
+    if (!lastRenderedSnapshot) {
+      if (dashboard.node) {
+        dashboard.node.textContent =
+          "Unavailable";
+      }
+
+      if (dashboard.capturedAt) {
+        dashboard.capturedAt.textContent =
+          "Unavailable";
+      }
+
+      if (dashboard.age) {
+        dashboard.age.textContent =
+          "Unavailable";
+      }
+
+      if (dashboard.freshness) {
+        dashboard.freshness.textContent =
+          "UNAVAILABLE";
+      }
+
+      setBannerState(
+        "unavailable",
+        "[UNAVAILABLE] Live Mission Control data could not be loaded. Static service details remain available."
+      );
+
+      return;
+    }
+
+    if (dashboard.freshness) {
+      dashboard.freshness.textContent =
+        "UNAVAILABLE";
+    }
+
+    setBannerState(
+      "unavailable",
+      "[UNAVAILABLE] Showing the most recent successful snapshot. A new refresh attempt failed."
+    );
+  }
+
+  function validateSnapshotShape(snapshot) {
+    return Boolean(
+      snapshot &&
+        typeof snapshot.node ===
+          "string" &&
+        Array.isArray(snapshot.protocols) &&
+        Array.isArray(snapshot.containers)
+    );
+  }
+
+  async function fetchSnapshot() {
+    if (refreshInFlight) {
+      return refreshInFlight;
+    }
+
+    activeController?.abort();
+
+    const controller =
+      new AbortController();
+    const timeoutId =
+      window.setTimeout(() => {
+        controller.abort(
+          new Error("Request timed out.")
+        );
+      }, requestTimeoutMilliseconds);
+
+    activeController = controller;
+
+    refreshInFlight = fetch(
+      snapshotUrl,
+      {
+        method: "GET",
+        mode: "cors",
+        cache: "no-store",
+        credentials: "omit",
+        signal: controller.signal,
+      }
+    )
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error(
+            `Snapshot request failed with ${response.status}.`
+          );
+        }
+
+        return response.json();
+      })
+      .then((snapshot) => {
+        if (
+          !validateSnapshotShape(
+            snapshot
+          )
+        ) {
+          throw new Error(
+            "Snapshot payload did not match the expected contract."
+          );
+        }
+
+        renderSnapshot(snapshot);
+      })
+      .catch((error) => {
+        if (
+          controller.signal.aborted &&
+          isCleaningUp
+        ) {
+          return;
+        }
+
+        renderUnavailableState(error);
+      })
+      .finally(() => {
+        window.clearTimeout(timeoutId);
+
+        if (activeController === controller) {
+          activeController = null;
+        }
+
+        refreshInFlight = null;
+      });
+
+    return refreshInFlight;
+  }
+
+  function cleanup() {
+    isCleaningUp = true;
+
+    if (refreshTimerId !== null) {
+      window.clearInterval(
+        refreshTimerId
+      );
+      refreshTimerId = null;
+    }
+
+    activeController?.abort();
+  }
+
+  if (filterInput) {
+    filterInput.addEventListener(
+      "input",
+      applyFilter
+    );
+    applyFilter();
+  }
+
+  dashboard.refreshButton?.addEventListener(
+    "click",
+    () => {
+      void fetchSnapshot();
+    }
   );
+
+  refreshTimerId = window.setInterval(
+    () => {
+      void fetchSnapshot();
+    },
+    refreshIntervalMilliseconds
+  );
+
+  window.addEventListener(
+    "pagehide",
+    cleanup,
+    { once: true }
+  );
+
+  void fetchSnapshot();
 })();

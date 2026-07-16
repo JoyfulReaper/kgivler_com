@@ -124,7 +124,12 @@
 
           <div class="services-summary-grid mt-3">
             <div class="services-summary-card">
-              <span class="services-summary-value">13</span>
+              <span
+                class="services-summary-value"
+                data-live-running-containers
+              >
+                13
+              </span>
 
               <span class="services-summary-label">
                 Running containers
@@ -201,6 +206,7 @@
               <details
                 class="service-entry"
                 data-service-entry
+                data-container-name="joyful-stack-randomsteam-1"
                 data-search="random steam game randomsteam steam picker web application api public docker healthy"
               >
                 <summary>
@@ -228,6 +234,7 @@
 
                     <span
                       class="service-chip"
+                      data-live-status
                       data-type="healthy"
                     >
                       HEALTHY
@@ -247,7 +254,10 @@
                     <div class="service-meta-item">
                       <span class="service-meta-label">Container</span>
 
-                      <span class="service-meta-value">
+                      <span
+                        class="service-meta-value"
+                        data-live-container-name
+                      >
                         joyful-stack-randomsteam-1
                       </span>
                     </div>
@@ -281,8 +291,24 @@
                         Observed memory
                       </span>
 
-                      <span class="service-meta-value">
+                      <span
+                        class="service-meta-value"
+                        data-live-memory
+                      >
                         Approximately 163 MB
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">
+                        Container state
+                      </span>
+
+                      <span
+                        class="service-meta-value"
+                        data-live-container-state
+                      >
+                        Static snapshot
                       </span>
                     </div>
                   </div>
@@ -324,6 +350,8 @@
               <details
                 class="service-entry"
                 data-service-entry
+                data-container-name="joyful-stack-happyecho-1"
+                data-protocol-service="happyecho"
                 data-search="happyecho echo protocol tcp port 7 networking rfc public dotnet"
               >
                 <summary>
@@ -351,6 +379,14 @@
 
                     <span
                       class="service-chip"
+                      data-live-status
+                      data-type="warning"
+                    >
+                      CHECKING
+                    </span>
+
+                    <span
+                      class="service-chip"
                       data-type="protocol"
                     >
                       TCP :7
@@ -363,7 +399,10 @@
                     <div class="service-meta-item">
                       <span class="service-meta-label">Container</span>
 
-                      <span class="service-meta-value">
+                      <span
+                        class="service-meta-value"
+                        data-live-container-name
+                      >
                         joyful-stack-happyecho-1
                       </span>
                     </div>
@@ -397,8 +436,35 @@
                         Observed memory
                       </span>
 
-                      <span class="service-meta-value">
+                      <span
+                        class="service-meta-value"
+                        data-live-memory
+                      >
                         Approximately 40 MB
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">
+                        Container state
+                      </span>
+
+                      <span
+                        class="service-meta-value"
+                        data-live-container-state
+                      >
+                        Awaiting live snapshot
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Live probe</span>
+
+                      <span
+                        class="service-meta-value"
+                        data-live-protocol-latency
+                      >
+                        Awaiting live snapshot
                       </span>
                     </div>
                   </div>
@@ -420,6 +486,8 @@
               <details
                 class="service-entry"
                 data-service-entry
+                data-container-name="joyful-stack-happyfinger-1"
+                data-protocol-service="happyfinger"
                 data-search="happyfinger finger protocol tcp port 79 networking steam steamid random game picker rfc public dotnet"
               >
                 <summary>
@@ -447,6 +515,14 @@
 
                     <span
                       class="service-chip"
+                      data-live-status
+                      data-type="warning"
+                    >
+                      CHECKING
+                    </span>
+
+                    <span
+                      class="service-chip"
                       data-type="protocol"
                     >
                       TCP :79
@@ -459,7 +535,10 @@
                     <div class="service-meta-item">
                       <span class="service-meta-label">Container</span>
 
-                      <span class="service-meta-value">
+                      <span
+                        class="service-meta-value"
+                        data-live-container-name
+                      >
                         joyful-stack-happyfinger-1
                       </span>
                     </div>
@@ -484,7 +563,7 @@
                       <span class="service-meta-label">Protocol</span>
 
                       <span class="service-meta-value">
-                        Gopher
+                        Finger
                       </span>
                     </div>
 
@@ -493,8 +572,35 @@
                         Observed memory
                       </span>
 
-                      <span class="service-meta-value">
+                      <span
+                        class="service-meta-value"
+                        data-live-memory
+                      >
                         Approximately 41 MB
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">
+                        Container state
+                      </span>
+
+                      <span
+                        class="service-meta-value"
+                        data-live-container-state
+                      >
+                        Awaiting live snapshot
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Live probe</span>
+
+                      <span
+                        class="service-meta-value"
+                        data-live-protocol-latency
+                      >
+                        Awaiting live snapshot
                       </span>
                     </div>
                   </div>
@@ -527,6 +633,8 @@
               <details
                 class="service-entry"
                 data-service-entry
+                data-container-name="joyful-stack-happygopher-1"
+                data-protocol-service="happygopher"
                 data-search="happygopher gopher protocol tcp port 70 menu text old internet public dotnet"
               >
                 <summary>
@@ -554,6 +662,14 @@
 
                     <span
                       class="service-chip"
+                      data-live-status
+                      data-type="warning"
+                    >
+                      CHECKING
+                    </span>
+
+                    <span
+                      class="service-chip"
                       data-type="protocol"
                     >
                       TCP :70
@@ -566,7 +682,10 @@
                     <div class="service-meta-item">
                       <span class="service-meta-label">Container</span>
 
-                      <span class="service-meta-value">
+                      <span
+                        class="service-meta-value"
+                        data-live-container-name
+                      >
                         joyful-stack-happygopher-1
                       </span>
                     </div>
@@ -600,8 +719,35 @@
                         Observed memory
                       </span>
 
-                      <span class="service-meta-value">
+                      <span
+                        class="service-meta-value"
+                        data-live-memory
+                      >
                         Approximately 36 MB
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">
+                        Container state
+                      </span>
+
+                      <span
+                        class="service-meta-value"
+                        data-live-container-state
+                      >
+                        Awaiting live snapshot
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Live probe</span>
+
+                      <span
+                        class="service-meta-value"
+                        data-live-protocol-latency
+                      >
+                        Awaiting live snapshot
                       </span>
                     </div>
                   </div>
@@ -622,6 +768,8 @@
               <details
                 class="service-entry"
                 data-service-entry
+                data-container-name="joyful-stack-happyqotd-1"
+                data-protocol-service="happyqotd"
                 data-search="happyqotd qotd quote of the day tcp port 17 api json public dotnet classic internet quotes"
               >
                 <summary>
@@ -649,6 +797,14 @@
 
                     <span
                       class="service-chip"
+                      data-live-status
+                      data-type="warning"
+                    >
+                      CHECKING
+                    </span>
+
+                    <span
+                      class="service-chip"
                       data-type="protocol"
                     >
                       TCP :17
@@ -661,7 +817,10 @@
                     <div class="service-meta-item">
                       <span class="service-meta-label">Container</span>
 
-                      <span class="service-meta-value">
+                      <span
+                        class="service-meta-value"
+                        data-live-container-name
+                      >
                         joyful-stack-happyqotd-1
                       </span>
                     </div>
@@ -695,8 +854,35 @@
                         Observed memory
                       </span>
 
-                      <span class="service-meta-value">
+                      <span
+                        class="service-meta-value"
+                        data-live-memory
+                      >
                         Approximately 36 MB
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">
+                        Container state
+                      </span>
+
+                      <span
+                        class="service-meta-value"
+                        data-live-container-state
+                      >
+                        Awaiting live snapshot
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Live probe</span>
+
+                      <span
+                        class="service-meta-value"
+                        data-live-protocol-latency
+                      >
+                        Awaiting live snapshot
                       </span>
                     </div>
                   </div>
@@ -748,6 +934,7 @@
               <details
                 class="service-entry"
                 data-service-entry
+                data-container-name="it-tools"
                 data-search="it tools utilities converters encoders developer toolbox public browser cloudflare tunnel"
               >
                 <summary>
@@ -775,6 +962,14 @@
 
                     <span
                       class="service-chip"
+                      data-live-status
+                      data-type="warning"
+                    >
+                      CHECKING
+                    </span>
+
+                    <span
+                      class="service-chip"
                       data-type="protocol"
                     >
                       HTTPS
@@ -787,7 +982,10 @@
                     <div class="service-meta-item">
                       <span class="service-meta-label">Container</span>
 
-                      <span class="service-meta-value">
+                      <span
+                        class="service-meta-value"
+                        data-live-container-name
+                      >
                         it-tools
                       </span>
                     </div>
@@ -821,6 +1019,19 @@
 
                       <span class="service-meta-value">
                         Public through Cloudflare Tunnel
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">
+                        Container state
+                      </span>
+
+                      <span
+                        class="service-meta-value"
+                        data-live-container-state
+                      >
+                        Awaiting live snapshot
                       </span>
                     </div>
                   </div>
@@ -857,6 +1068,7 @@
               <details
                 class="service-entry"
                 data-service-entry
+                data-container-name="joyful-stack-gateway-1"
                 data-search="mission control gateway github webhook integration events rabbitmq ingress api port 5190 internal"
               >
                 <summary>
@@ -884,6 +1096,14 @@
 
                     <span
                       class="service-chip"
+                      data-live-status
+                      data-type="warning"
+                    >
+                      CHECKING
+                    </span>
+
+                    <span
+                      class="service-chip"
                       data-type="protocol"
                     >
                       HTTP
@@ -896,7 +1116,10 @@
                     <div class="service-meta-item">
                       <span class="service-meta-label">Container</span>
 
-                      <span class="service-meta-value">
+                      <span
+                        class="service-meta-value"
+                        data-live-container-name
+                      >
                         joyful-stack-gateway-1
                       </span>
                     </div>
@@ -922,8 +1145,24 @@
                         Observed memory
                       </span>
 
-                      <span class="service-meta-value">
+                      <span
+                        class="service-meta-value"
+                        data-live-memory
+                      >
                         Approximately 61 MB
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">
+                        Container state
+                      </span>
+
+                      <span
+                        class="service-meta-value"
+                        data-live-container-state
+                      >
+                        Awaiting live snapshot
                       </span>
                     </div>
                   </div>
@@ -956,6 +1195,7 @@
               <details
                 class="service-entry"
                 data-service-entry
+                data-container-name="joyful-stack-archive-1"
                 data-search="mission control archive sqlite event store rabbitmq durable queue history port 5191 internal"
               >
                 <summary>
@@ -983,6 +1223,14 @@
 
                     <span
                       class="service-chip"
+                      data-live-status
+                      data-type="warning"
+                    >
+                      CHECKING
+                    </span>
+
+                    <span
+                      class="service-chip"
                       data-type="protocol"
                     >
                       SQLITE
@@ -995,7 +1243,10 @@
                     <div class="service-meta-item">
                       <span class="service-meta-label">Container</span>
 
-                      <span class="service-meta-value">
+                      <span
+                        class="service-meta-value"
+                        data-live-container-name
+                      >
                         joyful-stack-archive-1
                       </span>
                     </div>
@@ -1021,8 +1272,24 @@
                         Observed memory
                       </span>
 
-                      <span class="service-meta-value">
+                      <span
+                        class="service-meta-value"
+                        data-live-memory
+                      >
                         Approximately 61 MB
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">
+                        Container state
+                      </span>
+
+                      <span
+                        class="service-meta-value"
+                        data-live-container-state
+                      >
+                        Awaiting live snapshot
                       </span>
                     </div>
                   </div>
@@ -1043,6 +1310,7 @@
               <details
                 class="service-entry"
                 data-service-entry
+                data-container-name="joyful-stack-gitactivity-1"
                 data-search="mission control gitactivity github commits projection sqlite api recent activity port 5192 internal public proxy"
               >
                 <summary>
@@ -1070,6 +1338,7 @@
 
                     <span
                       class="service-chip"
+                      data-live-status
                       data-type="healthy"
                     >
                       SQLITE READY
@@ -1089,7 +1358,10 @@
                     <div class="service-meta-item">
                       <span class="service-meta-label">Container</span>
 
-                      <span class="service-meta-value">
+                      <span
+                        class="service-meta-value"
+                        data-live-container-name
+                      >
                         joyful-stack-gitactivity-1
                       </span>
                     </div>
@@ -1115,8 +1387,24 @@
                         Observed memory
                       </span>
 
-                      <span class="service-meta-value">
+                      <span
+                        class="service-meta-value"
+                        data-live-memory
+                      >
                         Approximately 46 MB
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">
+                        Container state
+                      </span>
+
+                      <span
+                        class="service-meta-value"
+                        data-live-container-state
+                      >
+                        Static snapshot
                       </span>
                     </div>
                   </div>
@@ -1148,6 +1436,7 @@
               <details
                 class="service-entry"
                 data-service-entry
+                data-container-name="joyful-stack-rabbitmq-1"
                 data-search="rabbitmq message broker topic exchange durable queues mission control event routing internal healthy"
               >
                 <summary>
@@ -1175,6 +1464,7 @@
 
                     <span
                       class="service-chip"
+                      data-live-status
                       data-type="healthy"
                     >
                       HEALTHY
@@ -1194,7 +1484,10 @@
                     <div class="service-meta-item">
                       <span class="service-meta-label">Container</span>
 
-                      <span class="service-meta-value">
+                      <span
+                        class="service-meta-value"
+                        data-live-container-name
+                      >
                         joyful-stack-rabbitmq-1
                       </span>
                     </div>
@@ -1220,8 +1513,24 @@
                         Observed memory
                       </span>
 
-                      <span class="service-meta-value">
+                      <span
+                        class="service-meta-value"
+                        data-live-memory
+                      >
                         Approximately 322 MB
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">
+                        Container state
+                      </span>
+
+                      <span
+                        class="service-meta-value"
+                        data-live-container-state
+                      >
+                        Static snapshot
                       </span>
                     </div>
                   </div>
@@ -1258,6 +1567,7 @@
               <details
                 class="service-entry"
                 data-service-entry
+                data-container-name="beszel"
                 data-search="beszel monitoring dashboard docker containers cpu memory network host internal port 8090"
               >
                 <summary>
@@ -1285,6 +1595,14 @@
 
                     <span
                       class="service-chip"
+                      data-live-status
+                      data-type="warning"
+                    >
+                      CHECKING
+                    </span>
+
+                    <span
+                      class="service-chip"
                       data-type="protocol"
                     >
                       HTTP :8090
@@ -1297,7 +1615,10 @@
                     <div class="service-meta-item">
                       <span class="service-meta-label">Container</span>
 
-                      <span class="service-meta-value">
+                      <span
+                        class="service-meta-value"
+                        data-live-container-name
+                      >
                         beszel
                       </span>
                     </div>
@@ -1323,8 +1644,24 @@
                         Observed memory
                       </span>
 
-                      <span class="service-meta-value">
+                      <span
+                        class="service-meta-value"
+                        data-live-memory
+                      >
                         Approximately 18 MB
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">
+                        Container state
+                      </span>
+
+                      <span
+                        class="service-meta-value"
+                        data-live-container-state
+                      >
+                        Awaiting live snapshot
                       </span>
                     </div>
                   </div>
@@ -1344,6 +1681,7 @@
               <details
                 class="service-entry"
                 data-service-entry
+                data-container-name="beszel-agent"
                 data-search="beszel agent monitoring telemetry host docker metrics private internal"
               >
                 <summary>
@@ -1364,6 +1702,14 @@
                   <span class="service-summary-badges">
                     <span
                       class="service-chip"
+                      data-live-status
+                      data-type="warning"
+                    >
+                      CHECKING
+                    </span>
+
+                    <span
+                      class="service-chip"
                       data-type="internal"
                     >
                       INTERNAL
@@ -1376,7 +1722,10 @@
                     <div class="service-meta-item">
                       <span class="service-meta-label">Container</span>
 
-                      <span class="service-meta-value">
+                      <span
+                        class="service-meta-value"
+                        data-live-container-name
+                      >
                         beszel-agent
                       </span>
                     </div>
@@ -1402,8 +1751,24 @@
                         Observed memory
                       </span>
 
-                      <span class="service-meta-value">
+                      <span
+                        class="service-meta-value"
+                        data-live-memory
+                      >
                         Approximately 5 MB
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">
+                        Container state
+                      </span>
+
+                      <span
+                        class="service-meta-value"
+                        data-live-container-state
+                      >
+                        Awaiting live snapshot
                       </span>
                     </div>
                   </div>
@@ -1418,6 +1783,7 @@
               <details
                 class="service-entry"
                 data-service-entry
+                data-container-name="uptime-kuma"
                 data-search="uptime kuma monitoring health checks alerts uptime dashboard private port 3001 healthy"
               >
                 <summary>
@@ -1445,6 +1811,7 @@
 
                     <span
                       class="service-chip"
+                      data-live-status
                       data-type="healthy"
                     >
                       HEALTHY
@@ -1464,7 +1831,10 @@
                     <div class="service-meta-item">
                       <span class="service-meta-label">Container</span>
 
-                      <span class="service-meta-value">
+                      <span
+                        class="service-meta-value"
+                        data-live-container-name
+                      >
                         uptime-kuma
                       </span>
                     </div>
@@ -1490,8 +1860,24 @@
                         Observed memory
                       </span>
 
-                      <span class="service-meta-value">
+                      <span
+                        class="service-meta-value"
+                        data-live-memory
+                      >
                         Approximately 144 MB
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">
+                        Container state
+                      </span>
+
+                      <span
+                        class="service-meta-value"
+                        data-live-container-state
+                      >
+                        Static snapshot
                       </span>
                     </div>
                   </div>
@@ -1512,17 +1898,63 @@
 
             <div class="cmd-line mb-3">
               <span class="prompt">kyle@kgivler:~$</span>
-              docker compose ps --snapshot
+              mission-control status --live
             </div>
 
-            <div class="system-warning-box mb-3">
-              <i class="fas fa-camera me-2"></i>
+            <div
+              class="system-warning-box services-live-banner mb-3"
+              data-live-banner
+              data-state="loading"
+            >
+              <i
+                class="fas fa-satellite-dish me-2"
+                aria-hidden="true"
+              ></i>
 
-              <span>
-                [SNAPSHOT] The table below reflects one Beszel observation. It
-                is not a live status dashboard, and memory or uptime values
-                will change.
-              </span>
+              <div class="services-live-banner-copy">
+                <div
+                  data-live-status-summary
+                  role="status"
+                  aria-live="polite"
+                >
+                  [LOADING] Connecting to Mission Control live snapshot...
+                </div>
+
+                <div class="services-live-banner-meta">
+                  <span>
+                    Node:
+                    <strong data-live-node>Unavailable</strong>
+                  </span>
+
+                  <span>
+                    Captured:
+                    <strong data-live-captured-at>Unavailable</strong>
+                  </span>
+
+                  <span>
+                    Age:
+                    <strong data-live-age>Unavailable</strong>
+                  </span>
+
+                  <span>
+                    State:
+                    <strong data-live-freshness>Loading</strong>
+                  </span>
+
+                  <span>
+                    Last refresh:
+                    <strong data-live-last-refresh>Never</strong>
+                  </span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                class="terminal-btn-inline services-refresh-btn"
+                data-live-refresh
+              >
+                Refresh now
+              </button>
             </div>
 
             <div class="table-responsive project-terminal-badge">
@@ -1530,130 +1962,21 @@
                 <thead>
                   <tr>
                     <th scope="col">Container</th>
-                    <th scope="col">Role</th>
+                    <th scope="col">State</th>
                     <th scope="col">Memory</th>
-                    <th scope="col">Exposure</th>
-                    <th scope="col">Health</th>
-                    <th scope="col">Observed uptime</th>
+                    <th scope="col">Memory %</th>
+                    <th scope="col">CPU %</th>
+                    <th scope="col">Restarts</th>
                   </tr>
                 </thead>
 
-                <tbody>
+                <tbody data-live-table-body>
                   <tr>
-                    <td><code>beszel</code></td>
-                    <td>Monitoring dashboard</td>
-                    <td>18.4 MB</td>
-                    <td>127.0.0.1:8090</td>
-                    <td>Not configured</td>
-                    <td>4 days</td>
-                  </tr>
-
-                  <tr>
-                    <td><code>beszel-agent</code></td>
-                    <td>Metrics collector</td>
-                    <td>5.73 MB</td>
-                    <td>Internal</td>
-                    <td>Not configured</td>
-                    <td>4 days</td>
-                  </tr>
-
-                  <tr>
-                    <td><code>it-tools</code></td>
-                    <td>Developer utilities</td>
-                    <td>3.32 MB</td>
-                    <td>Cloudflare Tunnel</td>
-                    <td>Not configured</td>
-                    <td>4 days</td>
-                  </tr>
-
-                  <tr>
-                    <td><code>joyful-stack-archive-1</code></td>
-                    <td>Integration-event archive</td>
-                    <td>61.8 MB</td>
-                    <td>127.0.0.1:5191</td>
-                    <td>Application readiness</td>
-                    <td>27 hours</td>
-                  </tr>
-
-                  <tr>
-                    <td><code>joyful-stack-gateway-1</code></td>
-                    <td>Webhook and event ingress</td>
-                    <td>60.7 MB</td>
-                    <td>127.0.0.1:5190</td>
-                    <td>Application readiness</td>
-                    <td>2 hours</td>
-                  </tr>
-
-                  <tr>
-                    <td><code>joyful-stack-gitactivity-1</code></td>
-                    <td>GitHub activity projection</td>
-                    <td>59.4 MB</td>
-                    <td>127.0.0.1:5192</td>
-                    <td>RabbitMQ + SQLite readiness</td>
-                    <td>9 hours</td>
-                  </tr>
-
-                  <tr>
-                    <td><code>joyful-stack-happyecho-1</code></td>
-                    <td>Echo protocol server</td>
-                    <td>38.1 MB</td>
-                    <td>TCP 7</td>
-                    <td>Not configured</td>
-                    <td>32 hours</td>
-                  </tr>
-
-                  <tr>
-                    <td><code>joyful-stack-happyfinger-1</code></td>
-                    <td>Finger protocol server</td>
-                    <td>34.0 MB</td>
-                    <td>TCP 79</td>
-                    <td>Not configured</td>
-                    <td>30 hours</td>
-                  </tr>
-
-                  <tr>
-                    <td><code>joyful-stack-happygopher-1</code></td>
-                    <td>Gopher protocol server</td>
-                    <td>41.4 MB</td>
-                    <td>TCP 70</td>
-                    <td>Not configured</td>
-                    <td>2 days</td>
-                  </tr>
-
-                  <tr>
-                    <td><code>joyful-stack-happyqotd-1</code></td>
-                    <td>Quote of the Day server + API</td>
-                    <td>36.3 MB</td>
-                    <td>TCP 17</td>
-                    <td>Not configured</td>
-                    <td>7 minutes</td>
-                  </tr>
-
-                  <tr>
-                    <td><code>joyful-stack-rabbitmq-1</code></td>
-                    <td>Event message broker</td>
-                    <td>106.9 MB</td>
-                    <td>Internal Docker network</td>
-                    <td class="text-success">Healthy</td>
-                    <td>2 days</td>
-                  </tr>
-
-                  <tr>
-                    <td><code>joyful-stack-randomsteam-1</code></td>
-                    <td>Random Steam Game application</td>
-                    <td>162.6 MB</td>
-                    <td>Cloudflare Tunnel</td>
-                    <td class="text-success">Healthy</td>
-                    <td>30 hours</td>
-                  </tr>
-
-                  <tr>
-                    <td><code>uptime-kuma</code></td>
-                    <td>Availability monitoring</td>
-                    <td>138.0 MB</td>
-                    <td>127.0.0.1:3001</td>
-                    <td class="text-success">Healthy</td>
-                    <td>2 days</td>
+                    <td colspan="6">
+                      Live snapshot data will appear here when JavaScript can
+                      reach Mission Control. The service details above remain
+                      usable as a static fallback.
+                    </td>
                   </tr>
                 </tbody>
               </table>
