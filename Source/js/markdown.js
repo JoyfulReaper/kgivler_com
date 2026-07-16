@@ -1,7 +1,7 @@
-export function escapeHtml(str) {
-  if (!str) return "";
+export function escapeHtml(value) {
+  const text = String(value ?? "");
 
-  return str
+  return text
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
@@ -20,7 +20,7 @@ function formatInline(text) {
 
   output = escapeHtml(output);
 
-  output = output.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, (_, label, url) => {
+  output = output.replace(/\[([^\]]+)\]\((https:\/\/[^\s)]+)\)/g, (_, label, url) => {
     return `<a href="${url}" target="_blank" rel="noopener noreferrer">${label}</a>`;
   });
 

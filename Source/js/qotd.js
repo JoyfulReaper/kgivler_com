@@ -25,9 +25,18 @@ function renderError(message) {
 function renderQuote(quote) {
   if (!elements.qotdOutput) return;
 
-  const text = escapeHtml(quote?.text || "No quote is available today.");
-  const author = escapeHtml(quote?.author || "Unknown author");
-  const source = quote?.source
+  const text = escapeHtml(
+    typeof quote?.text === "string" && quote.text.trim()
+      ? quote.text
+      : "No quote is available today."
+  );
+  const author = escapeHtml(
+    typeof quote?.author === "string" && quote.author.trim()
+      ? quote.author
+      : "Unknown author"
+  );
+  const source =
+    typeof quote?.source === "string" && quote.source.trim()
     ? escapeHtml(quote.source)
     : null;
 

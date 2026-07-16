@@ -4,13 +4,22 @@ import { elements } from "./ui.js";
 let isRefreshingGitActivity = false;
 
 function formatRepository(repository) {
-  if (!repository) return "unknown";
+  if (typeof repository !== "string" || !repository.trim()) {
+    return "unknown";
+  }
 
   const parts = repository.split("/");
   return parts.at(-1) || repository;
 }
 
 function formatTimestamp(timestamp) {
+  if (
+    typeof timestamp !== "string" ||
+    !timestamp.trim()
+  ) {
+    return "Unknown time";
+  }
+
   const date = new Date(timestamp);
 
   if (Number.isNaN(date.getTime())) {
@@ -23,7 +32,79 @@ function formatTimestamp(timestamp) {
   }).format(date);
 }
 
-function createActivityItem(item) {
+function getValidGitHubUrl(value) {
+  if (typeof value !== "string" || !value.trim()) return null;
+
+  try {
+    const parsed = new URL(value);
+
+    if (
+      parsed.protocol === "https:" &&
+      parsed.hostname === "github.com"
+    ) {
+      return parsed.href;
+    }
+  } catch (_) {
+    return null;
+  }
+
+  return null;
+}
+
+function normalizeActivityItem(item) {
+  if (!item || typeof item !== "object") {
+    return null;
+  }
+
+  const sha =
+    typeof item.sha === "string" && item.sha.trim()
+      ? item.sha.trim()
+      : "unknown";
+  const repository =
+    typeof item.repository === "string"
+      ? item.repository.trim()
+      : "";
+  const branch =
+    typeof item.branch === "string" && item.branch.trim()
+      ? item.branch.trim()
+      : "unknown";
+  const message =
+    typeof item.message === "string" && item.message.trim()
+      ? item.message.trim()
+      : "(no commit message)";
+  const author =
+    typeof item.author === "string" && item.author.trim()
+      ? item.author.trim()
+      : typeof item.authorUsername === "string" && item.authorUsername.trim()
+        ? item.authorUsername.trim()
+        : "Unknown author";
+  const timestamp =
+    typeof item.timestamp === "string"
+      ? item.timestamp
+      : null;
+  const url =
+    typeof item.url === "string"
+      ? item.url
+      : "";
+
+  return {
+    sha,
+    repository,
+    branch,
+    message,
+    author,
+    timestamp,
+    url,
+  };
+}
+
+function createActivityItem(rawItem) {
+  const item = normalizeActivityItem(rawItem);
+
+  if (!item) {
+    return null;
+  }
+
   const container = document.createElement("div");
   container.className = "py-2 border-bottom";
   container.style.borderColor = "#222226";
@@ -32,24 +113,32 @@ function createActivityItem(item) {
   commitLine.className =
     "d-flex flex-column flex-lg-row gap-1 gap-lg-2 align-items-lg-baseline";
 
-  const commitLink = document.createElement("a");
-  commitLink.className = "font-monospace text-decoration-none";
-  commitLink.href = item.url;
-  commitLink.target = "_blank";
-  commitLink.rel = "noopener noreferrer";
-  commitLink.textContent = (item.sha || "unknown").slice(0, 7);
+  const validUrl =
+    getValidGitHubUrl(item.url);
+  const commitTarget = validUrl
+    ? document.createElement("a")
+    : document.createElement("span");
+  commitTarget.className = validUrl
+    ? "font-monospace text-decoration-none"
+    : "font-monospace";
+  commitTarget.textContent = item.sha.slice(0, 7);
+
+  if (validUrl) {
+    commitTarget.href = validUrl;
+    commitTarget.target = "_blank";
+    commitTarget.rel = "noopener noreferrer";
+  }
 
   const context = document.createElement("span");
   context.className = "text-accent font-monospace";
   context.textContent =
-    `[${formatRepository(item.repository)}:${item.branch || "unknown"}]`;
+    `[${formatRepository(item.repository)}:${item.branch}]`;
 
   const message = document.createElement("span");
-  message.textContent =
-    item.message || "(no commit message)";
+  message.textContent = item.message;
 
   commitLine.append(
-    commitLink,
+    commitTarget,
     context,
     message
   );
@@ -57,7 +146,7 @@ function createActivityItem(item) {
   const metadata = document.createElement("div");
   metadata.className = "small text-muted mt-1";
   metadata.textContent =
-    `${item.author || item.authorUsername || "Unknown author"} · ` +
+    `${item.author} · ` +
     formatTimestamp(item.timestamp);
 
   container.append(
@@ -91,10 +180,19 @@ function renderError(message) {
 function renderActivity(items) {
   if (!elements.gitActivity) return;
 
-  if (!items.length) {
+  const safeItems = Array.isArray(items)
+    ? items
+    : [];
+  const activityItems = safeItems
+    .map(createActivityItem)
+    .filter(Boolean);
+
+  if (!activityItems.length) {
     const empty = document.createElement("div");
     empty.className = "text-muted";
-    empty.textContent = "[INFO] No recent Git activity found.";
+    empty.textContent = safeItems.length
+      ? "[INFO] Git activity data was malformed."
+      : "[INFO] No recent Git activity found.";
 
     elements.gitActivity.replaceChildren(empty);
     return;
@@ -102,8 +200,8 @@ function renderActivity(items) {
 
   const fragment = document.createDocumentFragment();
 
-  for (const item of items) {
-    fragment.append(createActivityItem(item));
+  for (const item of activityItems) {
+    fragment.append(item);
   }
 
   elements.gitActivity.replaceChildren(fragment);
@@ -136,7 +234,12 @@ export async function refreshGitActivity() {
       return;
     }
 
-    renderActivity(result.items);
+    try {
+      renderActivity(result.items);
+    } catch (error) {
+      console.error("Git activity render failed:", error);
+      renderError("Git activity data could not be rendered.");
+    }
   } finally {
     isRefreshingGitActivity = false;
 

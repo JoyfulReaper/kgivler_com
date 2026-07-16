@@ -3,8 +3,9 @@ import { escapeHtml } from "./markdown.js";
 import { elements } from "./ui.js";
 
 const STEAM_PRESENCE_REFRESH_MS = 60_000;
-let isRefreshingSteamPresence = false;
 let steamRefreshIntervalId = null;
+let hasInitializedSteamPresence = false;
+let steamPresenceRequest = null;
 
 function renderSteamPresenceLoading() {
   if (!elements.steamPresence) return;
@@ -16,12 +17,35 @@ function renderSteamPresenceLoading() {
     </div>`;
 }
 
-function renderSteamPresenceBadge(presence) {
+function isNonEmptyString(value) {
+  return typeof value === "string" && value.trim().length > 0;
+}
+
+function isPresenceObject(presence) {
+  return (
+    presence !== null &&
+    typeof presence === "object" &&
+    !Array.isArray(presence)
+  );
+}
+
+function hasUsablePresenceShape(presence) {
+  return (
+    typeof presence.isOnline === "boolean" &&
+    typeof presence.isInGame === "boolean"
+  );
+}
+
+function renderSteamPresenceUnavailable(detail) {
   if (!elements.steamPresence) return;
 
-  if (!presence || presence.ok === false) {
-    const detail = escapeHtml(presence?.error || "Steam privacy settings or the Web API may be hiding activity.");
-    elements.steamPresence.innerHTML = `
+  const safeDetail = escapeHtml(
+    isNonEmptyString(detail)
+      ? detail
+      : "Steam privacy settings or the Web API may be hiding activity."
+  );
+
+  elements.steamPresence.innerHTML = `
       <div class="steam-presence-line">
         <span class="steam-presence-pill" data-state="unavailable">
           <i class="fab fa-steam"></i>
@@ -29,15 +53,46 @@ function renderSteamPresenceBadge(presence) {
         </span>
         <span><strong>[STEAM]</strong> Status unavailable</span>
       </div>
-      <div class="text-muted small mt-1">${detail}</div>`;
+      <div class="text-muted small mt-1">${safeDetail}</div>`;
+}
+
+function renderSteamPresenceBadge(presence) {
+  if (!elements.steamPresence) return;
+
+  if (!isPresenceObject(presence)) {
+    renderSteamPresenceUnavailable();
     return;
   }
 
-  const actorName = escapeHtml(presence.personaName || "Steam profile");
-  const statusText = escapeHtml(presence.statusText || "Unknown");
+  if (presence.ok === false) {
+    renderSteamPresenceUnavailable(presence.error);
+    return;
+  }
 
-  if (presence.isInGame) {
-    const gameName = escapeHtml(presence.gameName || presence.gameId || "Unknown Game");
+  if (!hasUsablePresenceShape(presence)) {
+    renderSteamPresenceUnavailable("Steam presence response was malformed.");
+    return;
+  }
+
+  const actorName = escapeHtml(
+    isNonEmptyString(presence.personaName)
+      ? presence.personaName
+      : "Steam profile"
+  );
+  const statusText = escapeHtml(
+    isNonEmptyString(presence.statusText)
+      ? presence.statusText
+      : "Unknown"
+  );
+
+  if (presence.isInGame === true) {
+    const gameName = escapeHtml(
+      isNonEmptyString(presence.gameName)
+        ? presence.gameName
+        : isNonEmptyString(presence.gameId)
+          ? presence.gameId
+          : "Unknown Game"
+    );
 
     elements.steamPresence.innerHTML = `
       <div class="steam-presence-line">
@@ -51,8 +106,8 @@ function renderSteamPresenceBadge(presence) {
     return;
   }
 
-  const state = presence.isOnline ? "online" : "offline";
-  const summary = presence.isOnline
+  const state = presence.isOnline === true ? "online" : "offline";
+  const summary = presence.isOnline === true
     ? `${actorName} is online`
     : `${actorName} is offline`;
 
@@ -66,30 +121,100 @@ function renderSteamPresenceBadge(presence) {
     </div>`;
 }
 
-export async function refreshSteamPresence() {
-  if (isRefreshingSteamPresence || !elements.steamPresence) return;
+async function loadSteamPresence(options = {}) {
+  const { showLoading = false } = options;
 
-  isRefreshingSteamPresence = true;
+  if (elements.steamRefreshButton) {
+    elements.steamRefreshButton.disabled = true;
+  }
 
   try {
-    renderSteamPresenceLoading();
+    if (showLoading) {
+      renderSteamPresenceLoading();
+    }
+
     const presence = await getSteamPresence();
     renderSteamPresenceBadge(presence);
   } finally {
-    isRefreshingSteamPresence = false;
+    if (elements.steamRefreshButton) {
+      elements.steamRefreshButton.disabled = false;
+    }
   }
+}
+
+export function refreshSteamPresence(options = {}) {
+  if (!elements.steamPresence) {
+    return Promise.resolve();
+  }
+
+  if (steamPresenceRequest) {
+    return steamPresenceRequest;
+  }
+
+  steamPresenceRequest = loadSteamPresence(options)
+    .finally(() => {
+      steamPresenceRequest = null;
+    });
+
+  return steamPresenceRequest;
+}
+
+function startSteamPresencePolling() {
+  if (steamRefreshIntervalId !== null) {
+    return;
+  }
+
+  steamRefreshIntervalId = setInterval(() => {
+    void refreshSteamPresence({ showLoading: false }).catch(console.error);
+  }, STEAM_PRESENCE_REFRESH_MS);
+}
+
+function stopSteamPresencePolling() {
+  if (steamRefreshIntervalId === null) {
+    return;
+  }
+
+  clearInterval(steamRefreshIntervalId);
+  steamRefreshIntervalId = null;
+}
+
+async function refreshSteamAfterPageRestore() {
+  const previousRequest = steamPresenceRequest;
+
+  if (previousRequest) {
+    await previousRequest;
+  }
+
+  await refreshSteamPresence({ showLoading: false });
 }
 
 export function initSteamPresence() {
   if (!elements.steamPresence) return;
 
-  refreshSteamPresence().catch(console.error);
+  void refreshSteamPresence({ showLoading: true }).catch(console.error);
+  startSteamPresencePolling();
 
-  if (steamRefreshIntervalId !== null) {
-    clearInterval(steamRefreshIntervalId);
+  if (hasInitializedSteamPresence) {
+    return;
   }
 
-  steamRefreshIntervalId = setInterval(() => {
-    refreshSteamPresence().catch(console.error);
-  }, STEAM_PRESENCE_REFRESH_MS);
+  hasInitializedSteamPresence = true;
+
+  window.addEventListener("pagehide", () => {
+    stopSteamPresencePolling();
+  });
+
+  window.addEventListener("pageshow", (event) => {
+    if (!event.persisted) {
+      return;
+    }
+
+    startSteamPresencePolling();
+    void refreshSteamAfterPageRestore().catch((error) => {
+      console.error(
+        "Unable to refresh restored Steam presence.",
+        error
+      );
+    });
+  });
 }

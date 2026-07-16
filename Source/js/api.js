@@ -1,8 +1,9 @@
 import { API_CONFIG } from "./config.js";
+import { escapeHtml } from "./markdown.js";
 
-let isFetching = false;
+let systemDataRequest = null;
 
-async function fetchJsonWithTimeout(url, options = {}, timeoutMs = 5000) {
+async function fetchWithTimeout(url, options = {}, timeoutMs = 5000) {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
@@ -21,32 +22,57 @@ async function fetchJsonWithTimeout(url, options = {}, timeoutMs = 5000) {
 async function readProblemDetail(response, fallbackMessage) {
   try {
     const problemJson = await response.json();
-    return problemJson.title || problemJson.detail || fallbackMessage;
+    const title =
+      typeof problemJson?.title === "string"
+        ? problemJson.title.trim()
+        : "";
+    const detail =
+      typeof problemJson?.detail === "string"
+        ? problemJson.detail.trim()
+        : "";
+
+    return title || detail || fallbackMessage;
   } catch (_) {
     return fallbackMessage;
   }
 }
 
-export async function getSystemData() {
-  if (isFetching) return null;
-  isFetching = true;
-
+async function loadSystemData() {
   try {
-    const res = await fetchJsonWithTimeout(`${API_CONFIG.TELEMETRY}/api/system/usage`, {}, 5000);
+    const res = await fetchWithTimeout(
+      `${API_CONFIG.TELEMETRY}/api/system/usage`,
+      { cache: "no-store" },
+      5000
+    );
 
     if (!res.ok) throw new Error("Request failed");
     return await res.json();
   } catch (e) {
     console.error("Fetch failed or timed out:", e);
     return null;
-  } finally {
-    isFetching = false;
   }
+}
+
+export function getSystemData() {
+  if (systemDataRequest) {
+    return systemDataRequest;
+  }
+
+  systemDataRequest = loadSystemData()
+    .finally(() => {
+      systemDataRequest = null;
+    });
+
+  return systemDataRequest;
 }
 
 export async function getQwenCoderHealth() {
   try {
-    const response = await fetchJsonWithTimeout(`${API_CONFIG.QWENCODER}/api/code-review/health`, {}, 5000);
+    const response = await fetchWithTimeout(
+      `${API_CONFIG.QWENCODER}/api/code-review/health`,
+      { cache: "no-store" },
+      5000
+    );
 
     if (!response.ok) {
       const detail = await readProblemDetail(response, "QwenCoder health check failed.");
@@ -62,7 +88,11 @@ export async function getQwenCoderHealth() {
 
 export async function getWorkstationStatus() {
   try {
-    const response = await fetchJsonWithTimeout(`${API_CONFIG.TELEMETRY}/api/system/status`, {}, 5000);
+    const response = await fetchWithTimeout(
+      `${API_CONFIG.TELEMETRY}/api/system/status`,
+      { cache: "no-store" },
+      5000
+    );
 
     if (!response.ok) {
       const detail = await readProblemDetail(response, "Workstation refresh failed.");
@@ -78,7 +108,11 @@ export async function getWorkstationStatus() {
 
 export async function getSteamPresence() {
   try {
-    const response = await fetchJsonWithTimeout(`${API_CONFIG.TELEMETRY}/api/steam/presence`, {}, 5000);
+    const response = await fetchWithTimeout(
+      `${API_CONFIG.TELEMETRY}/api/steam/presence`,
+      { cache: "no-store" },
+      5000
+    );
 
     if (!response.ok) {
       const detail = await readProblemDetail(response, "Steam presence check failed.");
@@ -99,8 +133,9 @@ export async function submitQwenCoderReview(code, language = "auto") {
   }
 
   try {
-    const response = await fetchJsonWithTimeout(`${API_CONFIG.QWENCODER}/api/code-review`, {
+    const response = await fetchWithTimeout(`${API_CONFIG.QWENCODER}/api/code-review`, {
       method: "POST",
+      cache: "no-store",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ code: trimmedCode, language }),
     }, 90_000);
@@ -124,9 +159,9 @@ export async function getRecentGitActivity(limit = 5) {
   );
 
   try {
-    const response = await fetchJsonWithTimeout(
+    const response = await fetchWithTimeout(
       `${API_CONFIG.GIT_ACTIVITY}/api/github/activity?limit=${effectiveLimit}`,
-      {},
+      { cache: "no-store" },
       5000
     );
 
@@ -145,9 +180,17 @@ export async function getRecentGitActivity(limit = 5) {
 
     const activity = await response.json();
 
+    if (!Array.isArray(activity)) {
+      return {
+        ok: false,
+        error: "Git activity returned an invalid response.",
+        status: response.status,
+      };
+    }
+
     return {
       ok: true,
-      items: Array.isArray(activity) ? activity : [],
+      items: activity,
     };
   } catch (error) {
     console.error(
@@ -165,7 +208,7 @@ export async function getRecentGitActivity(limit = 5) {
 
 export async function getQuoteOfTheDay() {
   try {
-    const response = await fetchJsonWithTimeout(
+    const response = await fetchWithTimeout(
       `${API_CONFIG.QOTD}/api/quotes/today`,
       {},
       5000
@@ -199,6 +242,102 @@ export async function getQuoteOfTheDay() {
     return {
       ok: false,
       error: "Could not reach the Quote of the Day endpoint.",
+      status: 0,
+    };
+  }
+}
+
+export async function getBbsMessages() {
+  try {
+    const response = await fetchWithTimeout(
+      `${API_CONFIG.TELEMETRY}/api/bbs`,
+      { cache: "no-store" },
+      5000
+    );
+
+    if (!response.ok) {
+      const detail = await readProblemDetail(
+        response,
+        "BBS is currently offline."
+      );
+
+      return {
+        ok: false,
+        error: detail,
+        status: response.status,
+      };
+    }
+
+    const messages = await response.json();
+
+    if (!Array.isArray(messages)) {
+      return {
+        ok: false,
+        error: "BBS returned an invalid message list.",
+        status: response.status,
+      };
+    }
+
+    return {
+      ok: true,
+      value: messages,
+    };
+  } catch (error) {
+    console.error(
+      "BBS message fetch failed or timed out:",
+      error
+    );
+
+    return {
+      ok: false,
+      error: "Could not reach the BBS endpoint.",
+      status: 0,
+    };
+  }
+}
+
+export async function postBbsMessage(content) {
+  try {
+    const response = await fetchWithTimeout(
+      `${API_CONFIG.TELEMETRY}/api/bbs`,
+      {
+        method: "POST",
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          author: "Visitor",
+          content,
+        }),
+      },
+      8000
+    );
+
+    if (!response.ok) {
+      const detail = await readProblemDetail(
+        response,
+        "BBS message failed to send."
+      );
+
+      return {
+        ok: false,
+        error: detail,
+        status: response.status,
+      };
+    }
+
+    return {
+      ok: true,
+      value: null,
+    };
+  } catch (error) {
+    console.error(
+      "BBS message post failed or timed out:",
+      error
+    );
+
+    return {
+      ok: false,
+      error: "Could not reach the BBS endpoint.",
       status: 0,
     };
   }
@@ -243,24 +382,25 @@ function parseSteamIdentityInput(input) {
 
 /**
  * @param {string} input - Steam vanity URL, 17-digit Steam ID, or Steam profile URL
- * @param {object} ctx - Context object with .loading(), .error(), .print()
+ * @param {object} ctx - Context object with terminal rendering helpers.
  * @param {string} provider - Default "steam"
  */
 export async function fetchRandomGame(input, ctx, provider = "steam") {
   const identity = parseSteamIdentityInput(input);
   const query = new URLSearchParams(identity);
+  const safeProvider = escapeHtml(provider);
 
-  ctx.loading(`Connecting to ${provider}...`);
+  ctx.loadingText(`Connecting to ${provider}...`);
 
   try {
-    const response = await fetchJsonWithTimeout(
+    const response = await fetchWithTimeout(
       `${API_CONFIG.STEAM}/api/${provider}/random-game/details?${query.toString()}`,
-      {},
+      { cache: "no-store" },
       10000
     );
 
     if (response.status === 429) {
-      ctx.error('<span class="text-danger">[ERROR] 429: Too many requests. Please slow down and try again in a few seconds.</span>');
+      ctx.errorText("429: Too many requests. Please slow down and try again in a few seconds.");
       return;
     }
 
@@ -270,32 +410,40 @@ export async function fetchRandomGame(input, ctx, provider = "steam") {
         "Could not resolve account or fetch games."
       );
 
-      ctx.error(`<span class="text-danger">[ERROR] ${errorDetail}</span>`);
+      ctx.errorText(errorDetail);
       return;
     }
 
     const data = await response.json();
-    const gameName = data?.name;
-    const appId = data?.id;
+    const gameName =
+      typeof data?.name === "string"
+        ? data.name
+        : "";
+    const appId =
+      typeof data?.id === "string" ||
+        typeof data?.id === "number"
+        ? String(data.id)
+        : "unknown";
     const playtimeHours =
       Number.isFinite(data?.playtimeForever)
         ? (data.playtimeForever / 60).toFixed(1)
         : null;
 
     if (!gameName) {
-      ctx.error('<span class="text-danger">[ERROR] Account has no games or the profile/library is private.</span>');
+      ctx.errorText("Account has no games or the profile/library is private.");
       return;
     }
 
-    ctx.print(
-      `[SUCCESS] Game Selected: <strong>${gameName}</strong>` +
-      ` <br /><small>AppID: ${appId}</small>` +
+    ctx.printTrustedHtml(
+      `[SUCCESS] Game Selected: <strong>${escapeHtml(gameName)}</strong>` +
+      ` <br /><small>AppID: ${escapeHtml(appId)}</small>` +
+      ` <br /><small>Provider: ${safeProvider}</small>` +
       (playtimeHours !== null
         ? ` <br /><small>Playtime: ${playtimeHours} hours</small>`
         : "")
     );
   } catch (err) {
     console.error("Fetch Error:", err);
-    ctx.error('<span class="text-danger">[ERROR] Network error: Could not reach the API server.</span>');
+    ctx.errorText("Network error: Could not reach the API server.");
   }
 }
