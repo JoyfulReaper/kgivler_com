@@ -1,3 +1,5 @@
+import { escapeHtml } from "./markdown.js";
+
 export const elements = {
   input: document.getElementById('terminalCommandInput'),
   output: document.getElementById('terminal-output'),
@@ -21,29 +23,65 @@ export const elements = {
   steamRefreshButton: document.getElementById('btn-steam-refresh')
 };
 
-export const Terminal = {
-  print: (html) => { 
-    if (elements.output) elements.output.innerHTML = html; 
-  },
-  error: (msg) => { 
-    Terminal.print(`<span class="text-danger">[ERROR] ${msg}</span>`); 
-  },
-  loading: (msg) => { 
-    Terminal.print(`<span class="text-warning"><i class="fas fa-circle-notch fa-spin me-2"></i>${msg}</span>`); 
-  },
-  clear: () => { 
-    if (elements.output) elements.output.innerHTML = ""; 
-  }
-};
+export function createTerminalContext(element) {
+  return {
+    printText(value) {
+      if (!element) return;
+      element.textContent = String(value ?? "");
+    },
+    printTrustedHtml(html) {
+      if (!element) return;
+      element.innerHTML = html;
+    },
+    errorText(message) {
+      if (!element) return;
+
+      const span = document.createElement("span");
+      span.className = "text-danger";
+      span.textContent = `[ERROR] ${message}`;
+      element.replaceChildren(span);
+    },
+    loadingText(message) {
+      if (!element) return;
+
+      element.innerHTML =
+        `<span class="text-warning"><i class="fas fa-circle-notch fa-spin me-2"></i>${escapeHtml(message)}</span>`;
+    },
+    clear() {
+      element?.replaceChildren();
+    },
+  };
+}
+
+export const Terminal =
+  createTerminalContext(elements.output);
 
 // --- PRIVATE HELPERS ---
 const formatGpuData = (gpu) => {
-  if (gpu.name) return `${gpu.name} | Load: ${gpu.loadPercentage}% | VRAM: ${gpu.vramUsedMB}/${gpu.vramTotalMB}MB`;
-  return gpu.error || gpu || "Unknown";
+  if (!gpu || typeof gpu !== "object") {
+    return typeof gpu === "string"
+      ? gpu
+      : "Unknown";
+  }
+
+  if (gpu.name) {
+    return `${gpu.name} | Load: ${gpu.loadPercentage ?? "?"}% | VRAM: ${gpu.vramUsedMB ?? "?"}/${gpu.vramTotalMB ?? "?"}MB`;
+  }
+
+  return gpu.error || "Unknown";
 };
 
 const formatStorage = (storage) => {
-  return storage.toString().replace(/[\d.]+/, match => parseFloat(match).toFixed(2));
+  if (storage === null || storage === undefined) {
+    return "Unknown";
+  }
+
+  return String(storage).replace(/[\d.]+/, match => {
+    const parsed = parseFloat(match);
+    return Number.isFinite(parsed)
+      ? parsed.toFixed(2)
+      : match;
+  });
 };
 
 const lastTelemetryCounters = {
@@ -55,7 +93,10 @@ export function initHostTelemetry(data) {
   if (!elements.telemetry) return;
 
   if (!data) {
-    elements.telemetry.innerHTML = `<div class="text-danger">[OFFLINE]</div>`;
+    const offline = document.createElement("div");
+    offline.className = "text-danger";
+    offline.textContent = "[OFFLINE]";
+    elements.telemetry.replaceChildren(offline);
     return;
   }
 
@@ -71,30 +112,54 @@ export function initHostTelemetry(data) {
 
   const totalRequestsHandled = data.totalRequestsHandled ?? lastTelemetryCounters.totalRequestsHandled;
   const uniqueVisitors = data.uniqueVisitors ?? lastTelemetryCounters.uniqueVisitors;
-  const hitCounterText =
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "row g-0 g-md-3 font-monospace";
+  wrapper.style.color = "#e2e8f0";
+  wrapper.style.fontSize = "0.9rem";
+
+  const left = document.createElement("div");
+  left.className = "col-md-6";
+  const right = document.createElement("div");
+  right.className = "col-md-6";
+
+  const addMetric = (parent, iconClass, label, value, suffix = "") => {
+    const row = document.createElement("div");
+    const labelSpan = document.createElement("span");
+    labelSpan.style.color = "#38bdf8";
+    labelSpan.innerHTML = `<i class="${iconClass} me-2"></i>${escapeHtml(label)}:`;
+
+    row.append(labelSpan, ` ${String(value ?? "Unknown")}${suffix}`);
+    parent.append(row);
+  };
+
+  addMetric(left, "fab fa-windows", "Host System", `${data.os ?? "Unknown"} (${data.architecture ?? "unknown"})`);
+  addMetric(left, "fas fa-microchip", "CPU Load", data.cpuUsage ?? "Unknown", ` (${data.cpuCores ?? "?"} Cores)`);
+  addMetric(left, "fas fa-memory", "System RAM", data.ram ?? "Unknown");
+  addMetric(left, "fas fa-desktop", "Graphics", formatGpuData(data.gpu));
+  addMetric(right, "fas fa-clock", "Node Uptime", data.uptime ?? "Unknown");
+  addMetric(right, "fas fa-database", "Root Volume", formatStorage(data.storage));
+  addMetric(right, "fas fa-tasks", "Kernel Tasks", `${data.processCount ?? "Unknown"} running PIDs`);
+  addMetric(right, "fas fa-cloud-sun", "Environment", data.weather ?? "Unknown");
+
+  const footer = document.createElement("div");
+  footer.className = "col-12 mt-2 pt-2 border-top d-flex flex-column flex-sm-row justify-content-between gap-2";
+  footer.style.borderColor = "#222226";
+  footer.style.fontSize = "0.8rem";
+  footer.style.color = "#888892";
+
+  const stardate = document.createElement("span");
+  stardate.textContent = `STARDATE: ${data.stardate ?? "Unknown"}`;
+  const runtime = document.createElement("span");
+  runtime.textContent = `RUNTIME: ${data.framework ?? "Unknown"}`;
+  const hits = document.createElement("span");
+  hits.textContent =
     totalRequestsHandled !== null && totalRequestsHandled !== undefined &&
     uniqueVisitors !== null && uniqueVisitors !== undefined
-      ? `<span>${totalRequestsHandled} Hits / ${uniqueVisitors} Unique</span>`
-      : `<span>HIT COUNTER: unavailable</span>`;
+      ? `${totalRequestsHandled} Hits / ${uniqueVisitors} Unique`
+      : "HIT COUNTER: unavailable";
 
-  elements.telemetry.innerHTML = `
-    <div class="row g-0 g-md-3 font-monospace" style="color: #e2e8f0; font-size: 0.9rem;">
-        <div class="col-md-6">
-            <div><span style="color: #38bdf8;"><i class="fab fa-windows me-2"></i>Host System:</span> ${data.os} (${data.architecture})</div>
-            <div><span style="color: #38bdf8;"><i class="fas fa-microchip me-2"></i>CPU Load:</span> ${data.cpuUsage} <small class="text-muted">(${data.cpuCores} Cores)</small></div>
-            <div><span style="color: #38bdf8;"><i class="fas fa-memory me-2"></i>System RAM:</span> ${data.ram}</div>
-            <div><span style="color: #38bdf8;"><i class="fas fa-desktop me-2"></i>Graphics:</span> ${formatGpuData(data.gpu)}</div>
-        </div>
-        <div class="col-md-6">
-            <div><span style="color: #38bdf8;"><i class="fas fa-clock me-2"></i>Node Uptime:</span> ${data.uptime}</div>
-            <div><span style="color: #38bdf8;"><i class="fas fa-database me-2"></i>Root Volume:</span> ${formatStorage(data.storage)}</div>
-            <div><span style="color: #38bdf8;"><i class="fas fa-tasks me-2"></i>Kernel Tasks:</span> ${data.processCount} running PIDs</div>
-            <div><span style="color: #38bdf8;"><i class="fas fa-cloud-sun me-2"></i>Environment:</span> ${data.weather}</div>
-        </div>
-        <div class="col-12 mt-2 pt-2 border-top d-flex flex-column flex-sm-row justify-content-between gap-2" style="border-color: #222226 !important; font-size: 0.8rem; color: #888892;">
-            <span>STARDATE: ${data.stardate}</span>
-            <span>RUNTIME: ${data.framework}</span>
-            ${hitCounterText}
-        </div>
-    </div>`;
+  footer.append(stardate, runtime, hits);
+  wrapper.append(left, right, footer);
+  elements.telemetry.replaceChildren(wrapper);
 }

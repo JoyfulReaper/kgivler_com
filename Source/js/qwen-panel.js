@@ -1,21 +1,6 @@
-import { elements } from "./ui.js";
+import { elements, createTerminalContext } from "./ui.js";
 import { escapeHtml, renderMarkdown } from "./markdown.js";
 import { getQwenCoderHealth, submitQwenCoderReview } from "./api.js";
-
-const createTerminalContext = (element) => ({
-  print: (html) => {
-    element.innerHTML = html;
-  },
-  error: (msg) => {
-    element.innerHTML = `<span class="text-danger">${msg}</span>`;
-  },
-  loading: (msg) => {
-    element.innerHTML = `<span class="text-warning">${msg}</span>`;
-  },
-  clear: () => {
-    element.innerHTML = "";
-  },
-});
 
 const qwenReviewTerminal = elements.qwenReviewOutput
   ? createTerminalContext(elements.qwenReviewOutput)
@@ -67,7 +52,7 @@ async function refreshQwenHealth() {
   if (!data || data.ok === false) {
     setQwenHealthBadge("offline", "Offline");
     if (elements.qwenReviewOutput && qwenReviewTerminal) {
-      qwenReviewTerminal.print(`<span class="text-danger">QwenCoder health check failed: ${escapeHtml(data?.error || "unknown error")}. Kyle is probably playing a video game or something...</span>`);
+      qwenReviewTerminal.printTrustedHtml(`<span class="text-danger">QwenCoder health check failed: ${escapeHtml(data?.error || "unknown error")}. Kyle is probably playing a video game or something...</span>`);
     }
     return data;
   }
@@ -85,11 +70,11 @@ async function runQwenReview() {
   const language = elements.qwenLanguage?.value || "auto";
 
   if (!code.trim()) {
-    qwenReviewTerminal.error("Paste some code first.");
+    qwenReviewTerminal.errorText("Paste some code first.");
     return;
   }
 
-  qwenReviewTerminal.loading("Sending code to QwenCoder... Please wait, this can take a long time...");
+  qwenReviewTerminal.loadingText("Sending code to QwenCoder... Please wait, this can take a long time...");
   if (elements.qwenReviewButton) elements.qwenReviewButton.disabled = true;
   if (elements.qwenHealthButton) elements.qwenHealthButton.disabled = true;
 
@@ -97,18 +82,18 @@ async function runQwenReview() {
     const result = await submitQwenCoderReview(code, language);
 
     if (!result || result.ok === false) {
-      qwenReviewTerminal.error(result?.error || "Code review failed.");
+      qwenReviewTerminal.errorText(result?.error || "Code review failed.");
       return;
     }
 
     const review = result.review || result.Review || "";
 
     if (!review.trim()) {
-      qwenReviewTerminal.error("QwenCoder returned an empty review.");
+      qwenReviewTerminal.errorText("QwenCoder returned an empty review.");
       return;
     }
 
-    qwenReviewTerminal.print(renderQwenReview(review));
+    qwenReviewTerminal.printTrustedHtml(renderQwenReview(review));
   } finally {
     if (elements.qwenReviewButton) elements.qwenReviewButton.disabled = false;
     if (elements.qwenHealthButton) elements.qwenHealthButton.disabled = false;

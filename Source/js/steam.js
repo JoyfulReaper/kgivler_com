@@ -5,6 +5,7 @@ import { elements } from "./ui.js";
 const STEAM_PRESENCE_REFRESH_MS = 60_000;
 let isRefreshingSteamPresence = false;
 let steamRefreshIntervalId = null;
+let hasInitializedSteamPresence = false;
 
 function renderSteamPresenceLoading() {
   if (!elements.steamPresence) return;
@@ -66,30 +67,73 @@ function renderSteamPresenceBadge(presence) {
     </div>`;
 }
 
-export async function refreshSteamPresence() {
+export async function refreshSteamPresence(options = {}) {
   if (isRefreshingSteamPresence || !elements.steamPresence) return;
 
+  const { showLoading = false } = options;
   isRefreshingSteamPresence = true;
 
+  if (elements.steamRefreshButton) {
+    elements.steamRefreshButton.disabled = true;
+  }
+
   try {
-    renderSteamPresenceLoading();
+    if (showLoading) {
+      renderSteamPresenceLoading();
+    }
+
     const presence = await getSteamPresence();
     renderSteamPresenceBadge(presence);
   } finally {
     isRefreshingSteamPresence = false;
+
+    if (elements.steamRefreshButton) {
+      elements.steamRefreshButton.disabled = false;
+    }
   }
+}
+
+function startSteamPresencePolling() {
+  if (steamRefreshIntervalId !== null) {
+    return;
+  }
+
+  steamRefreshIntervalId = setInterval(() => {
+    refreshSteamPresence({ showLoading: false }).catch(console.error);
+  }, STEAM_PRESENCE_REFRESH_MS);
+}
+
+function stopSteamPresencePolling() {
+  if (steamRefreshIntervalId === null) {
+    return;
+  }
+
+  clearInterval(steamRefreshIntervalId);
+  steamRefreshIntervalId = null;
 }
 
 export function initSteamPresence() {
   if (!elements.steamPresence) return;
 
-  refreshSteamPresence().catch(console.error);
+  refreshSteamPresence({ showLoading: true }).catch(console.error);
+  startSteamPresencePolling();
 
-  if (steamRefreshIntervalId !== null) {
-    clearInterval(steamRefreshIntervalId);
+  if (hasInitializedSteamPresence) {
+    return;
   }
 
-  steamRefreshIntervalId = setInterval(() => {
-    refreshSteamPresence().catch(console.error);
-  }, STEAM_PRESENCE_REFRESH_MS);
+  hasInitializedSteamPresence = true;
+
+  window.addEventListener("pagehide", () => {
+    stopSteamPresencePolling();
+  });
+
+  window.addEventListener("pageshow", (event) => {
+    if (!event.persisted) {
+      return;
+    }
+
+    startSteamPresencePolling();
+    refreshSteamPresence({ showLoading: false }).catch(console.error);
+  });
 }

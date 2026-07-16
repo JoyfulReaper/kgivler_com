@@ -1,32 +1,60 @@
-import { PLAYLIST, API_CONFIG } from "./config.js";
-import { getSystemData, fetchRandomGame } from "./api.js";
+import { PLAYLIST } from "./config.js";
+import { getSystemData, fetchRandomGame, getBbsMessages, postBbsMessage } from "./api.js";
 import { FileSystem } from "./files.js";
 import { initHostTelemetry } from "./ui.js";
+import { escapeHtml } from "./markdown.js";
+
+const asText = (value, fallback = "Unknown") =>
+  value === null || value === undefined
+    ? fallback
+    : String(value);
+
+const safe = (value, fallback = "Unknown") =>
+  escapeHtml(asText(value, fallback));
+
+const getCpuNumber = (data) => {
+  const raw = asText(data?.cpuUsage, "0");
+  const parsed = parseFloat(raw.replace("%", "").trim());
+  return Number.isFinite(parsed)
+    ? parsed
+    : 0;
+};
+
+function formatBbsTimestamp(timestamp) {
+  const date = new Date(timestamp);
+
+  if (Number.isNaN(date.getTime())) {
+    return "Unknown date";
+  }
+
+  return date.toLocaleDateString();
+}
 
 // Private helpers
 function runPlay(args, ctx) {
   const track = PLAYLIST[Math.floor(Math.random() * PLAYLIST.length)];
 
-  ctx.print(`
+  ctx.printTrustedHtml(`
         <div style="color: #38bdf8;">
-            <i class="fas fa-volume-up me-2 animate-pulse"></i>Now playing: <strong>${track.band}</strong> <br/>
-            <small class="text-muted">Genre: ${track.genre} | ${track.meta}</small>
+            <i class="fas fa-volume-up me-2 animate-pulse"></i>Now playing: <strong>${safe(track.band)}</strong> <br/>
+            <small class="text-muted">Genre: ${safe(track.genre)} | ${safe(track.meta)}</small>
         </div>
     `);
 }
 
 async function runTop(args, ctx) {
-  ctx.loading("Sampling kernel...");
+  ctx.loadingText("Sampling kernel...");
   const data = await getSystemData();
-  if (!data) return ctx.error("[ERROR] Unable to read procfs.");
+  if (!data) return ctx.errorText("Unable to read procfs.");
 
-  const cpuNum = data.cpuUsage.replace("%", "").trim();
-  ctx.print(`
+  const cpuNum = getCpuNumber(data).toFixed(1);
+  const processCount = Math.max(Number(data.processCount) || 1, 1);
+  ctx.printTrustedHtml(`
 <pre style="color: #e2e8f0; font-size: 0.8rem; line-height: 1.2; margin: 0; overflow-x: hidden;">
-top - ${new Date().toLocaleTimeString("en-US", { hour12: false })} up ${data.uptime},  1 user,  load average: ${cpuNum}, 0.04, 0.01
-Tasks: <span style="color: #ffffff;">${data.processCount}</span> total,   <span style="color: #ffffff;">1</span> running, <span style="color: #ffffff;">${data.processCount - 1}</span> sleeping,   0 stopped,   0 zombie
+top - ${new Date().toLocaleTimeString("en-US", { hour12: false })} up ${safe(data.uptime)},  1 user,  load average: ${safe(cpuNum)}, 0.04, 0.01
+Tasks: <span style="color: #ffffff;">${safe(processCount)}</span> total,   <span style="color: #ffffff;">1</span> running, <span style="color: #ffffff;">${safe(processCount - 1)}</span> sleeping,   0 stopped,   0 zombie
 %Cpu(s):  <span style="color: #39ff14;">${cpuNum}</span> us,  1.2 sy,  0.0 ni, 95.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
-MiB Mem : <span style="color: #ffffff;">${data.ram}</span>
+MiB Mem : <span style="color: #ffffff;">${safe(data.ram)}</span>
 MiB Swap:    0.0 total,    0.0 free,    0.0 used. 
 
   PID USER       PR  NI    VIRT    RES    SHR S  %CPU  %MEM    TIME+ COMMAND
@@ -39,198 +67,198 @@ MiB Swap:    0.0 total,    0.0 free,    0.0 used.
 }
 
 async function runStatus(args, ctx) {
-  ctx.loading("Polling host engine...");
+  ctx.loadingText("Polling host engine...");
   const data = await getSystemData();
-  if (!data) return ctx.error("[ERROR] Command execution faulted.");
+  if (!data) return ctx.errorText("Command execution faulted.");
 
-  const formattedStorage = data.storage.toString().replace(/[\d.]+/, (match) => parseFloat(match).toFixed(2));
-  const gpuText = data.gpu.name ? `${data.gpu.name} (Load: ${data.gpu.loadPercentage}%, VRAM: ${data.gpu.vramUsedMB}MB / ${data.gpu.vramTotalMB}MB)` : data.gpu.error || data.gpu;
+  const formattedStorage = asText(data.storage).replace(/[\d.]+/, (match) => {
+    const parsed = parseFloat(match);
+    return Number.isFinite(parsed)
+      ? parsed.toFixed(2)
+      : match;
+  });
+  const gpuText =
+    data.gpu && typeof data.gpu === "object" && data.gpu.name
+      ? `${data.gpu.name} (Load: ${data.gpu.loadPercentage ?? "?"}%, VRAM: ${data.gpu.vramUsedMB ?? "?"}MB / ${data.gpu.vramTotalMB ?? "?"}MB)`
+      : data.gpu?.error || data.gpu || "Unknown";
 
-  ctx.print(`
+  ctx.printTrustedHtml(`
     <pre style="color: #38bdf8; font-family: monospace; line-height: 1.4; margin: 0;">
     <span style="color: #39ff14; font-weight: bold;">kyle@kgivler</span>
     ------------
-    <span style="color: #ffffff;">OS:</span>        ${data.os}
-    <span style="color: #ffffff;">Arch:</span>      ${data.architecture}
-    <span style="color: #ffffff;">Runtime:</span>   ${data.framework}
-    <span style="color: #ffffff;">Uptime:</span>    ${data.uptime}
-    <span style="color: #ffffff;">Host CPU:</span>  ${data.cpuUsage}
-    <span style="color: #ffffff;">Tasks:</span>     ${data.processCount}
-    <span style="color: #ffffff;">RAM:</span>       ${data.ram}
-    <span style="color: #ffffff;">GPU:</span>       ${gpuText}
-    <span style="color: #ffffff;">Storage:</span>   ${data.storage}
-    <span style="color: #ffffff;">Stardate:</span>  ${data.stardate}
-    <span style="color: #ffffff;">Weather:</span>   ${data.weather}
-    <span style="color: #ffffff;">Total Hits:</span>   ${data.totalRequestsHandled}
+    <span style="color: #ffffff;">OS:</span>        ${safe(data.os)}
+    <span style="color: #ffffff;">Arch:</span>      ${safe(data.architecture)}
+    <span style="color: #ffffff;">Runtime:</span>   ${safe(data.framework)}
+    <span style="color: #ffffff;">Uptime:</span>    ${safe(data.uptime)}
+    <span style="color: #ffffff;">Host CPU:</span>  ${safe(data.cpuUsage)}
+    <span style="color: #ffffff;">Tasks:</span>     ${safe(data.processCount)}
+    <span style="color: #ffffff;">RAM:</span>       ${safe(data.ram)}
+    <span style="color: #ffffff;">GPU:</span>       ${safe(gpuText)}
+    <span style="color: #ffffff;">Storage:</span>   ${safe(formattedStorage)}
+    <span style="color: #ffffff;">Stardate:</span>  ${safe(data.stardate)}
+    <span style="color: #ffffff;">Weather:</span>   ${safe(data.weather)}
+    <span style="color: #ffffff;">Total Hits:</span>   ${safe(data.totalRequestsHandled)}
     </pre>`);
   initHostTelemetry(data);
 }
 
 async function runNeofetch(args, ctx) {
-  ctx.loading("Gathering system info...");
+  ctx.loadingText("Gathering system info...");
   const data = await getSystemData();
-  if (!data) return ctx.error("[ERROR] Could not retrieve system data. Host unreachable.");
+  if (!data) return ctx.errorText("Could not retrieve system data. Host unreachable.");
 
-  const gpuName = data.gpu.name ? data.gpu.name : data.gpu.error || "Unknown GPU";
-  ctx.print(`<pre style="color: #39ff14; font-size: 0.8rem; line-height: 1.2; margin: 0;">
+  const gpuName =
+    data.gpu && typeof data.gpu === "object" && data.gpu.name
+      ? data.gpu.name
+      : data.gpu?.error || "Unknown GPU";
+  ctx.printTrustedHtml(`<pre style="color: #39ff14; font-size: 0.8rem; line-height: 1.2; margin: 0;">
       /\\        <span style="color: #38bdf8; font-weight: bold;">kyle@kgivler</span>
      /  \\       ------------
-    /____\\      <span style="color: #ffffff;">OS:</span>     ${data.os} (${data.architecture})
-   /      \\     <span style="color: #ffffff;">Kernel:</span> ${data.framework}
-  /________\\    <span style="color: #ffffff;">Uptime:</span> ${data.uptime}
- /          \\   <span style="color: #ffffff;">CPU:</span>    ${data.cpuUsage}
-/____________\\  <span style="color: #ffffff;">RAM:</span>    ${data.ram}
-                <span style="color: #ffffff;">GPU:</span>    ${gpuName}
+    /____\\      <span style="color: #ffffff;">OS:</span>     ${safe(data.os)} (${safe(data.architecture)})
+   /      \\     <span style="color: #ffffff;">Kernel:</span> ${safe(data.framework)}
+  /________\\    <span style="color: #ffffff;">Uptime:</span> ${safe(data.uptime)}
+ /          \\   <span style="color: #ffffff;">CPU:</span>    ${safe(data.cpuUsage)}
+/____________\\  <span style="color: #ffffff;">RAM:</span>    ${safe(data.ram)}
+                <span style="color: #ffffff;">GPU:</span>    ${safe(gpuName)}
 </pre>`);
   initHostTelemetry(data);
 }
 
 async function runDate(args, ctx) {
-  ctx.loading("Caluclating stardate...");
+  ctx.loadingText("Caluclating stardate...");
   const data = await getSystemData();
   // Fallback to local date if API is down
   const dateStr = data ? data.stardate : new Date().toString();
-  ctx.print(`${new Date().toString()}<br/><span style="color: #888892;">Stardate: ${dateStr}</span>`);
+  ctx.printTrustedHtml(`${escapeHtml(new Date().toString())}<br/><span style="color: #888892;">Stardate: ${safe(dateStr)}</span>`);
 }
 
 async function runUname(args, ctx) {
-  ctx.loading("Looking up name...");
+  ctx.loadingText("Looking up name...");
   if (args.includes("-a")) {
     const data = await getSystemData();
     if (data) {
-      ctx.print(`${data.os} kgivler-web ${data.framework} ${data.architecture} GNU/Linux`);
+      ctx.printText(`${asText(data.os)} kgivler-web ${asText(data.framework)} ${asText(data.architecture)} GNU/Linux`);
     } else {
-      ctx.print(`Linux kgivler-web x86_64 GNU/Linux`);
+      ctx.printText("Linux kgivler-web x86_64 GNU/Linux");
     }
   } else {
-    ctx.print("Linux");
+    ctx.printText("Linux");
   }
 }
 
 async function runUptime(args, ctx) {
-  ctx.loading("Querying system timers...");
+  ctx.loadingText("Querying system timers...");
   const data = await getSystemData();
-  if (!data) return ctx.error("[ERROR] Unable to fetch system initialization timers.");
+  if (!data) return ctx.errorText("Unable to fetch system initialization timers.");
 
   // Format current local time as HH:MM:SS
   const currentTime = new Date().toLocaleTimeString("en-US", { hour12: false });
 
   // Extract the raw CPU percentage to simulate a load average
-  const cpuNum = data.cpuUsage.replace("%", "").trim();
+  const cpuNum = String(getCpuNumber(data));
   const loadAvg = (parseFloat(cpuNum) / 100).toFixed(2);
 
   // Standard Linux uptime format:
   // 16:45:22 up 5 days, 22:34,  1 user,  load average: 0.08, 0.04, 0.01
-  ctx.print(`${currentTime} up ${data.uptime},  1 user,  load average: ${loadAvg}, 0.05, 0.01`);
+  ctx.printText(`${currentTime} up ${asText(data.uptime)},  1 user,  load average: ${loadAvg}, 0.05, 0.01`);
 }
 
-const escapeHtml = (str) => {
-  if (!str) return "";
-  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-};
-
 async function runBbs(args, ctx) {
-  ctx.print("Dialing KGIVLER BBS node...");
+  ctx.printText("Dialing KGIVLER BBS node...");
   await new Promise((r) => setTimeout(r, 800));
 
   const subcommand = args[0]?.toLowerCase();
 
   // --- Show Command ---
   if (subcommand === "show") {
-    try {
-      const response = await fetch(`${API_CONFIG.TELEMETRY}/api/bbs`);
+    const result = await getBbsMessages();
 
-      if (!response.ok) throw new Error("Busy");
+    if (!result.ok) {
+      ctx.printTrustedHtml(`<pre style="color: #ff3131; font-family: monospace; margin: 0;">
+[!] CONNECT 2400 / ARQ
+[!] ERROR: NO CARRIER
+[!] BUSY TONE... (${escapeHtml(result.error || "BBS currently offline")})</pre>`);
+      return;
+    }
 
-      const messages = await response.json();
+    const messages = result.value;
 
-      if (messages.length === 0) {
-        return ctx.print(`<pre style="color: #888;">[BOARD EMPTY: No messages found]</pre>`);
-      }
+    if (messages.length === 0) {
+      return ctx.printTrustedHtml(`<pre style="color: #888;">[BOARD EMPTY: No messages found]</pre>`);
+    }
 
-      let output = `<pre style="color: #38bdf8; font-family: monospace; line-height: 1.4; margin: 0;">
+    let output = `<pre style="color: #38bdf8; font-family: monospace; line-height: 1.4; margin: 0;">
 __________________________________________
 |                                          |
 |         --- KGIVLER BBS v1.0 ---         |
 |__________________________________________|
 `;
-      messages.forEach((m) => {
-        const date = new Date(m.timestamp).toLocaleDateString();
-        const safeAuthor = escapeHtml(m.author);
-        const safeContent = escapeHtml(m.content);
-        output += `[${date}] <strong>${safeAuthor}</strong>: ${safeContent}\n`;
-      });
-      output += `</pre>`;
+    messages.forEach((m) => {
+      const date = formatBbsTimestamp(m?.timestamp);
+      const safeAuthor = escapeHtml(m?.author || "Visitor");
+      const safeContent = escapeHtml(m?.content || "");
+      output += `[${escapeHtml(date)}] <strong>${safeAuthor}</strong>: ${safeContent}\n`;
+    });
+    output += `</pre>`;
 
-      ctx.print(output);
-      return;
-    } catch (err) {
-      ctx.error(`<pre style="color: #ff3131; font-family: monospace; margin: 0;">
-[!] CONNECT 2400 / ARQ
-[!] ERROR: NO CARRIER
-[!] BUSY TONE... (BBS currently offline)</pre>`);
-      return;
-    }
+    ctx.printTrustedHtml(output);
+    return;
   }
 
   // --- Post Command ---
   if (subcommand === "message") {
     if (args.length < 2) {
-      ctx.print('<pre style="color: #e2e8f0; font-family: monospace; margin: 0;">Usage: bbs message [message]</pre>');
+      ctx.printTrustedHtml('<pre style="color: #e2e8f0; font-family: monospace; margin: 0;">Usage: bbs message [message]</pre>');
       return;
     }
 
-    try {
-      const content = args.slice(1).join(" ");
-      const response = await fetch(`${API_CONFIG.TELEMETRY}/api/bbs`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ author: "Visitor", content: content }),
-      });
+    const content = args.slice(1).join(" ");
+    const result = await postBbsMessage(content);
 
-      if (response.ok) {
-        ctx.print('<pre style="color: #39ff14; font-family: monospace; margin: 0;">Message transmitted and acknowledged.</pre>');
-      } else {
-        throw new Error("Post Failed");
-      }
-    } catch (e) {
-      ctx.error(`<pre style="color: #ff3131; font-family: monospace; margin: 0;">[!] CONNECTION LOST. Message failed to send.</pre>`);
+    if (result.ok) {
+      ctx.printTrustedHtml('<pre style="color: #39ff14; font-family: monospace; margin: 0;">Message transmitted and acknowledged.</pre>');
+    } else {
+      ctx.printTrustedHtml(`<pre style="color: #ff3131; font-family: monospace; margin: 0;">[!] CONNECTION LOST. ${escapeHtml(result.error || "Message failed to send.")}</pre>`);
     }
     return;
   }
 
-  ctx.print('<pre style="color: #e2e8f0; font-family: monospace; margin: 0;">Usage: bbs show | bbs message [message]</pre>');
+  ctx.printTrustedHtml('<pre style="color: #e2e8f0; font-family: monospace; margin: 0;">Usage: bbs show | bbs message [message]</pre>');
 }
 
 // --- PUBLIC EXPORT ---
 export const Commands = {
-  help: (_, ctx) => ctx.print(`[INFO] Available commands: random [steamId|vanityUrl|profileUrl], get-random-game [steamId|vanityUrl|profileUrl], clear, cowsay, stats, ls, pwd, echo, cat, bbs, music, neofetch, sudo, uname, top, whoami, date, history`),
+  help: (_, ctx) => ctx.printText(`[INFO] Available commands: random [steamId|vanityUrl|profileUrl], get-random-game [steamId|vanityUrl|profileUrl], clear, cowsay, stats, ls, pwd, echo, cat, bbs, music, neofetch, sudo, uname, top, whoami, date, history`),
   clear: (_, ctx) => {
     ctx.clear();
   },
-  pwd: (_, ctx) => ctx.print("/home/kyle/workspace/kgivler.com"),
-  whoami: (_, ctx) => ctx.print("kyle"),
+  pwd: (_, ctx) => ctx.printText("/home/kyle/workspace/kgivler.com"),
+  whoami: (_, ctx) => ctx.printText("kyle"),
   bbs: (args, ctx) => runBbs(args, ctx),
-  echo: (args, ctx) => ctx.print(escapeHtml(args.join(" "))),
+  echo: (args, ctx) => ctx.printText(args.join(" ")),
 
   ls: (_, ctx) => {
     const files = Object.keys(FileSystem)
       .map((f) => `-rw-r--r-- ${f}`)
       .join("<br>");
-    ctx.print(`<div style="color: #e2e8f0;">drwxr-xr-x ./<br>drwxr-xr-x ../<br>${files}</div>`);
+    ctx.printTrustedHtml(`<div style="color: #e2e8f0;">drwxr-xr-x ./<br>drwxr-xr-x ../<br>${files}</div>`);
   },
 
   cat: (args, ctx) => {
     if (!args || args.length === 0) {
-      return ctx.error("cat: missing file operand");
+      return ctx.errorText("cat: missing file operand");
     }
 
-    const file = FileSystem[args[0]];
+    const filename = args[0];
+    const file =
+      Object.hasOwn(FileSystem, filename)
+        ? FileSystem[filename]
+        : null;
 
     if (file) {
-      ctx.print(file);
+      ctx.printTrustedHtml(file);
     } else {
-      ctx.error(`cat: ${args[0]}: No such file or directory`);
+      ctx.errorText(`cat: ${filename}: No such file or directory`);
     }
   },
 
@@ -238,13 +266,14 @@ export const Commands = {
   music: (_, ctx) => runPlay(_, ctx),
 
   cowsay: (args, ctx) => {
-    const msg = args.length > 0 ? args.join(" ").replace(/</g, "&lt;") : "Moo.";
-    ctx.print(
-      `<pre style="color: #e2e8f0;"> ${"_".repeat(msg.length + 2)}<br>< ${msg} ><br> ${"-".repeat(msg.length + 2)}<br>        \\   ^__^<br>         \\  (oo)\\_______<br>            (__)\\       )\\/\\<br>                ||----w |<br>                ||     ||</pre>`,
+    const rawMessage = args.length > 0 ? args.join(" ") : "Moo.";
+    const msg = escapeHtml(rawMessage);
+    ctx.printTrustedHtml(
+      `<pre style="color: #e2e8f0;"> ${"_".repeat(rawMessage.length + 2)}<br>< ${msg} ><br> ${"-".repeat(rawMessage.length + 2)}<br>        \\   ^__^<br>         \\  (oo)\\_______<br>            (__)\\       )\\/\\<br>                ||----w |<br>                ||     ||</pre>`,
     );
   },
 
-  sudo: (_, ctx) => ctx.print('<span class="text-danger">[SECURITY] User kyle is not in the sudoers file. Incident reported.</span>'),
+  sudo: (_, ctx) => ctx.printTrustedHtml('<span class="text-danger">[SECURITY] User kyle is not in the sudoers file. Incident reported.</span>'),
 
   random: (args, ctx) => fetchRandomGame(args[0], ctx),
   "get-random-game": (args, ctx) => fetchRandomGame(args[0], ctx),
@@ -256,5 +285,5 @@ export const Commands = {
   stats: (args, ctx) => runStatus(args, ctx),
   date: (args, ctx) => runDate(args, ctx),
   uname: (args, ctx) => runUname(args, ctx),
-  history: (_, ctx) => ctx.print(`<div style="color: #e2e8f0; line-height: 1.5;">1  sudo rm -rf /<br>2  git push --force origin main<br>3  neofetch<br>4  history</div>`),
+  history: (_, ctx) => ctx.printTrustedHtml(`<div style="color: #e2e8f0; line-height: 1.5;">1  sudo rm -rf /<br>2  git push --force origin main<br>3  neofetch<br>4  history</div>`),
 };

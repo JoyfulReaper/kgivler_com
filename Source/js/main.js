@@ -1,5 +1,5 @@
 import { Commands } from "./commands.js";
-import { elements, Terminal, initHostTelemetry } from "./ui.js";
+import { elements, Terminal, createTerminalContext, initHostTelemetry } from "./ui.js";
 import { getSystemData, getWorkstationStatus, fetchRandomGame } from "./api.js";
 import { initQwenPanel } from "./qwen-panel.js";
 import { parseCommandLine } from "./parser.js";
@@ -7,35 +7,25 @@ import { initSteamPresence, refreshSteamPresence } from "./steam.js";
 import { initGitActivity } from "./git-activity.js";
 import { initQotd } from "./qotd.js";
 
-// Helper to create UI-agnostic terminal contexts
-const createTerminalContext = (element) => ({
-  print: (html) => {
-    element.innerHTML = html;
-  },
-  error: (msg) => {
-    element.innerHTML = `<span class="text-danger">${msg}</span>`;
-  },
-  loading: (msg) => {
-    element.innerHTML = `<span class="text-warning">${msg}</span>`;
-  },
-  clear: () => {
-    element.innerHTML = "";
-  },
-});
-
 const demoTerminal = createTerminalContext(elements.demo);
 
 async function refreshWorkstation() {
   if (!elements.workstationRefreshButton || !elements.telemetry) return;
 
   elements.workstationRefreshButton.disabled = true;
-  elements.telemetry.innerHTML = `<div class="text-warning animate-pulse"><i class="fas fa-spinner fa-spin me-2"></i>Refreshing telemetry...</div>`;
+  const loading = document.createElement("div");
+  loading.className = "text-warning animate-pulse";
+  loading.innerHTML = `<i class="fas fa-spinner fa-spin me-2"></i>Refreshing telemetry...`;
+  elements.telemetry.replaceChildren(loading);
 
   try {
     const data = await getWorkstationStatus();
 
     if (!data || data.ok === false) {
-      elements.telemetry.innerHTML = `<div class="text-danger">[OFFLINE] ${data?.error || "Workstation refresh failed."}</div>`;
+      const error = document.createElement("div");
+      error.className = "text-danger";
+      error.textContent = `[OFFLINE] ${data?.error || "Workstation refresh failed."}`;
+      elements.telemetry.replaceChildren(error);
       return;
     }
 
@@ -52,14 +42,19 @@ async function processCommand(input) {
   const [cmd, ...args] = parseCommandLine(input);
 
   try {
-    if (Commands[cmd]) {
-      await Commands[cmd](args, Terminal);
+    const command =
+      Object.hasOwn(Commands, cmd)
+        ? Commands[cmd]
+        : null;
+
+    if (typeof command === "function") {
+      await command(args, Terminal);
     } else {
-      Terminal.error(`bash: command not found: ${cmd}`);
+      Terminal.errorText(`bash: command not found: ${cmd}`);
     }
   } catch (err) {
     console.error(`Execution error in ${cmd}:`, err);
-    Terminal.error(`[CRITICAL] Error executing command: ${cmd}`);
+    Terminal.errorText(`[CRITICAL] Error executing command: ${cmd}`);
   }
 }
 
@@ -72,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initQotd();
   initQwenPanel();
   elements.workstationRefreshButton?.addEventListener("click", () => refreshWorkstation());
-  elements.steamRefreshButton?.addEventListener("click", () => refreshSteamPresence().catch(console.error));
+  elements.steamRefreshButton?.addEventListener("click", () => refreshSteamPresence({ showLoading: true }).catch(console.error));
 
   // Terminal input listener
   elements.input?.addEventListener("keydown", (e) => {

@@ -23,6 +23,25 @@ function formatTimestamp(timestamp) {
   }).format(date);
 }
 
+function getValidGitHubUrl(value) {
+  if (!value) return null;
+
+  try {
+    const parsed = new URL(value);
+
+    if (
+      parsed.protocol === "https:" &&
+      parsed.hostname === "github.com"
+    ) {
+      return parsed.href;
+    }
+  } catch (_) {
+    return null;
+  }
+
+  return null;
+}
+
 function createActivityItem(item) {
   const container = document.createElement("div");
   container.className = "py-2 border-bottom";
@@ -32,12 +51,21 @@ function createActivityItem(item) {
   commitLine.className =
     "d-flex flex-column flex-lg-row gap-1 gap-lg-2 align-items-lg-baseline";
 
-  const commitLink = document.createElement("a");
-  commitLink.className = "font-monospace text-decoration-none";
-  commitLink.href = item.url;
-  commitLink.target = "_blank";
-  commitLink.rel = "noopener noreferrer";
-  commitLink.textContent = (item.sha || "unknown").slice(0, 7);
+  const validUrl =
+    getValidGitHubUrl(item.url);
+  const commitTarget = validUrl
+    ? document.createElement("a")
+    : document.createElement("span");
+  commitTarget.className = validUrl
+    ? "font-monospace text-decoration-none"
+    : "font-monospace";
+  commitTarget.textContent = (item.sha || "unknown").slice(0, 7);
+
+  if (validUrl) {
+    commitTarget.href = validUrl;
+    commitTarget.target = "_blank";
+    commitTarget.rel = "noopener noreferrer";
+  }
 
   const context = document.createElement("span");
   context.className = "text-accent font-monospace";
@@ -49,7 +77,7 @@ function createActivityItem(item) {
     item.message || "(no commit message)";
 
   commitLine.append(
-    commitLink,
+    commitTarget,
     context,
     message
   );

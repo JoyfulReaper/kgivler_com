@@ -73,7 +73,6 @@
   let refreshInFlight = null;
   let lastRenderedSnapshot = null;
   let lastSuccessfulRefreshAt = null;
-  let isCleaningUp = false;
 
   function applyFilter() {
     if (!filterInput) {
@@ -264,6 +263,29 @@
     }
   }
 
+  function setDashboardBusy(isBusy) {
+    if (dashboard.banner) {
+      dashboard.banner.setAttribute(
+        "aria-busy",
+        isBusy ? "true" : "false"
+      );
+    }
+
+    if (dashboard.refreshButton) {
+      dashboard.refreshButton.disabled =
+        isBusy;
+    }
+  }
+
+  function formatChipLabel(
+    label,
+    options = {}
+  ) {
+    return options.lastKnown
+      ? `LAST KNOWN: ${label}`
+      : label;
+  }
+
   function buildProtocolMap(protocols) {
     return new Map(
       (protocols ?? []).map((protocol) => [
@@ -282,7 +304,10 @@
     );
   }
 
-  function renderContainerTable(snapshot) {
+  function renderContainerTable(
+    snapshot,
+    options = {}
+  ) {
     if (!dashboard.tableBody) {
       return;
     }
@@ -297,7 +322,7 @@
       left.name.localeCompare(right.name)
     );
 
-    dashboard.tableBody.textContent = "";
+    dashboard.tableBody.replaceChildren();
 
     if (containers.length === 0) {
       const row =
@@ -339,15 +364,19 @@
       chip.className = "service-chip";
       setChipState(
         chip,
-        (
-          normalizedState ||
-          "unknown"
-        ).toUpperCase(),
-        isRunning
-          ? snapshot.stale
-            ? "warning"
-            : "running"
-          : "unhealthy"
+        formatChipLabel(
+          (
+            normalizedState ||
+            "unknown"
+          ).toUpperCase(),
+          options
+        ),
+        options.lastKnown ||
+          snapshot.stale
+          ? "warning"
+          : isRunning
+            ? "running"
+            : "unhealthy"
       );
       stateCell.append(chip);
 
@@ -482,7 +511,10 @@
     );
   }
 
-  function renderServiceEntries(snapshot) {
+  function renderServiceEntries(
+    snapshot,
+    options = {}
+  ) {
     const containerMap =
       buildContainerMap(
         snapshot?.containers
@@ -527,11 +559,13 @@
           "[data-live-protocol-latency]"
         );
 
-      if (memoryValue && container) {
+      if (memoryValue) {
         memoryValue.textContent =
-          formatBytes(
-            container.memoryUsageBytes
-          );
+          container
+            ? formatBytes(
+                container.memoryUsageBytes
+              )
+            : "Unavailable";
       }
 
       if (containerStateValue) {
@@ -550,11 +584,19 @@
           protocolLatencyValue.textContent =
             protocol.succeeded
               ? `${protocol.durationMilliseconds} ms${
+                  options.lastKnown
+                    ? " (last known)"
+                    : ""
+                }${
                   snapshot.stale
                     ? " (stale snapshot)"
                     : ""
                 }`
               : `Probe failed${
+                  options.lastKnown
+                    ? " (last known)"
+                    : ""
+                }${
                   snapshot.stale
                     ? " (stale snapshot)"
                     : ""
@@ -566,23 +608,32 @@
       }
 
       if (protocol && chip) {
+        const label =
+          protocol.succeeded
+            ? "HEALTHY"
+            : "UNHEALTHY";
+
         if (snapshot.stale) {
           setChipState(
             chip,
-            protocol.succeeded
-              ? "HEALTHY"
-              : "UNHEALTHY",
+            formatChipLabel(
+              label,
+              options
+            ),
             "warning"
           );
         } else {
           setChipState(
             chip,
-            protocol.succeeded
-              ? "HEALTHY"
-              : "UNHEALTHY",
-            protocol.succeeded
-              ? "healthy"
-              : "unhealthy"
+            formatChipLabel(
+              label,
+              options
+            ),
+            options.lastKnown
+              ? "warning"
+              : protocol.succeeded
+                ? "healthy"
+                : "unhealthy"
           );
         }
 
@@ -594,15 +645,21 @@
           isRunningState(
             container.state
           );
-
-        setChipState(
-          chip,
+        const label =
           (
             normalizeContainerState(
               container.state
             ) || "unknown"
-          ).toUpperCase(),
-          snapshot.stale
+          ).toUpperCase();
+
+        setChipState(
+          chip,
+          formatChipLabel(
+            label,
+            options
+          ),
+          options.lastKnown ||
+            snapshot.stale
             ? "warning"
             : running
               ? "running"
@@ -611,7 +668,10 @@
       } else if (chip) {
         setChipState(
           chip,
-          "UNAVAILABLE",
+          formatChipLabel(
+            "UNAVAILABLE",
+            options
+          ),
           "unavailable"
         );
       }
@@ -675,9 +735,79 @@
         "UNAVAILABLE";
     }
 
+    renderContainerTable(
+      lastRenderedSnapshot,
+      { lastKnown: true }
+    );
+    renderServiceEntries(
+      lastRenderedSnapshot,
+      { lastKnown: true }
+    );
+
     setBannerState(
       "unavailable",
       "[UNAVAILABLE] Showing the most recent successful snapshot. A new refresh attempt failed."
+    );
+  }
+
+  function isValidTimestamp(value) {
+    return (
+      typeof value === "string" &&
+      !Number.isNaN(
+        new Date(value).getTime()
+      )
+    );
+  }
+
+  function isFiniteNonNegativeNumber(value) {
+    return (
+      Number.isFinite(value) &&
+      value >= 0
+    );
+  }
+
+  function isNonEmptyString(value) {
+    return (
+      typeof value === "string" &&
+      value.trim().length > 0
+    );
+  }
+
+  function validateProtocol(protocol) {
+    return Boolean(
+      protocol &&
+        isNonEmptyString(
+          protocol.service
+        ) &&
+        typeof protocol.succeeded ===
+          "boolean" &&
+        isFiniteNonNegativeNumber(
+          protocol.durationMilliseconds
+        )
+    );
+  }
+
+  function validateContainer(container) {
+    return Boolean(
+      container &&
+        isNonEmptyString(container.name) &&
+        typeof container.state ===
+          "string" &&
+        isFiniteNonNegativeNumber(
+          container.memoryUsageBytes
+        ) &&
+        isFiniteNonNegativeNumber(
+          container.memoryLimitBytes
+        ) &&
+        Number.isFinite(
+          container.memoryPercent
+        ) &&
+        Number.isFinite(
+          container.cpuPercent
+        ) &&
+        isFiniteNonNegativeNumber(
+          container.restartCount
+        )
     );
   }
 
@@ -686,8 +816,22 @@
       snapshot &&
         typeof snapshot.node ===
           "string" &&
+        isValidTimestamp(
+          snapshot.capturedAt
+        ) &&
+        isFiniteNonNegativeNumber(
+          snapshot.ageSeconds
+        ) &&
+        typeof snapshot.stale ===
+          "boolean" &&
         Array.isArray(snapshot.protocols) &&
-        Array.isArray(snapshot.containers)
+        snapshot.protocols.every(
+          validateProtocol
+        ) &&
+        Array.isArray(snapshot.containers) &&
+        snapshot.containers.every(
+          validateContainer
+        )
     );
   }
 
@@ -700,14 +844,17 @@
 
     const controller =
       new AbortController();
+    let didTimeout = false;
     const timeoutId =
       window.setTimeout(() => {
+        didTimeout = true;
         controller.abort(
           new Error("Request timed out.")
         );
       }, requestTimeoutMilliseconds);
 
     activeController = controller;
+    setDashboardBusy(true);
 
     refreshInFlight = fetch(
       snapshotUrl,
@@ -744,7 +891,7 @@
       .catch((error) => {
         if (
           controller.signal.aborted &&
-          isCleaningUp
+          !didTimeout
         ) {
           return;
         }
@@ -759,22 +906,47 @@
         }
 
         refreshInFlight = null;
+        setDashboardBusy(false);
       });
 
     return refreshInFlight;
   }
 
-  function cleanup() {
-    isCleaningUp = true;
+  function startPolling() {
+    if (refreshTimerId !== null) {
+      return;
+    }
 
+    refreshTimerId = window.setInterval(
+      () => {
+        void fetchSnapshot();
+      },
+      refreshIntervalMilliseconds
+    );
+  }
+
+  function stopPolling() {
     if (refreshTimerId !== null) {
       window.clearInterval(
         refreshTimerId
       );
       refreshTimerId = null;
     }
+  }
 
+  function handlePageHide(event) {
+    stopPolling();
     activeController?.abort();
+
+  }
+
+  function handlePageShow(event) {
+    if (!event.persisted) {
+      return;
+    }
+
+    startPolling();
+    void fetchSnapshot();
   }
 
   if (filterInput) {
@@ -792,18 +964,16 @@
     }
   );
 
-  refreshTimerId = window.setInterval(
-    () => {
-      void fetchSnapshot();
-    },
-    refreshIntervalMilliseconds
+  window.addEventListener(
+    "pagehide",
+    handlePageHide
   );
 
   window.addEventListener(
-    "pagehide",
-    cleanup,
-    { once: true }
+    "pageshow",
+    handlePageShow
   );
 
+  startPolling();
   void fetchSnapshot();
 })();

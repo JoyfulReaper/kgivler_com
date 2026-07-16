@@ -20,7 +20,7 @@ function formatInline(text) {
 
   output = escapeHtml(output);
 
-  output = output.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, (_, label, url) => {
+  output = output.replace(/\[([^\]]+)\]\((https:\/\/[^\s)]+)\)/g, (_, label, url) => {
     return `<a href="${url}" target="_blank" rel="noopener noreferrer">${label}</a>`;
   });
 
