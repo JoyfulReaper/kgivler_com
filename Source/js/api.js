@@ -180,9 +180,17 @@ export async function getRecentGitActivity(limit = 5) {
 
     const activity = await response.json();
 
+    if (!Array.isArray(activity)) {
+      return {
+        ok: false,
+        error: "Git activity returned an invalid response.",
+        status: response.status,
+      };
+    }
+
     return {
       ok: true,
-      items: Array.isArray(activity) ? activity : [],
+      items: activity,
     };
   } catch (error) {
     console.error(

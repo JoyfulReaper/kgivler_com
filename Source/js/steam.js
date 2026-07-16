@@ -31,12 +31,8 @@ function isPresenceObject(presence) {
 
 function hasUsablePresenceShape(presence) {
   return (
-    typeof presence.isInGame === "boolean" ||
-    typeof presence.isOnline === "boolean" ||
-    isNonEmptyString(presence.personaName) ||
-    isNonEmptyString(presence.statusText) ||
-    isNonEmptyString(presence.gameName) ||
-    isNonEmptyString(presence.gameId)
+    typeof presence.isOnline === "boolean" &&
+    typeof presence.isInGame === "boolean"
   );
 }
 
