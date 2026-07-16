@@ -3,9 +3,9 @@ import { escapeHtml } from "./markdown.js";
 import { elements } from "./ui.js";
 
 const STEAM_PRESENCE_REFRESH_MS = 60_000;
-let isRefreshingSteamPresence = false;
 let steamRefreshIntervalId = null;
 let hasInitializedSteamPresence = false;
+let steamPresenceRequest = null;
 
 function renderSteamPresenceLoading() {
   if (!elements.steamPresence) return;
@@ -17,16 +17,39 @@ function renderSteamPresenceLoading() {
     </div>`;
 }
 
-function renderSteamPresenceBadge(presence) {
+function isNonEmptyString(value) {
+  return typeof value === "string" && value.trim().length > 0;
+}
+
+function isPresenceObject(presence) {
+  return (
+    presence !== null &&
+    typeof presence === "object" &&
+    !Array.isArray(presence)
+  );
+}
+
+function hasUsablePresenceShape(presence) {
+  return (
+    typeof presence.isInGame === "boolean" ||
+    typeof presence.isOnline === "boolean" ||
+    isNonEmptyString(presence.personaName) ||
+    isNonEmptyString(presence.statusText) ||
+    isNonEmptyString(presence.gameName) ||
+    isNonEmptyString(presence.gameId)
+  );
+}
+
+function renderSteamPresenceUnavailable(detail) {
   if (!elements.steamPresence) return;
 
-  if (!presence || presence.ok === false) {
-    const detail = escapeHtml(
-      typeof presence?.error === "string" && presence.error.trim()
-        ? presence.error
-        : "Steam privacy settings or the Web API may be hiding activity."
-    );
-    elements.steamPresence.innerHTML = `
+  const safeDetail = escapeHtml(
+    isNonEmptyString(detail)
+      ? detail
+      : "Steam privacy settings or the Web API may be hiding activity."
+  );
+
+  elements.steamPresence.innerHTML = `
       <div class="steam-presence-line">
         <span class="steam-presence-pill" data-state="unavailable">
           <i class="fab fa-steam"></i>
@@ -34,26 +57,43 @@ function renderSteamPresenceBadge(presence) {
         </span>
         <span><strong>[STEAM]</strong> Status unavailable</span>
       </div>
-      <div class="text-muted small mt-1">${detail}</div>`;
+      <div class="text-muted small mt-1">${safeDetail}</div>`;
+}
+
+function renderSteamPresenceBadge(presence) {
+  if (!elements.steamPresence) return;
+
+  if (!isPresenceObject(presence)) {
+    renderSteamPresenceUnavailable();
+    return;
+  }
+
+  if (presence.ok === false) {
+    renderSteamPresenceUnavailable(presence.error);
+    return;
+  }
+
+  if (!hasUsablePresenceShape(presence)) {
+    renderSteamPresenceUnavailable("Steam presence response was malformed.");
     return;
   }
 
   const actorName = escapeHtml(
-    typeof presence.personaName === "string" && presence.personaName.trim()
+    isNonEmptyString(presence.personaName)
       ? presence.personaName
       : "Steam profile"
   );
   const statusText = escapeHtml(
-    typeof presence.statusText === "string" && presence.statusText.trim()
+    isNonEmptyString(presence.statusText)
       ? presence.statusText
       : "Unknown"
   );
 
   if (presence.isInGame === true) {
     const gameName = escapeHtml(
-      typeof presence.gameName === "string" && presence.gameName.trim()
+      isNonEmptyString(presence.gameName)
         ? presence.gameName
-        : typeof presence.gameId === "string" && presence.gameId.trim()
+        : isNonEmptyString(presence.gameId)
           ? presence.gameId
           : "Unknown Game"
     );
@@ -83,13 +123,8 @@ function renderSteamPresenceBadge(presence) {
       </span>
       <span><strong>[STEAM]</strong> ${summary}</span>
     </div>`;
-}
-
-export async function refreshSteamPresence(options = {}) {
-  if (isRefreshingSteamPresence || !elements.steamPresence) return;
-
+async function loadSteamPresence(options = {}) {
   const { showLoading = false } = options;
-  isRefreshingSteamPresence = true;
 
   if (elements.steamRefreshButton) {
     elements.steamRefreshButton.disabled = true;
@@ -103,12 +138,27 @@ export async function refreshSteamPresence(options = {}) {
     const presence = await getSteamPresence();
     renderSteamPresenceBadge(presence);
   } finally {
-    isRefreshingSteamPresence = false;
-
     if (elements.steamRefreshButton) {
       elements.steamRefreshButton.disabled = false;
     }
   }
+}
+
+export function refreshSteamPresence(options = {}) {
+  if (!elements.steamPresence) {
+    return Promise.resolve();
+  }
+
+  if (steamPresenceRequest) {
+    return steamPresenceRequest;
+  }
+
+  steamPresenceRequest = loadSteamPresence(options)
+    .finally(() => {
+      steamPresenceRequest = null;
+    });
+
+  return steamPresenceRequest;
 }
 
 function startSteamPresencePolling() {
@@ -117,7 +167,7 @@ function startSteamPresencePolling() {
   }
 
   steamRefreshIntervalId = setInterval(() => {
-    refreshSteamPresence({ showLoading: false }).catch(console.error);
+    void refreshSteamPresence({ showLoading: false }).catch(console.error);
   }, STEAM_PRESENCE_REFRESH_MS);
 }
 
@@ -130,10 +180,20 @@ function stopSteamPresencePolling() {
   steamRefreshIntervalId = null;
 }
 
+async function refreshSteamAfterPageRestore() {
+  const previousRequest = steamPresenceRequest;
+
+  if (previousRequest) {
+    await previousRequest;
+  }
+
+  await refreshSteamPresence({ showLoading: false });
+}
+
 export function initSteamPresence() {
   if (!elements.steamPresence) return;
 
-  refreshSteamPresence({ showLoading: true }).catch(console.error);
+  void refreshSteamPresence({ showLoading: true }).catch(console.error);
   startSteamPresencePolling();
 
   if (hasInitializedSteamPresence) {
@@ -152,6 +212,11 @@ export function initSteamPresence() {
     }
 
     startSteamPresencePolling();
-    refreshSteamPresence({ showLoading: false }).catch(console.error);
+    void refreshSteamAfterPageRestore().catch((error) => {
+      console.error(
+        "Unable to refresh restored Steam presence.",
+        error
+      );
+    });
   });
 }

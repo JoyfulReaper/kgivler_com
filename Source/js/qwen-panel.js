@@ -60,6 +60,10 @@ function setReviewOutputKind(kind) {
 }
 
 function canShowHealthMessage() {
+  if (isRunningQwenReview) {
+    return false;
+  }
+
   if (!elements.qwenReviewOutput) {
     return false;
   }
@@ -69,8 +73,7 @@ function canShowHealthMessage() {
 
   return (
     !elements.qwenReviewOutput.textContent.trim() ||
-    kind === "health" ||
-    kind === "loading"
+    kind === "health"
   );
 }
 
@@ -97,8 +100,10 @@ async function refreshQwenHealth() {
       return data;
     }
 
-    const state = data.modelAvailable ? "online" : "warning";
-    const label = data.modelAvailable ? "Online" : "Model Missing";
+    const modelAvailable =
+      data?.modelAvailable === true;
+    const state = modelAvailable ? "online" : "warning";
+    const label = modelAvailable ? "Online" : "Model Missing";
     setQwenHealthBadge(state, label);
     return data;
   } catch (error) {
@@ -134,7 +139,7 @@ async function runQwenReview() {
 
   isRunningQwenReview = true;
   qwenReviewTerminal.loadingText("Sending code to QwenCoder... Please wait, this can take a long time...");
-  setReviewOutputKind("loading");
+  setReviewOutputKind("review-loading");
   if (elements.qwenReviewButton) elements.qwenReviewButton.disabled = true;
   if (elements.qwenHealthButton) elements.qwenHealthButton.disabled = true;
 
@@ -148,7 +153,7 @@ async function runQwenReview() {
           "Code review failed."
         )
       );
-      setReviewOutputKind("error");
+      setReviewOutputKind("review-error");
       return;
     }
 
@@ -161,7 +166,7 @@ async function runQwenReview() {
 
     if (!review.trim()) {
       qwenReviewTerminal.errorText("QwenCoder returned an empty review.");
-      setReviewOutputKind("error");
+      setReviewOutputKind("review-error");
       return;
     }
 
@@ -170,7 +175,7 @@ async function runQwenReview() {
   } catch (error) {
     console.error("QwenCoder review failed:", error);
     qwenReviewTerminal.errorText("Code review failed unexpectedly.");
-    setReviewOutputKind("error");
+    setReviewOutputKind("review-error");
   } finally {
     isRunningQwenReview = false;
     if (elements.qwenReviewButton) elements.qwenReviewButton.disabled = false;

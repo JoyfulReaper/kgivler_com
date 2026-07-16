@@ -25,6 +25,13 @@ const getCpuNumber = (data) => {
 };
 
 function formatBbsTimestamp(timestamp) {
+  if (
+    typeof timestamp !== "string" ||
+    !timestamp.trim()
+  ) {
+    return "Unknown date";
+  }
+
   const date = new Date(timestamp);
 
   if (Number.isNaN(date.getTime())) {
@@ -129,7 +136,7 @@ async function runNeofetch(args, ctx) {
 }
 
 async function runDate(args, ctx) {
-  ctx.loadingText("Caluclating stardate...");
+  ctx.loadingText("Calculating stardate...");
   const data = await getSystemData();
   // Fallback to local date if API is down
   const dateStr = data ? data.stardate : new Date().toString();

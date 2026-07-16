@@ -13,6 +13,13 @@ function formatRepository(repository) {
 }
 
 function formatTimestamp(timestamp) {
+  if (
+    typeof timestamp !== "string" ||
+    !timestamp.trim()
+  ) {
+    return "Unknown time";
+  }
+
   const date = new Date(timestamp);
 
   if (Number.isNaN(date.getTime())) {
@@ -72,8 +79,7 @@ function normalizeActivityItem(item) {
         ? item.authorUsername.trim()
         : "Unknown author";
   const timestamp =
-    typeof item.timestamp === "string" ||
-      typeof item.timestamp === "number"
+    typeof item.timestamp === "string"
       ? item.timestamp
       : null;
   const url =
