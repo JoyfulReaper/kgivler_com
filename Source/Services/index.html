@@ -137,7 +137,7 @@
             </div>
 
             <div class="services-summary-card">
-              <span class="services-summary-value">6</span>
+              <span class="services-summary-value">7</span>
 
               <span class="services-summary-label">
                 Public apps and protocols
@@ -344,6 +344,150 @@
                       View Source
                     </a>
                   </div>
+                </div>
+              </details>
+
+              <details
+                class="service-entry"
+                data-service-entry
+                data-container-name="joyful-stack-happydaytime-1"
+                data-protocol-service="happydaytime"
+                data-search="happydaytime daytime time protocol tcp port 13 networking rfc 867 public dotnet server clock"
+              >
+                <summary>
+                  <span class="service-summary-main">
+                    <i class="fas fa-clock service-icon"></i>
+
+                    <span class="service-summary-text">
+                      <span class="service-name">
+                        HappyDaytime
+                      </span>
+
+                      <span class="service-tagline">
+                        Connect to receive the current server time.
+                      </span>
+                    </span>
+                  </span>
+
+                  <span class="service-summary-badges">
+                    <span
+                      class="service-chip"
+                      data-type="public"
+                    >
+                      PUBLIC
+                    </span>
+
+                    <span
+                      class="service-chip"
+                      data-live-status
+                      data-type="warning"
+                    >
+                      CHECKING
+                    </span>
+
+                    <span
+                      class="service-chip"
+                      data-type="protocol"
+                    >
+                      TCP :13
+                    </span>
+                  </span>
+                </summary>
+
+                <div class="service-body">
+                  <div class="service-meta-grid">
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Container</span>
+
+                      <span
+                        class="service-meta-value"
+                        data-live-container-name
+                      >
+                        joyful-stack-happydaytime-1
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Port</span>
+
+                      <span class="service-meta-value">
+                        TCP 13
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Hostname</span>
+
+                      <span class="service-meta-value">
+                        daytime.kgivler.com
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Protocol</span>
+
+                      <span class="service-meta-value">
+                        Daytime (RFC 867)
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">
+                        Observed memory
+                      </span>
+
+                      <span
+                        class="service-meta-value"
+                        data-live-memory
+                      >
+                        Approximately 20 MB
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">
+                        Container state
+                      </span>
+
+                      <span
+                        class="service-meta-value"
+                        data-live-container-state
+                      >
+                        Awaiting live snapshot
+                      </span>
+                    </div>
+
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Live probe</span>
+
+                      <span
+                        class="service-meta-value"
+                        data-live-protocol-latency
+                      >
+                        Awaiting live snapshot
+                      </span>
+                    </div>
+                  </div>
+
+                  <p class="service-description">
+                    HappyDaytime is a modern implementation of the classic
+                    Daytime protocol. Each TCP connection receives a
+                    human-readable representation of the server's current
+                    date and time, then the connection closes.
+                  </p>
+
+                  <div class="service-command mt-3">
+                    <div class="text-accent font-monospace mb-2">
+                      Try it:
+                    </div>
+
+                    <code>nc daytime.kgivler.com 13</code>
+                  </div>
+
+                  <p class="service-note mt-3">
+                    This is a real TCP Daytime service on its assigned port,
+                    not an HTTP endpoint.
+                  </p>
                 </div>
               </details>
 
@@ -1944,6 +2088,16 @@
                   <span>
                     Last refresh:
                     <strong data-live-last-refresh>Never</strong>
+                  </span>
+
+                  <span>
+                    Event publish:
+                    <strong data-live-publish-status>Loading</strong>
+                  </span>
+
+                  <span>
+                    Publish attempted:
+                    <strong data-live-publish-at>Unavailable</strong>
                   </span>
                 </div>
               </div>
