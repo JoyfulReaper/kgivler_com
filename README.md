@@ -2,7 +2,7 @@
 
 Source for [kgivler.com](https://www.kgivler.com), Kyle Givler's terminal-themed portfolio site.
 
-The site is a public hub for software projects, self-hosted services, classic internet protocol experiments, live workstation telemetry, Steam integrations, GitHub activity, and a small local-AI code review demo.
+The site is a public hub for software projects, self-hosted services, classic internet protocol experiments, live workstation telemetry, Steam integrations, GitHub activity, and a small local-AI code review demo. It is proudly self-hosted on my local workstation and exposed to the internet through a Cloudflare Tunnel, so some of the live widgets are showing real data from the machine under my desk.
 
 ## What Is Here
 
@@ -94,7 +94,11 @@ Rate limits are applied to telemetry, Steam, BBS, and code review endpoints.
 
 ## Deployment Notes
 
-The public site is designed to run as a static frontend with supporting APIs exposed through `api.kgivler.com` and related service subdomains. Some live features depend on self-hosted services and may show offline or degraded states when the workstation, tunnel, VPS service, or local model runtime is unavailable.
+The public site is designed to run as a static frontend with supporting APIs exposed through `api.kgivler.com` and related service subdomains.
+
+Most of the interesting parts are self-hosted. The main site and several API-backed widgets run on my local workstation, with public traffic routed in through a Cloudflare Tunnel. No cloud bullshit: the point is to show real telemetry, real service health, and real experiments from my own hardware instead of a perfectly polished static brochure.
+
+Because the site depends on homelab infrastructure, occasional downtime is expected. Live features may show offline or degraded states when the workstation is powered off, under maintenance, the Cloudflare Tunnel is interrupted, a VPS-side service is unavailable, or the local model runtime is not running.
 
 ## License
 
