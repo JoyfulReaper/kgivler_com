@@ -172,21 +172,6 @@ internal static class TelemetricsHelper
         return $"{stardate:F1}";
     }
 
-    internal static async Task<string> GetLocalWeather()
-    {
-        try
-        {
-            using var client = new HttpClient();
-            client.DefaultRequestHeaders.UserAgent.ParseAdd("curl");
-            var weather = await client.GetStringAsync("https://wttr.in?format=3");
-            return weather.Trim();
-        }
-        catch
-        {
-            return "Weather data offline";
-        }
-    }
-
     internal static string ExecuteCommand(string fileName, string arguments)
     {
         try

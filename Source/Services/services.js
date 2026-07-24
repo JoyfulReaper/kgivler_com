@@ -51,6 +51,14 @@
       document.querySelector(
         "[data-live-last-refresh]"
       ),
+    publishStatus:
+      document.querySelector(
+        "[data-live-publish-status]"
+      ),
+    publishAt:
+      document.querySelector(
+        "[data-live-publish-at]"
+      ),
     refreshButton:
       document.querySelector(
         "[data-live-refresh]"
@@ -493,6 +501,20 @@
         );
     }
 
+    if (dashboard.publishStatus) {
+      dashboard.publishStatus.textContent =
+        snapshot?.missionControlPublishSucceeded
+          ? "SUCCEEDED"
+          : "FAILED";
+    }
+
+    if (dashboard.publishAt) {
+      dashboard.publishAt.textContent =
+        formatTimestamp(
+          snapshot?.lastMissionControlPublishAttemptAt
+        );
+    }
+
     const protocolCount = Array.isArray(
       snapshot?.protocols
     )
@@ -780,6 +802,16 @@
           "UNAVAILABLE";
       }
 
+      if (dashboard.publishStatus) {
+        dashboard.publishStatus.textContent =
+          "UNAVAILABLE";
+      }
+
+      if (dashboard.publishAt) {
+        dashboard.publishAt.textContent =
+          "Unavailable";
+      }
+
       setBannerState(
         "unavailable",
         "[UNAVAILABLE] Live Mission Control data could not be loaded. Static service details remain available."
@@ -882,6 +914,11 @@
         ) &&
         typeof snapshot.stale ===
           "boolean" &&
+        typeof snapshot.missionControlPublishSucceeded ===
+          "boolean" &&
+        isValidTimestamp(
+          snapshot.lastMissionControlPublishAttemptAt
+        ) &&
         Array.isArray(snapshot.protocols) &&
         snapshot.protocols.every(
           validateProtocol

@@ -11,6 +11,7 @@ using Kgivler.Api.CodeReview;
 using Kgivler.Api.Extensions;
 using Kgivler.Api.Routes;
 using Kgivler.Api.Steam;
+using Kgivler.Api.Weather;
 using Microsoft.AspNetCore.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,6 +36,8 @@ builder.Services.Configure<SteamOptions>(builder.Configuration.GetSection("Steam
 builder.Services.AddMissionControlClient(
     builder.Configuration.GetSection(
         MissionControlClientOptions.SectionName));
+
+builder.Services.AddSingleton<WeatherService>();
 
 // Rate limiting
 builder.Services.AddRateLimiter(options =>
@@ -76,6 +79,7 @@ builder.Services.AddHttpClient("LmStudio", client =>
     client.Timeout = TimeSpan.FromSeconds(90);
 });
 
+// HttpClient for Git Activity
 builder.Services.AddHttpClient("GitActivity", client =>
 {
     var baseUrl =
@@ -96,6 +100,14 @@ builder.Services.AddHttpClient("SteamStore", client =>
 {
     client.BaseAddress = new Uri("https://store.steampowered.com/api/");
     client.Timeout = TimeSpan.FromSeconds(10);
+});
+
+// Weather HttpClient
+builder.Services.AddHttpClient("Weather", client =>
+{
+    client.BaseAddress = new Uri("https://wttr.in/");
+    client.Timeout = TimeSpan.FromSeconds(2);
+    client.DefaultRequestHeaders.UserAgent.ParseAdd("kgivler-api");
 });
 
 var app = builder.Build();
