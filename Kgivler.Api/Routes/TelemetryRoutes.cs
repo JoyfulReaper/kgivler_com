@@ -26,6 +26,7 @@ public static class TelemetryRoutes
             ILogger<Program> logger,
             IMissionControlClient missionControlClient,
             WeatherService weatherService,
+            CancellationToken cancellationToken,
             IHitCounter hitCounter) =>
         {
             var forwardedHeader = context.Request.Headers["CF-Connecting-IP"].FirstOrDefault()
@@ -43,7 +44,7 @@ public static class TelemetryRoutes
             var gpu = TelemetricsHelper.GetGpuMetrics();
             var cpuUsage = TelemetricsHelper.GetCpuUsage();
             var stardate = TelemetricsHelper.GetStarDate();
-            var weather = await weatherService.GetCurrentAsync();
+            var weather = await weatherService.GetCurrentAsync(cancellationToken);
 
             var occurredAt = DateTimeOffset.UtcNow;
             var correlationId = Guid.NewGuid().ToString("N");
@@ -99,7 +100,8 @@ public static class TelemetryRoutes
         // Don't record a hit
         app.MapGet("/api/system/status", async (
             IHitCounter hitCounter,
-            WeatherService weatherService) =>
+            WeatherService weatherService,
+            CancellationToken cancellationToken) =>
         {
             var currentProcess = Process.GetCurrentProcess();
             var uptimeSpan = TimeSpan.FromMilliseconds(Environment.TickCount64);
@@ -108,7 +110,7 @@ public static class TelemetryRoutes
             var ram = TelemetricsHelper.GetRamMetrics();
             var gpu = TelemetricsHelper.GetGpuMetrics();
             var stardate = TelemetricsHelper.GetStarDate();
-            var weather = await weatherService.GetCurrentAsync();
+            var weather = await weatherService.GetCurrentAsync(cancellationToken);
             var hitResults = await hitCounter.GetHitCountsAsync();
 
             var telemetry = new

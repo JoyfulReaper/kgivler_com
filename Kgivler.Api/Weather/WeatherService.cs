@@ -17,18 +17,26 @@ public sealed class WeatherService
         _cache = cache;
     }
 
-    public async Task<string> GetCurrentAsync()
+    private const int WEATHER_CACHE_MINUTES = 30;
+
+    public async Task<string> GetCurrentAsync(CancellationToken cancellationToken = default)
     {
         return await _cache.GetOrCreateAsync(CacheKey, async entry =>
         {
-            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30); // TODO Make configurable
+            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(WEATHER_CACHE_MINUTES); // TODO Make configurable
 
             try
             {
                 var client = _httpClientFactory.CreateClient("Weather");
-                var weather = await client.GetStringAsync("?format=3");
+                var weather = await client.GetStringAsync("?format=3", cancellationToken);
 
                 return weather.Trim();
+            }
+            catch (OperationCanceledException)
+                when (!cancellationToken.IsCancellationRequested)
+            {
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1);
+                return "Weather data offline";
             }
             catch
             {
