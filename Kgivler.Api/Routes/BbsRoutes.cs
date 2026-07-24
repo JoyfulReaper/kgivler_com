@@ -96,12 +96,20 @@ public static class BbsRoutes
         });
 
         app.MapPost("/api/bbs", async (
-            Message msg,
+            Message? msg,
             SqliteConnection db,
             IMissionControlClient missionControlClient,
             ILogger<Program> logger,
             CancellationToken cancellationToken) =>
         {
+            if (string.IsNullOrWhiteSpace(msg?.Content))
+            {
+                return Results.BadRequest(new
+                {
+                    error = "Message content is required."
+                });
+            }
+
             var occurredAt = DateTimeOffset.UtcNow;
             var stopwatch = Stopwatch.StartNew();
             var correlationId = Guid.NewGuid().ToString("N");
@@ -129,7 +137,9 @@ public static class BbsRoutes
 
                 messageCmd.Parameters.AddWithValue(
                     "$author",
-                    msg.Author);
+                    string.IsNullOrWhiteSpace(msg.Author)
+                        ? "[UNKNOWN]"
+                        : msg.Author);
 
                 messageCmd.Parameters.AddWithValue(
                     "$content",
