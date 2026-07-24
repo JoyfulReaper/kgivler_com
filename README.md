@@ -77,7 +77,7 @@ Common configuration areas:
 - `GitActivity:ApiKey`
 - `MissionControl:*`
 
-The public `Source/config.*` files are not used by the frontend modules for live API routing; the active browser configuration lives in `Source/js/config.js`.
+The public `Source/config.*` files are intentionally fake scanner bait. The real browser configuration lives in `Source/js/config.js`.
 
 ## API Surface
 
