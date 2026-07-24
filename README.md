@@ -1,25 +1,103 @@
-# [SITE-INTERFACE: SYSTEMS ARCHITECTURE MANUAL]
+# kgivler.com
 
-**PROGRAM:** Personal Website Source  
-**REFERENCE:** WEB-01  
-**STATUS:** Operational  
-**MAINTAINER:** K. Givler  
+Source for [kgivler.com](https://www.kgivler.com), Kyle Givler's terminal-themed portfolio site.
 
-# 1.0 DESCRIPTION
-This repository contains the source code for the personal website located at 
-https://www.kgivler.com. The site serves as a central hub for software projects, 
-open-source work, and technical experiments.
+The site is a public hub for software projects, self-hosted services, classic internet protocol experiments, live workstation telemetry, Steam integrations, GitHub activity, and a small local-AI code review demo.
 
-# 2.0 PURPOSE
-- Provide a public-facing portfolio showcasing software development projects.
-- Maintain documentation and links for open-source contributions.
-- Serve as a landing page for ongoing technical experiments and research logs.
+## What Is Here
 
-# 3.0 MAINTENANCE
-3.1 This repository is updated periodically to reflect the current status 
-    of ongoing software projects.  
-3.2 For inquiries regarding the source code or site functionality, please 
-    refer to the repository issues section.
+- `Source/` - Static frontend assets for the portfolio site.
+- `Source/index.html` - Main terminal-style landing page.
+- `Source/Services/` - Services and infrastructure view.
+- `Source/js/` - Browser modules for commands, telemetry, Steam presence, Git activity, QOTD, and the Qwen review panel.
+- `Kgivler.Api/` - ASP.NET Core API used by the portfolio widgets.
+- `Kgivler.Api/Routes/` - Minimal API route groups for telemetry, Steam presence, BBS messages, Git activity, and code review.
 
-# 4.0 LICENSE
-Copyright (c) 2026 Kyle Givler. Licensed under the MIT License.
+## Features
+
+- Terminal-inspired portfolio interface with interactive commands.
+- Live host telemetry and public workstation status.
+- Steam presence and Random Steam Game demo links.
+- Services page covering public apps, classic TCP services, infrastructure, and monitoring tools.
+- Recent GitHub activity feed via Mission Control.
+- Daily quote integration through HappyQOTD.
+- Browser-based code review panel backed by a local LM Studio model.
+- Lightweight BBS-style message endpoints.
+
+## Tech Stack
+
+- Static HTML, CSS, and JavaScript modules.
+- Bootstrap 5 and Font Awesome from CDNs.
+- ASP.NET Core Minimal APIs.
+- SQLite-backed message and hit-count storage.
+- JoyfulReaperLib packages for Mission Control and web stats.
+- LM Studio integration for local code review experiments.
+
+## Local Development
+
+### Frontend
+
+The frontend is static. You can serve `Source/` with any local static server:
+
+```powershell
+cd Source
+python -m http.server 5500
+```
+
+Then open:
+
+```text
+http://localhost:5500
+```
+
+Local frontend API targets are configured in `Source/js/config.js`.
+
+### API
+
+Build and run the ASP.NET Core API:
+
+```powershell
+dotnet build Kgivler.Api\Kgivler.Api.slnx
+dotnet run --project Kgivler.Api\Kgivler.Api.csproj
+```
+
+In development, the API allows local frontend origins such as `http://localhost:5500`.
+
+## Configuration
+
+Runtime secrets and private service values should be supplied through user secrets, environment variables, or deployment configuration.
+
+Common configuration areas:
+
+- `Steam:ApiKey`
+- `Steam:OwnerSteamId`
+- `LmStudio:BaseUrl`
+- `LmStudio:Model`
+- `GitActivity:BaseUrl`
+- `GitActivity:ApiKey`
+- `MissionControl:*`
+
+The public `Source/config.*` files are not used by the frontend modules for live API routing; the active browser configuration lives in `Source/js/config.js`.
+
+## API Surface
+
+- `GET /api/system/usage`
+- `GET /api/system/status`
+- `GET /api/steam/presence`
+- `GET /api/github/activity`
+- `GET /api/code-review/health`
+- `POST /api/code-review`
+- `GET /api/bbs`
+- `POST /api/bbs`
+
+Rate limits are applied to telemetry, Steam, BBS, and code review endpoints.
+
+## Deployment Notes
+
+The public site is designed to run as a static frontend with supporting APIs exposed through `api.kgivler.com` and related service subdomains. Some live features depend on self-hosted services and may show offline or degraded states when the workstation, tunnel, VPS service, or local model runtime is unavailable.
+
+## License
+
+Copyright (c) 2026 Kyle Givler.
+
+Licensed under the MIT License. See [LICENSE.md](LICENSE.md).
