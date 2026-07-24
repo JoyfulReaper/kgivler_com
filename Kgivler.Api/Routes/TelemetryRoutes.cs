@@ -11,6 +11,7 @@ using Kgivler.Api.BackgroundServices;
 using Kgivler.Api.Events;
 using Kgivler.Api.Helpers;
 using Kgivler.Api.Telemetry;
+using Kgivler.Api.Weather;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
@@ -20,9 +21,11 @@ public static class TelemetryRoutes
 {
     public static WebApplication MapTelemetryRoutes(this WebApplication app)
     {
+        // Record the hit
         app.MapGet("/api/system/usage", async (HttpContext context,
             ILogger<Program> logger,
             IMissionControlClient missionControlClient,
+            WeatherService weatherService,
             IHitCounter hitCounter) =>
         {
             var forwardedHeader = context.Request.Headers["CF-Connecting-IP"].FirstOrDefault()
@@ -40,7 +43,7 @@ public static class TelemetryRoutes
             var gpu = TelemetricsHelper.GetGpuMetrics();
             var cpuUsage = TelemetricsHelper.GetCpuUsage();
             var stardate = TelemetricsHelper.GetStarDate();
-            var weather = await TelemetricsHelper.GetLocalWeather();
+            var weather = await weatherService.GetCurrentAsync();
 
             var occurredAt = DateTimeOffset.UtcNow;
             var correlationId = Guid.NewGuid().ToString("N");
@@ -93,7 +96,10 @@ public static class TelemetryRoutes
             return Results.Ok(telemetry);
         }).RequireRateLimiting("TelemetryPolicy");
 
-        app.MapGet("/api/system/status", async (IHitCounter hitCounter) =>
+        // Don't record a hit
+        app.MapGet("/api/system/status", async (
+            IHitCounter hitCounter,
+            WeatherService weatherService) =>
         {
             var currentProcess = Process.GetCurrentProcess();
             var uptimeSpan = TimeSpan.FromMilliseconds(Environment.TickCount64);
@@ -102,7 +108,7 @@ public static class TelemetryRoutes
             var ram = TelemetricsHelper.GetRamMetrics();
             var gpu = TelemetricsHelper.GetGpuMetrics();
             var stardate = TelemetricsHelper.GetStarDate();
-            var weather = await TelemetricsHelper.GetLocalWeather();
+            var weather = await weatherService.GetCurrentAsync();
             var hitResults = await hitCounter.GetHitCountsAsync();
 
             var telemetry = new
