@@ -10,7 +10,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
-    <link rel="stylesheet" href="styles.css?v=2" />
+    <link rel="stylesheet" href="styles.css?v=3" />
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
@@ -50,7 +50,7 @@
               <a href="#flagship-projects">Flagship Projects</a>
               <a href="#live-systems-lab">Live Systems Lab</a>
               <a href="/services/">Services</a>
-              <a href="#recent-projects">Recent Work</a>
+              <a href="#recent-projects">Additional Projects</a>
               <a href="#contact">Contact</a>
             </nav>
           </header>
@@ -63,23 +63,159 @@
               <h2>./show_flagship_projects.sh</h2>
             </div>
 
+            <p class="section-summary flagship-introduction">These are the systems that best represent how I design, build, deploy, and operate software.</p>
+
             <div class="flagship-project-grid mt-3">
               <article class="project-terminal-badge flagship-project-card">
-                <div class="flagship-project-status">[SYSTEM]</div>
-                <h3>Mission Control</h3>
-                <p>Processes application events and GitHub activity through RabbitMQ.</p>
+                <header class="flagship-project-header">
+                  <div class="flagship-project-status">[OPERATIONS PLATFORM]</div>
+                  <h3>Mission Control</h3>
+                  <p class="flagship-project-purpose">A self-hosted .NET operations and event-processing platform for the applications, hosts, containers, and protocol services I operate.</p>
+                </header>
+
+                <dl class="case-study-details">
+                  <div class="case-study-row">
+                    <dt>Problem:</dt>
+                    <dd>My self-hosted services needed durable event history and useful diagnostics without turning every private backend into a public API.</dd>
+                  </div>
+
+                  <div class="case-study-row">
+                    <dt>Built:</dt>
+                    <dd>An authenticated ASP.NET Core gateway for integration events and signed GitHub webhooks, a bounded NATS JetStream stream with durable Archive and GitActivity consumers, SQLite projections, a protocol-aware Agent, an authenticated Blazor dashboard, and a Windows/Android .NET MAUI client.</dd>
+                  </div>
+
+                  <div class="case-study-row">
+                    <dt>Decisions:</dt>
+                    <dd>Kept broker transport behind messaging contracts; used explicit ACK, delayed NAK, permanent TERM, and message-ID deduplication; shared contracts, clients, and UI; and kept private service credentials and URLs behind a bearer-authenticated proxy API.</dd>
+                  </div>
+
+                  <div class="case-study-row">
+                    <dt>Stack:</dt>
+                    <dd>
+                      <ul class="technology-chips" aria-label="Mission Control technology stack">
+                        <li>.NET 10</li>
+                        <li>ASP.NET Core</li>
+                        <li>NATS JetStream</li>
+                        <li>SQLite</li>
+                        <li>Blazor</li>
+                        <li>.NET MAUI</li>
+                        <li>Docker</li>
+                      </ul>
+                    </dd>
+                  </div>
+
+                  <div class="case-study-row case-study-result">
+                    <dt>Result:</dt>
+                    <dd>Full event envelopes are archived while GitHub activity and host, Docker, and protocol status are projected into authenticated web and installed clients. <span class="development-note">[DEV BRANCH]</span> Daily work picks, work-item listing, quick Todo creation, and GreenCloud usage and rate projections are implemented on <code>dev</code>; this card does not claim those additions are deployed.</dd>
+                  </div>
+                </dl>
+
+                <div class="case-study-links">
+                  <a href="https://github.com/JoyfulReaper/MissionControl" class="terminal-btn-inline text-decoration-none" target="_blank" rel="noopener noreferrer">View Source</a>
+                  <a href="https://github.com/JoyfulReaper/MissionControl#data-flow" class="terminal-btn-inline text-decoration-none" target="_blank" rel="noopener noreferrer">Architecture</a>
+                  <a href="https://github.com/JoyfulReaper/MissionControl/tree/dev" class="terminal-btn-inline text-decoration-none" target="_blank" rel="noopener noreferrer">Inspect Dev Work</a>
+                </div>
               </article>
 
               <article class="project-terminal-badge flagship-project-card">
-                <div class="flagship-project-status">[PUBLIC]</div>
-                <h3>Random Steam Game</h3>
-                <p>Picks a random game from a public Steam library.</p>
+                <header class="flagship-project-header">
+                  <div class="flagship-project-status">[PRODUCTION UTILITY]</div>
+                  <h3>Random Steam Game</h3>
+                  <p class="flagship-project-purpose">A production web utility that breaks decision paralysis by choosing a game from a public Steam library.</p>
+                </header>
+
+                <dl class="case-study-details">
+                  <div class="case-study-row">
+                    <dt>Problem:</dt>
+                    <dd>Large libraries make choosing difficult, while uncached Steam lookups and ambiguous identifiers can make a simple random choice slower and less reliable than it should be.</dd>
+                  </div>
+
+                  <div class="case-study-row">
+                    <dt>Built:</dt>
+                    <dd>A Blazor Interactive Auto UI and ASP.NET Core API that normalize SteamID and vanity input, select from cached library data, filter unplayed or locally blocked titles, show playtime, export CSV, and open Steam launch URIs.</dd>
+                  </div>
+
+                  <div class="case-study-row">
+                    <dt>Decisions:</dt>
+                    <dd>Used SQLite-backed distributed caching with coalesced cache misses, made library refresh deliberate, persisted Data Protection keys across deployments, kept readiness focused on local dependencies, and made identity-free Mission Control telemetry best-effort.</dd>
+                  </div>
+
+                  <div class="case-study-row">
+                    <dt>Stack:</dt>
+                    <dd>
+                      <ul class="technology-chips" aria-label="Random Steam Game technology stack">
+                        <li>.NET 10</li>
+                        <li>Blazor</li>
+                        <li>ASP.NET Core</li>
+                        <li>SQLite</li>
+                        <li>Steam API</li>
+                        <li>Docker</li>
+                        <li>Mission Control</li>
+                      </ul>
+                    </dd>
+                  </div>
+
+                  <div class="case-study-row case-study-result">
+                    <dt>Result:</dt>
+                    <dd>The live application delivers random picks with unplayed filtering, browser-local exclusions, playtime, CSV export, and direct Steam launch support—without presenting cookie preferences as account-backed profiles. Docker publishing is gated by the automated test suite.</dd>
+                  </div>
+                </dl>
+
+                <div class="case-study-links">
+                  <a href="https://github.com/JoyfulReaper/RandomSteamGame" class="terminal-btn-inline text-decoration-none" target="_blank" rel="noopener noreferrer">View Source</a>
+                  <a href="https://randomsteam.kgivler.com/" class="terminal-btn-inline text-decoration-none" target="_blank" rel="noopener noreferrer">Open Application</a>
+                </div>
               </article>
 
               <article class="project-terminal-badge flagship-project-card">
-                <div class="flagship-project-status">[PROTOCOLS]</div>
-                <h3>Happy Protocol Family</h3>
-                <p>Modern .NET services for Finger, Gopher, and Quote of the Day protocols.</p>
+                <header class="flagship-project-header">
+                  <div class="flagship-project-status">[PROTOCOL FAMILY]</div>
+                  <h3>Happy Protocol Family</h3>
+                  <p class="flagship-project-purpose">Modern .NET implementations of classic and small-web Internet protocols, from deliberately tiny TCP daemons to extensible Gopher and Gemini servers.</p>
+                </header>
+
+                <dl class="case-study-details">
+                  <div class="case-study-row">
+                    <dt>Problem:</dt>
+                    <dd>Seven protocol servers should not duplicate listener, concurrency, timeout, shutdown, and telemetry infrastructure, while richer protocols still need room to grow without becoming one everything-daemon.</dd>
+                  </div>
+
+                  <div class="case-study-row">
+                    <dt>Built:</dt>
+                    <dd>Echo <code>:7</code>, Discard <code>:9</code>, Daytime <code>:13</code>, QOTD <code>:17</code>, Gopher <code>:70</code>, Finger <code>:79</code>, and TLS Gemini <code>:1965</code>. The small services share <code>JoyfulReaperLib.TcpServer</code>; Gopher and Gemini add static content, dynamic pages, and manifest-loaded plugins.</dd>
+                  </div>
+
+                  <div class="case-study-row">
+                    <dt>Decisions:</dt>
+                    <dd>Used canonical ports, bounded connection lifecycles, graceful shutdown, Docker, and best-effort Mission Control telemetry. Echo, Daytime, QOTD, and Finger use Native AOT; Gopher and Gemini instead use explicit extensibility contracts and isolated plugin loading and are not described as AOT.</dd>
+                  </div>
+
+                  <div class="case-study-row">
+                    <dt>Stack:</dt>
+                    <dd>
+                      <ul class="technology-chips" aria-label="Happy Protocol Family technology stack">
+                        <li>.NET 10</li>
+                        <li>TCP/IP</li>
+                        <li>Native AOT</li>
+                        <li>Docker</li>
+                        <li>Gopher</li>
+                        <li>Gemini</li>
+                        <li>Mission Control</li>
+                      </ul>
+                    </dd>
+                  </div>
+
+                  <div class="case-study-row case-study-result">
+                    <dt>Result:</dt>
+                    <dd>The family spans intentionally small RFC-style services through plugin-extensible Gopher and Gemini application servers. The Services page identifies Echo, Daytime, QOTD, Gopher, and Finger as the currently public subset; Discard and Gemini are not claimed as live deployments.</dd>
+                  </div>
+                </dl>
+
+                <div class="case-study-links">
+                  <a href="/services/" class="terminal-btn-inline text-decoration-none">View Services</a>
+                  <a href="https://github.com/JoyfulReaper/HappyGopher" class="terminal-btn-inline text-decoration-none" target="_blank" rel="noopener noreferrer">HappyGopher Source</a>
+                  <a href="https://github.com/JoyfulReaper/HappyGemini" class="terminal-btn-inline text-decoration-none" target="_blank" rel="noopener noreferrer">HappyGemini Source</a>
+                </div>
               </article>
             </div>
           </section>
@@ -445,7 +581,7 @@
                   <span class="text-warning">[SYSTEM]</span>
                   <strong>Mission Control</strong>
                   <span class="text-muted">—</span>
-                  <span class="text-white-50">Processes application events and GitHub activity through RabbitMQ.</span>
+                  <span class="text-white-50">Processes integration events and GitHub activity through NATS JetStream.</span>
                 </div>
               </div>
 
@@ -459,11 +595,13 @@
 
           <hr class="terminal-divider" />
 
-          <section class="my-4 portfolio-section" id="recent-projects">
+          <section class="my-4 portfolio-section secondary-projects-section" id="recent-projects">
             <div class="cmd-line section-command">
               <span class="prompt">kyle@kgivler:~$</span>
-              <h2>./get_recent_projects.sh</h2>
+              <h2>./show_additional_projects.sh</h2>
             </div>
+
+            <p class="section-summary secondary-projects-summary">Additional Projects — recent and experimental work outside the flagship case studies.</p>
 
             <div class="d-flex flex-column gap-3">
               <article class="project-terminal-badge d-flex flex-column gap-2 w-100">
