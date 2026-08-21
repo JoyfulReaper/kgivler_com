@@ -53,7 +53,7 @@ function renderSteamPresenceUnavailable(detail) {
         </span>
         <span><strong>[STEAM]</strong> Status unavailable</span>
       </div>
-      <div class="text-muted small mt-1">${safeDetail}</div>`;
+      <div class="widget-state-detail">Only Steam presence is affected. ${safeDetail}</div>`;
 }
 
 function renderSteamPresenceBadge(presence) {
@@ -135,6 +135,9 @@ async function loadSteamPresence(options = {}) {
 
     const presence = await getSteamPresence();
     renderSteamPresenceBadge(presence);
+  } catch (error) {
+    console.error("Steam presence refresh failed:", error);
+    renderSteamPresenceUnavailable("Steam presence is temporarily unavailable. Use Refresh Steam to retry.");
   } finally {
     if (elements.steamRefreshButton) {
       elements.steamRefreshButton.disabled = false;
@@ -165,7 +168,7 @@ function startSteamPresencePolling() {
   }
 
   steamRefreshIntervalId = setInterval(() => {
-    void refreshSteamPresence({ showLoading: false }).catch(console.error);
+    void refreshSteamPresence({ showLoading: false });
   }, STEAM_PRESENCE_REFRESH_MS);
 }
 
@@ -191,7 +194,7 @@ async function refreshSteamAfterPageRestore() {
 export function initSteamPresence() {
   if (!elements.steamPresence) return;
 
-  void refreshSteamPresence({ showLoading: true }).catch(console.error);
+  void refreshSteamPresence({ showLoading: true });
   startSteamPresencePolling();
 
   if (hasInitializedSteamPresence) {

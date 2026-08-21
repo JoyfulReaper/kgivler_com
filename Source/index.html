@@ -10,7 +10,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
-    <link rel="stylesheet" href="styles.css?v=3" />
+    <link rel="stylesheet" href="styles.css?v=4" />
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
@@ -228,7 +228,18 @@
               <h2>./open_live_systems_lab.sh</h2>
             </div>
 
-            <p class="section-summary">Live telemetry, services, demos, and tools running against the systems behind this site.</p>
+            <p class="section-summary">Live data and interactive tools backed by services running on my workstation and Linux VPS.</p>
+
+            <div class="lab-availability-notice" role="note">
+              <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
+              <span><strong>[AVAILABILITY]</strong> Some components are self-hosted, so individual tools may be temporarily unavailable during maintenance or when a host is offline.</span>
+            </div>
+
+          <div class="live-lab-group" aria-labelledby="live-host-heading">
+            <div class="live-lab-group-heading">
+              <h3 id="live-host-heading">./live_host/</h3>
+              <p>Current workstation telemetry and public Steam presence.</p>
+            </div>
 
           <section class="live-lab-item">
             <div class="cmd-line">
@@ -246,7 +257,7 @@
               </span>
             </div>
 
-            <div id="host-telemetry" class="mt-3 project-terminal-badge">
+            <div id="host-telemetry" class="mt-3 project-terminal-badge" role="status" aria-live="polite" aria-atomic="true">
               <div class="text-warning animate-pulse">
                 <i class="fas fa-spinner fa-spin me-2"></i>
                 Establishing connection to host...
@@ -254,7 +265,7 @@
             </div>
 
             <div class="mt-3 d-flex flex-wrap gap-2">
-              <button id="btn-workstation-refresh" class="terminal-btn-inline" type="button">Refresh Telemetry</button>
+              <button id="btn-workstation-refresh" class="terminal-btn-inline" type="button" aria-controls="host-telemetry">Refresh Telemetry</button>
             </div>
           </section>
 
@@ -280,7 +291,7 @@
                 <span class="text-white-50">Shows my current Steam presence when available.</span>
               </div>
 
-              <div id="steam-presence">
+              <div id="steam-presence" role="status" aria-live="polite" aria-atomic="true">
                 <div class="text-warning animate-pulse">
                   <i class="fab fa-steam me-2"></i>
                   Checking Steam presence...
@@ -288,21 +299,27 @@
               </div>
 
               <div class="d-flex flex-wrap gap-2 mt-2">
-                <button id="btn-steam-refresh" class="terminal-btn-inline" type="button">Refresh Steam</button>
+                <button id="btn-steam-refresh" class="terminal-btn-inline" type="button" aria-controls="steam-presence">Refresh Steam</button>
 
                 <a href="https://steamcommunity.com/id/Mister_God/" class="terminal-btn-inline text-decoration-none" target="_blank" rel="noopener noreferrer">Steam Profile</a>
               </div>
             </div>
           </section>
 
-          <hr class="terminal-divider" />
+          </div>
+
+          <div class="live-lab-group" aria-labelledby="public-services-heading">
+            <div class="live-lab-group-heading">
+              <h3 id="public-services-heading">./public_services/</h3>
+              <p>Public demos, service endpoints, and the operational catalog.</p>
+            </div>
 
           <section class="my-4" id="demo-section">
             <div class="cmd-line">
               <span class="prompt">kyle@kgivler:~$</span>
               ./get-random-game -vanity
 
-              <input type="text" id="demoSteamInput" placeholder="Mister_God" class="terminal-input" />
+              <input type="text" id="demoSteamInput" aria-label="Steam vanity name, ID, or profile URL" placeholder="Mister_God" class="terminal-input" />
             </div>
 
             <div class="project-terminal-badge d-flex flex-column gap-2 w-100 mt-3">
@@ -321,12 +338,47 @@
               </div>
 
               <div class="d-flex flex-wrap gap-2 mt-2">
-                <button id="btn-random-game" class="terminal-btn-inline" type="button">Run</button>
+                <button id="btn-random-game" class="terminal-btn-inline" type="button" aria-controls="demo-output">Run</button>
 
                 <a href="https://randomsteam.kgivler.com/" class="terminal-btn-inline text-decoration-none" target="_blank" rel="noopener noreferrer">Full Site</a>
               </div>
 
-              <div id="demo-output" class="mt-3"></div>
+              <div id="demo-output" class="mt-3" role="status" aria-live="polite" aria-atomic="true"></div>
+            </div>
+          </section>
+
+          <hr class="terminal-divider" />
+
+          <section class="my-4" id="services-preview-section">
+            <div class="cmd-line">
+              <span class="prompt">kyle@kgivler:~$</span>
+              ./list_services.sh --featured
+            </div>
+
+            <div class="project-terminal-badge d-flex flex-column gap-3 w-100 mt-3">
+              <div>
+                <i class="fas fa-server me-2 text-accent"></i>
+                Status:
+                <span class="text-success">Featured service catalog</span>
+              </div>
+
+              <div>
+                <i class="fas fa-file-lines me-2 text-accent"></i>
+                Description:
+                <span class="text-white-50">A preview of public applications, classic internet protocols, APIs, and backend infrastructure running across my workstation and Linux VPS.</span>
+              </div>
+
+              <div class="d-flex flex-column gap-2 font-monospace">
+                <div><span class="text-success">[PUBLIC]</span> <strong><a href="https://randomsteam.kgivler.com/" target="_blank" rel="noopener noreferrer">Random Steam Game</a></strong> <span class="text-muted">—</span> <span class="text-white-50">Picks a random game from a public Steam library.</span></div>
+                <div><span class="text-success">[PUBLIC]</span> <strong>HappyFinger</strong> <span class="text-muted">—</span> <span class="text-white-50">A modern .NET Finger protocol server running on TCP port 79.</span></div>
+                <div><span class="text-success">[PUBLIC]</span> <strong>HappyGopher</strong> <span class="text-muted">—</span> <span class="text-white-50">An old-school Gopher server running on TCP port 70.</span></div>
+                <div><span class="text-warning">[SYSTEM]</span> <strong>Mission Control</strong> <span class="text-muted">—</span> <span class="text-white-50">Processes integration events and GitHub activity through NATS JetStream.</span></div>
+              </div>
+
+              <div class="services-catalog-callout">
+                <span>The complete operational catalog includes service purpose, protocol, status, and source links.</span>
+                <a href="/services/" class="terminal-btn-inline text-decoration-none">View Complete Operational Catalog</a>
+              </div>
             </div>
           </section>
 
@@ -342,7 +394,7 @@
               <div>
                 <i class="fas fa-quote-left me-2 text-accent"></i>
                 Status:
-                <span class="text-success">HappyQOTD online</span>
+                <span class="text-accent">Live API widget</span>
               </div>
 
               <div>
@@ -351,7 +403,7 @@
                 <span class="text-white-50">Daily quote served from my HappyQOTD API and classic QOTD service.</span>
               </div>
 
-              <div id="qotd-output" aria-live="polite" class="qotd-output">
+              <div id="qotd-output" class="qotd-output" role="status" aria-live="polite" aria-atomic="true">
                 <div class="text-warning animate-pulse">
                   <i class="fas fa-spinner fa-spin me-2"></i>
                   Fetching today&apos;s quote...
@@ -359,6 +411,8 @@
               </div>
 
               <div class="d-flex flex-wrap gap-2 mt-2">
+                <button id="btn-qotd-refresh" class="terminal-btn-inline" type="button" aria-controls="qotd-output">Refresh Quote</button>
+
                 <a href="https://qotd-api.kgivler.com/api/quotes/today" class="terminal-btn-inline text-decoration-none" target="_blank" rel="noopener noreferrer">Open API</a>
 
                 <a href="https://github.com/JoyfulReaper/HappyQOTD" class="terminal-btn-inline text-decoration-none" target="_blank" rel="noopener noreferrer">View Source</a>
@@ -366,7 +420,13 @@
             </div>
           </section>
 
-          <hr class="terminal-divider" />
+          </div>
+
+          <div class="live-lab-group" aria-labelledby="communication-heading">
+            <div class="live-lab-group-heading">
+              <h3 id="communication-heading">./communication_and_activity/</h3>
+              <p>Chat, recent development activity, and the visitor BBS.</p>
+            </div>
 
           <section class="my-4" id="chat-section">
             <div class="cmd-line">
@@ -379,7 +439,7 @@
                 <i class="fas fa-comments me-2 text-accent"></i>
                 Status:
 
-                <span class="text-success">IRC bridge online</span>
+                <span class="text-accent">Public IRC bridge</span>
               </div>
 
               <div>
@@ -429,7 +489,7 @@
                 <span class="text-white-50">Recent commits captured through my GitHub event pipeline.</span>
               </div>
 
-              <div id="recent-git-activity" aria-live="polite">
+              <div id="recent-git-activity" role="status" aria-live="polite" aria-atomic="true">
                 <div class="text-warning animate-pulse">
                   <i class="fas fa-spinner fa-spin me-2"></i>
                   Reading Git activity...
@@ -437,7 +497,7 @@
               </div>
 
               <div class="d-flex flex-wrap gap-2 mt-2">
-                <button id="btn-git-activity-refresh" class="terminal-btn-inline" type="button">Refresh Activity</button>
+                <button id="btn-git-activity-refresh" class="terminal-btn-inline" type="button" aria-controls="recent-git-activity">Refresh Activity</button>
 
                 <a href="https://github.com/JoyfulReaper" class="terminal-btn-inline text-decoration-none" target="_blank" rel="noopener noreferrer">GitHub Profile</a>
               </div>
@@ -445,6 +505,39 @@
           </section>
 
           <hr class="terminal-divider" />
+
+          <section class="my-4" id="bbs-terminal-section">
+            <div class="cmd-line">
+              <span class="prompt">kyle@kgivler:~$</span>
+              bbs show
+            </div>
+
+            <div class="project-terminal-badge d-flex flex-column gap-2 w-100">
+              <div>
+                <i class="fas fa-satellite-dish me-2 text-accent"></i>
+                Status:
+                <span class="text-success">Interactive terminal command</span>
+              </div>
+
+              <div>
+                <i class="fas fa-file-lines me-2 text-accent"></i>
+                Description:
+                <span class="text-white-50">Read the visitor board with <code>bbs show</code> or post with <code>bbs message your message</code> in the shell below.</span>
+              </div>
+
+              <div class="d-flex flex-wrap gap-2 mt-2">
+                <a href="#interactive-shell" class="terminal-btn-inline text-decoration-none">Open Interactive Shell</a>
+              </div>
+            </div>
+          </section>
+
+          </div>
+
+          <div class="live-lab-group" aria-labelledby="experiments-heading">
+            <div class="live-lab-group-heading">
+              <h3 id="experiments-heading">./experiments/</h3>
+              <p>Best-effort local AI tooling and the site&apos;s interactive command system.</p>
+            </div>
 
           <section class="my-4" id="qwen-review-section">
             <div class="cmd-line">
@@ -484,7 +577,7 @@
                   </div>
                 </div>
 
-                <span id="qwen-health-badge" class="qwen-health-pill badge rounded-pill text-warning">Checking...</span>
+                <span id="qwen-health-badge" class="qwen-health-pill badge rounded-pill text-warning" role="status" aria-live="polite" aria-atomic="true">Checking...</span>
               </div>
 
               <div class="mb-3 mt-2">
@@ -519,11 +612,17 @@
                 <button id="btn-qwen-clear" class="terminal-btn-inline" type="button">Clear Review</button>
               </div>
 
-              <div id="qwen-review-output" class="mt-3"></div>
+              <div id="qwen-review-output" class="mt-3" role="status" aria-live="polite" aria-atomic="true"></div>
             </div>
           </section>
 
           <hr class="terminal-divider" />
+
+          <section class="interactive-shell" id="interactive-shell" aria-labelledby="interactive-shell-heading">
+          <div class="interactive-shell-intro">
+            <h4 id="interactive-shell-heading">./interactive_shell.sh</h4>
+            <p>This fake shell is an optional interactive feature. Type <code>help</code> to explore commands, including the visitor BBS.</p>
+          </div>
 
           <div class="cmd-line">
             <label for="terminalCommandInput" class="prompt">kyle@kgivler:~$</label>
@@ -531,66 +630,9 @@
             <input type="text" aria-label="terminal input" autocomplete="off" spellcheck="false" id="terminalCommandInput" placeholder="type 'help'..." class="terminal-input" />
           </div>
 
-          <div id="terminal-output" aria-live="polite" class="mt-3 terminal-output-container"></div>
+          <div id="terminal-output" class="mt-3 terminal-output-container" role="status" aria-live="polite" aria-atomic="true"></div>
           </section>
-
-          <hr class="terminal-divider" />
-
-          <section class="my-4 portfolio-section" id="services-preview-section">
-            <div class="cmd-line section-command">
-              <span class="prompt">kyle@kgivler:~$</span>
-              <h2>./list_services.sh --featured</h2>
-            </div>
-
-            <div class="project-terminal-badge d-flex flex-column gap-3 w-100 mt-3">
-              <div>
-                <i class="fas fa-server me-2 text-accent"></i>
-                Status:
-                <span class="text-success">Services operational</span>
-              </div>
-
-              <div>
-                <i class="fas fa-file-lines me-2 text-accent"></i>
-                Description:
-                <span class="text-white-50">Public applications, classic internet protocols, APIs, and backend infrastructure running across my workstation and Linux VPS.</span>
-              </div>
-
-              <div class="d-flex flex-column gap-2 font-monospace">
-                <div>
-                  <span class="text-success">[PUBLIC]</span>
-                  <strong><a href="https://randomsteam.kgivler.com/" target="_blank" rel="noopener noreferrer">Random Steam Game</a></strong>
-                  <span class="text-muted">—</span>
-                  <span class="text-white-50">Picks a random game from a public Steam library.</span>
-                </div>
-
-                <div>
-                  <span class="text-success">[PUBLIC]</span>
-                  <strong>HappyFinger</strong>
-                  <span class="text-muted">—</span>
-                  <span class="text-white-50">A modern .NET Finger protocol server running on TCP port 79.</span>
-                </div>
-
-                <div>
-                  <span class="text-success">[PUBLIC]</span>
-                  <strong>HappyGopher</strong>
-                  <span class="text-muted">—</span>
-                  <span class="text-white-50">An old-school Gopher server running on TCP port 70.</span>
-                </div>
-
-                <div>
-                  <span class="text-warning">[SYSTEM]</span>
-                  <strong>Mission Control</strong>
-                  <span class="text-muted">—</span>
-                  <span class="text-white-50">Processes integration events and GitHub activity through NATS JetStream.</span>
-                </div>
-              </div>
-
-              <div class="d-flex flex-wrap gap-2 mt-1">
-                <a href="/services/" class="terminal-btn-inline text-decoration-none">View All Services</a>
-
-                <a href="https://github.com/JoyfulReaper" class="terminal-btn-inline text-decoration-none" target="_blank" rel="noopener noreferrer">View Source</a>
-              </div>
-            </div>
+          </div>
           </section>
 
           <hr class="terminal-divider" />

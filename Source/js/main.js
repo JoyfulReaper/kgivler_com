@@ -9,6 +9,21 @@ import { initQotd } from "./qotd.js";
 
 const demoTerminal = createTerminalContext(elements.demo);
 
+async function runRandomGameDemo() {
+  const randomButton = document.getElementById("btn-random-game");
+  const steamInput = document.getElementById("demoSteamInput");
+
+  if (!randomButton || !steamInput) return;
+
+  randomButton.disabled = true;
+
+  try {
+    await fetchRandomGame(steamInput.value.trim(), demoTerminal);
+  } finally {
+    randomButton.disabled = false;
+  }
+}
+
 async function refreshWorkstation() {
   if (!elements.workstationRefreshButton || !elements.telemetry) return;
 
@@ -23,13 +38,21 @@ async function refreshWorkstation() {
 
     if (!data || data.ok === false) {
       const error = document.createElement("div");
-      error.className = "text-danger";
-      error.textContent = `[OFFLINE] ${data?.error || "Workstation refresh failed."}`;
-      elements.telemetry.replaceChildren(error);
+      error.className = "widget-state-unavailable";
+      error.textContent = `[UNAVAILABLE] ${data?.error || "Workstation telemetry is temporarily unavailable."}`;
+
+      const detail = document.createElement("div");
+      detail.className = "widget-state-detail";
+      detail.textContent = "Only this optional widget is affected. Use Refresh Telemetry to try again.";
+
+      elements.telemetry.replaceChildren(error, detail);
       return;
     }
 
     initHostTelemetry(data);
+  } catch (error) {
+    console.error("Workstation telemetry refresh failed:", error);
+    initHostTelemetry(null);
   } finally {
     elements.workstationRefreshButton.disabled = false;
   }
@@ -61,13 +84,20 @@ async function processCommand(input) {
 // --- INITIALIZATION ---
 document.addEventListener("DOMContentLoaded", () => {
   // Telemetry
-  getSystemData().then(initHostTelemetry).catch(console.error);
+  getSystemData()
+    .then(initHostTelemetry)
+    .catch((error) => {
+      console.error("Initial workstation telemetry failed:", error);
+      initHostTelemetry(null);
+    });
   initSteamPresence();
   initGitActivity();
   initQotd();
   initQwenPanel();
   elements.workstationRefreshButton?.addEventListener("click", () => refreshWorkstation());
-  elements.steamRefreshButton?.addEventListener("click", () => refreshSteamPresence({ showLoading: true }).catch(console.error));
+  elements.steamRefreshButton?.addEventListener("click", () => {
+    void refreshSteamPresence({ showLoading: true });
+  });
 
   // Terminal input listener
   elements.input?.addEventListener("keydown", (e) => {
@@ -78,9 +108,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const randomBtn = document.getElementById("btn-random-game");
   if (randomBtn) {
     randomBtn.addEventListener("click", () => {
-      const input = document.getElementById("demoSteamInput")?.value.trim();
-      fetchRandomGame(input, demoTerminal);
+      void runRandomGameDemo();
     });
   }
+
+  document.getElementById("demoSteamInput")?.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      void runRandomGameDemo();
+    }
+  });
 
 });
