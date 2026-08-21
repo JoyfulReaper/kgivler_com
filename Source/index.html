@@ -10,7 +10,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
-    <link rel="stylesheet" href="styles.css?v=4" />
+    <link rel="stylesheet" href="styles.css?v=5" />
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
@@ -776,37 +776,52 @@
 
           <hr class="terminal-divider" />
 
-          <section class="my-4 portfolio-section" id="contact">
+          <section class="my-4 portfolio-section" id="contact" aria-labelledby="contact-heading">
             <div class="cmd-line section-command">
               <span class="prompt">kyle@kgivler:~$</span>
-              <h2>ls -la ./links/</h2>
+              <h2 id="contact-heading">./open_professional_channels.sh</h2>
             </div>
 
-            <div class="d-flex justify-content-start flex-wrap gap-3 mt-3">
-              <a href="https://www.linkedin.com/in/kyle-givler/" class="terminal-btn" target="_blank" rel="noopener noreferrer">
-                <i class="fab fa-linkedin me-2"></i>
-                linkedin.lnk
-              </a>
+            <p class="section-summary contact-summary">Interested in backend .NET work, systems engineering, developer tooling, open-source collaboration, and technically meaningful volunteer projects.</p>
 
-              <a href="https://github.com/JoyfulReaper" class="terminal-btn" target="_blank" rel="noopener noreferrer">
-                <i class="fab fa-github me-2"></i>
-                github.lnk
-              </a>
+            <div class="contact-groups">
+              <div class="contact-professional-group" role="group" aria-labelledby="professional-contact-heading">
+                <h3 id="professional-contact-heading">./professional/</h3>
 
-              <a href="https://steamcommunity.com/id/Mister_God/" class="terminal-btn" target="_blank" rel="noopener noreferrer">
-                <i class="fab fa-steam me-2"></i>
-                steam_profile.lnk
-              </a>
+                <div class="contact-professional-actions">
+                  <a href="https://github.com/JoyfulReaper" class="terminal-btn contact-primary-action" target="_blank" rel="noopener noreferrer" aria-label="Open Kyle Givler's GitHub profile in a new tab">
+                    <i class="fab fa-github" aria-hidden="true"></i>
+                    <span>GitHub Profile</span>
+                  </a>
 
-              <a href="https://steamcommunity.com/id/Mister_God/myworkshopfiles/?appid=294100" class="terminal-btn btn-highlight" target="_blank" rel="noopener noreferrer">
-                <i class="fas fa-hammer me-2"></i>
-                rimworld_mods.exe
-              </a>
+                  <a href="https://www.linkedin.com/in/kyle-givler/" class="terminal-btn contact-primary-action" target="_blank" rel="noopener noreferrer" aria-label="Open Kyle Givler's LinkedIn profile in a new tab">
+                    <i class="fab fa-linkedin" aria-hidden="true"></i>
+                    <span>LinkedIn Profile</span>
+                  </a>
+                </div>
+              </div>
 
-              <a href="https://chat.kgivler.com/" class="terminal-btn btn-highlight" target="_blank" rel="noopener noreferrer">
-                <i class="fas fa-comments me-2"></i>
-                chat_with_me.sh
-              </a>
+              <div class="contact-elsewhere-group" role="group" aria-labelledby="elsewhere-heading">
+                <h3 id="elsewhere-heading">./elsewhere/</h3>
+                <p>Games, mods, and the public chat bridge.</p>
+
+                <div class="contact-elsewhere-actions">
+                  <a href="https://steamcommunity.com/id/Mister_God/" class="terminal-btn-inline contact-secondary-action" target="_blank" rel="noopener noreferrer" aria-label="Open Steam profile in a new tab">
+                    <i class="fab fa-steam" aria-hidden="true"></i>
+                    <span>Steam Profile</span>
+                  </a>
+
+                  <a href="https://steamcommunity.com/id/Mister_God/myworkshopfiles/?appid=294100" class="terminal-btn-inline contact-secondary-action" target="_blank" rel="noopener noreferrer" aria-label="Open RimWorld Workshop files in a new tab">
+                    <i class="fas fa-hammer" aria-hidden="true"></i>
+                    <span>RimWorld Workshop</span>
+                  </a>
+
+                  <a href="https://chat.kgivler.com/" class="terminal-btn-inline contact-secondary-action" target="_blank" rel="noopener noreferrer" aria-label="Open public chat in a new tab">
+                    <i class="fas fa-comments" aria-hidden="true"></i>
+                    <span>Public Chat</span>
+                  </a>
+                </div>
+              </div>
             </div>
           </section>
         </div>

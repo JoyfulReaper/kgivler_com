@@ -114,6 +114,11 @@ body.terminal-theme {
     text-decoration: underline;
 }
 
+.terminal-nav a:focus-visible {
+    outline: 2px solid #fbbf24;
+    outline-offset: 3px;
+}
+
 .portfolio-section {
     scroll-margin-top: 1rem;
 }
@@ -656,6 +661,12 @@ body.terminal-theme {
     transform: translateY(-2px);
 }
 
+.terminal-btn:focus-visible,
+.terminal-btn-inline:focus-visible {
+    outline: 3px solid #fbbf24;
+    outline-offset: 3px;
+}
+
 .terminal-btn.btn-highlight {
     background-color: transparent;
     color: #e2e8f0 !important;
@@ -694,6 +705,82 @@ body.terminal-theme {
 .terminal-btn-inline:hover {
     background: #38bdf8;
     color: #000;
+}
+
+.contact-summary {
+    max-width: 70ch;
+    color: #e2e8f0;
+}
+
+.contact-groups {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.contact-professional-group,
+.contact-elsewhere-group {
+    border-radius: 4px;
+}
+
+.contact-professional-group {
+    padding: 1rem;
+    border: 1px solid #39ff14;
+    background-color: rgba(57, 255, 20, 0.04);
+}
+
+.contact-professional-group h3,
+.contact-elsewhere-group h3 {
+    margin: 0 0 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.contact-professional-group h3 {
+    color: #39ff14;
+}
+
+.contact-professional-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+
+.contact-primary-action {
+    justify-content: center;
+    gap: 0.55rem;
+    min-height: 3rem;
+    font-weight: 700;
+}
+
+.contact-elsewhere-group {
+    padding: 0.85rem 1rem;
+    border: 1px dashed #334155;
+    background-color: #0c0c0f;
+}
+
+.contact-elsewhere-group h3 {
+    color: #94a3b8;
+}
+
+.contact-elsewhere-group p {
+    margin: -0.35rem 0 0.75rem;
+    color: #64748b;
+    font-size: 0.8rem;
+}
+
+.contact-elsewhere-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+}
+
+.contact-secondary-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #94a3b8;
+    border-color: #4b5563;
 }
 
 .output-line {
@@ -790,6 +877,21 @@ body.terminal-theme {
     .interactive-shell .terminal-input {
         width: 100%;
         margin-top: 0.4rem;
+    }
+
+    .contact-professional-actions {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .contact-elsewhere-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .contact-secondary-action {
+        justify-content: flex-start;
+        width: 100%;
+        padding: 0.4rem 0.65rem;
     }
 }
 
