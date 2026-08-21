@@ -15,6 +15,10 @@
     document.querySelectorAll("[data-service-entry]")
   );
 
+  const serviceSummaries = serviceEntries
+    .map((entry) => entry.querySelector("summary"))
+    .filter(Boolean);
+
   const serviceSections = Array.from(
     document.querySelectorAll("[data-service-section]")
   );
@@ -1032,10 +1036,20 @@
     }
   }
 
-  function handlePageHide(event) {
+  function handlePageHide() {
     stopPolling();
     activeController?.abort();
+  }
 
+  function handleVisibilityChange() {
+    if (document.hidden) {
+      stopPolling();
+      activeController?.abort();
+      return;
+    }
+
+    startPolling();
+    void fetchSnapshot();
   }
 
   async function refreshAfterPageRestore() {
@@ -1070,6 +1084,19 @@
     applyFilter();
   }
 
+  for (const summary of serviceSummaries) {
+    // Keep disclosure activation consistent when the
+    // flex-styled summary receives keyboard input.
+    summary.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") {
+        return;
+      }
+
+      event.preventDefault();
+      summary.parentElement.open = !summary.parentElement.open;
+    });
+  }
+
   dashboard.refreshButton?.addEventListener(
     "click",
     () => {
@@ -1085,6 +1112,11 @@
   window.addEventListener(
     "pageshow",
     handlePageShow
+  );
+
+  document.addEventListener(
+    "visibilitychange",
+    handleVisibilityChange
   );
 
   startPolling();

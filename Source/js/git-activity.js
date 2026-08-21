@@ -171,10 +171,14 @@ function renderError(message) {
   if (!elements.gitActivity) return;
 
   const error = document.createElement("div");
-  error.className = "text-danger";
-  error.textContent = `[OFFLINE] ${message}`;
+  error.className = "widget-state-unavailable";
+  error.textContent = `[UNAVAILABLE] ${message}`;
 
-  elements.gitActivity.replaceChildren(error);
+  const detail = document.createElement("div");
+  detail.className = "widget-state-detail";
+  detail.textContent = "Only the Git activity feed is affected. Use Refresh Activity to retry.";
+
+  elements.gitActivity.replaceChildren(error, detail);
 }
 
 function renderActivity(items) {
@@ -240,6 +244,9 @@ export async function refreshGitActivity() {
       console.error("Git activity render failed:", error);
       renderError("Git activity data could not be rendered.");
     }
+  } catch (error) {
+    console.error("Git activity refresh failed:", error);
+    renderError("Git activity is temporarily unavailable.");
   } finally {
     isRefreshingGitActivity = false;
 
@@ -254,8 +261,10 @@ export function initGitActivity() {
 
   elements.gitActivityRefreshButton?.addEventListener(
     "click",
-    () => refreshGitActivity().catch(console.error)
+    () => {
+      void refreshGitActivity();
+    }
   );
 
-  refreshGitActivity().catch(console.error);
+  void refreshGitActivity();
 }

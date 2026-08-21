@@ -119,7 +119,7 @@ public static class GitActivityRoutes
                         statusCode:
                             StatusCodes.Status502BadGateway);
                 }
-            });
+            }).RequireRateLimiting("TelemetryPolicy");
 
         return app;
     }

@@ -8,26 +8,93 @@
       content="width=device-width, initial-scale=1.0"
     />
 
-    <title>KGIVLER.EXE: SERVICES</title>
+    <title>Services | Kyle Givler — Self-Hosted Systems</title>
 
     <meta
       name="description"
-      content="Public services, classic internet protocols, APIs, monitoring tools, and backend infrastructure operated by Kyle Givler."
+      content="Explore public self-hosted applications, .NET network services, APIs, protocol servers, and operational tooling designed and operated by Kyle Givler."
     />
+
+    <link
+      rel="canonical"
+      href="https://www.kgivler.com/services/"
+    />
+
+    <meta
+      property="og:type"
+      content="website"
+    />
+
+    <meta
+      property="og:title"
+      content="Services | Kyle Givler — Self-Hosted Systems"
+    />
+
+    <meta
+      property="og:description"
+      content="Public self-hosted applications, .NET network services, APIs, protocol servers, and operational tooling designed and operated by Kyle Givler."
+    />
+
+    <meta
+      property="og:url"
+      content="https://www.kgivler.com/services/"
+    />
+
+    <meta
+      property="og:site_name"
+      content="Kyle Givler"
+    />
+
+    <meta
+      name="twitter:card"
+      content="summary"
+    />
+
+    <meta
+      name="twitter:title"
+      content="Services | Kyle Givler — Self-Hosted Systems"
+    />
+
+    <meta
+      name="twitter:description"
+      content="Public self-hosted applications, .NET network services, APIs, protocol servers, and operational tooling designed and operated by Kyle Givler."
+    />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "@id": "https://www.kgivler.com/services/#webpage",
+        "url": "https://www.kgivler.com/services/",
+        "name": "Services | Kyle Givler — Self-Hosted Systems",
+        "description": "Public self-hosted applications, .NET network services, APIs, protocol servers, and operational tooling designed and operated by Kyle Givler.",
+        "isPartOf": {
+          "@id": "https://www.kgivler.com/#website"
+        },
+        "about": {
+          "@id": "https://www.kgivler.com/#person"
+        }
+      }
+    </script>
 
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
     />
 
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
     />
 
     <link
       rel="stylesheet"
-      href="../styles.css?v=2"
+      href="../styles.css?v=6"
     />
 
     <link
@@ -57,12 +124,14 @@
 
     <link
       rel="stylesheet"
-      href="./services.css"
+      href="./services.css?v=2"
     />
   </head>
 
   <body class="terminal-theme">
-    <main class="main-container">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <main class="main-container" id="main-content">
       <div class="terminal-window">
         <header class="terminal-header">
           <span class="terminal-dot close-dot"></span>
@@ -92,7 +161,7 @@
             </p>
           </header>
 
-          <div class="d-flex flex-wrap gap-2 mb-4">
+          <nav class="d-flex flex-wrap gap-2 mb-4" aria-label="Services navigation">
             <a
               href="/"
               class="terminal-btn-inline text-decoration-none"
@@ -110,7 +179,7 @@
               <i class="fab fa-github me-2"></i>
               GitHub Profile
             </a>
-          </div>
+          </nav>
 
           <div class="system-warning-box">
             <i class="fas fa-circle-info me-2"></i>
@@ -121,6 +190,12 @@
               loopback-only.
             </span>
           </div>
+
+          <noscript>
+            <div class="system-warning-box mt-3" role="note">
+              <span>[STATIC MODE] JavaScript is disabled. Service details remain available, but filtering and live status updates require JavaScript.</span>
+            </div>
+          </noscript>
 
           <div class="services-summary-grid mt-3">
             <div class="services-summary-card">
@@ -137,7 +212,7 @@
             </div>
 
             <div class="services-summary-card">
-              <span class="services-summary-value">7</span>
+              <span class="services-summary-value">9</span>
 
               <span class="services-summary-label">
                 Public apps and protocols
@@ -153,7 +228,7 @@
             </div>
 
             <div class="services-summary-card">
-              <span class="services-summary-value">3</span>
+              <span class="services-summary-value">6</span>
 
               <span class="services-summary-label">
                 Operations and monitoring tools
@@ -163,7 +238,7 @@
 
           <hr class="terminal-divider" />
 
-          <section class="my-4">
+          <div class="my-4">
             <div class="cmd-line">
               <label
                 for="service-filter"
@@ -179,11 +254,12 @@
                 class="terminal-input services-filter"
                 type="search"
                 autocomplete="off"
+                maxlength="100"
                 placeholder="service, protocol, container, or technology..."
                 aria-label="Filter services"
               />
             </div>
-          </section>
+          </div>
 
           <div
             id="services-empty"
@@ -197,10 +273,10 @@
             class="service-section"
             data-service-section
           >
-            <div class="cmd-line mb-3">
+            <h2 class="cmd-line mb-3 service-section-heading">
               <span class="prompt">kyle@kgivler:~$</span>
               ls -la ./public-services/
-            </div>
+            </h2>
 
             <div class="service-list">
               <details
@@ -350,6 +426,75 @@
               <details
                 class="service-entry"
                 data-service-entry
+                data-container-name="joyful-stack-happydiscard-1"
+                data-protocol-service="happydiscard"
+                data-search="happydiscard discard tcp port 9 classic protocol networking rfc public dotnet"
+              >
+                <summary>
+                  <span class="service-summary-main">
+                    <i class="fas fa-trash-can service-icon" aria-hidden="true"></i>
+                    <span class="service-summary-text">
+                      <span class="service-name">HappyDiscard</span>
+                      <span class="service-tagline">A modern implementation of the classic Discard protocol.</span>
+                    </span>
+                  </span>
+                  <span class="service-summary-badges">
+                    <span class="service-chip" data-type="public">PUBLIC</span>
+                    <span class="service-chip" data-live-status data-type="warning">CHECKING</span>
+                    <span class="service-chip" data-type="protocol">TCP :9</span>
+                  </span>
+                </summary>
+
+                <div class="service-body">
+                  <div class="service-meta-grid">
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Container</span>
+                      <span class="service-meta-value" data-live-container-name>joyful-stack-happydiscard-1</span>
+                    </div>
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Image</span>
+                      <span class="service-meta-value">happy-discard</span>
+                    </div>
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Endpoint</span>
+                      <span class="service-meta-value">discard.kgivler.com:9</span>
+                    </div>
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Protocol</span>
+                      <span class="service-meta-value">Discard / TCP :9</span>
+                    </div>
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Observed memory</span>
+                      <span class="service-meta-value" data-live-memory>Awaiting live snapshot</span>
+                    </div>
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Container state</span>
+                      <span class="service-meta-value" data-live-container-state>Awaiting live snapshot</span>
+                    </div>
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Live probe</span>
+                      <span class="service-meta-value" data-live-protocol-latency>Awaiting live snapshot</span>
+                    </div>
+                  </div>
+
+                  <p class="service-description">
+                    Accepts data over TCP port 9 and discards every byte without decoding, storing, logging, or echoing it.
+                  </p>
+
+                  <div class="service-command mt-3">
+                    <div class="text-accent font-monospace mb-2">Try it:</div>
+                    <code>nc discard.kgivler.com 9</code>
+                  </div>
+
+                  <div class="d-flex flex-wrap gap-2 mt-3">
+                    <a href="https://github.com/JoyfulReaper/HappyDiscard" class="terminal-btn-inline text-decoration-none" target="_blank" rel="noopener noreferrer">View HappyDiscard Source</a>
+                  </div>
+                </div>
+              </details>
+
+              <details
+                class="service-entry"
+                data-service-entry
                 data-container-name="joyful-stack-happydaytime-1"
                 data-protocol-service="happydaytime"
                 data-search="happydaytime daytime time protocol tcp port 13 networking rfc 867 public dotnet server clock"
@@ -488,6 +633,10 @@
                     This is a real TCP Daytime service on its assigned port,
                     not an HTTP endpoint.
                   </p>
+
+                  <div class="d-flex flex-wrap gap-2 mt-3">
+                    <a href="https://github.com/JoyfulReaper/HappyDaytime" class="terminal-btn-inline text-decoration-none" target="_blank" rel="noopener noreferrer">View HappyDaytime Source</a>
+                  </div>
                 </div>
               </details>
 
@@ -624,6 +773,10 @@
                     working example of one of the original small Internet
                     services.
                   </p>
+
+                  <div class="d-flex flex-wrap gap-2 mt-3">
+                    <a href="https://github.com/JoyfulReaper/HappyEcho" class="terminal-btn-inline text-decoration-none" target="_blank" rel="noopener noreferrer">View HappyEcho Source</a>
+                  </div>
                 </div>
               </details>
 
@@ -771,6 +924,10 @@
                     is a real TCP Finger service listening on the protocol's
                     assigned port, not an HTTP simulation.
                   </p>
+
+                  <div class="d-flex flex-wrap gap-2 mt-3">
+                    <a href="https://github.com/JoyfulReaper/HappyFinger" class="terminal-btn-inline text-decoration-none" target="_blank" rel="noopener noreferrer">View HappyFinger Source</a>
+                  </div>
                 </div>
               </details>
 
@@ -906,6 +1063,69 @@
                     The result is closer to navigating a remote text filesystem
                     than browsing a typical website.
                   </p>
+
+                  <div class="d-flex flex-wrap gap-2 mt-3">
+                    <a href="https://github.com/JoyfulReaper/HappyGopher" class="terminal-btn-inline text-decoration-none" target="_blank" rel="noopener noreferrer">View HappyGopher Source</a>
+                  </div>
+                </div>
+              </details>
+
+              <details
+                class="service-entry"
+                data-service-entry
+                data-container-name="joyful-stack-happygemini-1"
+                data-search="happygemini gemini tls port 1965 small web smolweb text plugins public dotnet"
+              >
+                <summary>
+                  <span class="service-summary-main">
+                    <i class="fas fa-star service-icon" aria-hidden="true"></i>
+                    <span class="service-summary-text">
+                      <span class="service-name">HappyGemini</span>
+                      <span class="service-tagline">A small Gemini protocol server for the text-first web.</span>
+                    </span>
+                  </span>
+                  <span class="service-summary-badges">
+                    <span class="service-chip" data-type="public">PUBLIC</span>
+                    <span class="service-chip" data-live-status data-type="warning">CHECKING</span>
+                    <span class="service-chip" data-type="protocol">TLS :1965</span>
+                  </span>
+                </summary>
+
+                <div class="service-body">
+                  <div class="service-meta-grid">
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Container</span>
+                      <span class="service-meta-value" data-live-container-name>joyful-stack-happygemini-1</span>
+                    </div>
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Image</span>
+                      <span class="service-meta-value">joyful-stack-happygemini</span>
+                    </div>
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Endpoint</span>
+                      <span class="service-meta-value">gemini.kgivler.com:1965</span>
+                    </div>
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Protocol</span>
+                      <span class="service-meta-value">Gemini / TLS :1965</span>
+                    </div>
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Observed memory</span>
+                      <span class="service-meta-value" data-live-memory>Awaiting live snapshot</span>
+                    </div>
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Container state</span>
+                      <span class="service-meta-value" data-live-container-state>Awaiting live snapshot</span>
+                    </div>
+                  </div>
+
+                  <p class="service-description">
+                    A .NET 10 Gemini server with TLS, virtual hosts, static content, dynamic pages, and external plugin support.
+                  </p>
+
+                  <div class="d-flex flex-wrap gap-2 mt-3">
+                    <a href="https://github.com/JoyfulReaper/HappyGemini" class="terminal-btn-inline text-decoration-none" target="_blank" rel="noopener noreferrer">View HappyGemini Source</a>
+                  </div>
                 </div>
               </details>
 
@@ -1192,6 +1412,10 @@
                     restricted later if it attracts abusive traffic or
                     excessive resource usage.
                   </p>
+
+                  <div class="d-flex flex-wrap gap-2 mt-3">
+                    <a href="https://tools.kgivler.com/" class="terminal-btn-inline text-decoration-none" target="_blank" rel="noopener noreferrer">Open IT-Tools</a>
+                  </div>
                 </div>
               </details>
             </div>
@@ -1203,17 +1427,17 @@
           >
             <hr class="terminal-divider" />
 
-            <div class="cmd-line mb-3">
+            <h2 class="cmd-line mb-3 service-section-heading">
               <span class="prompt">kyle@kgivler:~$</span>
               ls -la ./mission-control/
-            </div>
+            </h2>
 
             <div class="service-list">
               <details
                 class="service-entry"
                 data-service-entry
                 data-container-name="joyful-stack-gateway-1"
-                data-search="mission control gateway github webhook integration events rabbitmq ingress api port 5190 internal"
+                data-search="mission control gateway github webhook integration events nats jetstream ingress api port 5190 internal"
               >
                 <summary>
                   <span class="service-summary-main">
@@ -1314,7 +1538,7 @@
                   <p class="service-description">
                     The Gateway accepts generic integration events and signed
                     GitHub webhooks. Validated events are wrapped in a common
-                    envelope and published to RabbitMQ for downstream
+                    envelope and published to NATS JetStream for downstream
                     processing.
                   </p>
 
@@ -1340,7 +1564,7 @@
                 class="service-entry"
                 data-service-entry
                 data-container-name="joyful-stack-archive-1"
-                data-search="mission control archive sqlite event store rabbitmq durable queue history port 5191 internal"
+                data-search="mission control archive sqlite event store nats jetstream durable consumer history port 5191 internal"
               >
                 <summary>
                   <span class="service-summary-main">
@@ -1448,6 +1672,10 @@
                     Specialized projections can change without losing the
                     original integration-event record.
                   </p>
+
+                  <div class="d-flex flex-wrap gap-2 mt-3">
+                    <a href="https://github.com/JoyfulReaper/MissionControl" class="terminal-btn-inline text-decoration-none" target="_blank" rel="noopener noreferrer">View Mission Control Source</a>
+                  </div>
                 </div>
               </details>
 
@@ -1573,6 +1801,8 @@
                     >
                       View Recent Activity JSON
                     </a>
+
+                    <a href="https://github.com/JoyfulReaper/MissionControl" class="terminal-btn-inline text-decoration-none" target="_blank" rel="noopener noreferrer">View Mission Control Source</a>
                   </div>
                 </div>
               </details>
@@ -1580,8 +1810,8 @@
               <details
                 class="service-entry"
                 data-service-entry
-                data-container-name="joyful-stack-rabbitmq-1"
-                data-search="rabbitmq message broker topic exchange durable queues mission control event routing internal healthy"
+                data-container-name="joyful-stack-nats-1"
+                data-search="nats jetstream message broker events durable consumers mission control internal"
               >
                 <summary>
                   <span class="service-summary-main">
@@ -1589,11 +1819,11 @@
 
                     <span class="service-summary-text">
                       <span class="service-name">
-                        RabbitMQ
+                        NATS JetStream
                       </span>
 
                       <span class="service-tagline">
-                        Routes Mission Control events to durable consumers.
+                        Provides durable event streaming for Mission Control.
                       </span>
                     </span>
                   </span>
@@ -1618,7 +1848,7 @@
                       class="service-chip"
                       data-type="protocol"
                     >
-                      AMQP
+                      NATS
                     </span>
                   </span>
                 </summary>
@@ -1632,7 +1862,7 @@
                         class="service-meta-value"
                         data-live-container-name
                       >
-                        joyful-stack-rabbitmq-1
+                        joyful-stack-nats-1
                       </span>
                     </div>
 
@@ -1640,15 +1870,15 @@
                       <span class="service-meta-label">Image</span>
 
                       <span class="service-meta-value">
-                        rabbitmq:4-management
+                        nats:2.14.3-alpine
                       </span>
                     </div>
 
                     <div class="service-meta-item">
-                      <span class="service-meta-label">Virtual host</span>
+                      <span class="service-meta-label">Endpoint</span>
 
                       <span class="service-meta-value">
-                        /mission-control
+                        nats:4222
                       </span>
                     </div>
 
@@ -1661,7 +1891,7 @@
                         class="service-meta-value"
                         data-live-memory
                       >
-                        Approximately 322 MB
+                        Awaiting live snapshot
                       </span>
                     </div>
 
@@ -1680,16 +1910,15 @@
                   </div>
 
                   <p class="service-description">
-                    RabbitMQ is the message broker behind Mission Control. A
-                    topic exchange routes each integration event to matching
-                    durable queues, allowing Archive, GitActivity, and future
-                    services to process events independently.
+                    NATS JetStream is the message broker behind Mission Control.
+                    It persists integration events and delivers them to durable
+                    consumers so Archive, GitActivity, and future services can
+                    process events independently.
                   </p>
 
                   <p class="service-note">
-                    It currently has the largest memory footprint in this stack,
-                    but provides durable queueing and reliable separation
-                    between publishers and consumers.
+                    Durable streams separate publishers from consumers while
+                    preserving events for reliable processing and recovery.
                   </p>
                 </div>
               </details>
@@ -1702,12 +1931,192 @@
           >
             <hr class="terminal-divider" />
 
-            <div class="cmd-line mb-3">
+            <h2 class="cmd-line mb-3 service-section-heading">
               <span class="prompt">kyle@kgivler:~$</span>
               ls -la ./operations/
-            </div>
+            </h2>
 
             <div class="service-list">
+              <details
+                class="service-entry"
+                data-service-entry
+                data-container-name="joyful-stack-dashboard-1"
+                data-search="mission control dashboard operations monitoring events archive containers health blazor private"
+              >
+                <summary>
+                  <span class="service-summary-main">
+                    <i class="fas fa-gauge-high service-icon" aria-hidden="true"></i>
+                    <span class="service-summary-text">
+                      <span class="service-name">Mission Control Dashboard</span>
+                      <span class="service-tagline">A private operations console for monitoring the JoyfulReaper service stack.</span>
+                    </span>
+                  </span>
+                  <span class="service-summary-badges">
+                    <span class="service-chip" data-type="internal">PRIVATE</span>
+                    <span class="service-chip" data-live-status data-type="warning">CHECKING</span>
+                    <span class="service-chip" data-type="protocol">BLAZOR</span>
+                  </span>
+                </summary>
+
+                <div class="service-body">
+                  <div class="service-meta-grid">
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Container</span>
+                      <span class="service-meta-value" data-live-container-name>joyful-stack-dashboard-1</span>
+                    </div>
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Image</span>
+                      <span class="service-meta-value">joyful-stack-dashboard</span>
+                    </div>
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Hostname</span>
+                      <span class="service-meta-value">dashboard.kgivler.com</span>
+                    </div>
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Protocol</span>
+                      <span class="service-meta-value">HTTPS / Blazor Server</span>
+                    </div>
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Observed memory</span>
+                      <span class="service-meta-value" data-live-memory>Awaiting live snapshot</span>
+                    </div>
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Container state</span>
+                      <span class="service-meta-value" data-live-container-state>Awaiting live snapshot</span>
+                    </div>
+                  </div>
+
+                  <p class="service-description">
+                    An authenticated Blazor dashboard for viewing Mission Control events, service status, container health, protocol probes, archive statistics, and detailed event payloads.
+                  </p>
+
+                  <p class="service-note">The dashboard is authenticated; no administrative action is exposed from this public catalog.</p>
+
+                  <div class="d-flex flex-wrap gap-2 mt-3">
+                    <a href="https://github.com/JoyfulReaper/MissionControl" class="terminal-btn-inline text-decoration-none" target="_blank" rel="noopener noreferrer">View Mission Control Source</a>
+                  </div>
+                </div>
+              </details>
+
+              <details
+                class="service-entry"
+                data-service-entry
+                data-container-name="joyful-stack-wsiwot-1"
+                data-search="what should i work on today wsiwot work planning projects todos daily pick productivity blazor sqlite private"
+              >
+                <summary>
+                  <span class="service-summary-main">
+                    <i class="fas fa-list-check service-icon" aria-hidden="true"></i>
+                    <span class="service-summary-text">
+                      <span class="service-name">What Should I Work On Today?</span>
+                      <span class="service-tagline">Surfaces neglected projects and gives me something concrete to work on.</span>
+                    </span>
+                  </span>
+                  <span class="service-summary-badges">
+                    <span class="service-chip" data-type="internal">PRIVATE</span>
+                    <span class="service-chip" data-live-status data-type="warning">CHECKING</span>
+                    <span class="service-chip" data-type="protocol">BLAZOR</span>
+                  </span>
+                </summary>
+
+                <div class="service-body">
+                  <div class="service-meta-grid">
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Container</span>
+                      <span class="service-meta-value" data-live-container-name>joyful-stack-wsiwot-1</span>
+                    </div>
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Image</span>
+                      <span class="service-meta-value">joyful-stack-wsiwot</span>
+                    </div>
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Loopback endpoint</span>
+                      <span class="service-meta-value">127.0.0.1:5080</span>
+                    </div>
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Protocol</span>
+                      <span class="service-meta-value">HTTP / Blazor Server / JSON API</span>
+                    </div>
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Observed memory</span>
+                      <span class="service-meta-value" data-live-memory>Awaiting live snapshot</span>
+                    </div>
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Container state</span>
+                      <span class="service-meta-value" data-live-container-state>Awaiting live snapshot</span>
+                    </div>
+                  </div>
+
+                  <p class="service-description">
+                    A private work-planning application for tracking projects and todos, recording when work was last performed, and choosing a daily task based on neglect, energy, and effort.
+                  </p>
+
+                  <div class="d-flex flex-wrap gap-2 mt-3">
+                    <a href="https://github.com/JoyfulReaper/WhatShouldIWorkOnToday" class="terminal-btn-inline text-decoration-none" target="_blank" rel="noopener noreferrer">View Project Source</a>
+                  </div>
+                </div>
+              </details>
+
+              <details
+                class="service-entry"
+                data-service-entry
+                data-container-name="joyful-stack-ntfy-1"
+                data-search="ntfy notifications push alerts monitoring http self-hosted operations rest api"
+              >
+                <summary>
+                  <span class="service-summary-main">
+                    <i class="fas fa-bell service-icon" aria-hidden="true"></i>
+                    <span class="service-summary-text">
+                      <span class="service-name">ntfy</span>
+                      <span class="service-tagline">Delivers push notifications from applications and infrastructure.</span>
+                    </span>
+                  </span>
+                  <span class="service-summary-badges">
+                    <span class="service-chip" data-type="internal">OPERATIONS</span>
+                    <span class="service-chip" data-live-status data-type="warning">CHECKING</span>
+                    <span class="service-chip" data-type="protocol">HTTPS</span>
+                  </span>
+                </summary>
+
+                <div class="service-body">
+                  <div class="service-meta-grid">
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Container</span>
+                      <span class="service-meta-value" data-live-container-name>joyful-stack-ntfy-1</span>
+                    </div>
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Image</span>
+                      <span class="service-meta-value">binwiederhier/ntfy</span>
+                    </div>
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Hostname</span>
+                      <span class="service-meta-value">ntfy.kgivler.com</span>
+                    </div>
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Protocol</span>
+                      <span class="service-meta-value">HTTPS / REST API</span>
+                    </div>
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Observed memory</span>
+                      <span class="service-meta-value" data-live-memory>Awaiting live snapshot</span>
+                    </div>
+                    <div class="service-meta-item">
+                      <span class="service-meta-label">Container state</span>
+                      <span class="service-meta-value" data-live-container-state>Awaiting live snapshot</span>
+                    </div>
+                  </div>
+
+                  <p class="service-description">
+                    A self-hosted notification service that accepts simple HTTP requests and delivers real-time push notifications to subscribed devices. It is used for application alerts, monitoring events, and operational notifications.
+                  </p>
+
+                  <div class="d-flex flex-wrap gap-2 mt-3">
+                    <a href="https://ntfy.kgivler.com/" class="terminal-btn-inline text-decoration-none" target="_blank" rel="noopener noreferrer">Open Application</a>
+                    <a href="https://github.com/binwiederhier/ntfy" class="terminal-btn-inline text-decoration-none" target="_blank" rel="noopener noreferrer">View ntfy Source</a>
+                  </div>
+                </div>
+              </details>
+
               <details
                 class="service-entry"
                 data-service-entry
@@ -2040,10 +2449,10 @@
           <section class="service-section">
             <hr class="terminal-divider" />
 
-            <div class="cmd-line mb-3">
+            <h2 class="cmd-line mb-3 service-section-heading">
               <span class="prompt">kyle@kgivler:~$</span>
               mission-control status --live
-            </div>
+            </h2>
 
             <div
               class="system-warning-box services-live-banner mb-3"
@@ -2139,7 +2548,7 @@
 
           <hr class="terminal-divider" />
 
-          <div class="d-flex flex-wrap gap-2 mt-4">
+          <nav class="d-flex flex-wrap gap-2 mt-4" aria-label="Services footer navigation">
             <a
               href="/"
               class="terminal-btn-inline text-decoration-none"
@@ -2157,7 +2566,7 @@
               <i class="fab fa-github me-2"></i>
               Browse Source Code
             </a>
-          </div>
+          </nav>
 
           <div class="cmd-line mt-4">
             <span class="prompt">kyle@kgivler:~$</span>
@@ -2167,6 +2576,6 @@
       </div>
     </main>
 
-    <script src="./services.js"></script>
+    <script src="./services.js?v=2"></script>
   </body>
 </html>

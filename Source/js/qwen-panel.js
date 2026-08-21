@@ -9,7 +9,7 @@ let isRunningQwenReview = false;
 let isCheckingQwenHealth = false;
 
 const badSampleCode = `const API_URL = "http://localhost:5000/api/code-review";
-const TOKEN = "SUPER_SECRET_ADMIN_TOKEN_123";
+const TOKEN = "DEMO_TOKEN_NOT_A_SECRET";
 
 export async function submitReview() {
     const code = document.getElementById("codeReviewInput").value;
@@ -94,7 +94,7 @@ async function refreshQwenHealth() {
         qwenReviewTerminal &&
         canShowHealthMessage()
       ) {
-        qwenReviewTerminal.printTrustedHtml(`<span class="text-danger">QwenCoder health check failed: ${escapeHtml(getMessage(data?.error, "unknown error"))}. Kyle is probably playing a video game or something...</span>`);
+        qwenReviewTerminal.printTrustedHtml(`<span class="widget-state-unavailable">[UNAVAILABLE] QwenCoder service unavailable: ${escapeHtml(getMessage(data?.error, "unknown error"))}</span><div class="widget-state-detail">Only local AI review is affected. Use Health Check to retry.</div>`);
         setReviewOutputKind("health");
       }
       return data;
@@ -114,7 +114,7 @@ async function refreshQwenHealth() {
       qwenReviewTerminal &&
       canShowHealthMessage()
     ) {
-      qwenReviewTerminal.errorText("QwenCoder health check failed.");
+      qwenReviewTerminal.errorText("QwenCoder service is temporarily unavailable. Use Health Check to retry.");
       setReviewOutputKind("health");
     }
 
@@ -138,7 +138,7 @@ async function runQwenReview() {
   }
 
   isRunningQwenReview = true;
-  qwenReviewTerminal.loadingText("Sending code to QwenCoder... Please wait, this can take a long time...");
+  qwenReviewTerminal.loadingText("Sending code to QwenCoder... This bounded request may take up to 90 seconds...");
   setReviewOutputKind("review-loading");
   if (elements.qwenReviewButton) elements.qwenReviewButton.disabled = true;
   if (elements.qwenHealthButton) elements.qwenHealthButton.disabled = true;

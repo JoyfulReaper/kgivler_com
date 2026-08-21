@@ -17,9 +17,15 @@ function renderLoading() {
 function renderError(message) {
   if (!elements.qotdOutput) return;
 
-  elements.qotdOutput.innerHTML = `
-    <div class="text-danger">[ERROR] ${escapeHtml(message)}</div>
-    <div class="small text-muted mt-1">This can also happen if the browser blocks the API response because of cross-origin policy.</div>`;
+  const unavailable = document.createElement("div");
+  unavailable.className = "widget-state-unavailable";
+  unavailable.textContent = `[UNAVAILABLE] ${message}`;
+
+  const detail = document.createElement("div");
+  detail.className = "widget-state-detail";
+  detail.textContent = "Only the Quote of the Day service is affected. Use Refresh Quote to retry.";
+
+  elements.qotdOutput.replaceChildren(unavailable, detail);
 }
 
 function renderQuote(quote) {
@@ -56,6 +62,10 @@ export async function refreshQotd() {
 
   isRefreshingQotd = true;
 
+  if (elements.qotdRefreshButton) {
+    elements.qotdRefreshButton.disabled = true;
+  }
+
   renderLoading();
 
   try {
@@ -67,13 +77,24 @@ export async function refreshQotd() {
     }
 
     renderQuote(result.quote);
+  } catch (error) {
+    console.error("Quote of the Day refresh failed:", error);
+    renderError("Quote of the Day is temporarily unavailable.");
   } finally {
     isRefreshingQotd = false;
+
+    if (elements.qotdRefreshButton) {
+      elements.qotdRefreshButton.disabled = false;
+    }
   }
 }
 
 export function initQotd() {
   if (!elements.qotdOutput) return;
 
-  refreshQotd().catch(console.error);
+  elements.qotdRefreshButton?.addEventListener("click", () => {
+    void refreshQotd();
+  });
+
+  void refreshQotd();
 }

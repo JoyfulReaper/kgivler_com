@@ -30,6 +30,12 @@
   margin-top: 2rem;
 }
 
+.service-section-heading {
+  color: inherit;
+  font: inherit;
+  font-weight: inherit;
+}
+
 .service-list {
   display: flex;
   flex-direction: column;
@@ -53,6 +59,11 @@
   padding: 1rem;
   cursor: pointer;
   list-style: none;
+}
+
+.service-entry > summary:focus-visible {
+  outline: 3px solid #fbbf24;
+  outline-offset: 3px;
 }
 
 .service-entry > summary::-webkit-details-marker {

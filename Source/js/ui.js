@@ -7,6 +7,7 @@ export const elements = {
   telemetry: document.getElementById('host-telemetry'),
   steamPresence: document.getElementById('steam-presence'),
   qotdOutput: document.getElementById('qotd-output'),
+  qotdRefreshButton: document.getElementById('btn-qotd-refresh'),
 
   gitActivity: document.getElementById('recent-git-activity'),
   gitActivityRefreshButton: document.getElementById('btn-git-activity-refresh'),
@@ -94,9 +95,14 @@ export function initHostTelemetry(data) {
 
   if (!data) {
     const offline = document.createElement("div");
-    offline.className = "text-danger";
-    offline.textContent = "[OFFLINE]";
-    elements.telemetry.replaceChildren(offline);
+    offline.className = "widget-state-unavailable";
+    offline.textContent = "[UNAVAILABLE] Workstation telemetry is temporarily unavailable.";
+
+    const detail = document.createElement("div");
+    detail.className = "widget-state-detail";
+    detail.textContent = "This optional self-hosted service may be offline. Use Refresh Telemetry to retry.";
+
+    elements.telemetry.replaceChildren(offline, detail);
     return;
   }
 
@@ -126,8 +132,11 @@ export function initHostTelemetry(data) {
   const addMetric = (parent, iconClass, label, value, suffix = "") => {
     const row = document.createElement("div");
     const labelSpan = document.createElement("span");
+    const icon = document.createElement("i");
     labelSpan.style.color = "#38bdf8";
-    labelSpan.innerHTML = `<i class="${iconClass} me-2"></i>${escapeHtml(label)}:`;
+    icon.className = `${iconClass} me-2`;
+    icon.setAttribute("aria-hidden", "true");
+    labelSpan.append(icon, `${label}:`);
 
     row.append(labelSpan, ` ${String(value ?? "Unknown")}${suffix}`);
     parent.append(row);

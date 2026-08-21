@@ -2,10 +2,22 @@ import { API_CONFIG } from "./config.js";
 import { escapeHtml } from "./markdown.js";
 
 let systemDataRequest = null;
+const DEFAULT_REQUEST_TIMEOUT_MS = 5000;
 
-async function fetchWithTimeout(url, options = {}, timeoutMs = 5000) {
+class RequestTimeoutError extends Error {
+  constructor(timeoutMs) {
+    super(`Request timed out after ${timeoutMs}ms.`);
+    this.name = "RequestTimeoutError";
+  }
+}
+
+async function fetchWithTimeout(url, options = {}, timeoutMs = DEFAULT_REQUEST_TIMEOUT_MS) {
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  let didTimeOut = false;
+  const timeoutId = setTimeout(() => {
+    didTimeOut = true;
+    controller.abort();
+  }, timeoutMs);
 
   try {
     const response = await fetch(url, {
@@ -14,9 +26,30 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = 5000) {
     });
 
     return response;
+  } catch (error) {
+    if (didTimeOut) {
+      throw new RequestTimeoutError(timeoutMs);
+    }
+
+    throw error;
   } finally {
     clearTimeout(timeoutId);
   }
+}
+
+function unavailableMessage(error, serviceName) {
+  return error instanceof RequestTimeoutError
+    ? `${serviceName} timed out and is temporarily unavailable.`
+    : `${serviceName} is currently unavailable.`;
+}
+
+function redactPrivateUrls(value) {
+  if (typeof value !== "string") return "";
+
+  return value.replace(
+    /https?:\/\/(?:localhost|127(?:\.\d{1,3}){3}|0\.0\.0\.0|10(?:\.\d{1,3}){3}|192\.168(?:\.\d{1,3}){2}|172\.(?:1[6-9]|2\d|3[01])(?:\.\d{1,3}){2}|[^\s/]+\.local)(?::\d+)?(?:\/[^\s]*)?/gi,
+    "an internal service"
+  );
 }
 
 async function readProblemDetail(response, fallbackMessage) {
@@ -31,7 +64,7 @@ async function readProblemDetail(response, fallbackMessage) {
         ? problemJson.detail.trim()
         : "";
 
-    return title || detail || fallbackMessage;
+    return redactPrivateUrls(title || detail) || fallbackMessage;
   } catch (_) {
     return fallbackMessage;
   }
@@ -82,7 +115,7 @@ export async function getQwenCoderHealth() {
     return await response.json();
   } catch (e) {
     console.error("QwenCoder health fetch failed or timed out:", e);
-    return { ok: false, error: "Could not reach QwenCoder.", status: 0 };
+    return { ok: false, error: unavailableMessage(e, "QwenCoder"), status: 0 };
   }
 }
 
@@ -102,7 +135,7 @@ export async function getWorkstationStatus() {
     return await response.json();
   } catch (e) {
     console.error("Workstation status fetch failed or timed out:", e);
-    return { ok: false, error: "Could not reach the workstation status endpoint.", status: 0 };
+    return { ok: false, error: unavailableMessage(e, "Workstation telemetry"), status: 0 };
   }
 }
 
@@ -122,7 +155,7 @@ export async function getSteamPresence() {
     return await response.json();
   } catch (e) {
     console.error("Steam presence fetch failed or timed out:", e);
-    return { ok: false, error: "Could not reach the Steam presence endpoint.", status: 0 };
+    return { ok: false, error: unavailableMessage(e, "Steam presence"), status: 0 };
   }
 }
 
@@ -148,7 +181,7 @@ export async function submitQwenCoderReview(code, language = "auto") {
     return await response.json();
   } catch (e) {
     console.error("QwenCoder review fetch failed or timed out:", e);
-    return { ok: false, error: "Could not reach QwenCoder.", status: 0 };
+    return { ok: false, error: unavailableMessage(e, "QwenCoder"), status: 0 };
   }
 }
 
@@ -200,7 +233,7 @@ export async function getRecentGitActivity(limit = 5) {
 
     return {
       ok: false,
-      error: "Could not reach the Git activity endpoint.",
+      error: unavailableMessage(error, "Git activity"),
       status: 0,
     };
   }
@@ -241,7 +274,7 @@ export async function getQuoteOfTheDay() {
 
     return {
       ok: false,
-      error: "Could not reach the Quote of the Day endpoint.",
+      error: unavailableMessage(error, "Quote of the Day"),
       status: 0,
     };
   }
@@ -290,7 +323,7 @@ export async function getBbsMessages() {
 
     return {
       ok: false,
-      error: "Could not reach the BBS endpoint.",
+      error: unavailableMessage(error, "BBS"),
       status: 0,
     };
   }
@@ -337,7 +370,7 @@ export async function postBbsMessage(content) {
 
     return {
       ok: false,
-      error: "Could not reach the BBS endpoint.",
+      error: unavailableMessage(error, "BBS"),
       status: 0,
     };
   }
@@ -444,6 +477,6 @@ export async function fetchRandomGame(input, ctx, provider = "steam") {
     );
   } catch (err) {
     console.error("Fetch Error:", err);
-    ctx.errorText("Network error: Could not reach the API server.");
+    ctx.errorText(unavailableMessage(err, "Random Steam Game service") + " Please try again later.");
   }
 }
