@@ -10,7 +10,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
-    <link rel="stylesheet" href="styles.css?v=1" />
+    <link rel="stylesheet" href="styles.css?v=2" />
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
@@ -20,7 +20,7 @@
 
     <link rel="manifest" href="/site.webmanifest" />
 
-    <meta name="description" content="Kyle Givler's personal terminal-themed portfolio. Software Developer, Modder, and Creator of the Random Steam Game Picker." />
+    <meta name="description" content="Kyle Givler's terminal-themed portfolio featuring .NET backend systems, self-hosted applications, network services, developer tools, and game mods." />
   </head>
 
   <body class="terminal-theme">
@@ -42,12 +42,59 @@
 
             <h1 class="display-5 fw-bold terminal-header-text">Kyle Givler</h1>
 
-            <div class="terminal-lead">Software Developer &amp; Video Game Enthusiast</div>
+            <div class="terminal-lead">Backend and systems-focused .NET developer building self-hosted applications, network services, developer tools, and performance-oriented game mods.</div>
+
+            <p class="terminal-intro-support">I design, deploy, and operate the systems shown on this site.</p>
+
+            <nav class="terminal-nav" aria-label="Portfolio sections">
+              <a href="#flagship-projects">Flagship Projects</a>
+              <a href="#live-systems-lab">Live Systems Lab</a>
+              <a href="/services/">Services</a>
+              <a href="#recent-projects">Recent Work</a>
+              <a href="#contact">Contact</a>
+            </nav>
           </header>
 
           <hr class="terminal-divider" />
 
-          <section class="my-4">
+          <section class="my-4 portfolio-section" id="flagship-projects">
+            <div class="cmd-line section-command">
+              <span class="prompt">kyle@kgivler:~$</span>
+              <h2>./show_flagship_projects.sh</h2>
+            </div>
+
+            <div class="flagship-project-grid mt-3">
+              <article class="project-terminal-badge flagship-project-card">
+                <div class="flagship-project-status">[SYSTEM]</div>
+                <h3>Mission Control</h3>
+                <p>Processes application events and GitHub activity through RabbitMQ.</p>
+              </article>
+
+              <article class="project-terminal-badge flagship-project-card">
+                <div class="flagship-project-status">[PUBLIC]</div>
+                <h3>Random Steam Game</h3>
+                <p>Picks a random game from a public Steam library.</p>
+              </article>
+
+              <article class="project-terminal-badge flagship-project-card">
+                <div class="flagship-project-status">[PROTOCOLS]</div>
+                <h3>Happy Protocol Family</h3>
+                <p>Modern .NET services for Finger, Gopher, and Quote of the Day protocols.</p>
+              </article>
+            </div>
+          </section>
+
+          <hr class="terminal-divider" />
+
+          <section class="my-4 portfolio-section" id="live-systems-lab">
+            <div class="cmd-line section-command">
+              <span class="prompt">kyle@kgivler:~$</span>
+              <h2>./open_live_systems_lab.sh</h2>
+            </div>
+
+            <p class="section-summary">Live telemetry, services, demos, and tools running against the systems behind this site.</p>
+
+          <section class="live-lab-item">
             <div class="cmd-line">
               <span class="prompt">kyle@kgivler:~$</span>
               ./show_status.sh
@@ -144,65 +191,6 @@
               </div>
 
               <div id="demo-output" class="mt-3"></div>
-            </div>
-          </section>
-
-          <hr class="terminal-divider" />
-
-          <section class="my-4" id="services-preview-section">
-            <div class="cmd-line">
-              <span class="prompt">kyle@kgivler:~$</span>
-              ./list_services.sh --featured
-            </div>
-
-            <div class="project-terminal-badge d-flex flex-column gap-3 w-100 mt-3">
-              <div>
-                <i class="fas fa-server me-2 text-accent"></i>
-                Status:
-                <span class="text-success">Services operational</span>
-              </div>
-
-              <div>
-                <i class="fas fa-file-lines me-2 text-accent"></i>
-                Description:
-                <span class="text-white-50">Public applications, classic internet protocols, APIs, and backend infrastructure running across my workstation and Linux VPS.</span>
-              </div>
-
-              <div class="d-flex flex-column gap-2 font-monospace">
-                <div>
-                  <span class="text-success">[PUBLIC]</span>
-                  <strong><a href="https://randomsteam.kgivler.com/" target="_blank" rel="noopener noreferrer">Random Steam Game</a></strong>
-                  <span class="text-muted">—</span>
-                  <span class="text-white-50">Picks a random game from a public Steam library.</span>
-                </div>
-
-                <div>
-                  <span class="text-success">[PUBLIC]</span>
-                  <strong>HappyFinger</strong>
-                  <span class="text-muted">—</span>
-                  <span class="text-white-50">A modern .NET Finger protocol server running on TCP port 79.</span>
-                </div>
-
-                <div>
-                  <span class="text-success">[PUBLIC]</span>
-                  <strong>HappyGopher</strong>
-                  <span class="text-muted">—</span>
-                  <span class="text-white-50">An old-school Gopher server running on TCP port 70.</span>
-                </div>
-
-                <div>
-                  <span class="text-warning">[SYSTEM]</span>
-                  <strong>Mission Control</strong>
-                  <span class="text-muted">—</span>
-                  <span class="text-white-50">Processes application events and GitHub activity through RabbitMQ.</span>
-                </div>
-              </div>
-
-              <div class="d-flex flex-wrap gap-2 mt-1">
-                <a href="/services/" class="terminal-btn-inline text-decoration-none">View All Services</a>
-
-                <a href="https://github.com/JoyfulReaper" class="terminal-btn-inline text-decoration-none" target="_blank" rel="noopener noreferrer">View Source</a>
-              </div>
             </div>
           </section>
 
@@ -322,10 +310,159 @@
 
           <hr class="terminal-divider" />
 
-          <section class="my-4">
+          <section class="my-4" id="qwen-review-section">
             <div class="cmd-line">
               <span class="prompt">kyle@kgivler:~$</span>
-              ./get_recent_projects.sh
+              ./qwen_review.sh --health
+            </div>
+
+            <div class="project-terminal-badge d-flex flex-column gap-2 w-100">
+              <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-start gap-2">
+                <div class="d-flex flex-column gap-2">
+                  <div>
+                    <i class="fas fa-robot me-2 text-accent"></i>
+                    Status:
+
+                    <span class="text-warning">Experimental local AI review</span>
+                  </div>
+
+                  <div>
+                    <i class="fas fa-file-lines me-2 text-accent"></i>
+                    Description:
+
+                    <span class="text-white-50">Best-effort code review powered by qwen2.5-coder-3b-instruct@q6_k plus simple static hints.</span>
+                  </div>
+
+                  <div>
+                    <i class="fas fa-triangle-exclamation me-2 text-warning"></i>
+                    Warning:
+
+                    <span class="text-white-50">Small model, small expectations. Not a security scanner. Not a formal audit.</span>
+                  </div>
+
+                  <div>
+                    <i class="fas fa-microchip me-2 text-accent"></i>
+                    Limits:
+
+                    <span class="text-white-50">Single-pass reviews up to 12k chars; larger files auto-chunk up to 48k chars total.</span>
+                  </div>
+                </div>
+
+                <span id="qwen-health-badge" class="qwen-health-pill badge rounded-pill text-warning">Checking...</span>
+              </div>
+
+              <div class="mb-3 mt-2">
+                <label for="qwenLanguage" class="form-label text-accent small mb-1">Language hint</label>
+
+                <select id="qwenLanguage" class="terminal-select" aria-label="language hint">
+                  <option value="auto" selected>Auto detect</option>
+
+                  <option value="csharp">C#</option>
+                  <option value="javascript">JavaScript</option>
+                  <option value="typescript">TypeScript</option>
+                  <option value="html">HTML</option>
+                  <option value="css">CSS</option>
+                  <option value="json">JSON</option>
+                  <option value="sql">SQL</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label for="qwenCodeInput" class="form-label text-accent small mb-1">Code to review</label>
+
+                <textarea id="qwenCodeInput" class="terminal-textarea" rows="8" placeholder="Paste a function, component, endpoint, or config snippet here. Ctrl+Enter runs the review."></textarea>
+              </div>
+
+              <div class="d-flex flex-wrap gap-2 align-items-center">
+                <button id="btn-qwen-health" class="terminal-btn-inline" type="button">Health Check</button>
+
+                <button id="btn-load-bad-sample" class="terminal-btn-inline" type="button">Load Bad Sample</button>
+
+                <button id="btn-qwen-review" class="terminal-btn-inline" type="button">Run Review</button>
+
+                <button id="btn-qwen-clear" class="terminal-btn-inline" type="button">Clear Review</button>
+              </div>
+
+              <div id="qwen-review-output" class="mt-3"></div>
+            </div>
+          </section>
+
+          <hr class="terminal-divider" />
+
+          <div class="cmd-line">
+            <label for="terminalCommandInput" class="prompt">kyle@kgivler:~$</label>
+
+            <input type="text" aria-label="terminal input" autocomplete="off" spellcheck="false" id="terminalCommandInput" placeholder="type 'help'..." class="terminal-input" />
+          </div>
+
+          <div id="terminal-output" aria-live="polite" class="mt-3 terminal-output-container"></div>
+          </section>
+
+          <hr class="terminal-divider" />
+
+          <section class="my-4 portfolio-section" id="services-preview-section">
+            <div class="cmd-line section-command">
+              <span class="prompt">kyle@kgivler:~$</span>
+              <h2>./list_services.sh --featured</h2>
+            </div>
+
+            <div class="project-terminal-badge d-flex flex-column gap-3 w-100 mt-3">
+              <div>
+                <i class="fas fa-server me-2 text-accent"></i>
+                Status:
+                <span class="text-success">Services operational</span>
+              </div>
+
+              <div>
+                <i class="fas fa-file-lines me-2 text-accent"></i>
+                Description:
+                <span class="text-white-50">Public applications, classic internet protocols, APIs, and backend infrastructure running across my workstation and Linux VPS.</span>
+              </div>
+
+              <div class="d-flex flex-column gap-2 font-monospace">
+                <div>
+                  <span class="text-success">[PUBLIC]</span>
+                  <strong><a href="https://randomsteam.kgivler.com/" target="_blank" rel="noopener noreferrer">Random Steam Game</a></strong>
+                  <span class="text-muted">—</span>
+                  <span class="text-white-50">Picks a random game from a public Steam library.</span>
+                </div>
+
+                <div>
+                  <span class="text-success">[PUBLIC]</span>
+                  <strong>HappyFinger</strong>
+                  <span class="text-muted">—</span>
+                  <span class="text-white-50">A modern .NET Finger protocol server running on TCP port 79.</span>
+                </div>
+
+                <div>
+                  <span class="text-success">[PUBLIC]</span>
+                  <strong>HappyGopher</strong>
+                  <span class="text-muted">—</span>
+                  <span class="text-white-50">An old-school Gopher server running on TCP port 70.</span>
+                </div>
+
+                <div>
+                  <span class="text-warning">[SYSTEM]</span>
+                  <strong>Mission Control</strong>
+                  <span class="text-muted">—</span>
+                  <span class="text-white-50">Processes application events and GitHub activity through RabbitMQ.</span>
+                </div>
+              </div>
+
+              <div class="d-flex flex-wrap gap-2 mt-1">
+                <a href="/services/" class="terminal-btn-inline text-decoration-none">View All Services</a>
+
+                <a href="https://github.com/JoyfulReaper" class="terminal-btn-inline text-decoration-none" target="_blank" rel="noopener noreferrer">View Source</a>
+              </div>
+            </div>
+          </section>
+
+          <hr class="terminal-divider" />
+
+          <section class="my-4 portfolio-section" id="recent-projects">
+            <div class="cmd-line section-command">
+              <span class="prompt">kyle@kgivler:~$</span>
+              <h2>./get_recent_projects.sh</h2>
             </div>
 
             <div class="d-flex flex-column gap-3">
@@ -459,89 +596,10 @@
 
           <hr class="terminal-divider" />
 
-          <section class="my-4" id="qwen-review-section">
-            <div class="cmd-line">
+          <section class="my-4 portfolio-section" id="contact">
+            <div class="cmd-line section-command">
               <span class="prompt">kyle@kgivler:~$</span>
-              ./qwen_review.sh --health
-            </div>
-
-            <div class="project-terminal-badge d-flex flex-column gap-2 w-100">
-              <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-start gap-2">
-                <div class="d-flex flex-column gap-2">
-                  <div>
-                    <i class="fas fa-robot me-2 text-accent"></i>
-                    Status:
-
-                    <span class="text-warning">Experimental local AI review</span>
-                  </div>
-
-                  <div>
-                    <i class="fas fa-file-lines me-2 text-accent"></i>
-                    Description:
-
-                    <span class="text-white-50">Best-effort code review powered by qwen2.5-coder-3b-instruct@q6_k plus simple static hints.</span>
-                  </div>
-
-                  <div>
-                    <i class="fas fa-triangle-exclamation me-2 text-warning"></i>
-                    Warning:
-
-                    <span class="text-white-50">Small model, small expectations. Not a security scanner. Not a formal audit.</span>
-                  </div>
-
-                  <div>
-                    <i class="fas fa-microchip me-2 text-accent"></i>
-                    Limits:
-
-                    <span class="text-white-50">Single-pass reviews up to 12k chars; larger files auto-chunk up to 48k chars total.</span>
-                  </div>
-                </div>
-
-                <span id="qwen-health-badge" class="qwen-health-pill badge rounded-pill text-warning">Checking...</span>
-              </div>
-
-              <div class="mb-3 mt-2">
-                <label for="qwenLanguage" class="form-label text-accent small mb-1">Language hint</label>
-
-                <select id="qwenLanguage" class="terminal-select" aria-label="language hint">
-                  <option value="auto" selected>Auto detect</option>
-
-                  <option value="csharp">C#</option>
-                  <option value="javascript">JavaScript</option>
-                  <option value="typescript">TypeScript</option>
-                  <option value="html">HTML</option>
-                  <option value="css">CSS</option>
-                  <option value="json">JSON</option>
-                  <option value="sql">SQL</option>
-                </select>
-              </div>
-
-              <div class="mb-3">
-                <label for="qwenCodeInput" class="form-label text-accent small mb-1">Code to review</label>
-
-                <textarea id="qwenCodeInput" class="terminal-textarea" rows="8" placeholder="Paste a function, component, endpoint, or config snippet here. Ctrl+Enter runs the review."></textarea>
-              </div>
-
-              <div class="d-flex flex-wrap gap-2 align-items-center">
-                <button id="btn-qwen-health" class="terminal-btn-inline" type="button">Health Check</button>
-
-                <button id="btn-load-bad-sample" class="terminal-btn-inline" type="button">Load Bad Sample</button>
-
-                <button id="btn-qwen-review" class="terminal-btn-inline" type="button">Run Review</button>
-
-                <button id="btn-qwen-clear" class="terminal-btn-inline" type="button">Clear Review</button>
-              </div>
-
-              <div id="qwen-review-output" class="mt-3"></div>
-            </div>
-          </section>
-
-          <hr class="terminal-divider" />
-
-          <div class="mt-4">
-            <div class="cmd-line">
-              <span class="prompt">kyle@kgivler:~$</span>
-              ls -la ./links/
+              <h2>ls -la ./links/</h2>
             </div>
 
             <div class="d-flex justify-content-start flex-wrap gap-3 mt-3">
@@ -570,17 +628,7 @@
                 chat_with_me.sh
               </a>
             </div>
-          </div>
-
-          <hr class="terminal-divider" />
-
-          <div class="cmd-line">
-            <label for="terminalCommandInput" class="prompt">kyle@kgivler:~$</label>
-
-            <input type="text" aria-label="terminal input" autocomplete="off" spellcheck="false" id="terminalCommandInput" placeholder="type 'help'..." class="terminal-input" />
-          </div>
-
-          <div id="terminal-output" aria-live="polite" class="mt-3 terminal-output-container"></div>
+          </section>
         </div>
       </div>
 

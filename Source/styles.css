@@ -75,6 +75,96 @@ body.terminal-theme {
 .terminal-lead {
     color: #a0aec0; 
     font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.terminal-intro-support {
+    margin: 0.65rem 0 0;
+    color: #e2e8f0;
+}
+
+.terminal-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem 1rem;
+    margin-top: 1.25rem;
+}
+
+.terminal-nav a {
+    color: #38bdf8;
+    text-decoration: none;
+    font-size: 0.88rem;
+}
+
+.terminal-nav a::before {
+    content: "[";
+    color: #6b7280;
+    margin-right: 0.2rem;
+}
+
+.terminal-nav a::after {
+    content: "]";
+    color: #6b7280;
+    margin-left: 0.2rem;
+}
+
+.terminal-nav a:hover,
+.terminal-nav a:focus-visible {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.portfolio-section {
+    scroll-margin-top: 1rem;
+}
+
+.section-command {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem;
+}
+
+.section-command h2 {
+    display: inline;
+    margin: 0;
+    color: #e2e8f0;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.section-summary {
+    margin: 0.5rem 0 0;
+    color: #94a3b8;
+    line-height: 1.5;
+}
+
+.flagship-project-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.flagship-project-card {
+    min-width: 0;
+}
+
+.flagship-project-card h3 {
+    margin: 0.35rem 0 0.55rem;
+    color: #ffffff;
+    font-size: 1.05rem;
+}
+
+.flagship-project-card p {
+    margin: 0;
+    color: #a0aec0;
+    line-height: 1.55;
+}
+
+.flagship-project-status {
+    color: #38bdf8;
+    font-size: 0.76rem;
+    letter-spacing: 0.04em;
 }
 
 .cmd-line {
@@ -446,6 +536,22 @@ body.terminal-theme {
 
     .terminal-body {
         padding: 1.5rem 1rem;
+    }
+
+    .terminal-lead {
+        font-size: 1rem;
+    }
+
+    .terminal-nav {
+        gap: 0.5rem 0.75rem;
+    }
+
+    .terminal-nav a {
+        font-size: 0.8rem;
+    }
+
+    .flagship-project-grid {
+        grid-template-columns: 1fr;
     }
 
     .project-terminal-badge {
