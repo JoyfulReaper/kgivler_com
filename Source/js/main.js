@@ -19,6 +19,9 @@ async function runRandomGameDemo() {
 
   try {
     await fetchRandomGame(steamInput.value.trim(), demoTerminal);
+  } catch (error) {
+    console.error("Random Steam Game demo failed unexpectedly:", error);
+    demoTerminal.errorText("Random Steam Game is temporarily unavailable. Please try again.");
   } finally {
     randomButton.disabled = false;
   }

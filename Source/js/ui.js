@@ -132,8 +132,11 @@ export function initHostTelemetry(data) {
   const addMetric = (parent, iconClass, label, value, suffix = "") => {
     const row = document.createElement("div");
     const labelSpan = document.createElement("span");
+    const icon = document.createElement("i");
     labelSpan.style.color = "#38bdf8";
-    labelSpan.innerHTML = `<i class="${iconClass} me-2"></i>${escapeHtml(label)}:`;
+    icon.className = `${iconClass} me-2`;
+    icon.setAttribute("aria-hidden", "true");
+    labelSpan.append(icon, `${label}:`);
 
     row.append(labelSpan, ` ${String(value ?? "Unknown")}${suffix}`);
     parent.append(row);

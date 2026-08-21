@@ -13,7 +13,23 @@ body.terminal-theme {
 
 /* Better contrast for muted text on terminal dark mode */
 .terminal-theme .text-muted {
-    color: #6b7280 !important; 
+    color: #94a3b8 !important;
+}
+
+.skip-link {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 1000;
+    padding: 0.55rem 0.8rem;
+    border: 2px solid #fbbf24;
+    background: #050507;
+    color: #ffffff;
+    transform: translateY(-200%);
+}
+
+.skip-link:focus {
+    transform: translateY(0);
 }
 
 /* Fluid structure: scales up to 1000px on desktop, sits at 95% width on mobile */
@@ -323,6 +339,14 @@ body.terminal-theme {
     font-weight: 700;
 }
 
+.widget-command {
+    display: inline;
+    margin: 0;
+    color: inherit;
+    font: inherit;
+    font-weight: inherit;
+}
+
 .live-lab-group-heading p,
 .interactive-shell-intro p {
     margin: 0.35rem 0 0;
@@ -429,7 +453,7 @@ body.terminal-theme {
 }
 
 .qotd-attribution .text-muted {
-    color: #64748b !important;
+    color: #94a3b8 !important;
 }
 
 .steam-presence-line {
@@ -688,6 +712,11 @@ body.terminal-theme {
     border-bottom: 1px dashed #39ff14;
 }
 
+.terminal-input:focus-visible {
+    border-bottom-style: solid;
+    box-shadow: 0 2px 0 #fbbf24;
+}
+
 .terminal-btn-inline {
     background: transparent;
     color: #38bdf8;
@@ -765,7 +794,7 @@ body.terminal-theme {
 
 .contact-elsewhere-group p {
     margin: -0.35rem 0 0.75rem;
-    color: #64748b;
+    color: #94a3b8;
     font-size: 0.8rem;
 }
 
@@ -892,6 +921,32 @@ body.terminal-theme {
         justify-content: flex-start;
         width: 100%;
         padding: 0.4rem 0.65rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .animate-pulse {
+        animation: none !important;
+        opacity: 1;
+    }
+
+    .terminal-btn:hover,
+    .skip-link,
+    .skip-link:focus {
+        transform: none;
+    }
+
+    .skip-link:not(:focus) {
+        clip-path: inset(100%);
     }
 }
 

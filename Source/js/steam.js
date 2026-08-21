@@ -220,4 +220,14 @@ export function initSteamPresence() {
       );
     });
   });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      stopSteamPresencePolling();
+      return;
+    }
+
+    startSteamPresencePolling();
+    void refreshSteamPresence({ showLoading: false });
+  });
 }

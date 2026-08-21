@@ -9,7 +9,7 @@ let isRunningQwenReview = false;
 let isCheckingQwenHealth = false;
 
 const badSampleCode = `const API_URL = "http://localhost:5000/api/code-review";
-const TOKEN = "SUPER_SECRET_ADMIN_TOKEN_123";
+const TOKEN = "DEMO_TOKEN_NOT_A_SECRET";
 
 export async function submitReview() {
     const code = document.getElementById("codeReviewInput").value;
