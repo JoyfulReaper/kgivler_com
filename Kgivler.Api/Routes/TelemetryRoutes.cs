@@ -1,6 +1,6 @@
 /*
  * kgivler_com
- * 
+ *
  * Copyright (c) 2026 Kyle Givler
  * Licensed under the MIT License.
  */
@@ -12,27 +12,35 @@ using Kgivler.Api.Events;
 using Kgivler.Api.Helpers;
 using Kgivler.Api.Telemetry;
 using Kgivler.Api.Weather;
+using Microsoft.Data.Sqlite;
 using System.Diagnostics;
+using System.Net;
 using System.Runtime.InteropServices;
 
 namespace Kgivler.Api.Routes;
 
 public static class TelemetryRoutes
 {
+    private const int MaxUserAgentLength = 512;
+
     public static WebApplication MapTelemetryRoutes(this WebApplication app)
     {
         // Record the hit
-        app.MapGet("/api/system/usage", async (HttpContext context,
+        app.MapGet("/api/system/usage", async (
+            HttpContext context,
+            SqliteConnection db,
             ILogger<Program> logger,
             IMissionControlClient missionControlClient,
+            VisitorIdProvider visitorIdProvider,
             WeatherService weatherService,
             CancellationToken cancellationToken,
             IHitCounter hitCounter) =>
         {
-            var forwardedHeader = context.Request.Headers["CF-Connecting-IP"].FirstOrDefault()
-                               ?? context.Request.Headers["X-Forwarded-For"].FirstOrDefault()
-                               ?? context.Connection.RemoteIpAddress?.ToString()
-                               ?? "unknown";
+            var forwardedHeader =
+                context.Request.Headers["CF-Connecting-IP"].FirstOrDefault()
+                ?? context.Request.Headers["X-Forwarded-For"].FirstOrDefault()
+                ?? context.Connection.RemoteIpAddress?.ToString()
+                ?? "unknown";
 
             var ip = forwardedHeader.Split(',')[0].Trim();
 
@@ -50,15 +58,22 @@ public static class TelemetryRoutes
             var correlationId = Guid.NewGuid().ToString("N");
             var hitStopwatch = Stopwatch.StartNew();
 
-            var hitResults = await hitCounter.RecordHitAsync(ip);
+            var hitResults = await hitCounter.RecordHitAsync(ip, cancellationToken);
 
             hitStopwatch.Stop();
 
             try
             {
+                var visitorId = GetVisitorId(visitorIdProvider, ip);
+                var isUniqueVisitor = await IsUniqueVisitorHitAsync(db, ip, cancellationToken);
+                var userAgent = GetUserAgent(context);
+
                 await missionControlClient.TryPublishAsync(
                     eventType: KgivlerEventTypes.SiteVisitRecorded,
                     payload: new SiteVisitRecordedEvent(
+                        VisitorId: visitorId,
+                        UserAgent: userAgent,
+                        IsUniqueVisitor: isUniqueVisitor,
                         TotalHits: hitResults.TotalHits,
                         UniqueVisitors: hitResults.UniqueVisitors,
                         DurationMilliseconds: hitStopwatch.ElapsedMilliseconds),
@@ -111,7 +126,7 @@ public static class TelemetryRoutes
             var gpu = TelemetricsHelper.GetGpuMetrics();
             var stardate = TelemetricsHelper.GetStarDate();
             var weather = await weatherService.GetCurrentAsync(cancellationToken);
-            var hitResults = await hitCounter.GetHitCountsAsync();
+            var hitResults = await hitCounter.GetHitCountsAsync(cancellationToken);
 
             var telemetry = new
             {
@@ -137,5 +152,63 @@ public static class TelemetryRoutes
         }).RequireRateLimiting("TelemetryPolicy");
 
         return app;
+    }
+
+    private static string? GetVisitorId(
+        VisitorIdProvider visitorIdProvider,
+        string ipAddress)
+    {
+        if (!IPAddress.TryParse(ipAddress, out _))
+        {
+            return null;
+        }
+
+        return visitorIdProvider.GetVisitorId(ipAddress);
+    }
+
+    private static string? GetUserAgent(HttpContext context)
+    {
+        var userAgent = context.Request.Headers["User-Agent"]
+            .ToString()
+            .Trim();
+
+        if (string.IsNullOrWhiteSpace(userAgent))
+        {
+            return null;
+        }
+
+        return userAgent.Length <= MaxUserAgentLength
+            ? userAgent
+            : userAgent[..MaxUserAgentLength];
+    }
+
+    private static async Task<bool> IsUniqueVisitorHitAsync(
+        SqliteConnection db,
+        string visitorKey,
+        CancellationToken cancellationToken)
+    {
+        if (db.State != System.Data.ConnectionState.Open)
+        {
+            await db.OpenAsync(cancellationToken);
+        }
+
+        await using var command = db.CreateCommand();
+
+        command.CommandText = """
+            SELECT Hits
+            FROM Visitors
+            WHERE IpAddress = $visitorKey
+            LIMIT 1;
+            """;
+
+        command.Parameters.AddWithValue(
+            "$visitorKey",
+            visitorKey.Trim());
+
+        var result = await command.ExecuteScalarAsync(cancellationToken);
+
+        return result is not null
+            && result is not DBNull
+            && Convert.ToInt64(result) == 1;
     }
 }
