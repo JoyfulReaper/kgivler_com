@@ -11,6 +11,7 @@ using Kgivler.Api.CodeReview;
 using Kgivler.Api.Extensions;
 using Kgivler.Api.Routes;
 using Kgivler.Api.Steam;
+using Kgivler.Api.Telemetry;
 using Kgivler.Api.Weather;
 using Microsoft.AspNetCore.RateLimiting;
 
@@ -29,13 +30,14 @@ var connectionString = SqliteDatabaseInitializer.Initialize("kgivler_com.db", sc
 
 builder.Services.AddApplicationServices(connectionString, builder.Environment);
 
+builder.Services.Configure<TelemetryOptions>(builder.Configuration.GetSection(TelemetryOptions.SectionName));
+builder.Services.AddSingleton<VisitorIdProvider>();
+
 builder.Services.AddScoped<QwenCoderReviewService>();
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<SteamPresenceService>();
 builder.Services.Configure<SteamOptions>(builder.Configuration.GetSection("Steam"));
-builder.Services.AddMissionControlClient(
-    builder.Configuration.GetSection(
-        MissionControlClientOptions.SectionName));
+builder.Services.AddMissionControlClient(builder.Configuration.GetSection(MissionControlClientOptions.SectionName));
 
 builder.Services.AddSingleton<WeatherService>();
 
