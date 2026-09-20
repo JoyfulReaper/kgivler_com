@@ -13,41 +13,23 @@ using System.Text.RegularExpressions;
 
 internal static class TelemetricsHelper
 {
-    internal static string GetCpuUsage()
+    [StructLayout(LayoutKind.Sequential)]
+    private struct MemoryStatusEx
     {
-        try
-        {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                var output = ExecuteCommand("wmic", "cpu get loadpercentage /Value");
-                var match = Regex.Match(output, @"LoadPercentage=(\d+)");
-
-                if (match.Success)
-                {
-                    return $"{match.Groups[1].Value}%";
-                }
-                return "Metrics unavailable";
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                if (File.Exists("/proc/loadavg"))
-                {
-                    var loadLines = File.ReadAllText("/proc/loadavg").Split(' ');
-                    if (loadLines.Length >= 3)
-                    {
-                        return $"Load: {loadLines[0]} {loadLines[1]} {loadLines[2]}";
-                    }
-                }
-                return "Metrics unavailable";
-            }
-
-            return "Unsupported OS";
-        }
-        catch
-        {
-            return "CPU tracking error";
-        }
+        public uint Length;
+        public uint MemoryLoad;
+        public ulong TotalPhysical;
+        public ulong AvailablePhysical;
+        public ulong TotalPageFile;
+        public ulong AvailablePageFile;
+        public ulong TotalVirtual;
+        public ulong AvailableVirtual;
+        public ulong AvailableExtendedVirtual;
     }
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool GlobalMemoryStatusEx(ref MemoryStatusEx buffer);
 
     internal static string GetStorageMetrics()
     {
@@ -88,21 +70,30 @@ internal static class TelemetricsHelper
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                var output = ExecuteCommand("wmic", "OS get FreePhysicalMemory,TotalVisibleMemorySize /Value");
-
-                var totalMatch = Regex.Match(output, @"TotalVisibleMemorySize=(\d+)");
-                var freeMatch = Regex.Match(output, @"FreePhysicalMemory=(\d+)");
-
-                if (totalMatch.Success && freeMatch.Success)
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
-                    double totalGB = Math.Round(double.Parse(totalMatch.Groups[1].Value) / (1024 * 1024), 1);
-                    double freeKB = double.Parse(freeMatch.Groups[1].Value);
-                    double totalKB = double.Parse(totalMatch.Groups[1].Value);
-                    double usedGB = Math.Round((totalKB - freeKB) / (1024 * 1024), 1);
+                    var memoryStatus = new MemoryStatusEx
+                    {
+                        Length = (uint)Marshal.SizeOf<MemoryStatusEx>()
+                    };
+
+                    if (!GlobalMemoryStatusEx(ref memoryStatus))
+                    {
+                        return "Metrics unavailable";
+                    }
+
+                    double totalGB = Math.Round(
+                        memoryStatus.TotalPhysical / (1024d * 1024d * 1024d),
+                        1);
+
+                    double availableGB = Math.Round(
+                        memoryStatus.AvailablePhysical / (1024d * 1024d * 1024d),
+                        1);
+
+                    double usedGB = Math.Round(totalGB - availableGB, 1);
 
                     return $"{usedGB}GB / {totalGB}GB ({Math.Round((usedGB / totalGB) * 100)}%)";
                 }
-                return "Metrics unavailable";
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
@@ -112,13 +103,23 @@ internal static class TelemetricsHelper
 
                 if (totalMatch.Success && availableMatch.Success)
                 {
-                    double totalGB = Math.Round(double.Parse(totalMatch.Groups[1].Value) / (1024 * 1024), 1);
-                    double availableKB = double.Parse(availableMatch.Groups[1].Value);
-                    double totalKB = double.Parse(totalMatch.Groups[1].Value);
-                    double usedGB = Math.Round((totalKB - availableKB) / (1024 * 1024), 1);
+                    double totalGB = Math.Round(
+                        double.Parse(totalMatch.Groups[1].Value) / (1024 * 1024),
+                        1);
+
+                    double availableKB = double.Parse(
+                        availableMatch.Groups[1].Value);
+
+                    double totalKB = double.Parse(
+                        totalMatch.Groups[1].Value);
+
+                    double usedGB = Math.Round(
+                        (totalKB - availableKB) / (1024 * 1024),
+                        1);
 
                     return $"{usedGB}GB / {totalGB}GB ({Math.Round((usedGB / totalGB) * 100)}%)";
                 }
+
                 return "Metrics unavailable";
             }
 

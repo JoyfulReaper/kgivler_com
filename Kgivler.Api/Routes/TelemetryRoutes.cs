@@ -50,7 +50,6 @@ public static class TelemetryRoutes
             var storage = TelemetricsHelper.GetStorageMetrics();
             var ram = TelemetricsHelper.GetRamMetrics();
             var gpu = TelemetricsHelper.GetGpuMetrics();
-            var cpuUsage = TelemetricsHelper.GetCpuUsage();
             var stardate = TelemetricsHelper.GetStarDate();
             var weather = await weatherService.GetCurrentAsync(cancellationToken);
 
