@@ -1,11 +1,44 @@
-export const IS_LOCAL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+export const IS_LOCAL =
+    window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1';
+
+export const IS_YGG =
+    window.location.hostname.endsWith('.ygg.kgivler.com');
 
 export const API_CONFIG = Object.freeze({
-    TELEMETRY: IS_LOCAL ? 'http://localhost:5081' : 'https://api.kgivler.com',
-    GIT_ACTIVITY: IS_LOCAL ? 'http://localhost:5081' : 'https://api.kgivler.com',
-    STEAM: IS_LOCAL ? 'http://localhost:5182' : 'https://randomsteam.kgivler.com',
-    QWENCODER: IS_LOCAL ? 'http://localhost:5081' : 'https://api.kgivler.com',
-    QOTD: IS_LOCAL ? 'http://localhost:5269' : 'https://qotd-api.kgivler.com'
+    SERVICES: IS_LOCAL
+        ? 'http://localhost:5081'
+        : IS_YGG
+            ? 'http://api.ygg.kgivler.com'
+            : 'https://api.kgivler.com',
+
+    TELEMETRY: IS_LOCAL
+        ? 'http://localhost:5081'
+        : IS_YGG
+            ? 'http://api.ygg.kgivler.com'
+            : 'https://api.kgivler.com',
+
+    GIT_ACTIVITY: IS_LOCAL
+        ? 'http://localhost:5081'
+        : IS_YGG
+            ? 'http://api.ygg.kgivler.com'
+            : 'https://api.kgivler.com',
+
+    STEAM: IS_LOCAL
+        ? 'http://localhost:5182'
+        : IS_YGG
+            ? 'https://steam.ygg.kgivler.com'
+            : 'https://randomsteam.kgivler.com',
+
+    QWENCODER: IS_LOCAL
+        ? 'http://localhost:5081'
+        : IS_YGG
+            ? 'http://api.ygg.kgivler.com'
+            : 'https://api.kgivler.com',
+
+    QOTD: IS_LOCAL
+        ? 'http://localhost:5269'
+        : 'https://qotd-api.kgivler.com'
 });
 
 export const PLAYLIST = Object.freeze([

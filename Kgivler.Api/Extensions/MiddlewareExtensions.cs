@@ -48,7 +48,9 @@ public static class MiddlewareExtensions
             return next();
         });
 
+        app.UseRouting();
         app.UseCors("MainSiteCorsPolicy");
+        app.UseRateLimiter();
 
         return app;
     }

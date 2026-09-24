@@ -10,6 +10,7 @@ using JoyfulReaperLib.Sqlite;
 using Kgivler.Api.CodeReview;
 using Kgivler.Api.Extensions;
 using Kgivler.Api.Routes;
+using Kgivler.Api.ServicesStatus;
 using Kgivler.Api.Steam;
 using Kgivler.Api.Telemetry;
 using Kgivler.Api.Weather;
@@ -35,6 +36,8 @@ builder.Services.AddSingleton<VisitorIdProvider>();
 
 builder.Services.AddScoped<QwenCoderReviewService>();
 builder.Services.AddMemoryCache();
+builder.Services.Configure<ServicesStatusOptions>(
+    builder.Configuration.GetSection(ServicesStatusOptions.SectionName));
 builder.Services.AddScoped<SteamPresenceService>();
 builder.Services.Configure<SteamOptions>(builder.Configuration.GetSection("Steam"));
 builder.Services.AddMissionControlClient(builder.Configuration.GetSection(MissionControlClientOptions.SectionName));
@@ -92,6 +95,18 @@ builder.Services.AddHttpClient("GitActivity", client =>
     client.Timeout = TimeSpan.FromSeconds(5);
 });
 
+// HttpClient for the configured Mission Control Agent fleet
+builder.Services.AddHttpClient("ServicesStatusAgents", client =>
+{
+    var timeoutSeconds = Math.Clamp(
+        builder.Configuration.GetValue<int?>(
+            "ServicesStatus:TimeoutSeconds") ?? 5,
+        1,
+        15);
+
+    client.Timeout = TimeSpan.FromSeconds(timeoutSeconds);
+});
+
 // Steam HttpClients
 builder.Services.AddHttpClient("SteamApi", client =>
 {
@@ -125,5 +140,6 @@ app.MapCodeReviewRoutes();
 app.MapSteamRoutes();
 app.MapBbsRoutes();
 app.MapTelemetryRoutes();
+app.MapServicesStatusRoutes();
 
 app.Run();
