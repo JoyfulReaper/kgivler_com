@@ -1,7 +1,7 @@
 import { API_CONFIG } from "../js/config.js";
 
 (() => {
-  const fleetUrl = `${API_CONFIG.SERVICES}/api/services/hosts`;
+  const fleetUrl = `${API_CONFIG.TELEMETRY}/api/services/hosts`;
   const refreshIntervalMilliseconds = 60_000;
   const requestTimeoutMilliseconds = 8_000;
 
