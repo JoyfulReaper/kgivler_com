@@ -179,20 +179,24 @@ public static class ServicesStatusRoutes
                     "Agent did not return a usable snapshot.");
             }
 
-            string? reportedNodeId = string.IsNullOrWhiteSpace(snapshot.NodeId)
-                ? snapshot.Node
-                : snapshot.NodeId;
-
-            if (!string.IsNullOrWhiteSpace(reportedNodeId) &&
+            // Node is a display/legacy name, not a stable identity. Current
+            // Agents emit NodeId; accept its absence only for compatibility
+            // with older Agent payloads that predate that property.
+            if (!string.IsNullOrWhiteSpace(snapshot.NodeId) &&
                 !string.Equals(
-                    reportedNodeId.Trim(),
+                    snapshot.NodeId.Trim(),
                     nodeId,
                     StringComparison.OrdinalIgnoreCase))
             {
                 logger.LogWarning(
-                    "Services status Agent configured as {NodeId} reported node {ReportedNodeId}.",
+                    "Services status Agent configured as {NodeId} reported unexpected stable node {ReportedNodeId}; rejecting snapshot.",
                     nodeId,
-                    reportedNodeId);
+                    snapshot.NodeId);
+
+                return Unavailable(
+                    nodeId,
+                    displayName,
+                    "Agent identity could not be verified.");
             }
 
             ServicesProtocolResponse[] protocols =
