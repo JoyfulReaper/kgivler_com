@@ -6,6 +6,12 @@ export const IS_YGG =
     window.location.hostname.endsWith('.ygg.kgivler.com');
 
 export const API_CONFIG = Object.freeze({
+    SERVICES: IS_LOCAL
+        ? 'http://localhost:5081'
+        : IS_YGG
+            ? 'http://api.ygg.kgivler.com'
+            : 'https://api.kgivler.com',
+
     TELEMETRY: IS_LOCAL
         ? 'http://localhost:5081'
         : IS_YGG
