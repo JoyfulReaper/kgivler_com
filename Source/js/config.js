@@ -4,7 +4,7 @@ export const IS_LOCAL =
 
 export const IS_YGG =
     window.location.hostname.endsWith('.ygg.kgivler.com') ||
-    window.location.hostname.endsWith('[301:762f:80bd:20e1::40]');
+    window.location.hostname === '[301:762f:80bd:20e1::40]';
 
 export const IS_DN42 =
     window.location.hostname.endsWith('.dn42');
