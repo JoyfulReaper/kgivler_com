@@ -27,9 +27,11 @@ const STEAM_BASE = IS_LOCAL
 
 const QOTD_BASE = IS_LOCAL
     ? 'http://localhost:5269'
-    : IS_DN42
-        ? 'https://qotd.kgivler.dn42'
-        : 'https://qotd-api.kgivler.com';
+    : IS_YGG
+        ? 'http://qotd.ygg.kgivler.com'
+        : IS_DN42
+            ? 'https://qotd.kgivler.dn42'
+            : 'https://qotd-api.kgivler.com';
 
 export const API_CONFIG = Object.freeze({
     SERVICES: SITE_API_BASE,
