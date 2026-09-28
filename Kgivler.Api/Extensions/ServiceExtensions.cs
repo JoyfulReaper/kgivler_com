@@ -33,11 +33,13 @@ public static class ServiceExtensions
             options.AddPolicy("MainSiteCorsPolicy", policy =>
             {
                 var allowedOrigins = new List<string>
-                    {
-                        "https://kgivler.com",
-                        "https://www.kgivler.com",
-                        "http://site.ygg.kgivler.com"
-                    };
+                {
+                    "https://kgivler.com",
+                    "https://www.kgivler.com",
+                    "http://site.ygg.kgivler.com",
+                    "https://kgivler.dn42",
+                    "http://kgivler.dn42"
+                };
 
                 // Append local development tools if running locally
                 if (env.IsDevelopment())

@@ -3,42 +3,41 @@ export const IS_LOCAL =
     window.location.hostname === '127.0.0.1';
 
 export const IS_YGG =
-    window.location.hostname.endsWith('.ygg.kgivler.com');
+    window.location.hostname.endsWith('.ygg.kgivler.com') ||
+    window.location.hostname.endsWith('[301:762f:80bd:20e1::40]');
+
+export const IS_DN42 =
+    window.location.hostname.endsWith('.dn42');
+
+const SITE_API_BASE = IS_LOCAL
+    ? 'http://localhost:5081'
+    : IS_YGG
+        ? 'http://api.ygg.kgivler.com'
+        : IS_DN42
+            ? 'https://api.kgivler.dn42'
+            : 'https://api.kgivler.com';
+
+const STEAM_BASE = IS_LOCAL
+    ? 'http://localhost:5182'
+    : IS_YGG
+        ? 'https://steam.ygg.kgivler.com'
+        : IS_DN42
+            ? 'https://randomsteam.dn42'
+            : 'https://randomsteam.kgivler.com';
+
+const QOTD_BASE = IS_LOCAL
+    ? 'http://localhost:5269'
+    : IS_DN42
+        ? 'https://qotd.kgivler.dn42'
+        : 'https://qotd-api.kgivler.com';
 
 export const API_CONFIG = Object.freeze({
-    SERVICES: IS_LOCAL
-        ? 'http://localhost:5081'
-        : IS_YGG
-            ? 'http://api.ygg.kgivler.com'
-            : 'https://api.kgivler.com',
-
-    TELEMETRY: IS_LOCAL
-        ? 'http://localhost:5081'
-        : IS_YGG
-            ? 'http://api.ygg.kgivler.com'
-            : 'https://api.kgivler.com',
-
-    GIT_ACTIVITY: IS_LOCAL
-        ? 'http://localhost:5081'
-        : IS_YGG
-            ? 'http://api.ygg.kgivler.com'
-            : 'https://api.kgivler.com',
-
-    STEAM: IS_LOCAL
-        ? 'http://localhost:5182'
-        : IS_YGG
-            ? 'https://steam.ygg.kgivler.com'
-            : 'https://randomsteam.kgivler.com',
-
-    QWENCODER: IS_LOCAL
-        ? 'http://localhost:5081'
-        : IS_YGG
-            ? 'http://api.ygg.kgivler.com'
-            : 'https://api.kgivler.com',
-
-    QOTD: IS_LOCAL
-        ? 'http://localhost:5269'
-        : 'https://qotd-api.kgivler.com'
+    SERVICES: SITE_API_BASE,
+    TELEMETRY: SITE_API_BASE,
+    GIT_ACTIVITY: SITE_API_BASE,
+    STEAM: STEAM_BASE,
+    QWENCODER: SITE_API_BASE,
+    QOTD: QOTD_BASE
 });
 
 export const PLAYLIST = Object.freeze([
