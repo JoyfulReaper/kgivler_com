@@ -1026,3 +1026,29 @@ body.terminal-theme {
 .site-footer-note {
     margin-top: 0.4rem;
 }
+
+/* Main portfolio navigation */
+.terminal-nav {
+    justify-content: center;
+    text-align: center;
+}
+
+.terminal-nav-primary {
+    padding: 0.18rem 0.45rem;
+    border: 1px solid #39ff14;
+    border-radius: 3px;
+    color: #39ff14 !important;
+    font-weight: 700;
+}
+
+.terminal-nav-primary::before,
+.terminal-nav-primary::after {
+    content: none !important;
+}
+
+.terminal-nav-primary:hover,
+.terminal-nav-primary:focus-visible {
+    background: #39ff14;
+    color: #000000 !important;
+    text-decoration: none;
+}
