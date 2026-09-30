@@ -970,3 +970,59 @@ body.terminal-theme {
     margin-left: auto;
     margin-right: auto;
 }
+
+.project-hosting-note {
+    padding: 1rem 1.1rem;
+    border: 1px dashed #334155;
+    border-left: 3px solid #38bdf8;
+    border-radius: 4px;
+    background-color: #0c0c0f;
+}
+
+.project-hosting-note h3 {
+    margin: 0.4rem 0 0.7rem;
+    color: #ffffff;
+    font-size: 1.05rem;
+}
+
+.project-hosting-note p {
+    margin: 0 0 0.65rem;
+    color: #cbd5e1;
+    line-height: 1.55;
+}
+
+.project-hosting-note p:last-child {
+    margin-bottom: 0;
+}
+
+.project-hosting-note a,
+.site-footer a {
+    color: #38bdf8;
+}
+
+.affiliate-disclosure,
+.site-footer-note {
+    color: #94a3b8 !important;
+    font-size: 0.78rem;
+}
+
+.site-footer {
+    margin-top: 3rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid #222226;
+    color: #94a3b8;
+    font-size: 0.82rem;
+    text-align: center;
+}
+
+.site-footer-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+}
+
+.site-footer-note {
+    margin-top: 0.4rem;
+}
