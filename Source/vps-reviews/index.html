@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>GreenCloud VPS Review | Kyle Givler</title>
+
+  <meta
+    name="description"
+    content="My first-hand GreenCloud VPS review based on running Linux, Docker, monitoring, DN42 routing, and public services across multiple VPS nodes."
+  />
+
+  <link rel="canonical" href="https://www.kgivler.com/vps-reviews/" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="GreenCloud VPS Review | Kyle Givler" />
+  <meta
+    property="og:description"
+    content="A first-hand GreenCloud VPS review based on running real Linux, Docker, networking, and public-service workloads."
+  />
+  <meta property="og:url" content="https://www.kgivler.com/vps-reviews/" />
+
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous"
+  />
+
+  <link rel="stylesheet" href="/styles.css?v=7" />
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+</head>
+
+<body class="terminal-theme">
+  <main class="main-container" id="main-content">
+    <div class="terminal-window">
+      <header class="terminal-header">
+        <span class="terminal-dot close-dot"></span>
+        <span class="terminal-dot minimize-dot"></span>
+        <span class="terminal-dot expand-dot"></span>
+        <span class="terminal-title">bash — kyle@kgivler.com — vps-reviews</span>
+      </header>
+
+      <div class="terminal-body">
+
+        <div class="cmd-line">
+          <span class="prompt">kyle@kgivler:~$</span>
+          ./review_vps.sh greencloud
+        </div>
+
+        <h1 class="display-5 fw-bold terminal-header-text">
+          GreenCloud VPS Review
+        </h1>
+
+        <p class="terminal-lead">
+          A review based on VPSes I actually use, not a list assembled from
+          somebody else's product pages.
+        </p>
+
+        <p class="terminal-intro-support">
+          Last updated: September 30, 2026
+        </p>
+
+        <div class="project-terminal-badge mt-4">
+          <strong>Affiliate disclosure:</strong>
+          The GreenCloud links on this page are affiliate links. I may earn a
+          commission if you sign up through them. That does not change what I
+          say about the service.
+        </div>
+
+        <hr class="terminal-divider my-4" />
+
+        <section>
+          <div class="cmd-line section-command">
+            <span class="prompt">kyle@kgivler:~$</span>
+            <h2>./summary.sh</h2>
+          </div>
+
+          <p>
+            I currently use
+            <a
+              href="https://greencloudvps.com/billing/aff.php?aff=10295"
+              target="_blank"
+              rel="sponsored noopener noreferrer"
+            >GreenCloud VPS</a>
+            for multiple public Linux VPS nodes, including
+            <strong>Clanker</strong> and <strong>ScopeCreep</strong>.
+          </p>
+
+          <p>
+            Those machines are not idle test boxes. I use them for Docker
+            services, monitoring, web applications, DN42 routing, WireGuard,
+            DNS, small Internet-protocol servers, and various networking
+            experiments.
+          </p>
+
+          <p>
+            So far, GreenCloud has been a good fit for the kind of inexpensive
+            Linux infrastructure I like to run: enough resources to do useful
+            work, inexpensive enough that keeping multiple locations online is
+            practical, and support that has responded quickly when I have
+            encountered provider-side network problems.
+          </p>
+        </section>
+
+        <hr class="terminal-divider my-4" />
+
+        <section>
+          <div class="cmd-line section-command">
+            <span class="prompt">kyle@kgivler:~$</span>
+            <h2>./what_i_run.sh</h2>
+          </div>
+
+          <div class="project-terminal-badge mt-3">
+            <ul class="mb-0">
+              <li>Docker and Docker Compose workloads</li>
+              <li>ASP.NET Core / .NET applications</li>
+              <li>Mission Control monitoring and telemetry</li>
+              <li>Random Steam Game and Random GitHub</li>
+              <li>Gopher, Gemini, QOTD, Finger, and other small services</li>
+              <li>WireGuard tunnels</li>
+              <li>BIRD and DN42 BGP routing</li>
+              <li>IPv4 and IPv6 networking experiments</li>
+              <li>Authoritative DNS and HTTPS services</li>
+            </ul>
+          </div>
+        </section>
+
+        <hr class="terminal-divider my-4" />
+
+        <section>
+          <div class="cmd-line section-command">
+            <span class="prompt">kyle@kgivler:~$</span>
+            <h2>./support_experience.sh</h2>
+          </div>
+
+          <p>
+            I have had a couple of network problems worth mentioning. I
+            actually consider these useful examples because they show what
+            support does when something is not working.
+          </p>
+
+          <article class="project-terminal-badge mt-3">
+            <h3>IPv6 provisioning issue — August 2026</h3>
+
+            <p>
+              After enabling IPv6 on one VPS, Neighbor Discovery to the supplied
+              gateway worked and outbound packets left the VM, but nothing came
+              back. Packet captures indicated that the problem was upstream of
+              the guest.
+            </p>
+
+            <p>
+              I opened a ticket at 07:30. Support replied at 07:32, investigated
+              the VPS, and at 07:48 asked me to retry after making a change.
+              I confirmed IPv6 was working at 07:54.
+            </p>
+
+            <p class="mb-0">
+              That was about <strong>24 minutes from opening the ticket to
+              confirmed working IPv6</strong>.
+            </p>
+          </article>
+
+          <article class="project-terminal-badge mt-3">
+            <h3>Unsolicited IPv6 multicast traffic — September 2026</h3>
+
+            <p>
+              On another VPS I noticed inbound bandwidth increasing even though
+              my applications were not receiving that amount of traffic.
+            </p>
+
+            <p>
+              A packet capture showed unsolicited ICMPv6 / MLDv2 multicast
+              listener reports from another device on the provider-side network.
+              During a 300-second capture I measured roughly
+              <strong>72,007 frames</strong>, about <strong>107 MB</strong>,
+              or approximately <strong>2.85 Mbps</strong> of sustained inbound
+              traffic from that conversation.
+            </p>
+
+            <p>
+              I opened a support ticket at 01:16. GreenCloud replied at 01:19
+              saying they were investigating the source and would ensure the VPS
+              was not charged for those packets.
+            </p>
+
+            <p class="mb-0">
+              Whatever the underlying switch or multicast-isolation problem was,
+              I appreciated getting a technical response in roughly
+              <strong>three minutes</strong> rather than spending hours trying
+              to convince first-line support that multicast traffic exists.
+            </p>
+          </article>
+        </section>
+
+        <hr class="terminal-divider my-4" />
+
+        <section>
+          <div class="cmd-line section-command">
+            <span class="prompt">kyle@kgivler:~$</span>
+            <h2>./good_and_bad.sh</h2>
+          </div>
+
+          <div class="row g-3 mt-1">
+            <div class="col-md-6">
+              <div class="project-terminal-badge h-100">
+                <h3>What I like</h3>
+                <ul class="mb-0">
+                  <li>Cheap enough for hobby and small-service infrastructure</li>
+                  <li>KVM VPSes work well for normal Linux workloads</li>
+                  <li>IPv6 is available</li>
+                  <li>Multiple locations make multi-node experiments practical</li>
+                  <li>Support has responded quickly to the problems I have reported</li>
+                  <li>I can run normal Docker/networking workloads without needing a special platform</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="project-terminal-badge h-100">
+                <h3>Things to know</h3>
+                <ul class="mb-0">
+                  <li>I have encountered provider-side IPv6/networking issues</li>
+                  <li>These are inexpensive VPSes, not managed enterprise infrastructure</li>
+                  <li>I monitor CPU, memory, bandwidth, and service health myself</li>
+                  <li>I would still design around backups and failure rather than trusting any single VPS</li>
+                  <li>Plan availability and pricing change, so check the current offer before buying</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <hr class="terminal-divider my-4" />
+
+        <section>
+          <div class="cmd-line section-command">
+            <span class="prompt">kyle@kgivler:~$</span>
+            <h2>./who_is_it_for.sh</h2>
+          </div>
+
+          <p>
+            I think GreenCloud makes the most sense if you are comfortable
+            administering your own Linux server and want inexpensive compute for
+            small applications, personal infrastructure, Docker workloads,
+            networking experiments, or geographically separate nodes.
+          </p>
+
+          <p>
+            If you need a fully managed environment where somebody else owns the
+            operating system, application stack, backups, and architecture,
+            that is a different product category.
+          </p>
+
+          <div class="d-flex flex-wrap gap-2 mt-3">
+            <a
+              href="https://greencloudvps.com/billing/aff.php?aff=10295"
+              class="terminal-btn"
+              target="_blank"
+              rel="sponsored noopener noreferrer"
+            >
+              View GreenCloud VPS
+            </a>
+
+            <a
+              href="https://greencloudvps.com/billing/store/budget-kvm-sale"
+              class="terminal-btn-inline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Current Budget KVM Plans
+            </a>
+          </div>
+
+          <p class="text-muted mt-3">
+            The first link is my affiliate link. I may earn a commission if you
+            purchase through it.
+          </p>
+        </section>
+
+        <hr class="terminal-divider my-4" />
+
+        <section>
+          <div class="cmd-line section-command">
+            <span class="prompt">kyle@kgivler:~$</span>
+            <h2>./review_your_vps.sh</h2>
+          </div>
+
+          <h3>Run a VPS company?</h3>
+
+          <p>
+            If you want me to test your VPS service, I'm open to reviewing other
+            providers.
+          </p>
+
+          <p>
+            Providing a VPS for testing does <strong>not</strong> guarantee a
+            positive review. If service is provided free or at a discount, I
+            will disclose that on the review.
+          </p>
+
+          <p>
+            I am especially interested in inexpensive KVM VPSes, IPv6,
+            interesting network configurations, unusual locations, and services
+            that are useful for self-hosters and developers.
+          </p>
+
+          <a
+            href="https://dev.kgivler.com/"
+            class="terminal-btn-inline"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Contact me
+          </a>
+        </section>
+
+        <hr class="terminal-divider my-4" />
+
+        <nav
+          class="d-flex flex-wrap justify-content-center gap-2"
+          aria-label="VPS review navigation"
+        >
+          <a href="/" class="terminal-btn-inline text-decoration-none">
+            Return Home
+          </a>
+
+          <a href="/services/" class="terminal-btn-inline text-decoration-none">
+            Services / Infrastructure
+          </a>
+
+          <a
+            href="https://dev.kgivler.com/"
+            class="terminal-btn-inline text-decoration-none"
+          >
+            Development Services
+          </a>
+        </nav>
+
+        <div class="cmd-line mt-4">
+          <span class="prompt">kyle@kgivler:~$</span>
+          <span class="animate-pulse">_</span>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
