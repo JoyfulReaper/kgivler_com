@@ -69,6 +69,9 @@ Audit Home and the Systems catalog line by line. Rewrite or remove repetitive Pr
 
 Prefer short first-person explanations, concrete technical details, and humor where it fits. Detailed architecture belongs on project pages, repository READMEs, or future writing.
 
+### Monetization guardrail
+Preserve existing monetization/affiliate content and required affiliate disclosures during future homepage cleanup unless Kyle explicitly requests their removal. Presentation may be compacted to fit the design, but keep the affiliate links, sponsored link attributes, and clear commission disclosure. The dedicated GreenCloud hosting section belongs immediately after Featured Projects and before Development Services / Hire Me; do not claim that all featured projects run on GreenCloud.
+
 ## Systems: inventory vs telemetry
 Declared service inventory is authoritative. Mission Control Agents are optional telemetry sources, not the source of truth for service existence.
 

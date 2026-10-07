@@ -122,6 +122,16 @@ body.terminal-theme.home-page {
 .home-page .home-project-card .home-kicker { font-size: 0.68rem; }
 .home-page .home-project-card .home-stack { margin: auto 0 1rem; padding-top: 0.4rem; color: #94a3b8; font-size: 0.72rem; line-height: 1.7; }
 
+.home-page .home-hosting {
+    padding: 1.25rem;
+    border-left: 2px solid #38bdf8;
+    background: #0c0c0f;
+}
+
+.home-page .home-hosting h2 { font-size: 1.2rem; }
+.home-page .home-hosting > p { color: #94a3b8; font-size: 0.88rem; line-height: 1.7; }
+.home-page .home-hosting .affiliate-disclosure { margin: 0.85rem 0 0; font-size: 0.78rem; }
+
 .home-page .home-hire,
 .home-page .home-lab-teaser {
     display: flex;
