@@ -1,0 +1,29 @@
+/* Temporary Systems landing page only. */
+body.terminal-theme.systems-page { display: block; padding: 0 24px; color: #cbd5e1; }
+.systems-page .systems-container { max-width: 1000px; margin: 0 auto; }
+.systems-page .systems-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.5rem 0; border-bottom: 1px solid #222226; }
+.systems-page .systems-brand { color: #f8fafc; font-weight: 700; font-size: 1.05rem; text-decoration: none; }
+.systems-page .systems-brand span { color: #39ff14; }
+.systems-page .terminal-nav { margin: 0; gap: 0.6rem 0.85rem; }
+.systems-page .terminal-nav a { padding-top: 0.35rem; padding-bottom: 0.35rem; }
+.systems-page .systems-intro { padding: 4rem 0 0; }
+.systems-page .systems-command { color: #38bdf8; font-size: 0.75rem; margin: 0 0 1rem; }
+.systems-page h1 { color: #f8fafc; font-size: clamp(2.5rem, 6vw, 3.5rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.04em; margin-bottom: 1rem; }
+.systems-page .systems-lead { color: #e2e8f0; font-size: 1.15rem; }
+.systems-page .systems-description { max-width: 70ch; font-size: 0.95rem; line-height: 1.8; }
+.systems-page .systems-notice { max-width: 70ch; margin: 2rem 0; padding: 1.2rem; border-left: 2px solid #38bdf8; background: #0c0c0f; }
+.systems-page .systems-notice h2 { color: #f8fafc; font-size: 1.1rem; font-weight: 700; }
+.systems-page .systems-notice p { margin: 0.6rem 0 0; color: #94a3b8; font-size: 0.9rem; line-height: 1.7; }
+.systems-page .systems-actions { display: flex; flex-wrap: wrap; gap: 0.65rem; }
+.systems-page .terminal-btn-inline { padding: 0.45rem 0.7rem; }
+.systems-page a:focus-visible { outline: 3px solid #fbbf24; outline-offset: 4px; }
+.systems-page .site-footer { margin-bottom: 2rem; }
+@media (max-width: 800px) {
+    .systems-page .systems-header { align-items: flex-start; flex-direction: column; }
+}
+@media (max-width: 576px) {
+    body.terminal-theme.systems-page { padding: 0 18px; }
+    .systems-page .systems-header { padding: 1.1rem 0; }
+    .systems-page .terminal-nav { justify-content: flex-start; gap: 0.5rem 0.7rem; }
+    .systems-page .systems-intro { padding-top: 3rem; }
+}
