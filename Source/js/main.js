@@ -1,6 +1,6 @@
 import { Commands } from "./commands.js";
 import { elements, Terminal, createTerminalContext, initHostTelemetry } from "./ui.js";
-import { getSystemData, getWorkstationStatus, fetchRandomGame } from "./api.js";
+import { getSystemData, getHostStatus, fetchRandomGame } from "./api.js";
 import { parseCommandLine } from "./parser.js";
 import { initSteamPresence, refreshSteamPresence } from "./steam.js";
 import { initGitActivity } from "./git-activity.js";
@@ -26,22 +26,22 @@ async function runRandomGameDemo() {
   }
 }
 
-async function refreshWorkstation() {
-  if (!elements.workstationRefreshButton || !elements.telemetry) return;
+async function refreshHost() {
+  if (!elements.hostRefreshButton || !elements.telemetry) return;
 
-  elements.workstationRefreshButton.disabled = true;
+  elements.hostRefreshButton.disabled = true;
   const loading = document.createElement("div");
   loading.className = "text-warning animate-pulse";
   loading.innerHTML = `<i class="fas fa-spinner fa-spin me-2"></i>Refreshing telemetry...`;
   elements.telemetry.replaceChildren(loading);
 
   try {
-    const data = await getWorkstationStatus();
+    const data = await getHostStatus();
 
     if (!data || data.ok === false) {
       const error = document.createElement("div");
       error.className = "widget-state-unavailable";
-      error.textContent = `[UNAVAILABLE] ${data?.error || "Workstation telemetry is temporarily unavailable."}`;
+      error.textContent = `[UNAVAILABLE] ${data?.error || "Host telemetry is temporarily unavailable."}`;
 
       const detail = document.createElement("div");
       detail.className = "widget-state-detail";
@@ -53,10 +53,10 @@ async function refreshWorkstation() {
 
     initHostTelemetry(data);
   } catch (error) {
-    console.error("Workstation telemetry refresh failed:", error);
+    console.error("Host telemetry refresh failed:", error);
     initHostTelemetry(null);
   } finally {
-    elements.workstationRefreshButton.disabled = false;
+    elements.hostRefreshButton.disabled = false;
   }
 }
 
@@ -89,13 +89,13 @@ document.addEventListener("DOMContentLoaded", () => {
   getSystemData()
     .then(initHostTelemetry)
     .catch((error) => {
-      console.error("Initial workstation telemetry failed:", error);
+      console.error("Initial host telemetry failed:", error);
       initHostTelemetry(null);
     });
   initSteamPresence();
   initGitActivity();
   initQotd();
-  elements.workstationRefreshButton?.addEventListener("click", () => refreshWorkstation());
+  elements.hostRefreshButton?.addEventListener("click", () => refreshHost());
   elements.steamRefreshButton?.addEventListener("click", () => {
     void refreshSteamPresence({ showLoading: true });
   });

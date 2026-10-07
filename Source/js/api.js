@@ -99,7 +99,7 @@ export function getSystemData() {
   return systemDataRequest;
 }
 
-export async function getWorkstationStatus() {
+export async function getHostStatus() {
   try {
     const response = await fetchWithTimeout(
       `${API_CONFIG.TELEMETRY}/api/system/status`,
@@ -108,14 +108,14 @@ export async function getWorkstationStatus() {
     );
 
     if (!response.ok) {
-      const detail = await readProblemDetail(response, "Workstation refresh failed.");
+      const detail = await readProblemDetail(response, "Host refresh failed.");
       return { ok: false, error: detail, status: response.status };
     }
 
     return await response.json();
   } catch (e) {
-    console.error("Workstation status fetch failed or timed out:", e);
-    return { ok: false, error: unavailableMessage(e, "Workstation telemetry"), status: 0 };
+    console.error("Host status fetch failed or timed out:", e);
+    return { ok: false, error: unavailableMessage(e, "Host telemetry"), status: 0 };
   }
 }
 
