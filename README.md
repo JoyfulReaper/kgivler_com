@@ -4,7 +4,7 @@ Repository for [www.kgivler.com](https://www.kgivler.com/), Kyle Givler's termin
 
 ## Purpose
 
-This project is both a portfolio and an operating display for software that is actually deployed. The static frontend presents project case studies, a service catalog, and a fake-shell interface. Its optional live widgets connect to a small ASP.NET Core API and related self-hosted services for workstation telemetry, Steam presence, Git activity, quotes, BBS messages, service health, and local-AI code review.
+This project is both a portfolio and an operating display for software that is actually deployed. The static frontend presents project case studies, a service catalog, and a fake-shell interface. Its optional live widgets connect to a small ASP.NET Core API and related self-hosted services for workstation telemetry, Steam presence, Git activity, quotes, BBS messages, and service health.
 
 The terminal presentation is intentional, but the site is not only a novelty shell. Conventional navigation, semantic page structure, accessible controls, and independently degrading widgets keep the portfolio useful when JavaScript or a self-hosted dependency is unavailable.
 
@@ -21,7 +21,6 @@ No current UI screenshots are tracked in this repository. Use the [live site](ht
 - Quote of the Day widget backed by HappyQOTD.
 - Public chat link and a small SQLite-backed visitor BBS.
 - Recent Git activity projected through Mission Control and proxied by `Kgivler.Api`.
-- Best-effort local code review backed by Qwen through LM Studio.
 - Fake-shell commands for discovery, telemetry, project information, and BBS access.
 - Responsive terminal styling, reduced-motion support, keyboard focus states, and per-widget failure handling.
 
@@ -42,14 +41,13 @@ The homepage loads `Source/js/main.js` as an ES module. API access is centralize
 
 `Kgivler.Api` is an ASP.NET Core Minimal API targeting .NET 10. It provides:
 
-- Minimal API routes for telemetry, Steam presence, Git activity, service status, code review, and the BBS.
+- Minimal API routes for telemetry, Steam presence, Git activity, service status, and the BBS.
 - SQLite storage for BBS messages and site hit counts.
-- Fixed-window rate-limiting policies for BBS writes, telemetry/Git activity, Steam, and code review.
-- Named `HttpClient` instances with bounded timeouts for Steam, LM Studio, Git activity, Mission Control Agents, and weather.
+- Fixed-window rate-limiting policies for BBS writes, telemetry/Git activity, and Steam.
+- Named `HttpClient` instances with bounded timeouts for Steam, Git activity, Mission Control Agents, and weather.
 - Concurrent, failure-isolated Agent snapshot proxying with a short in-memory cache and a sanitized public projection.
 - Steam Web API integration with short-lived in-memory caching.
-- Mission Control event publishing for selected site, BBS, Steam, and code-review activity.
-- A Qwen review adapter for an OpenAI-compatible LM Studio server.
+- Mission Control event publishing for selected site, BBS, and Steam activity.
 - Windows/Linux host telemetry with optional `wmic` and `nvidia-smi` enrichment when those tools are available.
 
 ### Related systems
@@ -64,11 +62,10 @@ The homepage loads `Source/js/main.js` as an ES module. API access is centralize
 flowchart LR
     Browser[Browser] --> PublicEdge[Public HTTPS / Cloudflare Tunnel]
     PublicEdge --> Frontend[Static frontend<br/>Source/]
-    Frontend -->|telemetry, Steam presence,<br/>BBS, Git/status proxies, AI review| Api[Kgivler.Api<br/>ASP.NET Core / .NET 10]
+    Frontend -->|telemetry, Steam presence,<br/>BBS, Git/status proxies| Api[Kgivler.Api<br/>ASP.NET Core / .NET 10]
 
     Api --> SQLite[(SQLite<br/>BBS + hit counts)]
     Api --> Steam[Steam Web API<br/>and Store API]
-    Api --> LMStudio[LM Studio<br/>Qwen model]
     Api --> MissionControl[Mission Control<br/>event publishing]
     Api --> GitActivity[Mission Control<br/>GitActivity endpoint]
     Api -->|concurrent sanitized snapshots| Agents[Configured Mission Control Agents<br/>public or private/WireGuard]
@@ -96,7 +93,6 @@ kgivler_com/
 ├── Kgivler.Api/
 │   ├── Program.cs                  Service registration and route mapping
 │   ├── Routes/                     Minimal API route groups
-│   ├── CodeReview/                 LM Studio/Qwen integration
 │   ├── Steam/                      Steam presence integration
 │   ├── ServicesStatus/             Sanitized Agent fleet transport models
 │   ├── Telemetry/                  Site telemetry event models
@@ -115,7 +111,7 @@ The public `Source/config.*`, `.env`, WordPress-lookalike, and dot-git-lookalike
 
 - .NET 10 SDK.
 - A static-file server for `Source/`.
-- Optional: Steam API credentials, LM Studio, Mission Control, Random Steam Game, and HappyQOTD for their corresponding integrations.
+- Optional: Steam API credentials, Mission Control, Random Steam Game, and HappyQOTD for their corresponding integrations.
 
 ### Restore, build, and test
 
@@ -162,7 +158,6 @@ Use .NET user secrets for local development and environment variables or protect
 | Section | Keys | Purpose |
 | --- | --- | --- |
 | `Steam` | `ApiKey`, `OwnerSteamId`, `CacheSeconds` | Steam presence lookup and cache duration |
-| `LmStudio` | `BaseUrl`, `Model` | OpenAI-compatible local inference endpoint and Qwen model ID |
 | `GitActivity` | `BaseUrl`, `ApiKey` | Upstream Mission Control Git activity API |
 | `MissionControl` | `Enabled`, `BaseUrl`, `ApiKey`, `CloudflareAccessClientId`, `CloudflareAccessClientSecret`, `TimeoutMilliseconds` | Event publishing and private service access |
 | `ServicesStatus` | `TimeoutSeconds`, `CacheSeconds`, `Hosts` (`NodeId`, `DisplayName`, `BaseUrl`) | Sanitized multi-host Mission Control Agent snapshot proxy |
@@ -177,7 +172,7 @@ dotnet user-secrets set "GitActivity:ApiKey" "<mission-control-api-key>" --proje
 dotnet user-secrets set "MissionControl:ApiKey" "<mission-control-api-key>" --project Kgivler.Api/Kgivler.Api.csproj
 ```
 
-Equivalent environment variables use ASP.NET Core's double-underscore convention, such as `Steam__ApiKey`, `LmStudio__BaseUrl`, and `MissionControl__Enabled`.
+Equivalent environment variables use ASP.NET Core's double-underscore convention, such as `Steam__ApiKey` and `MissionControl__Enabled`.
 
 The checked-in `ServicesStatus` configuration contains only Clanker's existing public Agent URL. On the Windows workstation that runs `Kgivler.Api` under IIS, add private nodes through protected IIS environment configuration (or another private ASP.NET Core configuration provider). For example, replace the placeholder URLs below with Agent base URLs reachable from that workstation; do not include `/api/snapshot`:
 
@@ -222,16 +217,15 @@ The repository includes a filesystem publish profile for the API but no complete
 - Production CORS is limited to `https://kgivler.com` and `https://www.kgivler.com`; local origins are added only in Development.
 - Public API routes preserve fixed-window rate limits appropriate to their workloads.
 - BBS database writes use SQL parameters, and browser rendering escapes visitor content.
-- Steam, Git activity, quote, telemetry, and AI output are validated or escaped before browser rendering; trusted HTML helpers are reserved for controlled templates.
+- Steam, Git activity, quote, and telemetry output are validated or escaped before browser rendering; trusted HTML helpers are reserved for controlled templates.
 - Private Mission Control and Git activity keys stay on the server. Agent URLs (including WireGuard addresses), credentials, and raw upstream diagnostics stay on the workstation; the browser receives only the sanitized multi-host projection.
 - The telemetry endpoint intentionally exposes selected host/runtime metrics and reads the connecting address for hit counting. Do not add sensitive host, process, filesystem, or network details to that payload.
-- The local AI review is an experiment, not a security scanner or formal audit. Submitted code is sent to the configured LM Studio endpoint.
 - Administrative tools may be described in the service catalog, but authenticated dashboards and loopback-only endpoints are not presented as public controls.
 - Scanner-bait files under `Source/` contain fictional values. Do not repurpose them for real configuration.
 
 ## Known limitations
 
-- Self-hosted widgets can be unavailable during workstation maintenance, tunnel interruption, model shutdown, or VPS/service outages.
+- Self-hosted widgets can be unavailable during workstation maintenance, tunnel interruption, or VPS/service outages.
 - A local frontend run is only fully interactive when its optional companion services and private configuration are also available.
 - Some telemetry fields depend on operating-system facilities, `wmic`, or `nvidia-smi`; missing tools produce partial metrics rather than startup failure.
 - The service catalog is curated static content with node-aware observation mappings, while the Docker/protocol table is the selected node's live snapshot. They can temporarily differ during deployments.

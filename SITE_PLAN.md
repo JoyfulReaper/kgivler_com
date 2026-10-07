@@ -37,7 +37,6 @@ Candidate content:
 - QOTD
 - recent Git activity
 - BBS
-- Qwen/local-AI code-review experiment
 - other experimental live widgets
 - full interactive shell at the bottom
 
@@ -152,7 +151,6 @@ Recent/current work worth considering includes ReaperShell, tcpnoise/freebsd-c-l
 - expand sitemap coverage as `/blog/`, `/projects/`, `/lab/`, and project pages are added
 - fill in meaningful webmanifest `name`, `short_name`, and theme metadata
 - improve terminal help/discoverability
-- fix Qwen model-status display
 - keep mobile layout clean
 - keep static/no-JS behavior useful
 

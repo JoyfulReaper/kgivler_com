@@ -99,26 +99,6 @@ export function getSystemData() {
   return systemDataRequest;
 }
 
-export async function getQwenCoderHealth() {
-  try {
-    const response = await fetchWithTimeout(
-      `${API_CONFIG.QWENCODER}/api/code-review/health`,
-      { cache: "no-store" },
-      5000
-    );
-
-    if (!response.ok) {
-      const detail = await readProblemDetail(response, "QwenCoder health check failed.");
-      return { ok: false, error: detail, status: response.status };
-    }
-
-    return await response.json();
-  } catch (e) {
-    console.error("QwenCoder health fetch failed or timed out:", e);
-    return { ok: false, error: unavailableMessage(e, "QwenCoder"), status: 0 };
-  }
-}
-
 export async function getWorkstationStatus() {
   try {
     const response = await fetchWithTimeout(
@@ -156,32 +136,6 @@ export async function getSteamPresence() {
   } catch (e) {
     console.error("Steam presence fetch failed or timed out:", e);
     return { ok: false, error: unavailableMessage(e, "Steam presence"), status: 0 };
-  }
-}
-
-export async function submitQwenCoderReview(code, language = "auto") {
-  const trimmedCode = (code || "").trim();
-  if (!trimmedCode) {
-    return { ok: false, error: "Paste some code first." };
-  }
-
-  try {
-    const response = await fetchWithTimeout(`${API_CONFIG.QWENCODER}/api/code-review`, {
-      method: "POST",
-      cache: "no-store",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code: trimmedCode, language }),
-    }, 90_000);
-
-    if (!response.ok) {
-      const detail = await readProblemDetail(response, "Code review failed.");
-      return { ok: false, error: detail, status: response.status };
-    }
-
-    return await response.json();
-  } catch (e) {
-    console.error("QwenCoder review fetch failed or timed out:", e);
-    return { ok: false, error: unavailableMessage(e, "QwenCoder"), status: 0 };
   }
 }
 

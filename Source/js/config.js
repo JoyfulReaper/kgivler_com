@@ -38,7 +38,6 @@ export const API_CONFIG = Object.freeze({
     TELEMETRY: SITE_API_BASE,
     GIT_ACTIVITY: SITE_API_BASE,
     STEAM: STEAM_BASE,
-    QWENCODER: SITE_API_BASE,
     QOTD: QOTD_BASE
 });
 

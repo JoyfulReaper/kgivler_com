@@ -56,7 +56,6 @@ Do not let the homepage become a full operations dashboard. Detailed live widget
 - QOTD
 - recent Git activity
 - visitor BBS
-- Qwen/local-AI experiment
 - other live infrastructure experiments
 - the interactive shell at the bottom
 

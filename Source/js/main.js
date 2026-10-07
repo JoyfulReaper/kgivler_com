@@ -1,7 +1,6 @@
 import { Commands } from "./commands.js";
 import { elements, Terminal, createTerminalContext, initHostTelemetry } from "./ui.js";
 import { getSystemData, getWorkstationStatus, fetchRandomGame } from "./api.js";
-import { initQwenPanel } from "./qwen-panel.js";
 import { parseCommandLine } from "./parser.js";
 import { initSteamPresence, refreshSteamPresence } from "./steam.js";
 import { initGitActivity } from "./git-activity.js";
@@ -96,7 +95,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initSteamPresence();
   initGitActivity();
   initQotd();
-  initQwenPanel();
   elements.workstationRefreshButton?.addEventListener("click", () => refreshWorkstation());
   elements.steamRefreshButton?.addEventListener("click", () => {
     void refreshSteamPresence({ showLoading: true });

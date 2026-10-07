@@ -12,14 +12,6 @@ export const elements = {
   gitActivity: document.getElementById('recent-git-activity'),
   gitActivityRefreshButton: document.getElementById('btn-git-activity-refresh'),
 
-  qwenReviewOutput: document.getElementById('qwen-review-output'),
-  qwenHealthBadge: document.getElementById('qwen-health-badge'),
-  qwenCodeInput: document.getElementById('qwenCodeInput'),
-  qwenLanguage: document.getElementById('qwenLanguage'),
-  qwenHealthButton: document.getElementById('btn-qwen-health'),
-  qwenLoadBadSampleButton: document.getElementById('btn-load-bad-sample'),
-  qwenReviewButton: document.getElementById('btn-qwen-review'),
-  qwenClearButton: document.getElementById('btn-qwen-clear'),
   workstationRefreshButton: document.getElementById('btn-workstation-refresh'),
   steamRefreshButton: document.getElementById('btn-steam-refresh')
 };
