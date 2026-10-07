@@ -86,12 +86,14 @@ async function processCommand(input) {
 // --- INITIALIZATION ---
 document.addEventListener("DOMContentLoaded", () => {
   // Telemetry
-  getSystemData()
-    .then(initHostTelemetry)
-    .catch((error) => {
-      console.error("Initial host telemetry failed:", error);
-      initHostTelemetry(null);
-    });
+  if (elements.telemetry) {
+    getSystemData()
+      .then(initHostTelemetry)
+      .catch((error) => {
+        console.error("Initial host telemetry failed:", error);
+        initHostTelemetry(null);
+      });
+  }
   initSteamPresence();
   initGitActivity();
   initQotd();
