@@ -6,19 +6,19 @@
 
     <title>Systems | Kyle Givler</title>
 
-    <meta name="description" content="Kyle Givler's self-hosted infrastructure, services, networks, and experiments. The detailed public inventory is being rebuilt and audited." />
+    <meta name="description" content="Kyle Givler's infrastructure inventory: Clanker's audited host specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
 
     <link rel="canonical" href="https://www.kgivler.com/services/" />
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Systems | Kyle Givler" />
-    <meta property="og:description" content="Kyle Givler's self-hosted infrastructure, services, networks, and experiments. The detailed public inventory is being rebuilt and audited." />
+    <meta property="og:description" content="Kyle Givler's infrastructure inventory: Clanker's audited host specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
     <meta property="og:url" content="https://www.kgivler.com/services/" />
     <meta property="og:site_name" content="Kyle Givler" />
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Systems | Kyle Givler" />
-    <meta name="twitter:description" content="Kyle Givler's self-hosted infrastructure, services, networks, and experiments. The detailed public inventory is being rebuilt and audited." />
+    <meta name="twitter:description" content="Kyle Givler's infrastructure inventory: Clanker's audited host specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
 
@@ -34,7 +34,7 @@
 
     <link rel="manifest" href="/site.webmanifest" />
 
-    <link rel="stylesheet" href="./systems.css?v=1" />
+    <link rel="stylesheet" href="./systems.css?v=2" />
   </head>
 
   <body class="terminal-theme systems-page">
@@ -52,22 +52,139 @@
         </nav>
       </header>
       <main id="main-content" class="systems-intro">
-        <p class="systems-command"><span aria-hidden="true">$</span> inventory --rebuild</p>
+        <p class="systems-command"><span aria-hidden="true">$</span> inventory --host Clanker</p>
         <h1>Systems</h1>
         <p class="systems-lead">The stuff I run.</p>
-        <p class="systems-description">This area will become a public inventory of my self-hosted infrastructure, services, networks, protocols, and experiments: public web applications, Gopher, Gemini, Finger, QOTD and other small Internet protocols, monitoring and operations services, DN42, and Yggdrasil.</p>
-        <p class="systems-description">It will also cover hosts, VPSes, home systems, network peers, and an overview of private infrastructure.</p>
-        <section class="systems-notice" aria-labelledby="rebuild-heading">
-          <h2 id="rebuild-heading">Detailed inventory coming soon</h2>
-          <p>I’m rebuilding and auditing the catalog before putting the details here. For now, explore the projects or visit the Lab for live widgets and experiments.</p>
+        <p class="systems-description">I’m auditing my infrastructure host-by-host: where things run, how they’re reachable, and what they do. Clanker is the first completed host. More hosts will be added as I work through the inventory.</p>
+        <p class="systems-audit"><time datetime="2026-10-07">Audited October 7, 2026</time> · Inventory snapshot, not real-time monitoring.</p>
+        <nav class="systems-actions" aria-label="Inventory sections">
+          <a href="#hosts" class="terminal-btn-inline">Hosts</a>
+          <a href="#networks" class="terminal-btn-inline">Networks</a>
+          <a href="#public-services" class="terminal-btn-inline">Public services</a>
+          <a href="#operations" class="terminal-btn-inline">Operations</a>
+          <a href="#experiments" class="terminal-btn-inline">Experiments</a>
+        </nav>
+
+        <section class="inventory-section" aria-labelledby="hosts">
+          <h2 id="hosts">Hosts</h2>
+          <article class="host-card" aria-labelledby="clanker">
+            <div class="inventory-card-heading"><h3 id="clanker">Clanker</h3><span class="inventory-badge">Audited host</span></div>
+            <p>Application host, public Internet services, DN42 router / BGP node, Yggdrasil node, and monitoring / operations host.</p>
+            <dl class="host-specs">
+              <div><dt>Operating system</dt><dd>Ubuntu 26.04.1 LTS</dd></div>
+              <div><dt>Architecture</dt><dd>x86_64</dd></div>
+              <div><dt>CPU</dt><dd>2 AMD EPYC Rome vCPUs</dd></div>
+              <div><dt>Memory</dt><dd>3.8 GiB RAM</dd></div>
+              <div><dt>Storage</dt><dd>33 GiB root disk</dd></div>
+            </dl>
+          </article>
         </section>
-        <div class="systems-actions">
-          <a href="/" class="terminal-btn-inline">Home</a>
-          <a href="/projects/" class="terminal-btn-inline">Projects</a>
-          <a href="/lab/" class="terminal-btn-inline">Enter the Lab <span aria-hidden="true">→</span></a>
-          <a href="/vps-reviews/" class="terminal-btn-inline">VPS Reviews</a>
-          <a href="https://dev.kgivler.com/" class="terminal-btn-inline">Development Services <span aria-hidden="true">→</span></a>
-        </div>
+
+        <section class="inventory-section" aria-labelledby="networks">
+          <h2 id="networks">Networks</h2>
+          <p class="section-description">Clanker connects public Internet services and two overlay networks. Overlay hostnames require connectivity to their respective networks.</p>
+          <article class="inventory-card"><div class="inventory-card-heading"><h3>Public Internet</h3><span class="inventory-badge">Public</span></div><p>Web applications and small Internet protocols, reached through the public hostnames listed below.</p></article>
+          <div class="inventory-grid network-grid">
+            <article class="inventory-card">
+              <div class="inventory-card-heading"><h3>DN42</h3><span class="inventory-badge">DN42</span></div>
+              <p><code>AS4242420425</code></p>
+              <p>BGP routing, authoritative DNS, web/service ingress, a Looking Glass, and peers/transit relationships connecting additional JoyfulReaper POPs.</p>
+              <h4>External BGP peers</h4>
+              <ul class="peer-list"><li>Baragoon <code>AS4242421732</code></li><li>RoutedBits <code>AS4242420207</code></li><li>HEADSCARF <code>AS4242420842</code></li></ul>
+              <h4>Within AS4242420425</h4>
+              <p>Routing relationships with ScopeCreep, Wurstcase, the hbg1 residential POP, and the overlay gateway.</p>
+              <details class="network-details">
+                <summary>DN42 services and hostnames</summary>
+                <ul class="endpoint-list">
+                  <li><code>joyfulreaper.dn42</code></li><li><code>kgivler.dn42</code></li><li><code>api.kgivler.dn42</code></li>
+                  <li><code>randomsteam.dn42</code></li><li><code>randomgit.dn42</code></li><li><code>dn42atlas.dn42</code></li>
+                  <li><code>qotd.kgivler.dn42</code></li><li><code>tools.joyfulreaper.dn42</code></li><li><code>lg.joyfulreaper.dn42</code> — Looking Glass</li>
+                  <li><code>verymad.dn42</code></li><li><code>pipes.verymad.dn42</code></li><li><code>gemini.kgivler.dn42</code> — Gemini</li>
+                </ul>
+                <p>Gopher is also available over DN42.</p>
+              </details>
+            </article>
+            <article class="inventory-card">
+              <div class="inventory-card-heading"><h3>Yggdrasil</h3><span class="inventory-badge">Yggdrasil</span></div>
+              <p>Clanker is a Yggdrasil node with its own routed subnet, giving services another way to be reached.</p>
+              <details class="network-details">
+                <summary>Yggdrasil services and hostnames</summary>
+                <ul class="endpoint-list">
+                  <li><code>site.ygg.kgivler.com</code></li><li><code>api.ygg.kgivler.com</code></li><li><code>steam.ygg.kgivler.com</code></li><li><code>git.ygg.kgivler.com</code></li>
+                  <li><code>qotd.ygg.kgivler.com</code></li><li><code>tools.ygg.kgivler.com</code></li><li><code>gemini.ygg.kgivler.com</code> — Gemini</li><li><code>verymad.ygg.kgivler.com</code></li>
+                </ul>
+                <p>Gopher is also available over Yggdrasil.</p>
+              </details>
+            </article>
+          </div>
+        </section>
+
+        <section class="inventory-section" aria-labelledby="public-services">
+          <h2 id="public-services">Public services &amp; protocols</h2>
+          <p class="section-description">Applications and protocol services on Clanker. These are audited inventory entries, not availability checks. Non-HTTP endpoints need a suitable client.</p>
+          <h3 class="inventory-subheading">Web applications <span class="inventory-badge">Public</span></h3>
+          <div class="inventory-grid">
+            <article class="service-card"><h4>Random Steam Game</h4><p>A random pick from a Steam library.</p><a href="https://randomsteam.kgivler.com/">randomsteam.kgivler.com</a><a class="source-link" href="https://github.com/JoyfulReaper/RandomSteamGame">Source</a></article>
+            <article class="service-card"><h4>Random GitHub</h4><p>Random GitHub browsing.</p><a href="https://randomgit.kgivler.com/">randomgit.kgivler.com</a></article>
+            <article class="service-card"><h4>IT-Tools</h4><p>A collection of developer utilities.</p><a href="https://tools.kgivler.com/">tools.kgivler.com</a></article>
+            <article class="service-card"><h4>ntfy</h4><p>Publish/subscribe notifications.</p><a href="https://ntfy.kgivler.com/">ntfy.kgivler.com</a><a class="source-link" href="https://github.com/binwiederhier/ntfy">Source</a></article>
+          </div>
+          <h3 class="inventory-subheading">Small Internet protocols <span class="inventory-badge">Protocol</span></h3>
+          <dl class="protocol-list">
+            <div><dt>HappyGopher <a href="https://github.com/JoyfulReaper/HappyGopher">Source</a></dt><dd><span>Gopher · TCP 70</span><code>gopher.kgivler.com:70</code></dd></div>
+            <div><dt>HappyGemini <a href="https://github.com/JoyfulReaper/HappyGemini">Source</a></dt><dd><span>Gemini · TLS 1965</span><code>gemini.kgivler.com:1965</code></dd></div>
+            <div><dt>HappyFinger <a href="https://github.com/JoyfulReaper/HappyFinger">Source</a></dt><dd><span>Finger · TCP 79</span><code>finger.kgivler.com:79</code></dd></div>
+            <div><dt>HappyQOTD <a href="https://github.com/JoyfulReaper/HappyQOTD">Source</a></dt><dd><span>Quote of the Day · TCP + UDP 17</span><code>qotd.kgivler.com:17</code><a href="https://qotd-api.kgivler.com/api/quotes/today">HTTP/JSON API</a></dd></div>
+            <div><dt>HappyDaytime <a href="https://github.com/JoyfulReaper/HappyDaytime">Source</a></dt><dd><span>Daytime · TCP + UDP 13</span><code>daytime.kgivler.com:13</code></dd></div>
+            <div><dt>HappyEcho <a href="https://github.com/JoyfulReaper/HappyEcho">Source</a></dt><dd><span>Echo · TCP 7</span><code>echo.kgivler.com:7</code></dd></div>
+            <div><dt>HappyDiscard <a href="https://github.com/JoyfulReaper/HappyDiscard">Source</a></dt><dd><span>Discard · TCP + UDP 9</span><code>discard.kgivler.com:9</code></dd></div>
+          </dl>
+        </section>
+
+        <section class="inventory-section" aria-labelledby="operations">
+          <h2 id="operations">Internal &amp; operations</h2>
+          <p class="section-description">The tooling behind the public services. Private/internal components are listed by role, without management endpoints.</p>
+          <div class="inventory-grid">
+            <article class="inventory-card">
+              <div class="inventory-card-heading"><h3>Mission Control</h3><span class="inventory-badge">Private</span></div>
+              <p>Dashboard, Gateway, Archive, GitActivity, and the host Agent handle monitoring, telemetry, and activity. NATS JetStream provides messaging and persistence.</p>
+              <a href="https://github.com/JoyfulReaper/MissionControl">Source</a>
+            </article>
+            <article class="inventory-card">
+              <div class="inventory-card-heading"><h3>Operations tooling</h3><span class="inventory-badge">Private</span></div>
+              <ul class="operations-list">
+                <li><strong>Beszel + Beszel Agent</strong> — host monitoring.</li><li><strong>Restic REST Server</strong> — backup storage service.</li>
+                <li><strong>Dozzle</strong> — container log viewing.</li><li><strong>Dockge</strong> — container stack management.</li>
+                <li><strong>WSIWOT</strong> — What Should I Work On Today.</li><li><strong>SmolSearch backend</strong> — search backend.</li>
+                <li><strong>Automated backups / maintenance jobs</strong> — routine upkeep.</li>
+              </ul>
+            </article>
+          </div>
+          <article class="inventory-card infrastructure-card">
+            <h3>Infrastructure components</h3>
+            <ul class="operations-list component-list">
+              <li><strong>nginx</strong> — web serving / reverse proxy.</li><li><strong>BIRD</strong> — BGP routing.</li>
+              <li><strong>NSD</strong> — authoritative DNS.</li><li><strong>Unbound</strong> — DNS resolution.</li>
+              <li><strong>Cloudflare Tunnel</strong> — service ingress.</li><li><strong>WireGuard</strong> — network tunnels.</li><li><strong>Yggdrasil</strong> — overlay networking.</li>
+            </ul>
+          </article>
+        </section>
+
+        <section class="inventory-section" aria-labelledby="experiments">
+          <h2 id="experiments">Experiments / Weird Internet</h2>
+          <div class="inventory-grid">
+            <article class="inventory-card">
+              <div class="inventory-card-heading"><h3>VeryMad / Pipes</h3><span class="inventory-badge">Experiment</span></div>
+              <p>A weird Internet experiment on Clanker, with web, Gopher, and Gemini variants across multiple networks.</p>
+              <ul class="endpoint-list"><li><code>pipes.verymad.net</code></li><li><code>verymad.dn42</code></li><li><code>pipes.verymad.dn42</code></li><li><code>verymad.ygg.kgivler.com</code></li></ul>
+            </article>
+            <article class="inventory-card">
+              <div class="inventory-card-heading"><h3>tcpnoise</h3><span class="inventory-badge">Experiment</span></div>
+              <p>A manually launched network-noise / connection experiment on Clanker. The live playground lives in the Lab.</p>
+              <div class="systems-actions"><a href="/lab/" class="terminal-btn-inline">Enter the Lab <span aria-hidden="true">→</span></a><a href="https://github.com/JoyfulReaper/tcpnoise" class="terminal-btn-inline">Source</a></div>
+            </article>
+          </div>
+        </section>
       </main>
           <footer class="site-footer">
             <div class="site-footer-links">

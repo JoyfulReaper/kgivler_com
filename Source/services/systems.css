@@ -1,4 +1,4 @@
-/* Temporary Systems landing page only. */
+/* Static Systems inventory; navigation and footer use shared site styles. */
 body.terminal-theme.systems-page { display: block; padding: 0 24px; color: #cbd5e1; }
 .systems-page .systems-container { max-width: 1000px; margin: 0 auto; }
 .systems-page .systems-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.5rem 0; border-bottom: 1px solid #222226; }
@@ -11,12 +11,55 @@ body.terminal-theme.systems-page { display: block; padding: 0 24px; color: #cbd5
 .systems-page h1 { color: #f8fafc; font-size: clamp(2.5rem, 6vw, 3.5rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.04em; margin-bottom: 1rem; }
 .systems-page .systems-lead { color: #e2e8f0; font-size: 1.15rem; }
 .systems-page .systems-description { max-width: 70ch; font-size: 0.95rem; line-height: 1.8; }
-.systems-page .systems-notice { max-width: 70ch; margin: 2rem 0; padding: 1.2rem; border-left: 2px solid #38bdf8; background: #0c0c0f; }
-.systems-page .systems-notice h2 { color: #f8fafc; font-size: 1.1rem; font-weight: 700; }
-.systems-page .systems-notice p { margin: 0.6rem 0 0; color: #94a3b8; font-size: 0.9rem; line-height: 1.7; }
+.systems-page .systems-audit { margin: 1.5rem 0; color: #94a3b8; font-size: 0.8rem; line-height: 1.7; }
+.systems-page .systems-audit time { color: #cbd5e1; }
+.systems-page .inventory-section { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #222226; }
+.systems-page h2 { margin-bottom: 1rem; color: #f8fafc; font-size: 1.5rem; font-weight: 700; }
+.systems-page h3 { color: #f8fafc; font-size: 1.1rem; font-weight: 700; }
+.systems-page h4 { color: #e2e8f0; font-size: 0.95rem; font-weight: 700; }
+.systems-page .section-description { max-width: 75ch; margin-bottom: 1.5rem; color: #94a3b8; font-size: 0.9rem; line-height: 1.8; }
+.systems-page .inventory-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.systems-page .host-card,
+.systems-page .inventory-card,
+.systems-page .service-card { min-width: 0; padding: 1.25rem; border: 1px solid #27272e; border-radius: 6px; background: #0c0c0f; font-size: 0.85rem; line-height: 1.75; }
+.systems-page .host-card { border-top: 2px solid #38bdf8; }
+.systems-page .inventory-card-heading { display: flex; flex-wrap: wrap; align-items: center; gap: 0.65rem; margin-bottom: 0.75rem; }
+.systems-page .inventory-card-heading h3 { margin: 0; }
+.systems-page .inventory-badge { display: inline-block; padding: 0.1rem 0.45rem; border: 1px solid #334155; border-radius: 3px; color: #b5c5d8; font-size: 0.65rem; font-weight: 400; line-height: 1.6; vertical-align: middle; }
+.systems-page .host-specs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin: 1.5rem 0 0; }
+.systems-page .host-specs dt { color: #94a3b8; font-size: 0.75rem; font-weight: 400; }
+.systems-page .host-specs dd { margin: 0.25rem 0 0; color: #e2e8f0; }
+.systems-page .network-grid { margin-top: 1rem; align-items: start; }
+.systems-page code { color: #7dd3fc; font-size: 0.85rem; overflow-wrap: anywhere; }
+.systems-page .peer-list,
+.systems-page .endpoint-list,
+.systems-page .operations-list { padding-left: 1.2rem; margin-bottom: 0; }
+.systems-page .peer-list { margin-bottom: 1.25rem; }
+.systems-page .peer-list li { margin-bottom: 0.25rem; }
+.systems-page .peer-list code { display: inline-block; }
+.systems-page .network-details { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #27272e; }
+.systems-page summary { color: #7dd3fc; cursor: pointer; }
+.systems-page .network-details .endpoint-list { margin-top: 1rem; }
+.systems-page .network-details p { margin: 1rem 0 0; }
+.systems-page .inventory-subheading { display: flex; flex-wrap: wrap; align-items: center; gap: 0.65rem; margin: 1.75rem 0 1rem; }
+.systems-page .service-card p { margin-bottom: 0.75rem; color: #94a3b8; }
+.systems-page .service-card a { overflow-wrap: anywhere; }
+.systems-page .source-link { display: block; width: fit-content; margin-top: 0.5rem; font-size: 0.75rem; }
+.systems-page .protocol-list { border: 1px solid #27272e; border-radius: 6px; margin: 0; }
+.systems-page .protocol-list > div { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 1rem; padding: 1rem 1.25rem; font-size: 0.85rem; line-height: 1.8; }
+.systems-page .protocol-list > div + div { border-top: 1px solid #27272e; }
+.systems-page .protocol-list dt { color: #e2e8f0; }
+.systems-page .protocol-list dt a { display: block; width: fit-content; font-size: 0.75rem; font-weight: 400; }
+.systems-page .protocol-list dd { display: flex; flex-direction: column; align-items: flex-start; margin: 0; color: #94a3b8; }
+.systems-page .operations-list li { margin-bottom: 0.5rem; }
+.systems-page .operations-list strong { color: #e2e8f0; font-weight: 400; }
+.systems-page .infrastructure-card { margin-top: 1rem; }
+.systems-page .component-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 2rem; }
 .systems-page .systems-actions { display: flex; flex-wrap: wrap; gap: 0.65rem; }
 .systems-page .terminal-btn-inline { padding: 0.45rem 0.7rem; }
-.systems-page a:focus-visible { outline: 3px solid #fbbf24; outline-offset: 4px; }
+.systems-page a:focus-visible,
+.systems-page summary:focus-visible { outline: 3px solid #fbbf24; outline-offset: 4px; }
+.systems-page h2[id] { scroll-margin-top: 1rem; }
 .systems-page .site-footer { margin-bottom: 2rem; }
 @media (max-width: 800px) {
     .systems-page .systems-header { align-items: flex-start; flex-direction: column; }
@@ -26,4 +69,12 @@ body.terminal-theme.systems-page { display: block; padding: 0 24px; color: #cbd5
     .systems-page .systems-header { padding: 1.1rem 0; }
     .systems-page .terminal-nav { justify-content: flex-start; gap: 0.5rem 0.7rem; }
     .systems-page .systems-intro { padding-top: 3rem; }
+    .systems-page .inventory-grid,
+    .systems-page .host-specs,
+    .systems-page .component-list,
+    .systems-page .protocol-list > div { grid-template-columns: minmax(0, 1fr); }
+    .systems-page .protocol-list > div { gap: 0.5rem; }
+    .systems-page .host-card,
+    .systems-page .inventory-card,
+    .systems-page .service-card { padding: 1rem; }
 }
