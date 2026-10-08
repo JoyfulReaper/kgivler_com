@@ -6,19 +6,19 @@
 
     <title>Systems | Kyle Givler</title>
 
-    <meta name="description" content="Kyle Givler's infrastructure inventory: five audited hosts — Clanker, ScopeCreep, Wurstcase, FrontDesk, and Molasses — with host specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
+    <meta name="description" content="Kyle Givler's infrastructure inventory: six audited hosts — Clanker, ScopeCreep, Wurstcase, FrontDesk, Molasses, and hbg1 — with host specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
 
     <link rel="canonical" href="https://www.kgivler.com/services/" />
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Systems | Kyle Givler" />
-    <meta property="og:description" content="Kyle Givler's infrastructure inventory: five audited hosts — Clanker, ScopeCreep, Wurstcase, FrontDesk, and Molasses — with host specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
+    <meta property="og:description" content="Kyle Givler's infrastructure inventory: six audited hosts — Clanker, ScopeCreep, Wurstcase, FrontDesk, Molasses, and hbg1 — with host specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
     <meta property="og:url" content="https://www.kgivler.com/services/" />
     <meta property="og:site_name" content="Kyle Givler" />
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Systems | Kyle Givler" />
-    <meta name="twitter:description" content="Kyle Givler's infrastructure inventory: five audited hosts — Clanker, ScopeCreep, Wurstcase, FrontDesk, and Molasses — with host specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
+    <meta name="twitter:description" content="Kyle Givler's infrastructure inventory: six audited hosts — Clanker, ScopeCreep, Wurstcase, FrontDesk, Molasses, and hbg1 — with host specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
 
@@ -52,11 +52,11 @@
         </nav>
       </header>
       <main id="main-content" class="systems-intro">
-        <p class="systems-command"><span aria-hidden="true">$</span> inventory --host Clanker --host ScopeCreep --host Wurstcase --host FrontDesk --host Molasses</p>
+        <p class="systems-command"><span aria-hidden="true">$</span> inventory --host Clanker --host ScopeCreep --host Wurstcase --host FrontDesk --host Molasses --host hbg1</p>
         <h1>Systems</h1>
         <p class="systems-lead">The stuff I run.</p>
-        <p class="systems-description">I’m auditing my infrastructure host-by-host: where things run, how they’re reachable, and what they do. Five hosts are audited so far: Clanker, ScopeCreep, Wurstcase, FrontDesk, and Molasses. FrontDesk handles client-facing hosting, private file storage, and infrastructure backups. Molasses runs home infrastructure and DNS. More hosts will be added as I work through the inventory.</p>
-        <p class="systems-audit">Clanker: <time datetime="2026-10-07">audited October 7, 2026</time> · ScopeCreep, Wurstcase, FrontDesk, and Molasses: <time datetime="2026-10-08">audited October 8, 2026</time> · Inventory snapshots, not real-time monitoring.</p>
+        <p class="systems-description">I’m auditing my infrastructure host-by-host: where things run, how they’re reachable, and what they do. Six hosts are audited so far: Clanker, ScopeCreep, Wurstcase, FrontDesk, Molasses, and hbg1. FrontDesk handles client-facing hosting, private file storage, and infrastructure backups. Molasses runs home infrastructure and DNS, and hosts the hbg1 residential DN42 router. More hosts will be added as I work through the inventory.</p>
+        <p class="systems-audit">Clanker: <time datetime="2026-10-07">audited October 7, 2026</time> · ScopeCreep, Wurstcase, FrontDesk, Molasses, and hbg1: <time datetime="2026-10-08">audited October 8, 2026</time> · Inventory snapshots, not real-time monitoring.</p>
         <nav class="systems-actions" aria-label="Inventory sections">
           <a href="#hosts" class="terminal-btn-inline">Hosts</a>
           <a href="#networks" class="terminal-btn-inline">Networks</a>
@@ -128,11 +128,23 @@
               <div><dt>Uplink</dt><dd>Residential Wi-Fi</dd></div>
             </dl>
           </article>
+          <article class="host-card infrastructure-card" aria-labelledby="hbg1">
+            <div class="inventory-card-heading"><h3 id="hbg1">hbg1</h3><span class="inventory-badge">Audited host</span></div>
+            <p>A FreeBSD virtual machine on Molasses: residential DN42 POP / router, internal iBGP router, external DN42 peering point, and native residential IPv6 test point. Also a FreeBSD routing / BIRD experiment.</p>
+            <dl class="host-specs">
+              <div><dt>Operating system</dt><dd>FreeBSD 15.1-RELEASE</dd></div>
+              <div><dt>Architecture</dt><dd>amd64</dd></div>
+              <div><dt>Virtualization</dt><dd>KVM on Molasses</dd></div>
+              <div><dt>CPU</dt><dd>1 vCPU · Intel Core i3-4170 @ 3.70 GHz</dd></div>
+              <div><dt>Memory</dt><dd>Approximately 1 GiB RAM</dd></div>
+              <div><dt>Storage</dt><dd>8 GiB virtual disk</dd></div>
+            </dl>
+          </article>
         </section>
 
         <section class="inventory-section" aria-labelledby="networks">
           <h2 id="networks">Networks</h2>
-          <p class="section-description">Clanker, ScopeCreep, and Wurstcase connect public Internet infrastructure and two overlay networks. Overlay hostnames require connectivity to their respective networks.</p>
+          <p class="section-description">Clanker, ScopeCreep, and Wurstcase connect public Internet infrastructure and two overlay networks. hbg1 adds a residential DN42 POP hosted on Molasses. Overlay hostnames require connectivity to their respective networks.</p>
           <h3 class="inventory-subheading">Clanker</h3>
           <article class="inventory-card"><div class="inventory-card-heading"><h3>Public Internet</h3><span class="inventory-badge">Public</span></div><p>Web applications and small Internet protocols, reached through the public hostnames listed below.</p></article>
           <div class="inventory-grid network-grid">
@@ -204,10 +216,15 @@
               <p>Wurstcase is a Yggdrasil node and overlay router, with public peering on TCP 54321.</p>
             </article>
           </div>
-          <h3 class="inventory-subheading">Molasses</h3>
+          <h3 class="inventory-subheading">hbg1</h3>
           <article class="inventory-card">
-            <div class="inventory-card-heading"><h3>hbg1 residential POP</h3><span class="inventory-badge">DN42</span></div>
+            <div class="inventory-card-heading"><h3>Residential POP</h3><span class="inventory-badge">DN42</span></div>
             <p>The FreeBSD virtual machine <code>hbg1</code> runs on Molasses and serves as a residential DN42 POP.</p>
+            <p><code>AS4242420425</code></p>
+            <h4>External BGP peers</h4>
+            <ul class="peer-list"><li>PuduNet NY01 <code>AS4242422227</code> — external eBGP / own-prefix-only export</li></ul>
+            <h4>Within AS4242420425</h4>
+            <p>Internal iBGP with Clanker and ScopeCreep over WireGuard links. hbg1 uses native residential IPv6 and does not provide general DN42 transit.</p>
           </article>
         </section>
 
@@ -359,6 +376,23 @@
                 <li><strong>Maintenance</strong> — weekly maintenance and 90-day retention for Molasses’s Restic backups on FrontDesk.</li>
               </ul>
               <p>Matrix history and uploaded media are intentionally excluded from Molasses’s configuration-focused backup. This backup scope does not cover full-machine recovery; restoration has not been verified.</p>
+            </article>
+          </div>
+          <h3 class="inventory-subheading">hbg1</h3>
+          <div class="inventory-grid">
+            <article class="inventory-card">
+              <div class="inventory-card-heading"><h3>Routing &amp; traffic control</h3><span class="inventory-badge">Private</span></div>
+              <ul class="operations-list">
+                <li><strong>BIRD 2.19.1</strong> — DN42 routing and ROA validation.</li>
+                <li><strong>WireGuard</strong> — links to Clanker, ScopeCreep, and PuduNet NY01.</li>
+                <li><strong>PF</strong> — host firewall.</li>
+                <li><strong>IPFW + dummynet</strong> — PuduNet traffic limited to 5 Mbps in each direction.</li>
+              </ul>
+            </article>
+            <article class="inventory-card">
+              <div class="inventory-card-heading"><h3>VM backups</h3><span class="inventory-badge">Private</span></div>
+              <p>Daily live VM backups from Molasses to FrontDesk, with 14 generations retained. These are separate from Molasses’s configuration-focused Restic backups.</p>
+              <p>Backup image integrity and transfer were verified during the audit; a full recovery boot has not been tested.</p>
             </article>
           </div>
         </section>
