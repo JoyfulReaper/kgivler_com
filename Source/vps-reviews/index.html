@@ -4,20 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>GreenCloud VPS Review | Kyle Givler</title>
+  <title>VPS Reviews &amp; Impressions | Kyle Givler</title>
 
   <meta
     name="description"
-    content="My first-hand GreenCloud VPS review based on running Linux, Docker, monitoring, DN42 routing, IPv6, and public services across multiple VPS nodes."
+    content="First-hand VPS reviews and impressions: my detailed GreenCloud experience and early Servitro IPv6 latency tests from Pennsylvania to Frankfurt."
   />
 
   <link rel="canonical" href="https://www.kgivler.com/vps-reviews/" />
 
   <meta property="og:type" content="article" />
-  <meta property="og:title" content="GreenCloud VPS Review | Kyle Givler" />
+  <meta property="og:title" content="VPS Reviews &amp; Impressions | Kyle Givler" />
   <meta
     property="og:description"
-    content="A first-hand GreenCloud VPS review based on running real Linux, Docker, networking, and public-service workloads."
+    content="First-hand VPS reviews and impressions: my detailed GreenCloud experience and early Servitro IPv6 latency tests from Pennsylvania to Frankfurt."
   />
   <meta property="og:url" content="https://www.kgivler.com/vps-reviews/" />
 
@@ -45,14 +45,14 @@
       <div class="container article-width">
         <p class="eyebrow">VPS Reviews</p>
 
-        <h1>GreenCloud VPS Review</h1>
+        <h1>VPS Reviews &amp; Impressions</h1>
 
         <p class="hero-copy">
-          A review based on VPSes I actually use, not a list assembled from
-          somebody else's product pages.
+          Reviews and early impressions of VPSes I actually use. GreenCloud has
+          the detailed review below; Servitro is a new addition I’m still evaluating.
         </p>
 
-        <p class="updated">Last updated: September 30, 2026</p>
+        <p class="updated">Last updated: October 7, 2026</p>
 
         <div class="disclosure">
           <strong>Affiliate disclosure:</strong>
@@ -63,7 +63,7 @@
 
         <div class="pricing-callout">
           <div>
-            <span class="pricing-label">Current budget pricing</span>
+            <span class="pricing-label">GreenCloud · Current budget pricing</span>
             <strong class="pricing-price">$25/year</strong>
           </div>
 
@@ -297,6 +297,63 @@
           <p class="small-note">
             The GreenCloud VPS button is an affiliate link. I may earn a
             commission if you purchase through it.
+          </p>
+        </div>
+      </section>
+
+      <section class="section section-alt" aria-labelledby="servitro-heading">
+        <div class="container article-width">
+          <p class="eyebrow">Early impressions · Currently evaluating</p>
+          <h2 id="servitro-heading">Servitro — Frankfurt, Germany</h2>
+
+          <p>
+            I only recently brought this VPS online, so this is not a full review
+            yet. I’m using it as <strong>Wurstcase</strong>, a European node for
+            DN42, Yggdrasil, WireGuard, and other networking/infrastructure experiments.
+          </p>
+
+          <p>
+            What immediately surprised me was the network latency. Initial IPv6
+            latency from my connection in Pennsylvania to Frankfurt has been
+            around <strong>90–95 ms</strong>, which is better than I expected for
+            a transatlantic VPS. My first two ordinary Windows ping runs to
+            <code>wurstcase.kgivler.com</code> averaged 92 and 94 ms.
+          </p>
+
+          <p>
+            Those eight ICMP replies are a very small sample, not a serious
+            network benchmark. The lack of packet loss in those samples and the
+            latency are simply a very encouraging first impression for a low-cost
+            European VPS.
+          </p>
+
+          <p>
+            More testing to come: I’ll expand this section after I’ve had enough
+            time to evaluate uptime, routing, sustained performance, and support.
+          </p>
+
+          <div class="card">
+            <h3>First IPv6 ping samples</h3>
+            <ul>
+              <li>First run: 90 ms minimum, 96 ms maximum, 92 ms average; 0% packet loss.</li>
+              <li>Second run: 89 ms minimum, 103 ms maximum, 94 ms average; 0% packet loss.</li>
+            </ul>
+          </div>
+
+          <div class="actions">
+            <a
+              class="button primary"
+              href="https://my.servitro.com/aff.php?aff=229"
+              target="_blank"
+              rel="sponsored noopener noreferrer"
+            >
+              View Servitro →
+            </a>
+          </div>
+
+          <p class="small-note">
+            The Servitro button is an affiliate link. I may earn a commission if
+            you purchase through it.
           </p>
         </div>
       </section>
