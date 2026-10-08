@@ -6,19 +6,19 @@
 
     <title>Systems | Kyle Givler</title>
 
-    <meta name="description" content="Kyle Givler's infrastructure inventory: audited Clanker, ScopeCreep, and Wurstcase host specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
+    <meta name="description" content="Kyle Givler's infrastructure inventory: four audited hosts — Clanker, ScopeCreep, Wurstcase, and FrontDesk — with host specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
 
     <link rel="canonical" href="https://www.kgivler.com/services/" />
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Systems | Kyle Givler" />
-    <meta property="og:description" content="Kyle Givler's infrastructure inventory: audited Clanker, ScopeCreep, and Wurstcase host specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
+    <meta property="og:description" content="Kyle Givler's infrastructure inventory: four audited hosts — Clanker, ScopeCreep, Wurstcase, and FrontDesk — with host specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
     <meta property="og:url" content="https://www.kgivler.com/services/" />
     <meta property="og:site_name" content="Kyle Givler" />
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Systems | Kyle Givler" />
-    <meta name="twitter:description" content="Kyle Givler's infrastructure inventory: audited Clanker, ScopeCreep, and Wurstcase host specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
+    <meta name="twitter:description" content="Kyle Givler's infrastructure inventory: four audited hosts — Clanker, ScopeCreep, Wurstcase, and FrontDesk — with host specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
 
@@ -52,11 +52,11 @@
         </nav>
       </header>
       <main id="main-content" class="systems-intro">
-        <p class="systems-command"><span aria-hidden="true">$</span> inventory --host Clanker --host ScopeCreep --host Wurstcase</p>
+        <p class="systems-command"><span aria-hidden="true">$</span> inventory --host Clanker --host ScopeCreep --host Wurstcase --host FrontDesk</p>
         <h1>Systems</h1>
         <p class="systems-lead">The stuff I run.</p>
-        <p class="systems-description">I’m auditing my infrastructure host-by-host: where things run, how they’re reachable, and what they do. Clanker is the first completed host, followed by ScopeCreep and Wurstcase. More hosts will be added as I work through the inventory.</p>
-        <p class="systems-audit">Clanker: <time datetime="2026-10-07">audited October 7, 2026</time> · ScopeCreep and Wurstcase: <time datetime="2026-10-08">audited October 8, 2026</time> · Inventory snapshots, not real-time monitoring.</p>
+        <p class="systems-description">I’m auditing my infrastructure host-by-host: where things run, how they’re reachable, and what they do. Four hosts are audited so far: Clanker, ScopeCreep, Wurstcase, and FrontDesk. FrontDesk handles client-facing hosting, private file storage, and infrastructure backups. More hosts will be added as I work through the inventory.</p>
+        <p class="systems-audit">Clanker: <time datetime="2026-10-07">audited October 7, 2026</time> · ScopeCreep, Wurstcase, and FrontDesk: <time datetime="2026-10-08">audited October 8, 2026</time> · Inventory snapshots, not real-time monitoring.</p>
         <nav class="systems-actions" aria-label="Inventory sections">
           <a href="#hosts" class="terminal-btn-inline">Hosts</a>
           <a href="#networks" class="terminal-btn-inline">Networks</a>
@@ -92,7 +92,7 @@
           </article>
           <article class="host-card infrastructure-card" aria-labelledby="wurstcase">
             <div class="inventory-card-heading"><h3 id="wurstcase">Wurstcase</h3><span class="inventory-badge">Audited host</span></div>
-            <p>A small Frankfurt, Germany POP: DN42 POP / router, Yggdrasil node, Looking Glass backend, and monitoring / backup infrastructure.</p>
+            <p>A small Frankfurt, Germany POP: DN42 POP / router, Yggdrasil node, Looking Glass backend, and monitoring infrastructure.</p>
             <dl class="host-specs">
               <div><dt>Operating system</dt><dd>Debian GNU/Linux 13 (trixie)</dd></div>
               <div><dt>Architecture</dt><dd>x86-64</dd></div>
@@ -101,6 +101,19 @@
               <div><dt>Memory</dt><dd>3.8 GiB RAM</dd></div>
               <div><dt>Storage</dt><dd>25 GiB root disk</dd></div>
               <div><dt>Location</dt><dd>Frankfurt, Germany</dd></div>
+            </dl>
+          </article>
+          <article class="host-card infrastructure-card" aria-labelledby="frontdesk">
+            <div class="inventory-card-heading"><h3 id="frontdesk">FrontDesk</h3><span class="inventory-badge">Audited host</span></div>
+            <p>A clean client-facing host for static websites and .NET APIs, with private SMB file storage, encrypted Restic backup storage, and monitoring. Bulk storage holds files moved off my workstation to free up local disk space.</p>
+            <dl class="host-specs">
+              <div><dt>Operating system</dt><dd>Debian GNU/Linux 13 (trixie)</dd></div>
+              <div><dt>Architecture</dt><dd>x86-64</dd></div>
+              <div><dt>Virtualization</dt><dd>KVM/QEMU</dd></div>
+              <div><dt>CPU</dt><dd>2 virtual Intel Xeon Skylake CPUs</dd></div>
+              <div><dt>Memory</dt><dd>2.9 GiB RAM</dd></div>
+              <div><dt>System disk</dt><dd>40 GB</dd></div>
+              <div><dt>Storage disk</dt><dd>1 TB</dd></div>
             </dl>
           </article>
         </section>
@@ -213,6 +226,19 @@
               <p>Supplies routing information to the Looking Glass frontend on Clanker. Backend access is private/internal.</p>
             </article>
           </div>
+          <h3 class="inventory-subheading">FrontDesk</h3>
+          <div class="inventory-grid">
+            <article class="service-card">
+              <h4>Static website hosting</h4>
+              <p>nginx serves kgivler.com and www.kgivler.com.</p>
+              <a href="https://kgivler.com/">kgivler.com</a>
+              <a class="source-link" href="https://www.kgivler.com/">www.kgivler.com</a>
+            </article>
+            <article class="service-card">
+              <h4>Kgivler.Api</h4>
+              <p>A separate .NET application supporting the site’s API functionality.</p>
+            </article>
+          </div>
         </section>
 
         <section class="inventory-section" aria-labelledby="operations">
@@ -274,8 +300,27 @@
             </article>
             <article class="inventory-card">
               <div class="inventory-card-heading"><h3>Backups &amp; maintenance</h3><span class="inventory-badge">Private</span></div>
-              <p>Wurstcase participates in the backup / maintenance topology, with backup jobs, OS maintenance, and Beszel Agent updates.</p>
+              <p>OS maintenance and Beszel Agent updates are in place. Wurstcase’s host backups are not yet configured or verified.</p>
               <p>A deliberately small network POP with native services. Docker is not installed, and there are no container workloads or general web applications.</p>
+            </article>
+          </div>
+          <h3 class="inventory-subheading">FrontDesk</h3>
+          <div class="inventory-grid">
+            <article class="inventory-card">
+              <div class="inventory-card-heading"><h3>Private storage &amp; backups</h3><span class="inventory-badge">Private</span></div>
+              <ul class="operations-list">
+                <li><strong>Samba</strong> — private SMB file sharing and bulk storage for files moved off my workstation.</li>
+                <li><strong>Restic backup storage</strong> — encrypted infrastructure backups.</li>
+                <li><strong>Scheduled backup maintenance</strong> — retention, pruning, and integrity checks for FrontDesk’s recovery-configuration backups.</li>
+              </ul>
+            </article>
+            <article class="inventory-card">
+              <div class="inventory-card-heading"><h3>Connectivity &amp; monitoring</h3><span class="inventory-badge">Private</span></div>
+              <ul class="operations-list">
+                <li><strong>Cloudflare Tunnel</strong> — outbound tunnel connectivity.</li>
+                <li><strong>Mission Control Agent</strong> — host telemetry.</li>
+                <li><strong>Beszel Agent</strong> — host monitoring.</li>
+              </ul>
             </article>
           </div>
         </section>
