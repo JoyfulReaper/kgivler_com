@@ -6,19 +6,19 @@
 
     <title>Systems | Kyle Givler</title>
 
-    <meta name="description" content="Kyle Givler's infrastructure inventory: four audited hosts — Clanker, ScopeCreep, Wurstcase, and FrontDesk — with host specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
+    <meta name="description" content="Kyle Givler's infrastructure inventory: five audited hosts — Clanker, ScopeCreep, Wurstcase, FrontDesk, and Molasses — with host specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
 
     <link rel="canonical" href="https://www.kgivler.com/services/" />
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Systems | Kyle Givler" />
-    <meta property="og:description" content="Kyle Givler's infrastructure inventory: four audited hosts — Clanker, ScopeCreep, Wurstcase, and FrontDesk — with host specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
+    <meta property="og:description" content="Kyle Givler's infrastructure inventory: five audited hosts — Clanker, ScopeCreep, Wurstcase, FrontDesk, and Molasses — with host specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
     <meta property="og:url" content="https://www.kgivler.com/services/" />
     <meta property="og:site_name" content="Kyle Givler" />
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Systems | Kyle Givler" />
-    <meta name="twitter:description" content="Kyle Givler's infrastructure inventory: four audited hosts — Clanker, ScopeCreep, Wurstcase, and FrontDesk — with host specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
+    <meta name="twitter:description" content="Kyle Givler's infrastructure inventory: five audited hosts — Clanker, ScopeCreep, Wurstcase, FrontDesk, and Molasses — with host specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
 
@@ -52,11 +52,11 @@
         </nav>
       </header>
       <main id="main-content" class="systems-intro">
-        <p class="systems-command"><span aria-hidden="true">$</span> inventory --host Clanker --host ScopeCreep --host Wurstcase --host FrontDesk</p>
+        <p class="systems-command"><span aria-hidden="true">$</span> inventory --host Clanker --host ScopeCreep --host Wurstcase --host FrontDesk --host Molasses</p>
         <h1>Systems</h1>
         <p class="systems-lead">The stuff I run.</p>
-        <p class="systems-description">I’m auditing my infrastructure host-by-host: where things run, how they’re reachable, and what they do. Four hosts are audited so far: Clanker, ScopeCreep, Wurstcase, and FrontDesk. FrontDesk handles client-facing hosting, private file storage, and infrastructure backups. More hosts will be added as I work through the inventory.</p>
-        <p class="systems-audit">Clanker: <time datetime="2026-10-07">audited October 7, 2026</time> · ScopeCreep, Wurstcase, and FrontDesk: <time datetime="2026-10-08">audited October 8, 2026</time> · Inventory snapshots, not real-time monitoring.</p>
+        <p class="systems-description">I’m auditing my infrastructure host-by-host: where things run, how they’re reachable, and what they do. Five hosts are audited so far: Clanker, ScopeCreep, Wurstcase, FrontDesk, and Molasses. FrontDesk handles client-facing hosting, private file storage, and infrastructure backups. Molasses runs home infrastructure and DNS. More hosts will be added as I work through the inventory.</p>
+        <p class="systems-audit">Clanker: <time datetime="2026-10-07">audited October 7, 2026</time> · ScopeCreep, Wurstcase, FrontDesk, and Molasses: <time datetime="2026-10-08">audited October 8, 2026</time> · Inventory snapshots, not real-time monitoring.</p>
         <nav class="systems-actions" aria-label="Inventory sections">
           <a href="#hosts" class="terminal-btn-inline">Hosts</a>
           <a href="#networks" class="terminal-btn-inline">Networks</a>
@@ -114,6 +114,18 @@
               <div><dt>Memory</dt><dd>2.9 GiB RAM</dd></div>
               <div><dt>System disk</dt><dd>40 GB</dd></div>
               <div><dt>Storage disk</dt><dd>1 TB</dd></div>
+            </dl>
+          </article>
+          <article class="host-card infrastructure-card" aria-labelledby="molasses">
+            <div class="inventory-card-heading"><h3 id="molasses">Molasses</h3><span class="inventory-badge">Audited host</span></div>
+            <p>Home infrastructure and DNS server, Docker host, monitoring, and private Restic backup infrastructure. Also hosts the FreeBSD virtual machine <code>hbg1</code>, a residential DN42 POP.</p>
+            <dl class="host-specs">
+              <div><dt>Hardware</dt><dd>Dell Inspiron 3847 desktop</dd></div>
+              <div><dt>Operating system</dt><dd>Debian GNU/Linux 13 (trixie)</dd></div>
+              <div><dt>CPU</dt><dd>Intel Core i3-4170 · 2 cores / 4 threads · 3.70 GHz</dd></div>
+              <div><dt>Memory</dt><dd>7.7 GiB RAM</dd></div>
+              <div><dt>Storage</dt><dd>1 TB WD Blue 7200 RPM mechanical HDD</dd></div>
+              <div><dt>Uplink</dt><dd>Residential Wi-Fi</dd></div>
             </dl>
           </article>
         </section>
@@ -192,6 +204,11 @@
               <p>Wurstcase is a Yggdrasil node and overlay router, with public peering on TCP 54321.</p>
             </article>
           </div>
+          <h3 class="inventory-subheading">Molasses</h3>
+          <article class="inventory-card">
+            <div class="inventory-card-heading"><h3>hbg1 residential POP</h3><span class="inventory-badge">DN42</span></div>
+            <p>The FreeBSD virtual machine <code>hbg1</code> runs on Molasses and serves as a residential DN42 POP.</p>
+          </article>
         </section>
 
         <section class="inventory-section" aria-labelledby="public-services">
@@ -321,6 +338,27 @@
                 <li><strong>Mission Control Agent</strong> — host telemetry.</li>
                 <li><strong>Beszel Agent</strong> — host monitoring.</li>
               </ul>
+            </article>
+          </div>
+          <h3 class="inventory-subheading">Molasses</h3>
+          <div class="inventory-grid">
+            <article class="inventory-card">
+              <div class="inventory-card-heading"><h3>Home services &amp; monitoring</h3><span class="inventory-badge">Private</span></div>
+              <ul class="operations-list">
+                <li><strong>Pi-hole + Unbound</strong> — home DNS.</li>
+                <li><strong>Docker workloads</strong> — Uptime Kuma, The Lounge, Scrutiny, PairDrop, NetAlertX, Matrix Synapse / PostgreSQL, Dozzle Agent, and Dockge.</li>
+                <li><strong>Mission Control Agent</strong> — host telemetry.</li>
+                <li><strong>Beszel Agent</strong> — host monitoring.</li>
+              </ul>
+            </article>
+            <article class="inventory-card">
+              <div class="inventory-card-heading"><h3>Private backups</h3><span class="inventory-badge">Private</span></div>
+              <ul class="operations-list">
+                <li><strong>Molasses</strong> — configuration and selected application state backed up daily with Restic to Clanker and FrontDesk.</li>
+                <li><strong>hbg1</strong> — separate daily live VM backups to FrontDesk.</li>
+                <li><strong>Maintenance</strong> — weekly maintenance and 90-day retention for Molasses’s Restic backups on FrontDesk.</li>
+              </ul>
+              <p>Matrix history and uploaded media are intentionally excluded from Molasses’s configuration-focused backup. This backup scope does not cover full-machine recovery; restoration has not been verified.</p>
             </article>
           </div>
         </section>
