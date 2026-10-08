@@ -6,19 +6,19 @@
 
     <title>Systems | Kyle Givler</title>
 
-    <meta name="description" content="Kyle Givler's infrastructure inventory: six audited hosts — Clanker, ScopeCreep, Wurstcase, FrontDesk, Molasses, and hbg1 — with host specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
+    <meta name="description" content="Kyle Givler's infrastructure inventory: seven audited systems — Clanker, ScopeCreep, Wurstcase, FrontDesk, Molasses, hbg1, and Ryzenshine — with hardware specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
 
     <link rel="canonical" href="https://www.kgivler.com/services/" />
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Systems | Kyle Givler" />
-    <meta property="og:description" content="Kyle Givler's infrastructure inventory: six audited hosts — Clanker, ScopeCreep, Wurstcase, FrontDesk, Molasses, and hbg1 — with host specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
+    <meta property="og:description" content="Kyle Givler's infrastructure inventory: seven audited systems — Clanker, ScopeCreep, Wurstcase, FrontDesk, Molasses, hbg1, and Ryzenshine — with hardware specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
     <meta property="og:url" content="https://www.kgivler.com/services/" />
     <meta property="og:site_name" content="Kyle Givler" />
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Systems | Kyle Givler" />
-    <meta name="twitter:description" content="Kyle Givler's infrastructure inventory: six audited hosts — Clanker, ScopeCreep, Wurstcase, FrontDesk, Molasses, and hbg1 — with host specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
+    <meta name="twitter:description" content="Kyle Givler's infrastructure inventory: seven audited systems — Clanker, ScopeCreep, Wurstcase, FrontDesk, Molasses, hbg1, and Ryzenshine — with hardware specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
 
@@ -52,13 +52,13 @@
         </nav>
       </header>
       <main id="main-content" class="systems-intro">
-        <p class="systems-command"><span aria-hidden="true">$</span> inventory --host Clanker --host ScopeCreep --host Wurstcase --host FrontDesk --host Molasses --host hbg1</p>
+        <p class="systems-command"><span aria-hidden="true">$</span> inventory --host Clanker --host ScopeCreep --host Wurstcase --host FrontDesk --host Molasses --host hbg1 --host Ryzenshine</p>
         <h1>Systems</h1>
         <p class="systems-lead">The stuff I run.</p>
-        <p class="systems-description">I’m auditing my infrastructure host-by-host: where things run, how they’re reachable, and what they do. Six hosts are audited so far: Clanker, ScopeCreep, Wurstcase, FrontDesk, Molasses, and hbg1. FrontDesk handles client-facing hosting, private file storage, and infrastructure backups. Molasses runs home infrastructure and DNS, and hosts the hbg1 residential DN42 router. More hosts will be added as I work through the inventory.</p>
-        <p class="systems-audit">Clanker: <time datetime="2026-10-07">audited October 7, 2026</time> · ScopeCreep, Wurstcase, FrontDesk, Molasses, and hbg1: <time datetime="2026-10-08">audited October 8, 2026</time> · Inventory snapshots, not real-time monitoring.</p>
+        <p class="systems-description">Seven audited systems: Clanker, ScopeCreep, Wurstcase, FrontDesk, Molasses, hbg1, and Ryzenshine. This inventory covers my VPSes, home infrastructure, residential router VM, and Windows development workstation: where things run, how they’re reachable, and what they do.</p>
+        <p class="systems-audit">Clanker: <time datetime="2026-10-07">audited October 7, 2026</time> · ScopeCreep, Wurstcase, FrontDesk, Molasses, hbg1, and Ryzenshine: <time datetime="2026-10-08">audited October 8, 2026</time> · Inventory snapshots, not real-time monitoring.</p>
         <nav class="systems-actions" aria-label="Inventory sections">
-          <a href="#hosts" class="terminal-btn-inline">Hosts</a>
+          <a href="#hosts" class="terminal-btn-inline">Systems</a>
           <a href="#networks" class="terminal-btn-inline">Networks</a>
           <a href="#public-services" class="terminal-btn-inline">Public services</a>
           <a href="#operations" class="terminal-btn-inline">Operations</a>
@@ -66,32 +66,32 @@
         </nav>
 
         <section class="inventory-section" aria-labelledby="hosts">
-          <h2 id="hosts">Hosts</h2>
+          <h2 id="hosts">Systems</h2>
           <article class="host-card" aria-labelledby="clanker">
-            <div class="inventory-card-heading"><h3 id="clanker">Clanker</h3><span class="inventory-badge">Audited host</span></div>
+            <div class="inventory-card-heading"><h3 id="clanker">Clanker</h3><span class="inventory-badge">Audited system</span></div>
             <p>Application host, public Internet services, DN42 router / BGP node, Yggdrasil node, and monitoring / operations host.</p>
             <dl class="host-specs">
               <div><dt>Operating system</dt><dd>Ubuntu 26.04.1 LTS</dd></div>
-              <div><dt>Architecture</dt><dd>x86_64</dd></div>
+              <div><dt>Architecture</dt><dd>x86-64</dd></div>
               <div><dt>CPU</dt><dd>2 AMD EPYC Rome vCPUs</dd></div>
               <div><dt>Memory</dt><dd>3.8 GiB RAM</dd></div>
               <div><dt>Storage</dt><dd>33 GiB root disk</dd></div>
             </dl>
           </article>
           <article class="host-card infrastructure-card" aria-labelledby="scopecreep">
-            <div class="inventory-card-heading"><h3 id="scopecreep">ScopeCreep</h3><span class="inventory-badge">Audited host</span></div>
+            <div class="inventory-card-heading"><h3 id="scopecreep">ScopeCreep</h3><span class="inventory-badge">Audited system</span></div>
             <p>Public VPS edge, DN42 routing node, Yggdrasil node, secondary authoritative DN42 DNS, Looking Glass backend, monitoring / backup node, and personal privacy-VPN gateway.</p>
             <dl class="host-specs">
               <div><dt>Operating system</dt><dd>Debian GNU/Linux 13 (trixie)</dd></div>
               <div><dt>Architecture</dt><dd>x86-64</dd></div>
               <div><dt>Virtualization</dt><dd>KVM/QEMU</dd></div>
-              <div><dt>CPU</dt><dd>2 AMD EPYC-Rome vCPUs</dd></div>
+              <div><dt>CPU</dt><dd>2 AMD EPYC Rome vCPUs</dd></div>
               <div><dt>Memory</dt><dd>3.8 GiB RAM</dd></div>
               <div><dt>Storage</dt><dd>35 GiB root disk</dd></div>
             </dl>
           </article>
           <article class="host-card infrastructure-card" aria-labelledby="wurstcase">
-            <div class="inventory-card-heading"><h3 id="wurstcase">Wurstcase</h3><span class="inventory-badge">Audited host</span></div>
+            <div class="inventory-card-heading"><h3 id="wurstcase">Wurstcase</h3><span class="inventory-badge">Audited system</span></div>
             <p>A small Frankfurt, Germany POP: DN42 POP / router, Yggdrasil node, Looking Glass backend, and monitoring infrastructure.</p>
             <dl class="host-specs">
               <div><dt>Operating system</dt><dd>Debian GNU/Linux 13 (trixie)</dd></div>
@@ -104,7 +104,7 @@
             </dl>
           </article>
           <article class="host-card infrastructure-card" aria-labelledby="frontdesk">
-            <div class="inventory-card-heading"><h3 id="frontdesk">FrontDesk</h3><span class="inventory-badge">Audited host</span></div>
+            <div class="inventory-card-heading"><h3 id="frontdesk">FrontDesk</h3><span class="inventory-badge">Audited system</span></div>
             <p>A clean client-facing host for static websites and .NET APIs, with private SMB file storage, encrypted Restic backup storage, and monitoring. Bulk storage holds files moved off my workstation to free up local disk space.</p>
             <dl class="host-specs">
               <div><dt>Operating system</dt><dd>Debian GNU/Linux 13 (trixie)</dd></div>
@@ -117,7 +117,7 @@
             </dl>
           </article>
           <article class="host-card infrastructure-card" aria-labelledby="molasses">
-            <div class="inventory-card-heading"><h3 id="molasses">Molasses</h3><span class="inventory-badge">Audited host</span></div>
+            <div class="inventory-card-heading"><h3 id="molasses">Molasses</h3><span class="inventory-badge">Audited system</span></div>
             <p>Home infrastructure and DNS server, Docker host, monitoring, and private Restic backup infrastructure. Also hosts the FreeBSD virtual machine <code>hbg1</code>, a residential DN42 POP.</p>
             <dl class="host-specs">
               <div><dt>Hardware</dt><dd>Dell Inspiron 3847 desktop</dd></div>
@@ -129,22 +129,34 @@
             </dl>
           </article>
           <article class="host-card infrastructure-card" aria-labelledby="hbg1">
-            <div class="inventory-card-heading"><h3 id="hbg1">hbg1</h3><span class="inventory-badge">Audited host</span></div>
+            <div class="inventory-card-heading"><h3 id="hbg1">hbg1</h3><span class="inventory-badge">Audited system</span></div>
             <p>A FreeBSD virtual machine on Molasses: residential DN42 POP / router, internal iBGP router, external DN42 peering point, and native residential IPv6 test point. Also a FreeBSD routing / BIRD experiment.</p>
             <dl class="host-specs">
               <div><dt>Operating system</dt><dd>FreeBSD 15.1-RELEASE</dd></div>
               <div><dt>Architecture</dt><dd>amd64</dd></div>
               <div><dt>Virtualization</dt><dd>KVM on Molasses</dd></div>
-              <div><dt>CPU</dt><dd>1 vCPU · Intel Core i3-4170 @ 3.70 GHz</dd></div>
+              <div><dt>CPU</dt><dd>1 vCPU · Intel Core i3-4170 · 3.70 GHz</dd></div>
               <div><dt>Memory</dt><dd>Approximately 1 GiB RAM</dd></div>
               <div><dt>Storage</dt><dd>8 GiB virtual disk</dd></div>
+            </dl>
+          </article>
+          <article class="host-card infrastructure-card" aria-labelledby="ryzenshine">
+            <div class="inventory-card-heading"><h3 id="ryzenshine">Ryzenshine</h3><span class="inventory-badge">Audited system</span></div>
+            <p>Windows development / build workstation, Hyper-V lab host, and Docker container build host. Runs networking / lab VMs and the IIS origin for RandomSteamBeta.</p>
+            <dl class="host-specs">
+              <div><dt>Operating system</dt><dd>Windows 11 Pro</dd></div>
+              <div><dt>CPU</dt><dd>AMD Ryzen 7 3700X · 8 cores / 16 threads</dd></div>
+              <div><dt>Memory</dt><dd>Approximately 80 GiB RAM</dd></div>
+              <div><dt>Motherboard</dt><dd>ASRock X570 Steel Legend WiFi ax</dd></div>
+              <div><dt>Storage</dt><dd>Multiple NVMe / SATA disks</dd></div>
+              <div><dt>Virtualization</dt><dd>Hyper-V + Docker Desktop</dd></div>
             </dl>
           </article>
         </section>
 
         <section class="inventory-section" aria-labelledby="networks">
           <h2 id="networks">Networks</h2>
-          <p class="section-description">Clanker, ScopeCreep, and Wurstcase connect public Internet infrastructure and two overlay networks. hbg1 adds a residential DN42 POP hosted on Molasses. Overlay hostnames require connectivity to their respective networks.</p>
+          <p class="section-description">Public Internet services, private infrastructure, and DN42 / Yggdrasil connectivity across the systems below. Overlay hostnames require connectivity to their respective networks.</p>
           <h3 class="inventory-subheading">Clanker</h3>
           <article class="inventory-card"><div class="inventory-card-heading"><h3>Public Internet</h3><span class="inventory-badge">Public</span></div><p>Web applications and small Internet protocols, reached through the public hostnames listed below.</p></article>
           <div class="inventory-grid network-grid">
@@ -226,11 +238,16 @@
             <h4>Within AS4242420425</h4>
             <p>Internal iBGP with Clanker and ScopeCreep over WireGuard links. hbg1 uses native residential IPv6 and does not provide general DN42 transit.</p>
           </article>
+          <h3 class="inventory-subheading">Ryzenshine</h3>
+          <article class="inventory-card">
+            <div class="inventory-card-heading"><h3>Private infrastructure &amp; DN42</h3><span class="inventory-badge">Private</span><span class="inventory-badge">DN42</span></div>
+            <p>The workstation connects to private infrastructure and DN42 over WireGuard.</p>
+          </article>
         </section>
 
         <section class="inventory-section" aria-labelledby="public-services">
           <h2 id="public-services">Public services &amp; protocols</h2>
-          <p class="section-description">Applications, protocol services, and supporting infrastructure on the audited hosts. These are audited inventory entries, not availability checks. Non-HTTP endpoints need a suitable client.</p>
+          <p class="section-description">Applications, protocol services, and supporting infrastructure on the audited systems. These are audited inventory entries, not availability checks. Non-HTTP endpoints need a suitable client.</p>
           <h3 class="inventory-subheading">Clanker</h3>
           <h3 class="inventory-subheading">Web applications <span class="inventory-badge">Public</span></h3>
           <div class="inventory-grid">
@@ -273,11 +290,17 @@
               <p>A separate .NET application supporting the site’s API functionality.</p>
             </article>
           </div>
+          <h3 class="inventory-subheading">Ryzenshine</h3>
+          <article class="service-card">
+            <h4>RandomSteamBeta</h4>
+            <p>IIS provides the active origin for RandomSteamBeta, published through Cloudflare Tunnel.</p>
+            <a href="https://randombeta.kgivler.com/">randombeta.kgivler.com</a>
+          </article>
         </section>
 
         <section class="inventory-section" aria-labelledby="operations">
           <h2 id="operations">Internal &amp; operations</h2>
-          <p class="section-description">The tooling behind the public services. Private/internal components are listed by role, without management endpoints.</p>
+          <p class="section-description">Hosting, home infrastructure, development, and operations tooling. Private/internal components are listed by role, without management endpoints.</p>
           <h3 class="inventory-subheading">Clanker</h3>
           <div class="inventory-grid">
             <article class="inventory-card">
@@ -393,6 +416,21 @@
               <div class="inventory-card-heading"><h3>VM backups</h3><span class="inventory-badge">Private</span></div>
               <p>Daily live VM backups from Molasses to FrontDesk, with 14 generations retained. These are separate from Molasses’s configuration-focused Restic backups.</p>
               <p>Backup image integrity and transfer were verified during the audit; a full recovery boot has not been tested.</p>
+            </article>
+          </div>
+          <h3 class="inventory-subheading">Ryzenshine</h3>
+          <div class="inventory-grid">
+            <article class="inventory-card">
+              <div class="inventory-card-heading"><h3>Development &amp; lab workloads</h3><span class="inventory-badge">Private</span></div>
+              <ul class="operations-list">
+                <li><strong>Windows development workstation</strong> — development work and source / application builds.</li>
+                <li><strong>Hyper-V</strong> — networking and lab VMs.</li>
+                <li><strong>Docker Desktop</strong> — container builds and local development.</li>
+              </ul>
+            </article>
+            <article class="inventory-card">
+              <div class="inventory-card-heading"><h3>Backup audit status</h3><span class="inventory-badge">Private</span></div>
+              <p>Windows host backup / recovery coverage was not fully audited and remains to be reviewed.</p>
             </article>
           </div>
         </section>
