@@ -6,19 +6,19 @@
 
     <title>Systems | Kyle Givler</title>
 
-    <meta name="description" content="Kyle Givler's infrastructure inventory: Clanker's audited host specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
+    <meta name="description" content="Kyle Givler's infrastructure inventory: audited Clanker and ScopeCreep host specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
 
     <link rel="canonical" href="https://www.kgivler.com/services/" />
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Systems | Kyle Givler" />
-    <meta property="og:description" content="Kyle Givler's infrastructure inventory: Clanker's audited host specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
+    <meta property="og:description" content="Kyle Givler's infrastructure inventory: audited Clanker and ScopeCreep host specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
     <meta property="og:url" content="https://www.kgivler.com/services/" />
     <meta property="og:site_name" content="Kyle Givler" />
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Systems | Kyle Givler" />
-    <meta name="twitter:description" content="Kyle Givler's infrastructure inventory: Clanker's audited host specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
+    <meta name="twitter:description" content="Kyle Givler's infrastructure inventory: audited Clanker and ScopeCreep host specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
 
@@ -52,11 +52,11 @@
         </nav>
       </header>
       <main id="main-content" class="systems-intro">
-        <p class="systems-command"><span aria-hidden="true">$</span> inventory --host Clanker</p>
+        <p class="systems-command"><span aria-hidden="true">$</span> inventory --host Clanker --host ScopeCreep</p>
         <h1>Systems</h1>
         <p class="systems-lead">The stuff I run.</p>
-        <p class="systems-description">I’m auditing my infrastructure host-by-host: where things run, how they’re reachable, and what they do. Clanker is the first completed host. More hosts will be added as I work through the inventory.</p>
-        <p class="systems-audit"><time datetime="2026-10-07">Audited October 7, 2026</time> · Inventory snapshot, not real-time monitoring.</p>
+        <p class="systems-description">I’m auditing my infrastructure host-by-host: where things run, how they’re reachable, and what they do. Clanker is the first completed host, followed by ScopeCreep. More hosts will be added as I work through the inventory.</p>
+        <p class="systems-audit">Clanker: <time datetime="2026-10-07">audited October 7, 2026</time> · ScopeCreep: <time datetime="2026-10-08">audited October 8, 2026</time> · Inventory snapshots, not real-time monitoring.</p>
         <nav class="systems-actions" aria-label="Inventory sections">
           <a href="#hosts" class="terminal-btn-inline">Hosts</a>
           <a href="#networks" class="terminal-btn-inline">Networks</a>
@@ -78,11 +78,24 @@
               <div><dt>Storage</dt><dd>33 GiB root disk</dd></div>
             </dl>
           </article>
+          <article class="host-card infrastructure-card" aria-labelledby="scopecreep">
+            <div class="inventory-card-heading"><h3 id="scopecreep">ScopeCreep</h3><span class="inventory-badge">Audited host</span></div>
+            <p>Public VPS edge, DN42 routing node, Yggdrasil node, secondary authoritative DN42 DNS, Looking Glass backend, monitoring / backup node, and personal privacy-VPN gateway.</p>
+            <dl class="host-specs">
+              <div><dt>Operating system</dt><dd>Debian GNU/Linux 13 (trixie)</dd></div>
+              <div><dt>Architecture</dt><dd>x86-64</dd></div>
+              <div><dt>Virtualization</dt><dd>KVM/QEMU</dd></div>
+              <div><dt>CPU</dt><dd>2 AMD EPYC-Rome vCPUs</dd></div>
+              <div><dt>Memory</dt><dd>3.8 GiB RAM</dd></div>
+              <div><dt>Storage</dt><dd>35 GiB root disk</dd></div>
+            </dl>
+          </article>
         </section>
 
         <section class="inventory-section" aria-labelledby="networks">
           <h2 id="networks">Networks</h2>
-          <p class="section-description">Clanker connects public Internet services and two overlay networks. Overlay hostnames require connectivity to their respective networks.</p>
+          <p class="section-description">Clanker and ScopeCreep connect public Internet infrastructure and two overlay networks. Overlay hostnames require connectivity to their respective networks.</p>
+          <h3 class="inventory-subheading">Clanker</h3>
           <article class="inventory-card"><div class="inventory-card-heading"><h3>Public Internet</h3><span class="inventory-badge">Public</span></div><p>Web applications and small Internet protocols, reached through the public hostnames listed below.</p></article>
           <div class="inventory-grid network-grid">
             <article class="inventory-card">
@@ -117,11 +130,32 @@
               </details>
             </article>
           </div>
+          <h3 class="inventory-subheading">ScopeCreep</h3>
+          <div class="inventory-grid network-grid">
+            <article class="inventory-card">
+              <div class="inventory-card-heading"><h3>DN42</h3><span class="inventory-badge">DN42</span></div>
+              <p><code>AS4242420425</code></p>
+              <p>DN42 routing, secondary authoritative DNS, and a Looking Glass backend.</p>
+              <h4>External BGP peers</h4>
+              <ul class="peer-list">
+                <li>iEdon <code>AS4242422189</code> — controlled transit</li>
+                <li>Kioubit <code>AS4242423914</code> — controlled transit</li>
+                <li>MOE233 <code>AS4242420253</code> — own-prefix-only / no transit</li>
+              </ul>
+              <h4>Within AS4242420425</h4>
+              <p>Internal iBGP with Clanker and with hbg1 over IPv6 / MP-BGP / RFC8950.</p>
+            </article>
+            <article class="inventory-card">
+              <div class="inventory-card-heading"><h3>Yggdrasil</h3><span class="inventory-badge">Yggdrasil</span></div>
+              <p>ScopeCreep participates in Yggdrasil and offers public Yggdrasil peering.</p>
+            </article>
+          </div>
         </section>
 
         <section class="inventory-section" aria-labelledby="public-services">
           <h2 id="public-services">Public services &amp; protocols</h2>
-          <p class="section-description">Applications and protocol services on Clanker. These are audited inventory entries, not availability checks. Non-HTTP endpoints need a suitable client.</p>
+          <p class="section-description">Applications, protocol services, and supporting infrastructure on the audited hosts. These are audited inventory entries, not availability checks. Non-HTTP endpoints need a suitable client.</p>
+          <h3 class="inventory-subheading">Clanker</h3>
           <h3 class="inventory-subheading">Web applications <span class="inventory-badge">Public</span></h3>
           <div class="inventory-grid">
             <article class="service-card"><h4>Random Steam Game</h4><p>A random pick from a Steam library.</p><a href="https://randomsteam.kgivler.com/">randomsteam.kgivler.com</a><a class="source-link" href="https://github.com/JoyfulReaper/RandomSteamGame">Source</a></article>
@@ -139,11 +173,23 @@
             <div><dt>HappyEcho <a href="https://github.com/JoyfulReaper/HappyEcho">Source</a></dt><dd><span>Echo · TCP 7</span><code>echo.kgivler.com:7</code></dd></div>
             <div><dt>HappyDiscard <a href="https://github.com/JoyfulReaper/HappyDiscard">Source</a></dt><dd><span>Discard · TCP + UDP 9</span><code>discard.kgivler.com:9</code></dd></div>
           </dl>
+          <h3 class="inventory-subheading">ScopeCreep</h3>
+          <div class="inventory-grid">
+            <article class="inventory-card">
+              <div class="inventory-card-heading"><h3>Secondary authoritative DNS</h3><span class="inventory-badge">DN42</span></div>
+              <p>Secondary DN42 DNS for the JoyfulReaper zones, with Clanker as the primary.</p>
+            </article>
+            <article class="inventory-card">
+              <div class="inventory-card-heading"><h3>Looking Glass backend</h3><span class="inventory-badge">Private</span></div>
+              <p>Supplies routing information to the Looking Glass frontend on Clanker. Backend access is private/internal.</p>
+            </article>
+          </div>
         </section>
 
         <section class="inventory-section" aria-labelledby="operations">
           <h2 id="operations">Internal &amp; operations</h2>
           <p class="section-description">The tooling behind the public services. Private/internal components are listed by role, without management endpoints.</p>
+          <h3 class="inventory-subheading">Clanker</h3>
           <div class="inventory-grid">
             <article class="inventory-card">
               <div class="inventory-card-heading"><h3>Mission Control</h3><span class="inventory-badge">Private</span></div>
@@ -168,6 +214,24 @@
               <li><strong>Cloudflare Tunnel</strong> — service ingress.</li><li><strong>WireGuard</strong> — network tunnels.</li><li><strong>Yggdrasil</strong> — overlay networking.</li>
             </ul>
           </article>
+          <h3 class="inventory-subheading">ScopeCreep</h3>
+          <div class="inventory-grid">
+            <article class="inventory-card">
+              <div class="inventory-card-heading"><h3>Operations tooling &amp; backups</h3><span class="inventory-badge">Private</span></div>
+              <ul class="operations-list">
+                <li><strong>Mission Control Agent</strong> — host telemetry.</li>
+                <li><strong>Beszel Agent</strong> — host monitoring.</li>
+                <li><strong>Dozzle Agent</strong> — container logs.</li>
+                <li><strong>Dockge</strong> — container stack management.</li>
+                <li><strong>Restic REST Server</strong> — backup storage service.</li>
+                <li><strong>Backup jobs / redundant backups</strong> — ScopeCreep backs up to both Clanker and FrontDesk and stores backups for those hosts.</li>
+              </ul>
+            </article>
+            <article class="inventory-card">
+              <div class="inventory-card-heading"><h3>Personal privacy VPN</h3><span class="inventory-badge">Private</span></div>
+              <p>A personal WireGuard privacy-VPN gateway for my devices on untrusted / public Wi-Fi. Access is private/internal.</p>
+            </article>
+          </div>
         </section>
 
         <section class="inventory-section" aria-labelledby="experiments">
@@ -182,6 +246,11 @@
               <div class="inventory-card-heading"><h3>tcpnoise</h3><span class="inventory-badge">Experiment</span></div>
               <p>A manually launched network-noise / connection experiment on Clanker. The live playground lives in the Lab.</p>
               <div class="systems-actions"><a href="/lab/" class="terminal-btn-inline">Enter the Lab <span aria-hidden="true">→</span></a><a href="https://github.com/JoyfulReaper/tcpnoise" class="terminal-btn-inline">Source</a></div>
+            </article>
+            <article class="inventory-card">
+              <div class="inventory-card-heading"><h3>tcpnoise on ScopeCreep</h3><span class="inventory-badge">Experiment</span></div>
+              <p>A public network-noise / connection experiment on ScopeCreep.</p>
+              <a href="https://github.com/JoyfulReaper/tcpnoise">Source</a>
             </article>
           </div>
         </section>
