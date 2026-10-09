@@ -260,9 +260,9 @@ h3 {
 }
 
 .contact-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
     gap: 48px;
 }
 
@@ -272,6 +272,40 @@ h3 {
 
 .contact-inner h2 {
     margin-bottom: 12px;
+}
+
+.contact-form label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 650;
+}
+
+.contact-form input,
+.contact-form textarea {
+    display: block;
+    width: 100%;
+    margin-bottom: 18px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    background: #fff;
+    font: inherit;
+}
+
+.contact-form textarea {
+    resize: vertical;
+}
+
+.contact-form button {
+    font: inherit;
+    font-weight: 650;
+    cursor: pointer;
+}
+
+.contact-section :focus-visible {
+    outline: 3px solid #9bb7ff;
+    outline-offset: 3px;
 }
 
 footer {
@@ -308,7 +342,8 @@ footer {
 
     .card-grid,
     .work-grid,
-    .split {
+    .split,
+    .contact-inner {
         grid-template-columns: 1fr;
     }
 

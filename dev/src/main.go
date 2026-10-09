@@ -16,21 +16,16 @@ var staticFiles embed.FS
 
 func main() {
 	addr := getenv("DEV_SITE_LISTEN", "127.0.0.1:5196")
+	store, err := openContactStore(getenv("DEV_CONTACT_DB_PATH", "data/contact.db"))
+	if err != nil {
+		log.Fatalf("initialize contact storage: %v", err)
+	}
+	defer store.db.Close()
 
-	staticFS, err := fs.Sub(staticFiles, "static")
+	mux, err := newSiteHandler(store)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	mux := http.NewServeMux()
-
-	mux.Handle("GET /", http.FileServer(http.FS(staticFS)))
-
-	mux.HandleFunc("GET /health/live", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-		w.WriteHeader(http.StatusOK)
-		_, _ = w.Write([]byte("ok\n"))
-	})
 
 	server := &http.Server{
 		Addr:              addr,
@@ -51,6 +46,26 @@ func main() {
 	if err := server.Serve(listener); err != nil && err != http.ErrServerClosed {
 		log.Fatal(err)
 	}
+}
+
+func newSiteHandler(store *contactStore) (http.Handler, error) {
+	staticFS, err := fs.Sub(staticFiles, "static")
+	if err != nil {
+		return nil, err
+	}
+
+	mux := http.NewServeMux()
+
+	mux.Handle("GET /", http.FileServer(http.FS(staticFS)))
+	mux.HandleFunc("POST /contact", store.handleContact)
+
+	mux.HandleFunc("GET /health/live", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte("ok\n"))
+	})
+
+	return mux, nil
 }
 
 func requestLogging(next http.Handler) http.Handler {
