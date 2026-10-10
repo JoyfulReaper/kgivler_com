@@ -1,0 +1,22 @@
+{{define "list"}}{{template "header"}}
+    <h1>Contact messages</h1>
+    {{if .}}
+    <div class="table-scroll" role="region" aria-label="Contact messages, newest first" tabindex="0">
+        <table>
+            <caption>Newest first. All received times are UTC.</caption>
+            <thead><tr><th scope="col">Status</th><th scope="col">Message</th><th scope="col">Name</th><th scope="col">Email</th><th scope="col">Phone</th><th scope="col">Subject</th><th scope="col">Received</th></tr></thead>
+            <tbody>
+            {{range .}}<tr>
+                <td><span class="status">{{.Status}}</span></td>
+                <td><a href="/admin/contact/{{.ID}}">#{{.ID}}</a></td>
+                <td>{{.Name}}</td>
+                <td>{{.Email}}</td>
+                <td>{{if .Phone}}{{.Phone}}{{else}}—{{end}}</td>
+                <td>{{if .Subject}}{{.Subject}}{{else}}(no subject){{end}}</td>
+                <td><time datetime="{{.CreatedUtc}}">{{.CreatedUtc}}</time></td>
+            </tr>{{end}}
+            </tbody>
+        </table>
+    </div>
+    {{else}}<p>No contact messages yet.</p>{{end}}
+{{template "footer"}}{{end}}

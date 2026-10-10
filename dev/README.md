@@ -34,8 +34,8 @@ decide backup and retention policies. SQLite needs directory write access for
 its journal. Use a SQLite-aware backup or stop the service before copying the
 database. Existing file permissions remain the operator's responsibility.
 
-There is no admin screen yet. Arrange a way to review the database until a later
-step adds one; notifications do not contain the complete contact submission.
+The optional private admin listener can display complete submissions and change
+their status; notifications do not contain the complete contact submission.
 Existing `DEV_SITE_LISTEN` and `MISSION_CONTROL_*` settings still apply.
 
 ## Contact rate limit
@@ -77,6 +77,49 @@ attempt. Any notification failure logs only a generic failure or HTTP status and
 still returns the normal success redirect with the stored record intact. Publish
 URLs, tokens, response bodies, and contact content are never included in those
 logs. There is no notification queue, so failed notifications are not replayed.
+
+## Private contact admin
+
+`DEV_ADMIN_LISTEN` enables a separate HTTP server and ServeMux. Empty or unset
+means no admin handler/server/socket is created. For local development only,
+`127.0.0.1:5197` or `[::1]:5197` can be used.
+
+The value must be a literal IP and numeric port from 1 to 65535. IPv6 must use
+brackets. Only loopback, RFC1918 IPv4, and IPv6 ULA addresses are accepted;
+IPv4-mapped IPv6 addresses are checked as IPv4. Hostnames, wildcards, unspecified,
+public, link-local, multicast, scoped/zone addresses, and port zero are rejected.
+Whitespace is not silently trimmed. A configured listener that cannot bind stops
+startup; there is no fallback address.
+
+For production, bind to the host's **exact private/WireGuard interface address**,
+never a wildcard or public address. WireGuard is the access boundary: this UI
+intentionally has no separate account or login system. Address validation cannot
+verify that a private address belongs to WireGuard rather than a LAN; choose the
+interface and network/firewall access deliberately. Keep this listener off public
+ingress. No public admin routes or proxy are added to `DEV_SITE_LISTEN`.
+
+The private routes are:
+
+- `GET /` redirects to `/admin/contact`.
+- `GET /admin/contact` lists messages in descending insertion-ID order.
+- `GET /admin/contact/{id}` shows a complete message without changing its status.
+- `POST /admin/contact/{id}/status` accepts `new`, `read`, `archived`, or `spam`,
+  then redirects to the detail page. There is no delete action.
+- `GET /admin/style.css` serves the private stylesheet.
+
+Templates and CSS are embedded separately from public static files. All stored
+content is escaped by `html/template`. Responses include `Cache-Control: no-store`,
+`X-Frame-Options: DENY`, `Referrer-Policy: no-referrer`, `nosniff`, and a restrictive
+CSP allowing only the local stylesheet and same-origin forms. No JavaScript,
+external assets, credentials, database paths, or environment settings are shown.
+
+Each admin handler generates a random 256-bit CSRF token at startup. Status forms
+include it as a hidden field and POSTs compare it in constant time; missing or
+incorrect tokens return 403. Tokens in query strings do not authorize changes.
+Restarting the service invalidates open forms; reload the detail page before
+submitting again. Status form bodies are limited to 8 KiB. Admin requests are not
+sent through public request logging or Mission Control telemetry. The existing
+SQLite schema and public contact behavior are unchanged.
 
 ## Checks
 

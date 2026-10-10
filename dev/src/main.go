@@ -37,9 +37,26 @@ func main() {
 		IdleTimeout:       60 * time.Second,
 	}
 
+	adminServer, adminListener, err := prepareAdminServer(store, os.Getenv("DEV_ADMIN_LISTEN"))
+	if err != nil {
+		log.Fatal(err)
+	}
+	if adminListener != nil {
+		defer adminListener.Close()
+	}
+
 	listener, err := net.Listen("tcp", addr)
 	if err != nil {
 		log.Fatalf("listen %s: %v", addr, err)
+	}
+
+	if adminServer != nil {
+		go func() {
+			if err := adminServer.Serve(adminListener); err != nil && err != http.ErrServerClosed {
+				log.Fatal("private contact admin server failed")
+			}
+		}()
+		log.Print("private contact admin listener started")
 	}
 
 	log.Printf("dev.kgivler.com listening on http://%s", addr)
