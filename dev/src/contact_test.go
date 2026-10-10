@@ -31,7 +31,7 @@ func validContactForm() url.Values {
 
 func postContact(t *testing.T, store *contactStore, body string) *httptest.ResponseRecorder {
 	t.Helper()
-	handler, err := newSiteHandler(store)
+	handler, err := newSiteHandler(store, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -115,7 +115,7 @@ func TestContactValidSubmissionPersists(t *testing.T) {
 	}
 
 	// Follow the redirect as a browser would; refreshing the GET cannot insert again.
-	handler, err := newSiteHandler(reopened)
+	handler, err := newSiteHandler(reopened, nil)
 	if err != nil {
 		t.Fatal(err)
 	}

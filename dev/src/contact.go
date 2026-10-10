@@ -7,13 +7,21 @@ import (
 	"mime"
 	"net/http"
 	"net/mail"
+	"strconv"
 	"strings"
+	"time"
 	"unicode/utf8"
 )
 
 const maxContactBody = 64 << 10
 
-func (s *contactStore) handleContact(w http.ResponseWriter, r *http.Request) {
+type contactHandler struct {
+	store    *contactStore
+	limiter  *contactLimiter
+	notifier *contactNotifier
+}
+
+func (h *contactHandler) handleContact(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Cache-Control", "no-store")
 	r.Body = http.MaxBytesReader(w, r.Body, maxContactBody)
 	mediaType, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
@@ -47,11 +55,18 @@ func (s *contactStore) handleContact(w http.ResponseWriter, r *http.Request) {
 		contactError(w, http.StatusBadRequest, problem)
 		return
 	}
-	if err := s.save(r.Context(), message); err != nil {
+	if retryAfter := h.limiter.allow(requestRemoteHost(r)); retryAfter > 0 {
+		w.Header().Set("Retry-After", strconv.Itoa(int((retryAfter+time.Second-1)/time.Second)))
+		contactError(w, http.StatusTooManyRequests, "You've sent several messages recently. Please wait up to 15 minutes before trying again.")
+		return
+	}
+	id, err := h.store.save(r.Context(), message)
+	if err != nil {
 		log.Printf("contact storage failed: %v", err)
 		contactError(w, http.StatusInternalServerError, "Your message could not be saved. Please try again later or contact me on LinkedIn.")
 		return
 	}
+	h.notifier.publish(r.Context(), id, message.Name, message.Subject)
 	http.Redirect(w, r, "/contact-sent.html", http.StatusSeeOther)
 }
 

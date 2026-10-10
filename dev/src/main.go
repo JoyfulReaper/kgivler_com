@@ -22,7 +22,8 @@ func main() {
 	}
 	defer store.db.Close()
 
-	mux, err := newSiteHandler(store)
+	notifier := newContactNotifier(os.Getenv("DEV_CONTACT_NTFY_URL"), os.Getenv("DEV_CONTACT_NTFY_TOKEN"))
+	mux, err := newSiteHandler(store, notifier)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -48,7 +49,7 @@ func main() {
 	}
 }
 
-func newSiteHandler(store *contactStore) (http.Handler, error) {
+func newSiteHandler(store *contactStore, notifier *contactNotifier) (http.Handler, error) {
 	staticFS, err := fs.Sub(staticFiles, "static")
 	if err != nil {
 		return nil, err
@@ -57,7 +58,8 @@ func newSiteHandler(store *contactStore) (http.Handler, error) {
 	mux := http.NewServeMux()
 
 	mux.Handle("GET /", http.FileServer(http.FS(staticFS)))
-	mux.HandleFunc("POST /contact", store.handleContact)
+	contact := &contactHandler{store: store, limiter: newContactLimiter(time.Now), notifier: notifier}
+	mux.HandleFunc("POST /contact", contact.handleContact)
 
 	mux.HandleFunc("GET /health/live", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/plain; charset=utf-8")

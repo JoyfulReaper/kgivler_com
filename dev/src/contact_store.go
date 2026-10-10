@@ -66,10 +66,13 @@ func openContactStore(path string) (*contactStore, error) {
 	return &contactStore{db: db}, nil
 }
 
-func (s *contactStore) save(ctx context.Context, message contactMessage) error {
-	_, err := s.db.ExecContext(ctx, `INSERT INTO ContactMessages
+func (s *contactStore) save(ctx context.Context, message contactMessage) (int64, error) {
+	result, err := s.db.ExecContext(ctx, `INSERT INTO ContactMessages
 		(CreatedUtc, Name, Email, Phone, Subject, Message) VALUES (?, ?, ?, ?, ?, ?)`,
 		time.Now().UTC().Format(time.RFC3339Nano), message.Name, message.Email,
 		message.Phone, message.Subject, message.Message)
-	return err
+	if err != nil {
+		return 0, err
+	}
+	return result.LastInsertId()
 }

@@ -34,9 +34,49 @@ decide backup and retention policies. SQLite needs directory write access for
 its journal. Use a SQLite-aware backup or stop the service before copying the
 database. Existing file permissions remain the operator's responsibility.
 
-This step stores messages only: there are no notifications or admin screens.
-Arrange a way to review the database until a later step adds those features.
+There is no admin screen yet. Arrange a way to review the database until a later
+step adds one; notifications do not contain the complete contact submission.
 Existing `DEV_SITE_LISTEN` and `MISSION_CONTROL_*` settings still apply.
+
+## Contact rate limit
+
+Only valid `POST /contact` submissions consume the in-memory limit: five accepted
+attempts per client in a fixed 15-minute window starting with the first attempt.
+The check runs before SQLite writes; a failed write still consumes an attempt.
+Excess attempts receive HTTP 429 with a human-readable page and `Retry-After`
+seconds. Invalid forms retain their validation responses, and honeypot submissions
+retain their fake-success redirect without consuming limiter state.
+
+Client identification uses the existing `requestRemoteHost` helper, including
+its forwarding-header handling for loopback proxies. Client strings are kept only
+in limiter memory, with expired entries removed on each valid submission attempt.
+The limiter resets at process restart and is local to each service process. No IP
+fields or other schema changes are added to SQLite. Existing request logging and
+Mission Control telemetry behavior are unchanged.
+
+## Optional contact notifications
+
+- `DEV_CONTACT_NTFY_URL`: the full server-side ntfy publish URL, including topic.
+  Empty or unset disables notifications.
+- `DEV_CONTACT_NTFY_TOKEN`: optional bearer token; unset means no Authorization
+  header is sent.
+
+Set these in the service environment, never in frontend files or committed
+configuration. Use an HTTPS publish URL for a remote server and restrict access
+to the topic as appropriate. No changes are needed to keep notifications disabled.
+
+After SQLite saves a message, the service makes one plain-text HTTP POST with
+the fixed `Title: New dev.kgivler.com contact` header. The body includes the saved
+message ID, name, and subject (or `(no subject)`). Control characters in name and
+subject are replaced with spaces; neither value is used in HTTP headers. Email,
+phone, and message-body fields are omitted.
+
+Publishing is best-effort, with a two-second HTTP timeout and no retries or
+redirect following. A submission may wait up to that timeout for its one publish
+attempt. Any notification failure logs only a generic failure or HTTP status and
+still returns the normal success redirect with the stored record intact. Publish
+URLs, tokens, response bodies, and contact content are never included in those
+logs. There is no notification queue, so failed notifications are not replayed.
 
 ## Checks
 
@@ -44,6 +84,7 @@ From `dev/src`:
 
 ```sh
 gofmt -w *.go
-CGO_ENABLED=0 go test ./...
+go mod tidy
+CGO_ENABLED=0 go test -v ./...
 CGO_ENABLED=0 go build ./...
 ```
