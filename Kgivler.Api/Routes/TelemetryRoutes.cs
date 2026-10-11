@@ -70,7 +70,7 @@ public static class TelemetryRoutes
                 await missionControlClient.TryPublishAsync(
                     eventType: KgivlerEventTypes.SiteVisitRecorded,
                     payload: CreateSiteVisitRecordedEvent(
-                        context.Request.Host.Host,
+                        context.Request,
                         visitorId,
                         userAgent,
                         isUniqueVisitor,
@@ -155,7 +155,7 @@ public static class TelemetryRoutes
     }
 
     internal static SiteVisitRecordedEvent CreateSiteVisitRecordedEvent(
-        string host,
+        HttpRequest request,
         string? visitorId,
         string? userAgent,
         bool isUniqueVisitor,
@@ -163,7 +163,14 @@ public static class TelemetryRoutes
         long uniqueVisitors,
         long durationMilliseconds)
     {
-        var ingressNetwork = KgivlerIngressNetwork.FromHost(host);
+        var forwardedHost = request.Headers["X-Forwarded-Host"]
+            .FirstOrDefault()?
+            .Split(',')[0]
+            .Trim();
+        var ingressHost = string.IsNullOrWhiteSpace(forwardedHost)
+            ? request.Host.Host
+            : forwardedHost;
+        var ingressNetwork = KgivlerIngressNetwork.FromHost(ingressHost);
 
         return new SiteVisitRecordedEvent(
             VisitorId: visitorId,
