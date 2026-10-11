@@ -99,6 +99,7 @@ kgivler_com/
 │   ├── Bbs/                        BBS models and event payloads
 │   ├── Extensions/                 CORS and middleware configuration
 │   └── Kgivler.Api.slnx            .NET solution
+├── Kgivler.Api.Tests/               Focused API unit tests
 ├── LICENSE.md
 └── README.md
 ```
@@ -123,7 +124,8 @@ dotnet build Kgivler.Api/Kgivler.Api.slnx
 dotnet test Kgivler.Api/Kgivler.Api.slnx --no-build
 ```
 
-The solution currently contains the API project and no automated test project, so `dotnet test` validates the solution target but does not execute test cases.
+The solution includes focused API tests for ingress-network classification and
+the site-visit event payload.
 
 ### Run the API
 
@@ -229,7 +231,7 @@ The repository includes a filesystem publish profile for the API but no complete
 - A local frontend run is only fully interactive when its optional companion services and private configuration are also available.
 - Some telemetry fields depend on operating-system facilities, `wmic`, or `nvidia-smi`; missing tools produce partial metrics rather than startup failure.
 - The service catalog is curated static content with node-aware observation mappings, while the Docker/protocol table is the selected node's live snapshot. They can temporarily differ during deployments.
-- The repository currently has no automated test project or committed browser-test suite.
+- The repository currently has no committed browser-test suite.
 - Current UI screenshots are not tracked in the repository.
 
 ## License

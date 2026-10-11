@@ -69,13 +69,14 @@ public static class TelemetryRoutes
 
                 await missionControlClient.TryPublishAsync(
                     eventType: KgivlerEventTypes.SiteVisitRecorded,
-                    payload: new SiteVisitRecordedEvent(
-                        VisitorId: visitorId,
-                        UserAgent: userAgent,
-                        IsUniqueVisitor: isUniqueVisitor,
-                        TotalHits: hitResults.TotalHits,
-                        UniqueVisitors: hitResults.UniqueVisitors,
-                        DurationMilliseconds: hitStopwatch.ElapsedMilliseconds),
+                    payload: CreateSiteVisitRecordedEvent(
+                        context.Request.Host.Host,
+                        visitorId,
+                        userAgent,
+                        isUniqueVisitor,
+                        hitResults.TotalHits,
+                        hitResults.UniqueVisitors,
+                        hitStopwatch.ElapsedMilliseconds),
                     occurredAt: occurredAt,
                     correlationId: correlationId,
                     cancellationToken: CancellationToken.None);
@@ -151,6 +152,27 @@ public static class TelemetryRoutes
         }).RequireRateLimiting("TelemetryPolicy");
 
         return app;
+    }
+
+    internal static SiteVisitRecordedEvent CreateSiteVisitRecordedEvent(
+        string host,
+        string? visitorId,
+        string? userAgent,
+        bool isUniqueVisitor,
+        long totalHits,
+        long uniqueVisitors,
+        long durationMilliseconds)
+    {
+        var ingressNetwork = KgivlerIngressNetwork.FromHost(host);
+
+        return new SiteVisitRecordedEvent(
+            VisitorId: visitorId,
+            UserAgent: userAgent,
+            IngressNetwork: ingressNetwork,
+            IsUniqueVisitor: isUniqueVisitor,
+            TotalHits: totalHits,
+            UniqueVisitors: uniqueVisitors,
+            DurationMilliseconds: durationMilliseconds);
     }
 
     private static string? GetVisitorId(
