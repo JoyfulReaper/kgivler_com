@@ -863,6 +863,16 @@ body.terminal-theme {
     gap: 0.45rem;
 }
 
+.site-footer-links + .site-footer-links {
+    margin-top: 0.5rem;
+}
+
+/* Keep initial HTML fail-closed even when an element also uses flex/grid. */
+[data-hosting-promotion][hidden],
+[data-i2p-note][hidden] {
+    display: none !important;
+}
+
 .site-footer-note {
     margin-top: 0.4rem;
 }

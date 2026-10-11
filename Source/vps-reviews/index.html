@@ -47,21 +47,23 @@
 
         <h1>VPS Reviews &amp; Impressions</h1>
 
-        <p class="hero-copy">
+        <p class="hero-copy" data-hosting-promotion hidden>
           Reviews and early impressions of VPSes I actually use. GreenCloud has
           the detailed review below; Servitro is a new addition I’m still evaluating.
         </p>
 
+        <p data-i2p-note hidden>This is the I2P deployment. Browser assets are local; some optional integrations may be unavailable.</p>
+
         <p class="updated">Last updated: October 7, 2026</p>
 
-        <div class="disclosure">
+        <div class="disclosure" data-hosting-promotion hidden>
           <strong>Affiliate disclosure:</strong>
           GreenCloud links on this page may be affiliate links. I may earn a
           commission if you sign up through them. The review is based on my own
           experience running their VPSes.
         </div>
 
-        <div class="pricing-callout">
+        <div class="pricing-callout" data-hosting-promotion hidden>
           <div>
             <span class="pricing-label">GreenCloud · Current budget pricing</span>
             <strong class="pricing-price">$25/year</strong>
@@ -88,7 +90,7 @@
     </section>
 
     <article>
-      <section class="section">
+      <section class="section" data-hosting-promotion hidden>
         <div class="container article-width">
           <h2>My experience with GreenCloud</h2>
 
@@ -119,7 +121,7 @@
         </div>
       </section>
 
-      <section class="section section-alt">
+      <section class="section section-alt" data-hosting-promotion hidden>
         <div class="container article-width">
           <h2>What I run on them</h2>
 
@@ -139,7 +141,7 @@
         </div>
       </section>
 
-      <section class="section">
+      <section class="section" data-hosting-promotion hidden>
         <div class="container article-width">
           <h2>Support experience</h2>
 
@@ -212,7 +214,7 @@
         </div>
       </section>
 
-      <section class="section section-alt">
+      <section class="section section-alt" data-hosting-promotion hidden>
         <div class="container article-width">
           <h2>What I like and what to know</h2>
 
@@ -245,7 +247,7 @@
         </div>
       </section>
 
-      <section class="section">
+      <section class="section" data-hosting-promotion hidden>
         <div class="container article-width">
           <h2>Who I think GreenCloud fits</h2>
 
@@ -387,6 +389,22 @@
   </main>
 
   <footer>
+    <div class="container footer-network-links">
+      <span>Also available on:</span>
+      <a href="https://www.kgivler.com/">Clearnet</a>
+      <a href="http://site.ygg.kgivler.com/">Yggdrasil</a>
+      <a href="https://kgivler.dn42/">DN42</a>
+      <a href="http://bmhbwuvcvdof5aenq2ocow4rsqzfwxttdy4o6tbro2kohzxyytfq.b32.i2p/">I2P</a>
+    </div>
+    <div class="container footer-network-links">
+      <a href="https://github.com/JoyfulReaper/kgivler_com">Project / Source</a>
+    </div>
+    <div class="container footer-network-links">
+      <span>Network projects:</span>
+      <a href="https://yggdrasil-network.github.io/">Yggdrasil</a>
+      <a href="https://dn42.dev/Home">DN42</a>
+      <a href="https://i2p.net/">I2P</a>
+    </div>
     <div class="container footer-inner">
       <span>© Kyle Givler</span>
 
@@ -397,5 +415,6 @@
       </div>
     </div>
   </footer>
+  <script type="module" src="/js/network-presentation.js"></script>
 </body>
 </html>

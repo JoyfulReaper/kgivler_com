@@ -433,8 +433,8 @@
               <p>Windows host backup / recovery coverage was not fully audited and remains to be reviewed.</p>
             </article>
           </div>
-          <h3 class="inventory-subheading">Infrastructure / Hosting</h3>
-          <article class="inventory-card">
+          <h3 class="inventory-subheading" data-hosting-promotion hidden>Infrastructure / Hosting</h3>
+          <article class="inventory-card" data-hosting-promotion hidden>
             <h4>VPS providers I use</h4>
             <ul class="operations-list">
               <li><a href="https://greencloudvps.com/billing/aff.php?aff=10295" target="_blank" rel="sponsored noopener noreferrer">GreenCloud VPS</a> (affiliate)</li>
@@ -467,35 +467,39 @@
       </main>
           <footer class="site-footer">
             <div class="site-footer-links">
-              <span>© Kyle Givler</span>
-              <span>·</span>
-
-              <a href="https://dev.kgivler.com/" target="_blank" rel="noopener noreferrer">
-                Development Services
-              </a>
-
-              <span>·</span>
-
-              <a href="/vps-reviews/">
-                VPS Reviews
-              </a>
-
-              <span>·</span>
-
-              <span>VPS hosting I use:</span>
-
-              <a href="https://greencloudvps.com/billing/aff.php?aff=10295"
-                 target="_blank"
-                 rel="sponsored noopener noreferrer">
-                GreenCloud VPS
-              </a>
+              <span>Also available on:</span>
+              <a href="https://www.kgivler.com/">Clearnet</a>
+              <a href="http://site.ygg.kgivler.com/">Yggdrasil</a>
+              <a href="https://kgivler.dn42/">DN42</a>
+              <a href="http://bmhbwuvcvdof5aenq2ocow4rsqzfwxttdy4o6tbro2kohzxyytfq.b32.i2p/">I2P</a>
             </div>
-
-            <div class="site-footer-note">
+            <div class="site-footer-links">
+              <a href="https://github.com/JoyfulReaper/kgivler_com">Project / Source</a>
+            </div>
+            <div class="site-footer-links">
+              <span>Network projects:</span>
+              <a href="https://yggdrasil-network.github.io/">Yggdrasil</a>
+              <a href="https://dn42.dev/Home">DN42</a>
+              <a href="https://i2p.net/">I2P</a>
+            </div>
+            <div class="site-footer-links">
+              <span>© Kyle Givler</span>
+              <span aria-hidden="true">·</span>
+              <a href="https://dev.kgivler.com/">Development Services</a>
+              <span aria-hidden="true">·</span>
+              <a href="/vps-reviews/">VPS Reviews</a>
+            </div>
+            <div class="site-footer-links" data-hosting-promotion hidden>
+              <span>VPS hosting I use:</span>
+              <a href="https://greencloudvps.com/billing/aff.php?aff=10295" target="_blank" rel="sponsored noopener noreferrer">GreenCloud VPS</a>
+            </div>
+            <div class="site-footer-note" data-hosting-promotion hidden>
               GreenCloud link is an affiliate link — I may earn a commission
               if you sign up through it.
             </div>
+            <p class="site-footer-note" data-i2p-note hidden>This is the I2P deployment. Browser assets are local; some optional integrations may be unavailable.</p>
           </footer>
     </div>
+    <script type="module" src="/js/network-presentation.js"></script>
   </body>
 </html>

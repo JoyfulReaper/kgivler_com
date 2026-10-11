@@ -177,13 +177,28 @@ remain disabled and never fall back to clearnet. QOTD has no I2P endpoint yet, s
 the Lab shows a clear unavailable message and disables its refresh button.
 I2P API requests reject automatic redirects and non-I2P targets.
 
+Hosting presentation is separate from API routing. `Source/js/network-presentation.js`
+uses `IS_I2P` to keep hosting promotions hidden on I2P and show a neutral deployment
+note instead. Promotion containers have `data-hosting-promotion hidden` in the
+shared HTML; JavaScript reveals them only on non-I2P networks. This includes the
+homepage, shared footers, Systems hosting card, and GreenCloud review sections.
+With JavaScript disabled or unavailable, these containers stay hidden on every
+network. Clearnet, Yggdrasil, and DN42 retain the existing content when JS runs.
+
+The footer separates site deployments (Clearnet, Yggdrasil, DN42, I2P), Project /
+Source, and Network projects. Its I2P link uses the direct destination
+`http://bmhbwuvcvdof5aenq2ocow4rsqzfwxttdy4o6tbro2kohzxyytfq.b32.i2p/`,
+so it does not require the friendly `kgivler.i2p` name in a visitor's address book.
+These are ordinary navigation links, never automatic resources or API settings.
+
 All page stylesheets, fonts, icons, scripts, manifests, and error-page assets are
 local. The audit covered HTML resource attributes, CSS URLs/imports, JavaScript
 fetch calls, and dynamically rendered content. No remote image embeds are
 rendered by the Steam/Git widgets or Random Steam demo. Canonical/Open Graph and
 structured-data URLs remain clearnet metadata, which browsers do not fetch as
-page dependencies. User-clicked GitHub, LinkedIn, Steam, chat, affiliate, and other
-external links remain available. Frontend tests check local resource existence,
+page dependencies. User-clicked GitHub, LinkedIn, Steam, chat, and other
+external links remain available; hosting promotions follow the policy above.
+Frontend tests check local resource existence,
 SRI/vendor hashes, network routes, and zero requests from disabled integrations.
 
 An I2P frontend route does not make upstream services self-contained: Random

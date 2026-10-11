@@ -1,6 +1,6 @@
 // Set an integration to null until it is available on I2P. No clearnet fallback.
 export const I2P_SERVICES = Object.freeze({
-    SITE_API: null, // Enable with 'http://api.kgivler.i2p' when the API is available.
+    SITE_API: 'http://i3orcbjjienp2x53tplvjozico73xfhcelqr3lzav5yu5wghk4hq.b32.i2p',
     STEAM: 'http://randomsteam.i2p',
     QOTD: null
 });
