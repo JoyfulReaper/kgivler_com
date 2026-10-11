@@ -10,6 +10,8 @@ public sealed class KgivlerIngressNetworkTests
     [InlineData("api.kgivler.com", "public")]
     [InlineData("router.dn42", "dn42")]
     [InlineData("service.i2p", "i2p")]
+    [InlineData("kgivler.i2p", "i2p")]
+    [InlineData("api.kgivler.i2p", "i2p")]
     [InlineData("api.ygg.kgivler.com", "yggdrasil")]
     [InlineData("API.YGG.KGIVLER.COM.", "yggdrasil")]
     [InlineData("unrelated.example", "unknown")]

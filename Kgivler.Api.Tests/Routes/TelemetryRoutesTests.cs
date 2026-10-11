@@ -8,6 +8,8 @@ public sealed class TelemetryRoutesTests
 {
     [Theory]
     [InlineData("api.kgivler.com", null, "public")]
+    [InlineData("api.kgivler.i2p", null, "i2p")]
+    [InlineData("api.kgivler.com", "api.kgivler.i2p", "i2p")]
     [InlineData("api.kgivler.com", "api.kgivler.dn42", "dn42")]
     [InlineData("api.kgivler.com", "api.ygg.kgivler.com", "yggdrasil")]
     [InlineData("api.kgivler.com", "  api.kgivler.dn42 , api.kgivler.com", "dn42")]

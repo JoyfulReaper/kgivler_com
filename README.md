@@ -33,7 +33,7 @@ No current UI screenshots are tracked in this repository. Use the [live site](ht
 - HTML provides the homepage, Services page, metadata, and no-JavaScript content.
 - CSS preserves the terminal-window identity and responsive layout.
 - Native JavaScript modules implement commands, API access, polling, timeouts, safe rendering, and widget state.
-- Bootstrap and Font Awesome stylesheets are version-pinned CDN dependencies with Subresource Integrity metadata.
+- Bootstrap 5.3.3 and Font Awesome Free 6.5.1 stylesheets/fonts are vendored under `Source/vendor/`, with licenses and provenance hashes. Stylesheets retain their Subresource Integrity metadata.
 
 The homepage loads `Source/js/main.js` as an ES module. API access is centralized in `Source/js/api.js`; the Services page has a separate `Source/Services/services.js` controller for filtering and live snapshot rendering.
 
@@ -112,6 +112,7 @@ The public `Source/config.*`, `.env`, WordPress-lookalike, and dot-git-lookalike
 
 - .NET 10 SDK.
 - A static-file server for `Source/`.
+- Node.js 22 or newer to run the dependency-free frontend tests (no package install required).
 - Optional: Steam API credentials, Mission Control, Random Steam Game, and HappyQOTD for their corresponding integrations.
 
 ### Restore, build, and test
@@ -122,6 +123,7 @@ From the repository root:
 dotnet restore Kgivler.Api/Kgivler.Api.slnx
 dotnet build Kgivler.Api/Kgivler.Api.slnx
 dotnet test Kgivler.Api/Kgivler.Api.slnx --no-build
+node --test Frontend.Tests/*.test.js
 ```
 
 The solution includes focused API tests for ingress-network classification and
@@ -152,6 +154,44 @@ Then open `http://localhost:5500/`. Development CORS permits the checked-in loca
 - HappyQOTD: `http://localhost:5269`
 
 The portfolio and independently available widgets remain usable when the optional companion services are not running.
+
+## Network routing and I2P
+
+The same `Source/` tree serves all networks. `Source/js/config.js` selects
+endpoints at runtime using the browser hostname. There is no separate I2P site.
+
+| Browser hostname | Site API | Random Steam | QOTD |
+| --- | --- | --- | --- |
+| `kgivler.com`, `www.kgivler.com` (default clearnet) | `https://api.kgivler.com` | `https://randomsteam.kgivler.com` | `https://qotd-api.kgivler.com` |
+| `*.ygg.kgivler.com`, `[301:762f:80bd:20e1::40]` | `http://api.ygg.kgivler.com` | `https://steam.ygg.kgivler.com` | `http://qotd.ygg.kgivler.com` |
+| `*.dn42` | `https://api.kgivler.dn42` | `https://randomsteam.dn42` | `https://qotd.kgivler.dn42` |
+| `localhost`, `127.0.0.1` | `http://localhost:5081` | `http://localhost:5182` | `http://localhost:5269` |
+| `kgivler.i2p`, any `*.i2p` | Disabled (`null`) | `http://randomsteam.i2p` | Disabled (`null`) |
+
+For `http://kgivler.i2p/`, optional service availability is explicit in
+`I2P_SERVICES`: set `SITE_API` to `http://api.kgivler.i2p` once that
+API endpoint is available. This enables telemetry, Steam presence, Git activity,
+and BBS through I2P. Until then they display their existing unavailable states and
+make no requests. `STEAM` or `QOTD` can also be set to `null`; missing entries
+remain disabled and never fall back to clearnet. QOTD has no I2P endpoint yet, so
+the Lab shows a clear unavailable message and disables its refresh button.
+I2P API requests reject automatic redirects and non-I2P targets.
+
+All page stylesheets, fonts, icons, scripts, manifests, and error-page assets are
+local. The audit covered HTML resource attributes, CSS URLs/imports, JavaScript
+fetch calls, and dynamically rendered content. No remote image embeds are
+rendered by the Steam/Git widgets or Random Steam demo. Canonical/Open Graph and
+structured-data URLs remain clearnet metadata, which browsers do not fetch as
+page dependencies. User-clicked GitHub, LinkedIn, Steam, chat, affiliate, and other
+external links remain available. Frontend tests check local resource existence,
+SRI/vendor hashes, network routes, and zero requests from disabled integrations.
+
+An I2P frontend route does not make upstream services self-contained: Random
+Steam and the API's Steam integration still depend on Steam's public APIs;
+weather uses wttr.in, and Git/status features require the configured Mission
+Control services. These requests happen server-side. Availability of I2P hosts,
+Random Steam's own CORS policy, and any independent site's assets must be handled
+in those services. This repository change does not configure or deploy tunnels.
 
 ## Configuration
 
@@ -216,7 +256,7 @@ The repository includes a filesystem publish profile for the API but no complete
 
 ## Security and privacy notes
 
-- Production CORS is limited to `https://kgivler.com` and `https://www.kgivler.com`; local origins are added only in Development.
+- Production CORS permits the existing clearnet, DN42, and Yggdrasil site origins plus exactly `http://kgivler.i2p`; local origins are added only in Development. `api.kgivler.i2p` is an API host, not a frontend origin, so it is not added to CORS.
 - Public API routes preserve fixed-window rate limits appropriate to their workloads.
 - BBS database writes use SQL parameters, and browser rendering escapes visitor content.
 - Steam, Git activity, quote, and telemetry output are validated or escaped before browser rendering; trusted HTML helpers are reserved for controlled templates.

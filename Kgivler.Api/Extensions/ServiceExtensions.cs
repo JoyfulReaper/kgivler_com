@@ -36,6 +36,7 @@ public static class ServiceExtensions
                 {
                     "https://kgivler.com",
                     "https://www.kgivler.com",
+                    "http://kgivler.i2p",
                     "http://site.ygg.kgivler.com",
                     "https://kgivler.dn42",
                     "http://kgivler.dn42",

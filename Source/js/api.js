@@ -1,4 +1,4 @@
-import { API_CONFIG } from "./config.js";
+import { API_CONFIG, IS_I2P } from "./config.js";
 import { escapeHtml } from "./markdown.js";
 
 let systemDataRequest = null;
@@ -37,7 +37,34 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = DEFAULT_REQUEST_T
   }
 }
 
+class ServiceDisabledError extends Error {
+  constructor() {
+    super('Service is not configured for this network.');
+    this.name = 'ServiceDisabledError';
+  }
+}
+
+function fetchService(service, endpoint, options, timeoutMs) {
+  const base = API_CONFIG[service];
+  if (!base) throw new ServiceDisabledError();
+
+  const url = new URL(endpoint, base);
+  // Keep I2P requests inside I2P, including when an integration redirects.
+  if (IS_I2P && (!url.hostname.endsWith('.i2p') || !['http:', 'https:'].includes(url.protocol))) {
+    throw new ServiceDisabledError();
+  }
+
+  return fetchWithTimeout(url.href, {
+    ...options,
+    ...(IS_I2P ? { redirect: 'error' } : {}),
+  }, timeoutMs);
+}
+
 function unavailableMessage(error, serviceName) {
+  if (error instanceof ServiceDisabledError) {
+    return serviceName + ' is not available on this network.';
+  }
+
   return error instanceof RequestTimeoutError
     ? `${serviceName} timed out and is temporarily unavailable.`
     : `${serviceName} is currently unavailable.`;
@@ -72,8 +99,9 @@ async function readProblemDetail(response, fallbackMessage) {
 
 async function loadSystemData() {
   try {
-    const res = await fetchWithTimeout(
-      `${API_CONFIG.TELEMETRY}/api/system/usage`,
+    const res = await fetchService(
+      "TELEMETRY",
+      `/api/system/usage`,
       { cache: "no-store" },
       5000
     );
@@ -81,7 +109,7 @@ async function loadSystemData() {
     if (!res.ok) throw new Error("Request failed");
     return await res.json();
   } catch (e) {
-    console.error("Fetch failed or timed out:", e);
+    if (!(e instanceof ServiceDisabledError)) console.error("Fetch failed or timed out:", e);
     return null;
   }
 }
@@ -101,8 +129,9 @@ export function getSystemData() {
 
 export async function getHostStatus() {
   try {
-    const response = await fetchWithTimeout(
-      `${API_CONFIG.TELEMETRY}/api/system/status`,
+    const response = await fetchService(
+      "TELEMETRY",
+      `/api/system/status`,
       { cache: "no-store" },
       5000
     );
@@ -114,15 +143,16 @@ export async function getHostStatus() {
 
     return await response.json();
   } catch (e) {
-    console.error("Host status fetch failed or timed out:", e);
+    if (!(e instanceof ServiceDisabledError)) console.error("Host status fetch failed or timed out:", e);
     return { ok: false, error: unavailableMessage(e, "Host telemetry"), status: 0 };
   }
 }
 
 export async function getSteamPresence() {
   try {
-    const response = await fetchWithTimeout(
-      `${API_CONFIG.TELEMETRY}/api/steam/presence`,
+    const response = await fetchService(
+      "TELEMETRY",
+      `/api/steam/presence`,
       { cache: "no-store" },
       5000
     );
@@ -134,7 +164,7 @@ export async function getSteamPresence() {
 
     return await response.json();
   } catch (e) {
-    console.error("Steam presence fetch failed or timed out:", e);
+    if (!(e instanceof ServiceDisabledError)) console.error("Steam presence fetch failed or timed out:", e);
     return { ok: false, error: unavailableMessage(e, "Steam presence"), status: 0 };
   }
 }
@@ -146,8 +176,9 @@ export async function getRecentGitActivity(limit = 5) {
   );
 
   try {
-    const response = await fetchWithTimeout(
-      `${API_CONFIG.GIT_ACTIVITY}/api/github/activity?limit=${effectiveLimit}`,
+    const response = await fetchService(
+      "GIT_ACTIVITY",
+      `/api/github/activity?limit=${effectiveLimit}`,
       { cache: "no-store" },
       5000
     );
@@ -180,7 +211,7 @@ export async function getRecentGitActivity(limit = 5) {
       items: activity,
     };
   } catch (error) {
-    console.error(
+    if (!(error instanceof ServiceDisabledError)) console.error(
       "Git activity fetch failed or timed out:",
       error
     );
@@ -194,9 +225,14 @@ export async function getRecentGitActivity(limit = 5) {
 }
 
 export async function getQuoteOfTheDay() {
+  if (!API_CONFIG.QOTD) {
+    return { ok: false, disabled: true, error: 'Quote of the Day is not available on this network.', status: 0 };
+  }
+
   try {
-    const response = await fetchWithTimeout(
-      `${API_CONFIG.QOTD}/api/quotes/today`,
+    const response = await fetchService(
+      "QOTD",
+      `/api/quotes/today`,
       {},
       5000
     );
@@ -221,7 +257,7 @@ export async function getQuoteOfTheDay() {
       quote,
     };
   } catch (error) {
-    console.error(
+    if (!(error instanceof ServiceDisabledError)) console.error(
       "Quote of the day fetch failed or timed out:",
       error
     );
@@ -236,8 +272,9 @@ export async function getQuoteOfTheDay() {
 
 export async function getBbsMessages() {
   try {
-    const response = await fetchWithTimeout(
-      `${API_CONFIG.TELEMETRY}/api/bbs`,
+    const response = await fetchService(
+      "TELEMETRY",
+      `/api/bbs`,
       { cache: "no-store" },
       5000
     );
@@ -270,7 +307,7 @@ export async function getBbsMessages() {
       value: messages,
     };
   } catch (error) {
-    console.error(
+    if (!(error instanceof ServiceDisabledError)) console.error(
       "BBS message fetch failed or timed out:",
       error
     );
@@ -285,8 +322,9 @@ export async function getBbsMessages() {
 
 export async function postBbsMessage(content) {
   try {
-    const response = await fetchWithTimeout(
-      `${API_CONFIG.TELEMETRY}/api/bbs`,
+    const response = await fetchService(
+      "TELEMETRY",
+      `/api/bbs`,
       {
         method: "POST",
         cache: "no-store",
@@ -317,7 +355,7 @@ export async function postBbsMessage(content) {
       value: null,
     };
   } catch (error) {
-    console.error(
+    if (!(error instanceof ServiceDisabledError)) console.error(
       "BBS message post failed or timed out:",
       error
     );
@@ -380,8 +418,9 @@ export async function fetchRandomGame(input, ctx, provider = "steam") {
   ctx.loadingText(`Connecting to ${provider}...`);
 
   try {
-    const response = await fetchWithTimeout(
-      `${API_CONFIG.STEAM}/api/${provider}/random-game/details?${query.toString()}`,
+    const response = await fetchService(
+      "STEAM",
+      `/api/${provider}/random-game/details?${query.toString()}`,
       { cache: "no-store" },
       10000
     );
@@ -430,7 +469,7 @@ export async function fetchRandomGame(input, ctx, provider = "steam") {
         : "")
     );
   } catch (err) {
-    console.error("Fetch Error:", err);
+    if (!(err instanceof ServiceDisabledError)) console.error("Fetch Error:", err);
     ctx.errorText(unavailableMessage(err, "Random Steam Game service") + " Please try again later.");
   }
 }
