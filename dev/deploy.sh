@@ -1,3 +1,6 @@
+#!/bin/bash
+set -euo pipefail
+
 cd /opt/kgivler_com/dev/src
 
 go build -o /tmp/devsite .
