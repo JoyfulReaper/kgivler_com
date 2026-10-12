@@ -217,6 +217,31 @@ h3 {
     margin-top: 16px;
 }
 
+.faq-list {
+    display: grid;
+    gap: 18px;
+}
+
+.faq-item summary {
+    cursor: pointer;
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.faq-item summary:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 3px;
+}
+
+.faq-answer {
+    max-width: 760px;
+    margin-top: 16px;
+}
+
+.faq-answer p + p {
+    margin-top: 16px;
+}
+
 .work-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
