@@ -350,3 +350,13 @@
 .projects-page.project-detail-page .project-screenshot img {
     cursor: zoom-in;
 }
+
+.projects-page.project-detail-page .project-screenshot-narrow {
+    max-width: 560px;
+}
+
+.projects-page.project-detail-page .project-screenshot-narrow img {
+    width: 100%;
+    height: auto;
+    cursor: zoom-in;
+}
