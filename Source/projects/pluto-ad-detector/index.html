@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>PlutoAdDetector | Kyle Givler</title>
+
+    <meta
+      name="description"
+      content="PlutoAdDetector is Kyle Givler's experimental .NET desktop tool that detects Pluto TV ad breaks and recurring visual bumpers, then switches to a resumable YouTube queue until normal programming returns." />
+
+    <link rel="canonical" href="https://www.kgivler.com/projects/pluto-ad-detector/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="PlutoAdDetector | Kyle Givler" />
+    <meta
+      property="og:description"
+      content="An experimental .NET tool that detects Pluto TV ad breaks and recurring visual segments, switches to YouTube, and resumes where it left off when the break ends." />
+    <meta property="og:url" content="https://www.kgivler.com/projects/pluto-ad-detector/" />
+    <meta property="og:site_name" content="Kyle Givler" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="PlutoAdDetector | Kyle Givler" />
+    <meta
+      name="twitter:description"
+      content="A Pluto TV ad-break detector that switches to YouTube and resumes the queue when programming returns." />
+
+    <link
+      href="/vendor/bootstrap-5.3.3/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous" />
+
+    <link
+      rel="stylesheet"
+      href="/vendor/fontawesome-6.5.1/css/all.min.css"
+      integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="/styles.css?v=6" />
+    <link rel="stylesheet" href="../projects.css?v=1" />
+    <link rel="stylesheet" href="../project-detail.css?v=1" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+
+  <body class="terminal-theme projects-page project-detail-page">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <div class="projects-container">
+      <header class="projects-header">
+        <a class="projects-brand" href="/">Kyle Givler<span aria-hidden="true">_</span></a>
+
+        <nav class="terminal-nav" aria-label="Main navigation">
+          <a href="/">Home</a>
+          <a href="/projects/" aria-current="page">Projects</a>
+          <a href="/lab/">Lab</a>
+          <a href="/services/">Systems</a>
+          <a href="/vps-reviews/">VPS Reviews</a>
+          <a href="https://dev.kgivler.com/" class="terminal-nav-primary">Hire Me</a>
+        </nav>
+      </header>
+
+      <main id="main-content">
+        <header class="project-detail-hero">
+          <p class="projects-kicker">
+            <span class="prompt" aria-hidden="true">~/</span>projects/pluto-ad-detector
+          </p>
+
+          <h1>PlutoAdDetector</h1>
+
+          <p class="project-detail-lede">
+            An experimental Windows app that watches a streaming page for ad breaks
+            and recurring visual bumpers, switches to something I actually want to
+            watch on YouTube, then puts the original stream back when normal
+            programming returns.
+          </p>
+
+          <div class="projects-actions project-detail-actions">
+            <a
+              href="https://github.com/JoyfulReaper/PlutoAdDetector"
+              class="terminal-btn-inline"
+              target="_blank"
+              rel="noopener noreferrer">
+              Source
+              <span aria-hidden="true">↗</span>
+            </a>
+
+            <a
+              href="https://github.com/JoyfulReaper/PlutoAdDetector/releases"
+              class="terminal-btn-inline"
+              target="_blank"
+              rel="noopener noreferrer">
+              Releases
+              <span aria-hidden="true">↗</span>
+            </a>
+
+            <a href="/projects/" class="terminal-btn-inline">
+              Projects
+              <span aria-hidden="true">←</span>
+            </a>
+          </div>
+
+          <p class="project-detail-stack">
+            .NET 10 · WinForms · Playwright · Chrome · YouTube IFrame API · perceptual fingerprints
+          </p>
+        </header>
+
+        <section class="project-detail-section" aria-labelledby="why-heading">
+          <h2 id="why-heading">Why I built it</h2>
+
+          <p>
+            I got tired of seeing the same Pluto TV ads over and over, especially
+            during U.S. midterm-election season. At some point the obvious question
+            became: what if I could just watch the news during the ad breaks instead?
+          </p>
+
+          <p>
+            That became the entire premise. Pluto keeps playing in its own browser
+            tab. When an ad starts, the app mutes the source and brings a local
+            YouTube player forward. When the ad ends, YouTube pauses, Pluto comes
+            back, and the source is unmuted.
+          </p>
+
+          <p>
+            My normal replacement content is long-form news from YouTube, so the
+            useful version of the idea was not "play a random clip." It needed to
+            remember a queue and let me keep picking up where I left off across a
+            bunch of short ad breaks.
+          </p>
+        </section>
+
+        <figure class="project-screenshot project-screenshot-narrow">
+          <a
+            href="./images/gui.png"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Open full PlutoAdDetector GUI screenshot">
+            <img
+              src="./images/gui.png"
+              alt="PlutoAdDetector Windows GUI showing the streaming-service URL, Pluto and full-page detection modes, YouTube channel or single-video replacement options, visual detection, queue resume, and detector output."
+              loading="lazy"
+              decoding="async" />
+          </a>
+
+          <figcaption>
+            The Windows launcher keeps the normal workflow simple: choose the
+            streaming source, choose the YouTube replacement, and start the detector.
+          </figcaption>
+        </figure>
+
+        <section class="project-detail-section" aria-labelledby="dom-heading">
+          <h2 id="dom-heading">The first detector was deliberately simple</h2>
+
+          <p>
+            The original version watched Pluto's page for a visible DOM ad
+            indicator. That is still the preferred path because it is cheap,
+            deterministic, and directly tied to what the streaming UI is already
+            telling the viewer.
+          </p>
+
+          <p>
+            The detector is debounced so a single noisy DOM mutation does not
+            constantly flip the source and YouTube tabs back and forth. Pluto mode
+            stays focused on the known page structure, while a broader full-page
+            mode exists for experimenting with other services when the Pluto-specific
+            path is not appropriate.
+          </p>
+
+          <p>
+            I have confirmed that broader mode works at least partially with Tubi,
+            and I may add explicit support for other services I actually use rather
+            than trying to turn the project into a universal streaming-site framework.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="visual-heading">
+          <h2 id="visual-heading">Some annoying segments are not ads according to the UI</h2>
+
+          <p>
+            DOM detection cannot catch everything. Streaming services also have
+            bumpers, promos, station cards, and other repeated segments that may
+            look exactly like something I want to skip while never being marked as
+            an ad by the page.
+          </p>
+
+          <p>
+            The visual detector handles that case. Training samples the decoded
+            source video for a short period, normalizes the frames in memory, and
+            stores an ordered sequence of compact perceptual fingerprints. It does
+            not save the training video or screenshots.
+          </p>
+
+          <p>
+            During playback, the detector periodically samples the source again and
+            looks for a sequence sufficiently similar to the trained reference.
+            Matching is intentionally tolerant of sampling jitter, skipped reference
+            frames, and isolated mismatches rather than expecting every frame to line
+            up exactly.
+          </p>
+
+          <p>
+            A visual match can temporarily hide and mute the source and resume
+            YouTube before Pluto's normal ad UI appears. If the regular DOM detector
+            confirms an ad soon afterward, that detector takes over. If it does not,
+            the visual block times out and the app restores the source instead of
+            blindly assuming the entire program has become an ad.
+          </p>
+
+          <p class="project-detail-note">
+            It is useful for recurring bumpers and promos, not a magic classifier
+            that understands arbitrary video.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="youtube-heading">
+          <h2 id="youtube-heading">The YouTube side needed to remember where I was</h2>
+
+          <p>
+            The replacement player can use one specific YouTube video, but the more
+            useful mode builds a queue from a channel. My own use case is watching
+            news during Pluto breaks rather than restarting the same clip every time.
+          </p>
+
+          <p>
+            Channel mode discovers videos, filters out unsuitable live/upcoming
+            content, rejects videos below a configurable minimum length, and keeps
+            the queue bounded. When one video finishes, the next becomes current.
+          </p>
+
+          <p>
+            The queue is also saved periodically with the current video and playback
+            position. On a later run, the app can restore a compatible recent queue
+            and continue from roughly where I left off instead of rebuilding the
+            entire viewing state from scratch.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="browser-heading">
+          <h2 id="browser-heading">Browser automation without hijacking my normal browser</h2>
+
+          <p>
+            PlutoAdDetector drives a headed browser through Playwright. Installed
+            Google Chrome is preferred, with Playwright Chromium as a fallback.
+          </p>
+
+          <p>
+            It uses its own persistent browser profile rather than touching my
+            normal Chrome profile. That keeps the automated streaming session
+            separate from ordinary browsing while still allowing the source page to
+            behave like a real interactive browser tab.
+          </p>
+
+          <div
+            class="project-architecture"
+            role="img"
+            aria-label="PlutoAdDetector flow: a Playwright-controlled streaming page is watched by DOM and optional visual detectors. When a break is detected, the source is muted and hidden while a local YouTube IFrame player resumes its saved queue. When the break ends or a visual-only match times out, YouTube pauses and the source is restored.">
+            <div class="project-architecture-row">
+              <div class="project-architecture-box">
+                <strong>Streaming page</strong>
+                <span>Pluto TV · experimental other services</span>
+              </div>
+            </div>
+
+            <span class="project-architecture-arrow" aria-hidden="true">↓</span>
+
+            <div class="project-architecture-row project-architecture-split">
+              <div class="project-architecture-box project-architecture-accent">
+                <strong>DOM detector</strong>
+                <span>known ad UI · preferred path</span>
+              </div>
+
+              <div class="project-architecture-box">
+                <strong>Visual detector</strong>
+                <span>trained recurring bumpers / promos</span>
+              </div>
+            </div>
+
+            <span class="project-architecture-arrow" aria-hidden="true">↓</span>
+
+            <div class="project-architecture-row">
+              <div class="project-architecture-box project-architecture-accent">
+                <strong>Playback coordinator</strong>
+                <span>mute / hide source · resume / pause YouTube</span>
+              </div>
+            </div>
+
+            <span class="project-architecture-arrow" aria-hidden="true">↓</span>
+
+            <div class="project-architecture-row">
+              <div class="project-architecture-box">
+                <strong>YouTube queue</strong>
+                <span>channel discovery · filtering · saved position</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="decisions-heading">
+          <h2 id="decisions-heading">A few decisions that ended up mattering</h2>
+
+          <div class="project-decision-grid">
+            <article class="project-decision-card">
+              <h3>Use the DOM when the DOM already knows</h3>
+              <p>
+                Visual matching is useful, but the cheap service-specific signal
+                stays the primary detector when it is available.
+              </p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>Visual matches expire</h3>
+              <p>
+                A trained bumper can trigger an early switch, but if a real ad does
+                not follow soon enough the app restores normal programming.
+              </p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>Keep browser state isolated</h3>
+              <p>
+                Automation gets its own persistent browser profile instead of
+                borrowing credentials and state from my everyday Chrome profile.
+              </p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>Resume beats restarting</h3>
+              <p>
+                The YouTube side keeps queue and playback state because ad breaks
+                are interruptions, not separate viewing sessions.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="slop-heading">
+          <h2 id="slop-heading">Yes, this one was vibe coded</h2>
+
+          <p>
+            PlutoAdDetector is heavily AI-assisted. So is ReaperShell. I still made
+            the design decisions, tested the behavior, changed the architecture as
+            the project grew, and kept the parts that actually worked.
+          </p>
+
+          <p>
+            The README version is shorter: <strong>AI-assisted slop. Unfortunately,
+            it works.</strong>
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="release-heading">
+          <h2 id="release-heading">It also accidentally became releasable software</h2>
+
+          <p>
+            PlutoAdDetector is the first project in this collection where I have
+            published a compiled application as an actual GitHub Release rather than
+            expecting somebody to clone the repository and build it themselves.
+          </p>
+
+          <p>
+            The Windows release includes the GUI, detector, and .NET runtime. The
+            normal path is intentionally mundane: extract the archive, have Chrome
+            installed, run the GUI, choose the source and YouTube replacement, and
+            press Start.
+          </p>
+
+          <div class="projects-actions">
+            <a
+              href="https://github.com/JoyfulReaper/PlutoAdDetector/releases"
+              class="terminal-btn-inline"
+              target="_blank"
+              rel="noopener noreferrer">
+              GitHub Releases
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="stack-heading">
+          <h2 id="stack-heading">Technology</h2>
+
+          <div class="project-tech-list" aria-label="PlutoAdDetector technology stack">
+            <span>.NET 10</span>
+            <span>WinForms</span>
+            <span>Playwright</span>
+            <span>Google Chrome</span>
+            <span>YouTube IFrame API</span>
+            <span>DOM observation</span>
+            <span>Perceptual fingerprints</span>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="status-heading">
+          <h2 id="status-heading">Current status</h2>
+
+          <p>
+            PlutoAdDetector works for the thing I built it for and I actively use
+            it with Pluto TV. The broader detector has also worked at least
+            partially with Tubi, which makes explicit support for other services
+            plausible if I end up using them enough to care.
+          </p>
+
+          <p>
+            For now it is still an experimental personal tool that happens to be
+            packaged well enough for somebody else to download and try.
+          </p>
+
+          <div class="projects-actions project-detail-footer-actions">
+            <a href="/projects/" class="terminal-btn-inline">
+              <span aria-hidden="true">←</span>
+              Back to projects
+            </a>
+
+            <a
+              href="https://github.com/JoyfulReaper/PlutoAdDetector"
+              class="terminal-btn-inline"
+              target="_blank"
+              rel="noopener noreferrer">
+              Source
+              <span aria-hidden="true">↗</span>
+            </a>
+
+            <a
+              href="https://github.com/JoyfulReaper/PlutoAdDetector/releases"
+              class="terminal-btn-inline"
+              target="_blank"
+              rel="noopener noreferrer">
+              Releases
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="site-footer-links">
+          <span>Also available on:</span>
+          <a href="https://www.kgivler.com/">Clearnet</a>
+          <a href="http://site.ygg.kgivler.com/">Yggdrasil</a>
+          <a href="https://kgivler.dn42/">DN42</a>
+          <a href="http://bmhbwuvcvdof5aenq2ocow4rsqzfwxttdy4o6tbro2kohzxyytfq.b32.i2p/">I2P</a>
+        </div>
+
+        <div class="site-footer-links">
+          <a href="https://github.com/JoyfulReaper/kgivler_com">Project / Source</a>
+        </div>
+
+        <div class="site-footer-links">
+          <span>Network projects:</span>
+          <a href="https://yggdrasil-network.github.io/">Yggdrasil</a>
+          <a href="https://dn42.dev/Home">DN42</a>
+          <a href="https://i2p.net/">I2P</a>
+        </div>
+
+        <div class="site-footer-links">
+          <span>© Kyle Givler</span>
+          <span aria-hidden="true">·</span>
+          <a href="https://dev.kgivler.com/">Development Services</a>
+          <span aria-hidden="true">·</span>
+          <a href="/vps-reviews/">VPS Reviews</a>
+        </div>
+
+        <p class="site-footer-note" data-i2p-note hidden>
+          This is the I2P deployment. Browser assets are local; some optional
+          integrations may be unavailable.
+        </p>
+      </footer>
+    </div>
+
+    <script type="module" src="/js/network-presentation.js"></script>
+  </body>
+</html>
