@@ -70,6 +70,32 @@ function unavailableMessage(error, serviceName) {
     : `${serviceName} is currently unavailable.`;
 }
 
+export async function getNoiseSnapshot() {
+  // Only these origins are allowed by the Observatory's snapshot CORS policy.
+  // Alternate-network deployments must never fall back to a clearnet fetch.
+  if (IS_I2P || !['https://kgivler.com', 'https://www.kgivler.com'].includes(window.location.origin)) {
+    return { ok: false, disabled: true };
+  }
+
+  const controller = new AbortController();
+  // Keep the timeout active through JSON body reading, not just the headers.
+  const timeout = setTimeout(() => controller.abort(), 8000);
+  try {
+    const response = await fetch('https://noise.kgivler.com/api/snapshot', {
+      method: 'GET', mode: 'cors', credentials: 'omit', cache: 'no-store',
+      redirect: 'error', signal: controller.signal,
+    });
+    if (!response.ok) return { ok: false };
+    const snapshot = await response.json();
+    if (!Array.isArray(snapshot?.recentEvents)) return { ok: false };
+    return { ok: true, snapshot };
+  } catch (_) {
+    return { ok: false };
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 function redactPrivateUrls(value) {
   if (typeof value !== "string") return "";
 

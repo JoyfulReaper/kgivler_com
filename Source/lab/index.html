@@ -34,7 +34,7 @@
 
     <link rel="manifest" href="/site.webmanifest" />
 
-    <noscript><style>#host-telemetry, #qotd-output, #recent-git-activity, button, .terminal-input { display: none !important; }</style></noscript>
+    <noscript><style>#host-telemetry, #qotd-output, #recent-git-activity, #noise-events, button, .terminal-input { display: none !important; }</style></noscript>
   </head>
 
   <body class="terminal-theme">
@@ -179,6 +179,24 @@
                 <span>The complete operational catalog includes service purpose, protocol, status, and source links.</span>
                 <a href="/services/" class="terminal-btn-inline text-decoration-none">View Complete Operational Catalog</a>
               </div>
+            </div>
+          </section>
+
+          <hr class="terminal-divider" />
+
+          <section class="my-4" id="noise-section" aria-labelledby="noise-heading">
+            <div class="cmd-line">
+              <span class="prompt">kyle@kgivler:~$</span>
+              <h4 class="widget-command" id="noise-heading">./noise_observatory --recent 5</h4>
+            </div>
+            <p class="widget-state-detail">The latest five sanitized public TCPNoise events. Sources are masked; refreshes every 30 seconds while this tab is visible.</p>
+            <div id="noise-events" class="project-terminal-badge mt-3" role="status" aria-live="polite" aria-atomic="true">
+              <div class="text-warning animate-pulse">Reading the public noise snapshot...</div>
+            </div>
+            <noscript><p class="widget-state-detail">The live preview requires JavaScript. Open Noise Observatory to view its server-rendered snapshot.</p></noscript>
+            <div class="d-flex flex-wrap gap-2 mt-3">
+              <button id="btn-noise-refresh" class="terminal-btn-inline" type="button" aria-controls="noise-events">Refresh Noise</button>
+              <a href="https://noise.kgivler.com/" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer">Open Noise Observatory</a>
             </div>
           </section>
 
@@ -395,6 +413,7 @@
         </div>
       </div>
       <script type="module" src="/js/main.js"></script>
+      <script type="module" src="/js/noise.js?v=1"></script>
     </main>
     <script type="module" src="/js/network-presentation.js"></script>
   </body>
