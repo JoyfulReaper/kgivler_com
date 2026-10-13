@@ -107,11 +107,20 @@
 }
 
 .projects-page.project-detail-page .project-screenshot-mobile {
-    margin: 0;
+    width: 100%;
+    max-width: 280px;
+    margin: 0 auto;
+    justify-self: center;
 }
 
-.projects-page.project-detail-page .project-screenshot-mobile .project-screenshot-placeholder-inner {
-    min-height: 430px;
+.projects-page.project-detail-page .project-screenshot-mobile img {
+    display: block;
+    width: 100%;
+    height: 420px;
+    object-fit: cover;
+    object-position: top;
+    border: 1px solid #27313c;
+    border-radius: 6px;
 }
 
 .projects-page.project-detail-page .project-detail-list {
