@@ -1,0 +1,290 @@
+/* Shared styles for individual project detail pages. */
+
+.projects-page.project-detail-page .project-detail-hero {
+    padding: 4rem 0 0;
+}
+
+.projects-page.project-detail-page .project-detail-hero h1 {
+    margin-bottom: 1rem;
+}
+
+.projects-page.project-detail-page .project-detail-lede {
+    max-width: 72ch;
+    color: #e2e8f0;
+    font-size: 1.05rem;
+    line-height: 1.8;
+    margin-bottom: 1.25rem;
+}
+
+.projects-page.project-detail-page .project-detail-actions {
+    margin-bottom: 1rem;
+}
+
+.projects-page.project-detail-page .project-detail-stack {
+    color: #94a3b8;
+    font-size: 0.8rem;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.projects-page.project-detail-page .project-detail-section {
+    max-width: 820px;
+    margin-top: 3.5rem;
+    scroll-margin-top: 1.5rem;
+}
+
+.projects-page.project-detail-page .project-detail-section h2 {
+    margin-bottom: 1rem;
+}
+
+.projects-page.project-detail-page .project-detail-section > p,
+.projects-page.project-detail-page .project-detail-two-column p,
+.projects-page.project-detail-page .project-decision-card p {
+    color: #cbd5e1;
+    font-size: 0.94rem;
+    line-height: 1.85;
+}
+
+.projects-page.project-detail-page .project-detail-section strong {
+    color: #f8fafc;
+}
+
+.projects-page.project-detail-page .project-detail-note {
+    padding: 1rem 1.1rem;
+    border-left: 3px solid #38bdf8;
+    background: #0c0c0f;
+}
+
+.projects-page.project-detail-page .project-screenshot {
+    margin: 3rem 0 0;
+}
+
+.projects-page.project-detail-page .project-screenshot-placeholder {
+    max-width: 900px;
+}
+
+.projects-page.project-detail-page .project-screenshot-placeholder-inner {
+    min-height: 360px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 2rem;
+    border: 1px dashed #475569;
+    border-radius: 6px;
+    background:
+        linear-gradient(135deg, rgba(56, 189, 248, 0.04), transparent 45%),
+        #0c0c0f;
+    text-align: center;
+}
+
+.projects-page.project-detail-page .project-screenshot-placeholder-inner strong {
+    color: #f8fafc;
+    font-size: 1rem;
+}
+
+.projects-page.project-detail-page .project-screenshot-placeholder-inner > span:last-child {
+    max-width: 58ch;
+    color: #94a3b8;
+    font-size: 0.82rem;
+    line-height: 1.7;
+}
+
+.projects-page.project-detail-page .project-screenshot figcaption {
+    max-width: 78ch;
+    color: #64748b;
+    font-size: 0.75rem;
+    line-height: 1.65;
+    margin-top: 0.65rem;
+}
+
+.projects-page.project-detail-page .project-detail-two-column {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(240px, 0.6fr);
+    gap: 2rem;
+    align-items: start;
+}
+
+.projects-page.project-detail-page .project-screenshot-mobile {
+    margin: 0;
+}
+
+.projects-page.project-detail-page .project-screenshot-mobile .project-screenshot-placeholder-inner {
+    min-height: 430px;
+}
+
+.projects-page.project-detail-page .project-detail-list {
+    margin: 1rem 0 0;
+    padding-left: 1.25rem;
+}
+
+.projects-page.project-detail-page .project-detail-list li {
+    color: #cbd5e1;
+    font-size: 0.88rem;
+    line-height: 1.75;
+    margin-bottom: 0.35rem;
+}
+
+.projects-page.project-detail-page .project-architecture {
+    max-width: 760px;
+    margin: 2rem 0;
+    padding: 1.25rem;
+    border: 1px solid #27313c;
+    border-radius: 6px;
+    background: #09090b;
+}
+
+.projects-page.project-detail-page .project-architecture-row {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.projects-page.project-detail-page .project-architecture-split {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.projects-page.project-detail-page .project-architecture-box {
+    width: 100%;
+    max-width: 320px;
+    padding: 0.85rem 1rem;
+    border: 1px solid #27313c;
+    border-radius: 5px;
+    background: #0c0c0f;
+    text-align: center;
+}
+
+.projects-page.project-detail-page .project-architecture-box strong {
+    display: block;
+    color: #f8fafc;
+    font-size: 0.85rem;
+    margin-bottom: 0.3rem;
+}
+
+.projects-page.project-detail-page .project-architecture-box span {
+    display: block;
+    color: #94a3b8;
+    font-size: 0.72rem;
+    line-height: 1.5;
+}
+
+.projects-page.project-detail-page .project-architecture-accent {
+    border-color: #0e7490;
+    box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.05);
+}
+
+.projects-page.project-detail-page .project-architecture-arrow {
+    display: block;
+    color: #38bdf8;
+    text-align: center;
+    padding: 0.4rem 0;
+}
+
+.projects-page.project-detail-page .project-architecture-divider {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1.2rem 0;
+    color: #64748b;
+    font-size: 0.68rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.projects-page.project-detail-page .project-decision-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.projects-page.project-detail-page .project-decision-card {
+    padding: 1.15rem;
+    border: 1px solid #27313c;
+    border-radius: 5px;
+    background: #0c0c0f;
+}
+
+.projects-page.project-detail-page .project-decision-card h3 {
+    margin-bottom: 0.6rem;
+    font-size: 0.95rem;
+}
+
+.projects-page.project-detail-page .project-decision-card p {
+    margin: 0;
+    color: #94a3b8;
+    font-size: 0.84rem;
+    line-height: 1.75;
+}
+
+.projects-page.project-detail-page .project-tech-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+}
+
+.projects-page.project-detail-page .project-tech-list span {
+    padding: 0.4rem 0.6rem;
+    border: 1px solid #27313c;
+    border-radius: 4px;
+    background: #0c0c0f;
+    color: #cbd5e1;
+    font-size: 0.75rem;
+}
+
+.projects-page.project-detail-page .project-detail-footer-actions {
+    margin-top: 1.5rem;
+}
+
+.projects-page.project-detail-page .site-footer {
+    margin-top: 4rem;
+}
+
+@media (max-width: 800px) {
+    .projects-page.project-detail-page .project-detail-two-column,
+    .projects-page.project-detail-page .project-decision-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .projects-page.project-detail-page .project-screenshot-mobile {
+        max-width: 420px;
+    }
+}
+
+@media (max-width: 576px) {
+    .projects-page.project-detail-page .project-detail-hero {
+        padding-top: 3rem;
+    }
+
+    .projects-page.project-detail-page .project-detail-section {
+        margin-top: 2.75rem;
+    }
+
+    .projects-page.project-detail-page .project-screenshot-placeholder-inner {
+        min-height: 260px;
+        padding: 1.25rem;
+    }
+
+    .projects-page.project-detail-page .project-screenshot-mobile .project-screenshot-placeholder-inner {
+        min-height: 340px;
+    }
+
+    .projects-page.project-detail-page .project-architecture {
+        padding: 0.9rem;
+    }
+
+    .projects-page.project-detail-page .project-architecture-split,
+    .projects-page.project-detail-page .project-architecture-divider {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .projects-page.project-detail-page .project-architecture-divider {
+        display: none;
+    }
+
+    .projects-page.project-detail-page .project-architecture-split .project-architecture-box + .project-architecture-box {
+        margin-top: 0.75rem;
+    }
+}
