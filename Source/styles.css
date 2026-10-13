@@ -1,3 +1,24 @@
+.home-introduction {
+    max-width: 72ch;
+    color: #cbd5e1;
+    line-height: 1.65;
+}
+
+.home-introduction p {
+    margin: 0 0 1rem;
+}
+
+.home-introduction p:last-child {
+    margin-bottom: 0;
+}
+
+.home-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.25rem;
+}
+
 /* Core Terminal Layout */
 body.terminal-theme {
     margin: 0;
