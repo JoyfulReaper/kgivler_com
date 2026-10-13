@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>What Should I Work On Today? | Kyle Givler</title>
+
+    <meta
+      name="description"
+      content="What Should I Work On Today? is Kyle Givler's self-hosted planning tool for choosing useful work based on available energy, effort, priority, neglect, and recent work history." />
+
+    <link rel="canonical" href="https://www.kgivler.com/projects/wsiwot/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Should I Work On Today? | Kyle Givler" />
+    <meta
+      property="og:description"
+      content="A self-hosted priority engine for matching the time and energy I actually have to something worth doing." />
+    <meta property="og:url" content="https://www.kgivler.com/projects/wsiwot/" />
+    <meta property="og:site_name" content="Kyle Givler" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="What Should I Work On Today? | Kyle Givler" />
+    <meta
+      name="twitter:description"
+      content="A self-hosted priority engine for matching the time and energy I actually have to something worth doing." />
+
+    <link
+      href="/vendor/bootstrap-5.3.3/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous" />
+
+    <link
+      rel="stylesheet"
+      href="/vendor/fontawesome-6.5.1/css/all.min.css"
+      integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="/styles.css?v=6" />
+    <link rel="stylesheet" href="../projects.css?v=1" />
+    <link rel="stylesheet" href="../project-detail.css?v=1" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+
+  <body class="terminal-theme projects-page project-detail-page">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <div class="projects-container">
+      <header class="projects-header">
+        <a class="projects-brand" href="/">Kyle Givler<span aria-hidden="true">_</span></a>
+
+        <nav class="terminal-nav" aria-label="Main navigation">
+          <a href="/">Home</a>
+          <a href="/projects/" aria-current="page">Projects</a>
+          <a href="/lab/">Lab</a>
+          <a href="/services/">Systems</a>
+          <a href="/vps-reviews/">VPS Reviews</a>
+          <a href="https://dev.kgivler.com/" class="terminal-nav-primary">Hire Me</a>
+        </nav>
+      </header>
+
+      <main id="main-content">
+        <header class="project-detail-hero">
+          <p class="projects-kicker">
+            <span class="prompt" aria-hidden="true">~/</span>projects/wsiwot
+          </p>
+
+          <h1>What Should I Work On Today?</h1>
+
+          <p class="project-detail-lede">
+            A small self-hosted priority engine for the problem I keep having:
+            I have plenty of things I could work on, but the useful choice depends
+            on how much time, energy, and attention I actually have right now.
+          </p>
+
+          <div class="projects-actions project-detail-actions">
+            <a
+              href="https://github.com/JoyfulReaper/WhatShouldIWorkOnToday"
+              class="terminal-btn-inline"
+              target="_blank"
+              rel="noopener noreferrer">
+              Source
+              <span aria-hidden="true">↗</span>
+            </a>
+
+            <a href="/projects/" class="terminal-btn-inline">
+              Projects
+              <span aria-hidden="true">←</span>
+            </a>
+          </div>
+
+          <p class="project-detail-stack">
+            .NET 10 · ASP.NET Core · Blazor · EF Core · SQLite · GitHub API · Docker
+          </p>
+        </header>
+
+        <section class="project-detail-section" aria-labelledby="why-heading">
+          <h2 id="why-heading">Why I built it</h2>
+
+          <p>
+            I originally built an earlier version of this years ago and found it
+            genuinely useful. Eventually I went back to look at that code, decided
+            I did not want to keep building on it, threw it away, and started over.
+          </p>
+
+          <p>
+            The basic problem had not changed: I have a lot of projects, maintenance
+            work, experiments, and ideas competing for attention. When I finally
+            have some time to work on something, I do not want to spend that time
+            staring at a giant list trying to decide what deserves it.
+          </p>
+
+          <p>
+            The rewrite keeps the useful part of the original idea but makes the
+            chooser more realistic. A task that is technically important is not a
+            useful recommendation if I only have half an hour and enough energy for
+            something small.
+          </p>
+        </section>
+
+        <figure class="project-screenshot">
+          <a
+            href="./images/home.png"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Open full What Should I Work On Today home-page screenshot">
+            <img
+              src="./images/home.png"
+              alt="What Should I Work On Today home page with navigation, project search, and buttons for the chooser and work-item management."
+              loading="lazy"
+              decoding="async" />
+          </a>
+
+          <figcaption>
+            The application is deliberately small and personal: chooser, work notes,
+            work items, search, and the history needed to make better suggestions.
+          </figcaption>
+        </figure>
+
+        <section class="project-detail-section" aria-labelledby="model-heading">
+          <h2 id="model-heading">Work items, todos, and reality</h2>
+
+          <p>
+            The app separates higher-level <strong>work items</strong> from concrete
+            <strong>todos</strong>. A project, maintenance area, learning goal, idea,
+            or external issue can stay around for a long time while the actual next
+            actions change underneath it.
+          </p>
+
+          <p>
+            Todos carry their own energy, effort, and priority. The first version did
+            not have the energy-and-effort model; I added it during the rewrite and
+            kept it because it maps well to how I actually choose work.
+          </p>
+
+          <p>
+            "What is important?" and "what can I realistically do right now?" are
+            separate questions. The chooser uses both.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="chooser-heading">
+          <h2 id="chooser-heading">The chooser</h2>
+
+          <p>
+            The filtered chooser starts with incomplete todos on active work items
+            that fit the selected energy and effort limits. It then ranks them using
+            how long the parent work item has been neglected, plus a small priority
+            bias and some randomness.
+          </p>
+
+          <p>
+            Neglect matters because otherwise the same visible or recently touched
+            projects tend to keep winning. Old work should have a way to resurface
+            before it disappears from my brain completely.
+          </p>
+
+          <p>
+            There is also a separate random pick when I want to stop optimizing and
+            just let chance decide. Priority weighting can be enabled for that mode,
+            but no eligible todo is made impossible to pick.
+          </p>
+        </section>
+
+        <figure class="project-screenshot">
+          <a
+            href="./images/chooser.png"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Open full What Should I Work On Today chooser screenshot">
+            <img
+              src="./images/chooser.png"
+              alt="What Should I Work On Today chooser showing a daily pick, a random pick, energy and effort selectors, priority badges, and work-item history."
+              loading="lazy"
+              decoding="async" />
+          </a>
+
+          <figcaption>
+            The chooser can make a stable daily recommendation, generate a random
+            pick, or select work that fits a specific energy and effort budget.
+          </figcaption>
+        </figure>
+
+        <section class="project-detail-section" aria-labelledby="history-heading">
+          <h2 id="history-heading">Remember what has been ignored</h2>
+
+          <p>
+            Completing work updates the parent work item's last-worked timestamp and
+            records a history entry. I can also record general work with a note even
+            when no specific todo was completed.
+          </p>
+
+          <p>
+            That history is not just a journal. It feeds back into the chooser. A
+            work item that has been sitting untouched for a long time becomes more
+            likely to surface, while something I worked on yesterday does not need
+            to dominate the list just because it is fresh in my head.
+          </p>
+
+          <p class="project-detail-note">
+            The goal is not to build a mathematically perfect task optimizer. It is
+            to stop useful old work from quietly disappearing.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="sync-heading">
+          <h2 id="sync-heading">Git became the integration layer</h2>
+
+          <p>
+            The GitHub sync is one of the most important parts of how I use WSIWOT
+            now. I wanted ChatGPT to be able to interact with the planner through
+            tools I already had available. A direct MCP-style integration was not
+            convenient for this setup, so I used a private GitHub repository instead.
+          </p>
+
+          <p>
+            SQLite remains authoritative. A background worker publishes a sanitized
+            planning snapshot to the private sync repository, while tools can submit
+            tightly constrained command files such as "create todo", "complete todo",
+            or "set priority".
+          </p>
+
+          <p>
+            The worker validates those commands, applies accepted changes to the real
+            database, writes an applied or rejected receipt, and then refreshes the
+            snapshot. The Git repository is a mailbox and state mirror, not a second
+            database.
+          </p>
+
+          <div
+            class="project-architecture"
+            role="img"
+            aria-label="WSIWOT GitHub sync architecture: the WSIWOT application stores authoritative planning data in SQLite. A sync worker publishes a state snapshot to a private GitHub repository. ChatGPT reads that snapshot through the GitHub connector and writes constrained commands to a pending-command mailbox. The worker validates commands, applies accepted changes to SQLite, writes receipts, and republishes the snapshot.">
+            <div class="project-architecture-row">
+              <div class="project-architecture-box project-architecture-accent">
+                <strong>WSIWOT</strong>
+                <span>authoritative application state</span>
+              </div>
+            </div>
+
+            <span class="project-architecture-arrow" aria-hidden="true">↓</span>
+
+            <div class="project-architecture-row">
+              <div class="project-architecture-box">
+                <strong>SQLite</strong>
+                <span>work items · todos · history</span>
+              </div>
+            </div>
+
+            <span class="project-architecture-arrow" aria-hidden="true">↕</span>
+
+            <div class="project-architecture-row">
+              <div class="project-architecture-box project-architecture-accent">
+                <strong>GitHub sync worker</strong>
+                <span>snapshot publisher · command processor</span>
+              </div>
+            </div>
+
+            <span class="project-architecture-arrow" aria-hidden="true">↕</span>
+
+            <div class="project-architecture-row">
+              <div class="project-architecture-box">
+                <strong>Private sync repository</strong>
+                <span>state/snapshot.json · pending commands · receipts</span>
+              </div>
+            </div>
+
+            <span class="project-architecture-arrow" aria-hidden="true">↕</span>
+
+            <div class="project-architecture-row">
+              <div class="project-architecture-box">
+                <strong>ChatGPT + GitHub connector</strong>
+                <span>read state · submit constrained mutations</span>
+              </div>
+            </div>
+          </div>
+
+          <p class="project-detail-note">
+            In practice, this is now the main way I interact with WSIWOT: I can ask
+            ChatGPT what is in the planner, create or reprioritize work, and mark
+            things complete without giving an assistant direct database access.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="decisions-heading">
+          <h2 id="decisions-heading">A few decisions that ended up mattering</h2>
+
+          <div class="project-decision-grid">
+            <article class="project-decision-card">
+              <h3>Neglect is useful signal</h3>
+              <p>
+                Recent work is already easy to remember. The chooser deliberately
+                gives older work a path back into view.
+              </p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>Priority should bias, not dictate</h3>
+              <p>
+                High priority improves a todo's chances, but it does not completely
+                erase energy, effort, neglect, or randomness from the decision.
+              </p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>SQLite stays authoritative</h3>
+              <p>
+                GitHub sync mirrors useful state and carries requested mutations;
+                it does not turn repository JSON into a competing source of truth.
+              </p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>Assistant writes are constrained</h3>
+              <p>
+                The sync protocol exposes specific commands rather than arbitrary
+                database access, making automation useful without making it unlimited.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="api-heading">
+          <h2 id="api-heading">It is useful without the UI too</h2>
+
+          <p>
+            WSIWOT also exposes an authenticated API for reading planning state,
+            creating work items and todos, importing data, and asking for daily or
+            random picks. The deterministic daily pick uses the current date and
+            item identities instead of normal random jitter, so an unchanged planner
+            produces a repeatable recommendation for that day.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="stack-heading">
+          <h2 id="stack-heading">Technology</h2>
+
+          <div class="project-tech-list" aria-label="What Should I Work On Today technology stack">
+            <span>.NET 10</span>
+            <span>ASP.NET Core</span>
+            <span>Blazor Interactive Server</span>
+            <span>Entity Framework Core</span>
+            <span>SQLite</span>
+            <span>GitHub Contents API</span>
+            <span>Docker</span>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="status-heading">
+          <h2 id="status-heading">Current status</h2>
+
+          <p>
+            WSIWOT is an actively used single-user tool rather than a general-purpose
+            project-management product. It exists to make my own pile of projects
+            easier to navigate, and the GitHub bridge has turned it into something I
+            can interact with naturally from ChatGPT as well as from its own UI.
+          </p>
+
+          <div class="projects-actions project-detail-footer-actions">
+            <a href="/projects/" class="terminal-btn-inline">
+              <span aria-hidden="true">←</span>
+              Back to projects
+            </a>
+
+            <a
+              href="https://github.com/JoyfulReaper/WhatShouldIWorkOnToday"
+              class="terminal-btn-inline"
+              target="_blank"
+              rel="noopener noreferrer">
+              Source
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="site-footer-links">
+          <span>Also available on:</span>
+          <a href="https://www.kgivler.com/">Clearnet</a>
+          <a href="http://site.ygg.kgivler.com/">Yggdrasil</a>
+          <a href="https://kgivler.dn42/">DN42</a>
+          <a href="http://bmhbwuvcvdof5aenq2ocow4rsqzfwxttdy4o6tbro2kohzxyytfq.b32.i2p/">I2P</a>
+        </div>
+
+        <div class="site-footer-links">
+          <a href="https://github.com/JoyfulReaper/kgivler_com">Project / Source</a>
+        </div>
+
+        <div class="site-footer-links">
+          <span>Network projects:</span>
+          <a href="https://yggdrasil-network.github.io/">Yggdrasil</a>
+          <a href="https://dn42.dev/Home">DN42</a>
+          <a href="https://i2p.net/">I2P</a>
+        </div>
+
+        <div class="site-footer-links">
+          <span>© Kyle Givler</span>
+          <span aria-hidden="true">·</span>
+          <a href="https://dev.kgivler.com/">Development Services</a>
+          <span aria-hidden="true">·</span>
+          <a href="/vps-reviews/">VPS Reviews</a>
+        </div>
+
+        <p class="site-footer-note" data-i2p-note hidden>
+          This is the I2P deployment. Browser assets are local; some optional
+          integrations may be unavailable.
+        </p>
+      </footer>
+    </div>
+
+    <script type="module" src="/js/network-presentation.js"></script>
+  </body>
+</html>
