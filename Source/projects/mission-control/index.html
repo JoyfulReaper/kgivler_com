@@ -14,23 +14,15 @@
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Mission Control | Kyle Givler" />
-    <meta
-      property="og:description"
-      content="A self-hosted .NET operations system combining centralized event history with live infrastructure monitoring across multiple machines." />
+    <meta property="og:description" content="A self-hosted .NET operations system combining centralized event history with live infrastructure monitoring across multiple machines." />
     <meta property="og:url" content="https://www.kgivler.com/projects/mission-control/" />
     <meta property="og:site_name" content="Kyle Givler" />
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Mission Control | Kyle Givler" />
-    <meta
-      name="twitter:description"
-      content="A self-hosted .NET operations system combining centralized event history with live infrastructure monitoring across multiple machines." />
+    <meta name="twitter:description" content="A self-hosted .NET operations system combining centralized event history with live infrastructure monitoring across multiple machines." />
 
-    <link
-      href="/vendor/bootstrap-5.3.3/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-      crossorigin="anonymous" />
+    <link href="/vendor/bootstrap-5.3.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
 
     <link
       rel="stylesheet"
@@ -54,7 +46,10 @@
 
     <div class="projects-container">
       <header class="projects-header">
-        <a class="projects-brand" href="/">Kyle Givler<span aria-hidden="true">_</span></a>
+        <a class="projects-brand" href="/">
+          Kyle Givler
+          <span aria-hidden="true">_</span>
+        </a>
 
         <nav class="terminal-nav" aria-label="Main navigation">
           <a href="/">Home</a>
@@ -69,33 +64,24 @@
       <main id="main-content">
         <header class="project-detail-hero">
           <p class="projects-kicker">
-            <span class="prompt" aria-hidden="true">~/</span>projects/mission-control
+            <span class="prompt" aria-hidden="true">~/</span>
+            projects/mission-control
           </p>
 
           <h1>Mission Control</h1>
 
           <p class="project-detail-lede">
-            A self-hosted operations system for the services and machines I run:
-            centralized event history, live infrastructure state, service health,
-            Git activity, bandwidth, and the other things I got tired of checking
-            one machine at a time.
+            A self-hosted operations system for the services and machines I run: centralized event history, live infrastructure state, service health, Git activity, bandwidth, and the other things I
+            got tired of checking one machine at a time.
           </p>
 
           <div class="projects-actions project-detail-actions">
-            <a
-              href="https://github.com/JoyfulReaper/MissionControl"
-              class="terminal-btn-inline"
-              target="_blank"
-              rel="noopener noreferrer">
+            <a href="https://github.com/JoyfulReaper/MissionControl" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer">
               Source
               <span aria-hidden="true">↗</span>
             </a>
 
-            <a
-              href="https://github.com/JoyfulReaper/MissionControl/blob/dev/docs/ARCHITECTURE.md"
-              class="terminal-btn-inline"
-              target="_blank"
-              rel="noopener noreferrer">
+            <a href="https://github.com/JoyfulReaper/MissionControl/blob/dev/docs/ARCHITECTURE.md" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer">
               Architecture
               <span aria-hidden="true">↗</span>
             </a>
@@ -106,73 +92,49 @@
             </a>
           </div>
 
-          <p class="project-detail-stack">
-            .NET 10 · ASP.NET Core · Blazor · .NET MAUI · NATS JetStream · SQLite · Docker · Linux
-          </p>
+          <p class="project-detail-stack">.NET 10 · ASP.NET Core · Blazor · .NET MAUI · NATS JetStream · SQLite · Docker · Linux</p>
         </header>
 
         <section class="project-detail-section" aria-labelledby="why-heading">
           <h2 id="why-heading">Why I built it</h2>
 
           <p>
-            Mission Control started because I was tired of tailing logs on
-            different machines whenever I wanted to figure out what one of my
-            services was doing. At a previous job I had worked with a centralized
-            event stream, and I wanted something similar for my own infrastructure:
-            one place where applications could report useful events and I could
-            browse what had happened.
+            Mission Control started because I was tired of tailing logs on different machines whenever I wanted to figure out what one of my services was doing. At a previous job I had worked with a
+            centralized event stream, and I wanted something similar for my own infrastructure: one place where applications could report useful events and I could browse what had happened.
           </p>
 
           <p>
-            The original MVP was deliberately narrow: accept events, store them,
-            and give me a decent event viewer. It was always meant to grow beyond
-            that. Over time it became the place I use for live infrastructure
-            status, Git activity, service health, bandwidth, work planning, and
-            operational history.
+            The original MVP was deliberately narrow: accept events, store them, and give me a decent event viewer. It was always meant to grow beyond that. Over time it became the place I use for
+            live infrastructure status, Git activity, service health, bandwidth, work planning, and operational history.
           </p>
 
-          <p>
-            There was not really a grand product thesis behind it. I wanted this
-            thing, so I built it.
-          </p>
+          <p>There was not really a grand product thesis behind it. I wanted this thing, so I built it.</p>
         </section>
 
-        <figure class="project-screenshot project-screenshot-placeholder">
-          <div class="project-screenshot-placeholder-inner">
-            <span class="projects-kicker">Screenshot slot</span>
-            <strong>Desktop Dashboard — Home or Hosts</strong>
-            <span>
-              Good candidate: a view showing several hosts, status chips, and
-              resource cards without exposing anything private.
-            </span>
-          </div>
-          <figcaption>
-            Mission Control's web Dashboard brings live fleet state and durable
-            operational history into the same interface.
-          </figcaption>
+        <figure class="project-screenshot">
+          <img
+            src="./images/dashboard-overview.png"
+            alt="Mission Control web dashboard showing overview screen."
+            loading="lazy"
+            decoding="async" />
+
+          <figcaption>Mission Control's web Dashboard brings live fleet state and durable operational history into the same interface.</figcaption>
         </figure>
 
         <section class="project-detail-section" aria-labelledby="works-heading">
           <h2 id="works-heading">How it works</h2>
 
+          <p>Mission Control combines two different kinds of operational data instead of forcing everything into one storage model.</p>
+
           <p>
-            Mission Control combines two different kinds of operational data
-            instead of forcing everything into one storage model.
+            <strong>Durable events</strong>
+            enter through the Gateway and flow through NATS JetStream. Independent consumers archive complete event envelopes and build specialized projections such as recent Git activity.
           </p>
 
           <p>
-            <strong>Durable events</strong> enter through the Gateway and flow
-            through NATS JetStream. Independent consumers archive complete event
-            envelopes and build specialized projections such as recent Git
-            activity.
-          </p>
-
-          <p>
-            <strong>Live infrastructure state</strong> stays closer to the
-            machines themselves. An Agent on each monitored node collects host
-            resources, Docker state, disks, and protocol checks, stores its latest
-            snapshot locally, and exposes a sanitized API that the Dashboard
-            queries directly.
+            <strong>Live infrastructure state</strong>
+            stays closer to the machines themselves. An Agent on each monitored node collects host resources, Docker state, disks, and protocol checks, stores its latest snapshot locally, and exposes
+            a sanitized API that the Dashboard queries directly.
           </p>
 
           <div
@@ -248,9 +210,8 @@
           </div>
 
           <p class="project-detail-note">
-            The event and live-state paths meet in the UI, but they deliberately
-            have different sources of truth. An archived Agent event is useful
-            history; it is not treated as the current state of a machine.
+            The event and live-state paths meet in the UI, but they deliberately have different sources of truth. An archived Agent event is useful history; it is not treated as the current state of a
+            machine.
           </p>
         </section>
 
@@ -259,11 +220,7 @@
 
           <div class="project-detail-two-column">
             <div>
-              <p>
-                The Dashboard and mobile app give me one place to check things
-                that otherwise would mean bouncing between logs, SSH sessions,
-                provider dashboards, and individual services.
-              </p>
+              <p>The Dashboard and mobile app give me one place to check things that otherwise would mean bouncing between logs, SSH sessions, provider dashboards, and individual services.</p>
 
               <ul class="project-detail-list">
                 <li>Recent application and infrastructure events</li>
@@ -277,18 +234,10 @@
               </ul>
             </div>
 
-            <figure class="project-screenshot project-screenshot-placeholder project-screenshot-mobile">
-              <div class="project-screenshot-placeholder-inner">
-                <span class="projects-kicker">Screenshot slot</span>
-                <strong>Mission Control Mobile</strong>
-                <span>
-                  Good candidate: Hosts, Services, or Events in portrait orientation.
-                </span>
-              </div>
-              <figcaption>
-                The MAUI app shares much of the same UI and client code as the web
-                Dashboard while keeping backend credentials on the server.
-              </figcaption>
+            <figure class="project-screenshot project-screenshot-mobile">
+              <img src="./images/mobile-events.png" alt="Mission Control mobile app showing event monitoring information." loading="lazy" decoding="async" />
+
+              <figcaption>The MAUI app shares much of the same UI and client code as the web Dashboard while keeping backend credentials on the server.</figcaption>
             </figure>
           </div>
         </section>
@@ -297,27 +246,18 @@
           <h2 id="evolved-heading">How it evolved</h2>
 
           <p>
-            Mission Control started as an event pipeline and viewer, then grew in
-            the direction I actually needed while using it. Agents added current
-            machine and service state. The Dashboard became an authenticated
-            operations workspace. A .NET MAUI app made the same information
-            useful away from a desktop.
+            Mission Control started as an event pipeline and viewer, then grew in the direction I actually needed while using it. Agents added current machine and service state. The Dashboard became
+            an authenticated operations workspace. A .NET MAUI app made the same information useful away from a desktop.
           </p>
 
           <p>
-            The early event pipeline used RabbitMQ. I later moved the messaging
-            layer to NATS JetStream, partly to reduce the resource footprint on
-            shared VPS infrastructure and partly because JetStream fit the event
-            model well: durable consumers, bounded retention, explicit
-            acknowledgements, redelivery behavior, and message de-duplication.
+            The early event pipeline used RabbitMQ. I later moved the messaging layer to NATS JetStream, partly to reduce the resource footprint on shared VPS infrastructure and partly because
+            JetStream fit the event model well: durable consumers, bounded retention, explicit acknowledgements, redelivery behavior, and message de-duplication.
           </p>
 
           <p>
-            It also grew from monitoring a single Agent into a multi-node fleet.
-            The current system treats nodes independently, keeps useful
-            last-known state when a machine or provider is temporarily
-            unavailable, and isolates malformed or failed responses instead of
-            allowing one broken dependency to wipe out the rest of the view.
+            It also grew from monitoring a single Agent into a multi-node fleet. The current system treats nodes independently, keeps useful last-known state when a machine or provider is temporarily
+            unavailable, and isolates malformed or failed responses instead of allowing one broken dependency to wipe out the rest of the view.
           </p>
         </section>
 
@@ -327,38 +267,22 @@
           <div class="project-decision-grid">
             <article class="project-decision-card">
               <h3>Failures stay local</h3>
-              <p>
-                One dead Agent, broken Docker socket, failed protocol probe, or
-                unavailable bandwidth provider should not erase otherwise useful
-                information.
-              </p>
+              <p>One dead Agent, broken Docker socket, failed protocol probe, or unavailable bandwidth provider should not erase otherwise useful information.</p>
             </article>
 
             <article class="project-decision-card">
               <h3>Last-known state beats a blank screen</h3>
-              <p>
-                When a refresh fails, the Dashboard can retain a previously good
-                snapshot and mark it stale instead of pretending the host never
-                existed.
-              </p>
+              <p>When a refresh fails, the Dashboard can retain a previously good snapshot and mark it stale instead of pretending the host never existed.</p>
             </article>
 
             <article class="project-decision-card">
               <h3>Live state and history are different</h3>
-              <p>
-                Agents own current machine state. The event pipeline owns durable
-                history. Mission Control does not need to store every resource
-                sample forever just because it can.
-              </p>
+              <p>Agents own current machine state. The event pipeline owns durable history. Mission Control does not need to store every resource sample forever just because it can.</p>
             </article>
 
             <article class="project-decision-card">
               <h3>Credentials stay behind server boundaries</h3>
-              <p>
-                Mobile talks to the Dashboard rather than carrying credentials
-                for Agents, Archive, Git Activity, bandwidth providers, or work
-                planning integrations.
-              </p>
+              <p>Mobile talks to the Dashboard rather than carrying credentials for Agents, Archive, Git Activity, bandwidth providers, or work planning integrations.</p>
             </article>
           </div>
         </section>
@@ -382,10 +306,8 @@
           <h2 id="status-heading">Current status</h2>
 
           <p>
-            Mission Control is actively deployed and is the operations dashboard
-            I use for my own VPS, home infrastructure, public services, and
-            experiments. It continues to change as I add machines and find new
-            things I would rather not SSH into five servers to check manually.
+            Mission Control is actively deployed and is the operations dashboard I use for my own VPS, home infrastructure, public services, and experiments. It continues to change as I add machines
+            and find new things I would rather not SSH into five servers to check manually.
           </p>
 
           <div class="projects-actions project-detail-footer-actions">
@@ -394,11 +316,7 @@
               Back to projects
             </a>
 
-            <a
-              href="https://github.com/JoyfulReaper/MissionControl"
-              class="terminal-btn-inline"
-              target="_blank"
-              rel="noopener noreferrer">
+            <a href="https://github.com/JoyfulReaper/MissionControl" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer">
               Source
               <span aria-hidden="true">↗</span>
             </a>
@@ -436,23 +354,12 @@
 
         <div class="site-footer-links" data-hosting-promotion hidden>
           <span>VPS hosting I use:</span>
-          <a
-            href="https://greencloudvps.com/billing/aff.php?aff=10295"
-            target="_blank"
-            rel="sponsored noopener noreferrer">
-            GreenCloud VPS
-          </a>
+          <a href="https://greencloudvps.com/billing/aff.php?aff=10295" target="_blank" rel="sponsored noopener noreferrer">GreenCloud VPS</a>
         </div>
 
-        <div class="site-footer-note" data-hosting-promotion hidden>
-          GreenCloud link is an affiliate link — I may earn a commission if you
-          sign up through it.
-        </div>
+        <div class="site-footer-note" data-hosting-promotion hidden>GreenCloud link is an affiliate link — I may earn a commission if you sign up through it.</div>
 
-        <p class="site-footer-note" data-i2p-note hidden>
-          This is the I2P deployment. Browser assets are local; some optional
-          integrations may be unavailable.
-        </p>
+        <p class="site-footer-note" data-i2p-note hidden>This is the I2P deployment. Browser assets are local; some optional integrations may be unavailable.</p>
       </footer>
     </div>
 
