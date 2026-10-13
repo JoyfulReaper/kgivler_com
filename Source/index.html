@@ -170,14 +170,18 @@
         <section class="home-section" id="flagship-projects" aria-labelledby="featured-heading">
           <div class="home-section-heading">
             <h2 id="featured-heading">Featured projects</h2>
-            <p>A few things I’ve built and keep coming back to.</p>
+            <p>A few projects that best represent the kind of software I like to build.</p>
           </div>
+
           <div class="home-project-grid">
             <article class="home-project-card">
               <p class="home-kicker">Infrastructure / applications</p>
               <h3>Mission Control</h3>
-              <p>A home for the events, host status, and diagnostics from my self-hosted services. Agents collect the data; a durable event pipeline makes it useful across web and desktop clients.</p>
-              <p class="home-stack">.NET · NATS JetStream · SQLite · Blazor</p>
+              <p>
+                A self-hosted operations system combining durable event history with live host, container, and protocol monitoring across multiple machines. Agents collect current state while NATS
+                JetStream carries operational events to the archive and shared web/mobile clients.
+              </p>
+              <p class="home-stack">.NET · NATS JetStream · SQLite · Blazor / MAUI</p>
               <div class="home-actions">
                 <a href="https://github.com/JoyfulReaper/MissionControl" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer" aria-label="Mission Control source on GitHub">Source</a>
                 <a
@@ -190,11 +194,15 @@
                 </a>
               </div>
             </article>
+
             <article class="home-project-card">
               <p class="home-kicker">Games / applications</p>
               <h3>Random Steam Game</h3>
-              <p>For when choosing a game takes longer than playing one. Picks from a public Steam library, with unplayed filters, local exclusions, and cached lookups.</p>
-              <p class="home-stack">.NET · Blazor · Steam API · SQLite</p>
+              <p>
+                A fast Steam backlog picker and library exporter built for people with too many games and not enough desire to choose one. It supports unplayed filtering, local exclusions, aggressive
+                caching, and CSV exports with playtime and Steam Deck compatibility.
+              </p>
+              <p class="home-stack">.NET · Blazor · Steam API · HybridCache · SQLite</p>
               <div class="home-actions">
                 <a href="https://randomsteam.kgivler.com/" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer" aria-label="Try Random Steam Game">Live</a>
                 <a href="https://github.com/JoyfulReaper/RandomSteamGame" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer" aria-label="Random Steam Game source on GitHub">
@@ -202,16 +210,32 @@
                 </a>
               </div>
             </article>
+
             <article class="home-project-card">
-              <p class="home-kicker">Networking / protocols</p>
-              <h3>tcpnoise</h3>
+              <p class="home-kicker">Planning / applications</p>
+              <h3>What Should I Work On Today?</h3>
               <p>
-                A small C program that listens on exposed TCP ports and watches the scanners, bots, and strange payloads that arrive. FreeBSD/Linux networking experiments with SQLite/NATS and
-                companion tooling.
+                A self-hosted planning tool for deciding what to work on when time and energy are limited. It filters todos by available energy and effort, then favors useful work based on project
+                neglect and priority instead of always sending me back to whatever I touched most recently.
               </p>
-              <p class="home-stack">C · POSIX sockets · FreeBSD / Linux</p>
+              <p class="home-stack">.NET · Blazor · EF Core · SQLite · GitHub API</p>
               <div class="home-actions">
-                <a href="https://github.com/JoyfulReaper/tcpnoise" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer" aria-label="tcpnoise source on GitHub">Source</a>
+                <a
+                  href="https://github.com/JoyfulReaper/WhatShouldIWorkOnToday"
+                  class="terminal-btn-inline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="What Should I Work On Today source on GitHub">
+                  Source
+                </a>
+                <a
+                  href="https://github.com/JoyfulReaper/WhatShouldIWorkOnToday#chooser-behavior"
+                  class="terminal-btn-inline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="What Should I Work On Today chooser details">
+                  Details
+                </a>
               </div>
             </article>
           </div>
