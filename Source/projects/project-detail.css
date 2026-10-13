@@ -342,3 +342,11 @@
 .projects-page.project-detail-page .project-detail-two-column > * {
     min-width: 0;
 }
+
+.projects-page.project-detail-page .project-screenshot a {
+    display: block;
+}
+
+.projects-page.project-detail-page .project-screenshot img {
+    cursor: zoom-in;
+}
