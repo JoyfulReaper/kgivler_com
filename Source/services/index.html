@@ -248,6 +248,28 @@
         <section class="inventory-section" aria-labelledby="public-services">
           <h2 id="public-services">Public services &amp; protocols</h2>
           <p class="section-description">Applications, protocol services, and supporting infrastructure on the audited systems. These are audited inventory entries, not availability checks. Non-HTTP endpoints need a suitable client.</p>
+          <article class="service-card" data-search="noise observatory tcpnoise nats internet noise network telemetry aspnet asp.net core razor pages dotnet .net 10 dn42 yggdrasil i2p public https">
+            <h3>Noise Observatory <span class="inventory-badge">Public</span> <span class="inventory-badge">HTTPS web application</span></h3>
+            <p>A sanitized live view of unsolicited TCP activity collected by TCPNoise sensors. Also available over DN42, Yggdrasil, and I2P.</p>
+            <div class="systems-actions">
+              <a class="terminal-btn-inline" href="https://noise.kgivler.com/" target="_blank" rel="noopener noreferrer" aria-label="Open Noise Observatory">Open</a>
+              <a class="terminal-btn-inline" href="https://github.com/JoyfulReaper/NoiseObservatory" target="_blank" rel="noopener noreferrer" aria-label="Noise Observatory source on GitHub">Source</a>
+            </div>
+            <details class="network-details">
+              <summary>Technical details and network endpoints</summary>
+              <dl class="host-specs">
+                <div><dt>Tech</dt><dd>ASP.NET Core / Razor Pages / .NET 10</dd></div>
+                <div><dt>Data path</dt><dd>TCPNoise → NATS → sanitized public view</dd></div>
+                <div><dt>Public clearnet hostname</dt><dd><code>noise.kgivler.com</code></dd></div>
+              </dl>
+              <ul class="endpoint-list">
+                <li>Clearnet: <a href="https://noise.kgivler.com/" target="_blank" rel="noopener noreferrer">https://noise.kgivler.com/</a></li>
+                <li>DN42: <a href="https://noise.joyfulreaper.dn42/" target="_blank" rel="noopener noreferrer">https://noise.joyfulreaper.dn42/</a></li>
+                <li>Yggdrasil: <a href="http://noise.ygg.kgivler.com/" target="_blank" rel="noopener noreferrer">http://noise.ygg.kgivler.com/</a></li>
+                <li>I2P: <a href="http://noise.joyfulreaper.i2p/" target="_blank" rel="noopener noreferrer">http://noise.joyfulreaper.i2p/</a></li>
+              </ul>
+            </details>
+          </article>
           <h3 class="inventory-subheading">Clanker</h3>
           <h3 class="inventory-subheading">Web applications <span class="inventory-badge">Public</span></h3>
           <div class="inventory-grid">
