@@ -32,25 +32,29 @@ Prefer short explanations, specific technical details where interesting, plain l
 SEO metadata can be more conventional than visible body copy.
 
 ## Main-site structure
-Target homepage order:
-1. Short human introduction
-2. Prominent workstation/system-status widget
-3. Small Steam presence indicator
-4. Featured projects
-5. Latest blog/devlog posts
-6. Development-services callout linking to `https://dev.kgivler.com/`
-7. Recent/selected projects
-8. Link to `/projects/`
-9. Interactive shell near the bottom
-10. Contact and external links
+The homepage is in a stable enough state that project-detail work should not repeatedly churn it.
 
-The interactive shell should also appear at the bottom of `/lab/`.
+Current homepage progression:
+1. short human introduction / `whoami`
+2. small Steam presence
+3. Featured Projects
+4. infrastructure / hosting Kyle uses
+5. Development Services / Hire Me
+6. current / recent work
+7. Lab teaser
+8. interactive shell
+9. contact / elsewhere
+10. footer
+
+Featured Projects are Mission Control, Random Steam Game, and What Should I Work On Today?.
 
 Do not let the homepage become a full operations dashboard. Detailed live widgets belong on `/lab/`.
 
+The interactive shell should also appear at the bottom of `/lab/`.
+
 ## Lab
 `/lab/` is the home for larger live/experimental features:
-- detailed workstation telemetry
+- detailed host telemetry
 - Random Steam demo
 - service/system status views
 - QOTD
@@ -60,24 +64,53 @@ Do not let the homepage become a full operations dashboard. Detailed live widget
 - the interactive shell at the bottom
 
 ## Projects
-Use `/projects/` as a curated project directory with clean URLs such as:
+Use `/projects/` as a curated project directory, not a repository dump.
+
+Clean project-detail routes include:
 - `/projects/mission-control/`
 - `/projects/random-steam/`
+- `/projects/wsiwot/`
 - `/projects/reapershell/`
 - `/projects/tcpnoise/`
 
-Do not dump every tutorial, fork, scratchpad, archive, or abandoned experiment onto the public project directory.
+Project detail pages should be human-facing case studies, not README copies. Reuse `Source/projects/project-detail.css` where practical, but do not force every project into identical headings or structure.
+
+Completed detail pages on `dev`:
+- Mission Control
+- Random Steam Game
+- What Should I Work On Today?
+
+Rough next-page order:
+1. DN42Atlas
+2. tcpnoise / Noise Observatory as one combined page
+3. ReaperShell
+4. PlutoAdDetector
+5. Random GitHub
+6. SmolSearch
+7. Happy protocol projects as one combined page
+8. RimWorld modding as one combined page
+
+Build and review project detail pages one by one. Do not keep editing the `/projects/` index merely to add one new detail link after each page. After the planned detail-page batch is complete, do one catalog cleanup pass that adds `Details →` links and other needed index changes.
+
+Mycelium belongs in the curated Networking / protocols catalog once that index pass happens, but it should not get a detail page yet. Wait for a stronger completed vertical slice such as recursive crawling, a second protocol, or behavioral protocol recognition.
+
+Do not add planning-stage projects simply because repositories exist. Internet Noise FM, ShareShit, HappyPortal, and B.L.O.A.T. should be reconsidered when they have useful implemented behavior.
+
+Leave the dedicated DN42 / Yggdrasil infrastructure case study until late in the project-page pass. Review the Systems page first and revisit the case study after the planned clearnet-facing peering / DN42-mirror presentation work.
+
+Consolidate related work when that tells a clearer story:
+- tcpnoise + Noise Observatory
+- Happy protocol servers
+- RimWorld modding
+
+Do not dump tutorials, forks, scratchpads, archives, learning repos, landing-page repos, or abandoned experiments into the public project directory.
 
 ## Blog
-The planned canonical blog location is `https://kgivler.com/blog/`.
+Blogging remains a future decision.
 
-Use Markdown as the authoring format.
+Do not add Blog navigation, empty Latest Writing sections, or a publishing system before there is actual content and an implementation decision.
 
-A small .NET server-rendered app is acceptable, but avoid browser WYSIWYG editors, JavaScript editing interfaces, a database unless truly needed, login/admin systems just to publish posts, and a separate API unless justified.
-
-Posts should have stable URLs, dates, metadata, RSS, and sitemap coverage.
-
-If `blog.kgivler.com` is used, prefer redirecting it to `https://kgivler.com/blog/` rather than maintaining a second canonical copy.
+If blogging proceeds, `https://kgivler.com/blog/` is a useful candidate canonical location. Stable URLs, dates, metadata, RSS, and sitemap coverage would be useful. Avoid CMS complexity, browser WYSIWYG editors, login/admin systems, databases, or separate APIs without a real need.
 
 ## Development services
 `dev.kgivler.com` is intentionally visually separate from the main site.
@@ -86,13 +119,10 @@ It should:
 - use a light, conventional, professional visual style
 - identify the service provider as Kyle Givler
 - avoid fake-company branding
-- use LinkedIn as the initial primary contact path
-- avoid publishing fixed prices until pricing is deliberately worked out
 - communicate breadth without becoming an unreadable list
+- avoid publishing invented legal, tax, licensing, SLA, or business terms
 
-Potential service areas include websites, custom .NET/backend applications, APIs and small services, integrations and automation, Docker/VPS/self-hosting help, debugging/code review, programming mentoring, and smaller or discounted non-commercial/community work.
-
-Do not imply legal, tax, licensing, SLA, or business terms that have not been deliberately decided.
+Do not opportunistically redesign `dev.kgivler.com` while working on main-site project pages.
 
 ## Service inventory
 The operational service catalog must not treat Mission Control Agent availability as the source of truth for whether a service exists.
