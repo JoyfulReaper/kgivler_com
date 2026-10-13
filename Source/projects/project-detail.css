@@ -317,20 +317,25 @@
    clicking opens the full screenshot. */
 .projects-page.project-detail-page .project-screenshot-mobile {
     width: 100%;
-    max-width: 280px;
+    max-width: 220px;
     margin: 0 auto;
     justify-self: center;
+    align-self: start;
 }
 
 .projects-page.project-detail-page .project-screenshot-mobile img {
     display: block;
-    width: 100%;
-    max-width: 280px;
-    height: 420px;
+    width: 220px;
+    max-width: 100%;
+    height: 300px;
     object-fit: cover;
     object-position: top;
     border: 1px solid #27313c;
     border-radius: 6px;
+}
+
+.projects-page.project-detail-page .project-screenshot-mobile figcaption {
+    max-width: 220px;
 }
 
 /* Prevent grid children from forcing the page wider than the viewport. */
