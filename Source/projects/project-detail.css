@@ -101,7 +101,7 @@
 
 .projects-page.project-detail-page .project-detail-two-column {
     display: grid;
-    grid-template-columns: minmax(0, 1.4fr) minmax(240px, 0.6fr);
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 320px);
     gap: 2rem;
     align-items: start;
 }
@@ -287,4 +287,39 @@
     .projects-page.project-detail-page .project-architecture-split .project-architecture-box + .project-architecture-box {
         margin-top: 0.75rem;
     }
+}
+
+/* Real project screenshots must never expand the document width. */
+.projects-page.project-detail-page .project-screenshot {
+    width: 100%;
+    max-width: 900px;
+}
+
+.projects-page.project-detail-page .project-screenshot img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #27313c;
+    border-radius: 6px;
+}
+
+/* Portrait/mobile screenshots should stay phone-sized. */
+.projects-page.project-detail-page .project-screenshot-mobile {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+    justify-self: center;
+}
+
+.projects-page.project-detail-page .project-screenshot-mobile img {
+    display: block;
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+}
+
+/* Prevent grid children from forcing the page wider than the viewport. */
+.projects-page.project-detail-page .project-detail-two-column > * {
+    min-width: 0;
 }
