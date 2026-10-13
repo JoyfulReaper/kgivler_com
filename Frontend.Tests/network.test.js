@@ -19,7 +19,7 @@ const routes = {
   ygg: ['http://api.ygg.kgivler.com', 'https://steam.ygg.kgivler.com', 'http://qotd.ygg.kgivler.com'],
   dn42: ['https://api.kgivler.dn42', 'https://randomsteam.dn42', 'https://qotd.kgivler.dn42'],
   local: ['http://localhost:5081', 'http://localhost:5182', 'http://localhost:5269'],
-  i2p: [null, 'http://randomsteam.i2p', null],
+  i2p: ['http://i3orcbjjienp2x53tplvjozico73xfhcelqr3lzav5yu5wghk4hq.b32.i2p', 'http://randomsteam.i2p', null],
 };
 const hosts = [
   ['localhost', 'local'],
@@ -58,16 +58,16 @@ test('I2P suffix boundaries do not misclassify clearnet hosts', () => {
   }
 });
 
-test('explicitly enabling the I2P site API leaves other service routes unchanged', () => {
-  const enabledServices = { ...config.I2P_SERVICES, SITE_API: 'http://api.kgivler.i2p' };
-  assert.deepEqual(config.getApiConfig('kgivler.i2p', enabledServices), {
+test('overriding the I2P site API leaves other service routes unchanged', () => {
+  const overriddenServices = { ...config.I2P_SERVICES, SITE_API: 'http://api.kgivler.i2p' };
+  assert.deepEqual(config.getApiConfig('kgivler.i2p', overriddenServices), {
     SERVICES: 'http://api.kgivler.i2p', TELEMETRY: 'http://api.kgivler.i2p', GIT_ACTIVITY: 'http://api.kgivler.i2p',
     STEAM: 'http://randomsteam.i2p', QOTD: null,
   });
   for (const [hostname, network] of hosts.filter(([, network]) => network !== 'i2p')) {
-    assert.deepEqual(config.getApiConfig(hostname, enabledServices), config.getApiConfig(hostname), network);
+    assert.deepEqual(config.getApiConfig(hostname, overriddenServices), config.getApiConfig(hostname), network);
   }
-  assert.equal(config.I2P_SERVICES.SITE_API, null);
+  assert.equal(config.I2P_SERVICES.SITE_API, routes.i2p[0]);
   assert.ok(Object.isFrozen(config.I2P_SERVICES));
 });
 
@@ -109,9 +109,9 @@ function terminal() {
   return { errors, output, loadingText() {}, errorText(text) { errors.push(text); }, printTrustedHtml(text) { output.push(text); } };
 }
 
-test('default disabled I2P site API and QOTD make zero requests, including retries', async (t) => {
+test('explicitly disabled I2P site API and QOTD make zero requests, including retries', async (t) => {
   const fetch = t.mock.method(globalThis, 'fetch', async () => { throw new Error('Unexpected fetch'); });
-  const api = await apiFor('kgivler.i2p');
+  const api = await apiFor('kgivler.i2p', { ...config.I2P_SERVICES, SITE_API: null, QOTD: null });
   for (let attempt = 0; attempt < 2; attempt++) {
     await assertSiteUnavailable(api);
     assert.deepEqual(await api.getQuoteOfTheDay(), {
