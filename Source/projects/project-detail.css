@@ -313,10 +313,11 @@
     border-radius: 6px;
 }
 
-/* Portrait/mobile screenshots should stay phone-sized. */
+/* Portrait/mobile screenshots use a cropped preview;
+   clicking opens the full screenshot. */
 .projects-page.project-detail-page .project-screenshot-mobile {
     width: 100%;
-    max-width: 320px;
+    max-width: 280px;
     margin: 0 auto;
     justify-self: center;
 }
@@ -324,8 +325,12 @@
 .projects-page.project-detail-page .project-screenshot-mobile img {
     display: block;
     width: 100%;
-    max-width: 320px;
-    height: auto;
+    max-width: 280px;
+    height: 420px;
+    object-fit: cover;
+    object-position: top;
+    border: 1px solid #27313c;
+    border-radius: 6px;
 }
 
 /* Prevent grid children from forcing the page wider than the viewport. */
