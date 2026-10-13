@@ -31,10 +31,7 @@
             "url": "https://www.kgivler.com/",
             "jobTitle": "Software Developer",
             "description": "Software developer focused on backend and systems-oriented .NET development.",
-            "sameAs": [
-              "https://github.com/JoyfulReaper",
-              "https://www.linkedin.com/in/kyle-givler/"
-            ]
+            "sameAs": ["https://github.com/JoyfulReaper", "https://www.linkedin.com/in/kyle-givler/"]
           },
           {
             "@type": "WebSite",
@@ -65,7 +62,12 @@
 
     <link href="/vendor/bootstrap-5.3.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
 
-    <link rel="stylesheet" href="/vendor/fontawesome-6.5.1/css/all.min.css" integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link
+      rel="stylesheet"
+      href="/vendor/fontawesome-6.5.1/css/all.min.css"
+      integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer" />
 
     <link rel="stylesheet" href="styles.css?v=6" />
     <link rel="stylesheet" href="home.css?v=1" />
@@ -78,7 +80,15 @@
 
     <link rel="manifest" href="/site.webmanifest" />
 
-    <noscript><style>#steam-presence, #btn-steam-refresh, #terminalCommandInput { display: none !important; }</style></noscript>
+    <noscript>
+      <style>
+        #steam-presence,
+        #btn-steam-refresh,
+        #terminalCommandInput {
+          display: none !important;
+        }
+      </style>
+    </noscript>
   </head>
 
   <body class="terminal-theme home-page">
@@ -86,7 +96,10 @@
 
     <div class="home-container">
       <header class="home-header">
-        <a class="home-brand" href="/">Kyle Givler<span aria-hidden="true">_</span></a>
+        <a class="home-brand" href="/">
+          Kyle Givler
+          <span aria-hidden="true">_</span>
+        </a>
         <nav class="terminal-nav" aria-label="Main navigation">
           <a href="/" aria-current="page">Home</a>
           <a href="/projects/">Projects</a>
@@ -99,12 +112,35 @@
 
       <main id="main-content">
         <section class="home-hero" aria-labelledby="about-heading">
-          <p class="home-kicker"><span class="prompt" aria-hidden="true">$</span> whoami</p>
+          <p class="home-kicker">
+            <span class="prompt" aria-hidden="true">$</span>
+            whoami
+          </p>
+
           <h1 id="about-heading">Kyle Givler</h1>
-          <p class="home-introduction">I’m a software developer interested in backend systems, self-hosting, networking, weird Internet protocols, developer tools, and game modding.</p>
-          <p class="home-hero-note">Mostly .NET, usually something running on Linux, occasionally something that probably didn’t need to be a server.</p>
+
+          <div class="home-introduction">
+            <p>I’m Kyle, a software developer who likes understanding how things work, fixing things that don’t, and building software that’s useful without being needlessly complicated.</p>
+
+            <p>
+              Most of my work is backend-focused and built with C#/.NET, usually running on Linux somewhere I manage myself. I spend a lot of time on APIs, self-hosted services, developer tools,
+              networking, observability, and the occasional bit of code archaeology.
+            </p>
+
+            <p>
+              I’m also drawn to the older and stranger parts of computing: Gopher, Gemini, old Internet protocols, alternative networks like DN42 and Yggdrasil, and learning lower-level Unix and C
+              along the way. When I’m not doing that, I occasionally disappear into game modding or some small experiment that started with “I wonder if this would work.”
+            </p>
+
+            <p>This site is part portfolio, part workshop, and part record of whatever I’m currently building, running, breaking, or figuring out.</p>
+          </div>
+
           <div class="home-actions">
-            <a href="https://github.com/JoyfulReaper" class="terminal-btn" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+            <a href="https://github.com/JoyfulReaper" class="terminal-btn" target="_blank" rel="noopener noreferrer">
+              GitHub
+              <span aria-hidden="true">↗</span>
+            </a>
+
             <a href="/projects/" class="terminal-btn-inline">Projects</a>
             <a href="https://dev.kgivler.com/" class="terminal-btn-inline">Hire Me</a>
           </div>
@@ -113,7 +149,10 @@
         <section class="home-presence" aria-labelledby="steam-heading">
           <div class="home-presence-label">
             <h2 id="steam-heading">What is Kyle doing?</h2>
-            <span class="home-kicker"><i class="fab fa-steam" aria-hidden="true"></i> Steam</span>
+            <span class="home-kicker">
+              <i class="fab fa-steam" aria-hidden="true"></i>
+              Steam
+            </span>
           </div>
           <div id="steam-presence" role="status" aria-live="polite" aria-atomic="true">
             <div class="text-warning animate-pulse">Checking Steam presence...</div>
@@ -121,7 +160,10 @@
           <noscript><p class="widget-state-detail">Live Steam presence requires JavaScript. My Steam profile is still available.</p></noscript>
           <div class="home-presence-actions">
             <button id="btn-steam-refresh" class="terminal-btn-inline" type="button" aria-controls="steam-presence">Refresh Steam</button>
-            <a href="https://steamcommunity.com/id/Mister_God/" target="_blank" rel="noopener noreferrer">Profile <span aria-hidden="true">↗</span></a>
+            <a href="https://steamcommunity.com/id/Mister_God/" target="_blank" rel="noopener noreferrer">
+              Profile
+              <span aria-hidden="true">↗</span>
+            </a>
           </div>
         </section>
 
@@ -138,7 +180,14 @@
               <p class="home-stack">.NET · NATS JetStream · SQLite · Blazor</p>
               <div class="home-actions">
                 <a href="https://github.com/JoyfulReaper/MissionControl" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer" aria-label="Mission Control source on GitHub">Source</a>
-                <a href="https://github.com/JoyfulReaper/MissionControl#data-flow" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer" aria-label="Mission Control architecture details">Details</a>
+                <a
+                  href="https://github.com/JoyfulReaper/MissionControl#data-flow"
+                  class="terminal-btn-inline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Mission Control architecture details">
+                  Details
+                </a>
               </div>
             </article>
             <article class="home-project-card">
@@ -148,13 +197,18 @@
               <p class="home-stack">.NET · Blazor · Steam API · SQLite</p>
               <div class="home-actions">
                 <a href="https://randomsteam.kgivler.com/" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer" aria-label="Try Random Steam Game">Live</a>
-                <a href="https://github.com/JoyfulReaper/RandomSteamGame" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer" aria-label="Random Steam Game source on GitHub">Source</a>
+                <a href="https://github.com/JoyfulReaper/RandomSteamGame" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer" aria-label="Random Steam Game source on GitHub">
+                  Source
+                </a>
               </div>
             </article>
             <article class="home-project-card">
               <p class="home-kicker">Networking / protocols</p>
               <h3>tcpnoise</h3>
-              <p>A small C program that listens on exposed TCP ports and watches the scanners, bots, and strange payloads that arrive. FreeBSD/Linux networking experiments with SQLite/NATS and companion tooling.</p>
+              <p>
+                A small C program that listens on exposed TCP ports and watches the scanners, bots, and strange payloads that arrive. FreeBSD/Linux networking experiments with SQLite/NATS and
+                companion tooling.
+              </p>
               <p class="home-stack">C · POSIX sockets · FreeBSD / Linux</p>
               <div class="home-actions">
                 <a href="https://github.com/JoyfulReaper/tcpnoise" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer" aria-label="tcpnoise source on GitHub">Source</a>
@@ -165,10 +219,19 @@
 
         <section class="home-section home-hosting" id="infrastructure" aria-labelledby="infrastructure-heading" data-hosting-promotion hidden>
           <h2 id="infrastructure-heading">Infrastructure I use</h2>
-          <p>I use GreenCloud VPS for several of my public services and project infrastructure, including Mission Control, Random Steam Game, and the Happy protocol services. Their pricing has made it practical for me to keep public services and networking experiments running without spending a pile of money on infrastructure.</p>
+          <p>
+            I use GreenCloud VPS for several of my public services and project infrastructure, including Mission Control, Random Steam Game, and the Happy protocol services. Their pricing has made it
+            practical for me to keep public services and networking experiments running without spending a pile of money on infrastructure.
+          </p>
           <div class="home-actions">
-            <a href="https://greencloudvps.com/billing/aff.php?aff=10295" class="terminal-btn-inline" target="_blank" rel="sponsored noopener noreferrer">GreenCloud VPS <span aria-hidden="true">↗</span></a>
-            <a href="/vps-reviews/" class="terminal-btn-inline">My VPS reviews <span aria-hidden="true">→</span></a>
+            <a href="https://greencloudvps.com/billing/aff.php?aff=10295" class="terminal-btn-inline" target="_blank" rel="sponsored noopener noreferrer">
+              GreenCloud VPS
+              <span aria-hidden="true">↗</span>
+            </a>
+            <a href="/vps-reviews/" class="terminal-btn-inline">
+              My VPS reviews
+              <span aria-hidden="true">→</span>
+            </a>
           </div>
           <p class="affiliate-disclosure">The GreenCloud link is an affiliate link. I may earn a commission if you sign up through it.</p>
         </section>
@@ -180,7 +243,10 @@
             <h2 id="hire-heading">Have something you need built?</h2>
             <p>I also do paid development and deployment work: .NET, APIs, Linux/VPS deployment, Docker, self-hosting, and infrastructure.</p>
           </div>
-          <a href="https://dev.kgivler.com/" class="terminal-btn-inline">Development Services <span aria-hidden="true">→</span></a>
+          <a href="https://dev.kgivler.com/" class="terminal-btn-inline">
+            Development Services
+            <span aria-hidden="true">→</span>
+          </a>
         </section>
 
         <section class="home-section" id="recent-projects" aria-labelledby="recent-heading">
@@ -192,42 +258,69 @@
             <article class="home-work-row">
               <h3>ReaperShell</h3>
               <p>An experimental .NET shell with command packs you can rebuild and reload while you work.</p>
-              <a href="https://github.com/JoyfulReaper/ReaperShell" target="_blank" rel="noopener noreferrer" aria-label="ReaperShell source on GitHub">Source <span aria-hidden="true">↗</span></a>
+              <a href="https://github.com/JoyfulReaper/ReaperShell" target="_blank" rel="noopener noreferrer" aria-label="ReaperShell source on GitHub">
+                Source
+                <span aria-hidden="true">↗</span>
+              </a>
             </article>
             <article class="home-work-row">
               <h3>What Should I Work On Today?</h3>
               <p>A task picker for too many projects: what’s been neglected, and what do I have the energy for?</p>
-              <a href="https://github.com/JoyfulReaper/WhatShouldIWorkOnToday" target="_blank" rel="noopener noreferrer" aria-label="What Should I Work On Today source on GitHub">Source <span aria-hidden="true">↗</span></a>
+              <a href="https://github.com/JoyfulReaper/WhatShouldIWorkOnToday" target="_blank" rel="noopener noreferrer" aria-label="What Should I Work On Today source on GitHub">
+                Source
+                <span aria-hidden="true">↗</span>
+              </a>
             </article>
             <article class="home-work-row">
               <h3>HappyGopher / HappyGemini</h3>
               <p>.NET servers for the small web, with static content, dynamic pages, and plugins.</p>
               <div class="home-work-links">
-                <a href="https://github.com/JoyfulReaper/HappyGopher" target="_blank" rel="noopener noreferrer">Gopher <span aria-hidden="true">↗</span></a>
-                <a href="https://github.com/JoyfulReaper/HappyGemini" target="_blank" rel="noopener noreferrer">Gemini <span aria-hidden="true">↗</span></a>
+                <a href="https://github.com/JoyfulReaper/HappyGopher" target="_blank" rel="noopener noreferrer">
+                  Gopher
+                  <span aria-hidden="true">↗</span>
+                </a>
+                <a href="https://github.com/JoyfulReaper/HappyGemini" target="_blank" rel="noopener noreferrer">
+                  Gemini
+                  <span aria-hidden="true">↗</span>
+                </a>
               </div>
             </article>
             <article class="home-work-row">
               <h3>DN42 / Yggdrasil</h3>
               <p>Routing, overlay networks, and finding more ways to put services on the Internet.</p>
-              <a href="/services/">Systems <span aria-hidden="true">→</span></a>
+              <a href="/services/">
+                Systems
+                <span aria-hidden="true">→</span>
+              </a>
             </article>
             <article class="home-work-row">
               <h3>RimWorld modding</h3>
               <p>Performance work, quality-of-life mods, and occasional interference with the colony’s gods.</p>
-              <a href="https://steamcommunity.com/id/Mister_God/myworkshopfiles/?appid=294100" target="_blank" rel="noopener noreferrer">Workshop <span aria-hidden="true">↗</span></a>
+              <a href="https://steamcommunity.com/id/Mister_God/myworkshopfiles/?appid=294100" target="_blank" rel="noopener noreferrer">
+                Workshop
+                <span aria-hidden="true">↗</span>
+              </a>
             </article>
           </div>
         </section>
 
         <section class="home-section home-lab-teaser" id="live-systems-lab" aria-labelledby="lab-heading">
           <div>
-            <p class="home-kicker"><span class="prompt" aria-hidden="true">~/</span>lab</p>
+            <p class="home-kicker">
+              <span class="prompt" aria-hidden="true">~/</span>
+              lab
+            </p>
             <h2 id="lab-heading">The Lab</h2>
             <p>Live telemetry, weird protocols, demos, BBS, Internet noise, and questionable experiments.</p>
-            <p><a href="https://noise.kgivler.com/" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer">Noise Observatory</a> — A live, sanitized view of unsolicited TCP traffic observed across my network sensors.</p>
+            <p>
+              <a href="https://noise.kgivler.com/" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer">Noise Observatory</a>
+              — A live, sanitized view of unsolicited TCP traffic observed across my network sensors.
+            </p>
           </div>
-          <a href="/lab/" class="terminal-btn-inline">Enter the Lab <span aria-hidden="true">→</span></a>
+          <a href="/lab/" class="terminal-btn-inline">
+            Enter the Lab
+            <span aria-hidden="true">→</span>
+          </a>
         </section>
 
         <section class="home-section terminal-window" id="interactive-shell" aria-labelledby="interactive-shell-heading">
@@ -240,7 +333,11 @@
           <div class="terminal-body interactive-shell">
             <div class="interactive-shell-intro">
               <h2 id="interactive-shell-heading">./interactive_shell.sh</h2>
-              <p>This fake shell is an optional interactive feature. Type <code>help</code> to explore commands, including the visitor BBS.</p>
+              <p>
+                This fake shell is an optional interactive feature. Type
+                <code>help</code>
+                to explore commands, including the visitor BBS.
+              </p>
             </div>
             <noscript><p class="widget-state-detail">Terminal commands require JavaScript. The rest of this page and its links are available in static mode.</p></noscript>
             <div class="cmd-line">
@@ -264,39 +361,36 @@
         </section>
       </main>
 
-          <footer class="site-footer">
-            <div class="site-footer-links">
-              <span>Also available on:</span>
-              <a href="https://www.kgivler.com/">Clearnet</a>
-              <a href="http://site.ygg.kgivler.com/">Yggdrasil</a>
-              <a href="https://kgivler.dn42/">DN42</a>
-              <a href="http://bmhbwuvcvdof5aenq2ocow4rsqzfwxttdy4o6tbro2kohzxyytfq.b32.i2p/">I2P</a>
-            </div>
-            <div class="site-footer-links">
-              <a href="https://github.com/JoyfulReaper/kgivler_com">Project / Source</a>
-            </div>
-            <div class="site-footer-links">
-              <span>Network projects:</span>
-              <a href="https://yggdrasil-network.github.io/">Yggdrasil</a>
-              <a href="https://dn42.dev/Home">DN42</a>
-              <a href="https://i2p.net/">I2P</a>
-            </div>
-            <div class="site-footer-links">
-              <span>© Kyle Givler</span>
-              <span aria-hidden="true">·</span>
-              <a href="https://dev.kgivler.com/">Development Services</a>
-              <span aria-hidden="true">·</span>
-              <a href="/vps-reviews/">VPS Reviews</a>
-            </div>
-            <div class="site-footer-links" data-hosting-promotion hidden>
-              <span>VPS hosting I use:</span>
-              <a href="https://greencloudvps.com/billing/aff.php?aff=10295" target="_blank" rel="sponsored noopener noreferrer">GreenCloud VPS</a>
-            </div>
-            <div class="site-footer-note" data-hosting-promotion hidden>
-              GreenCloud link is an affiliate link — I may earn a commission
-              if you sign up through it.
-            </div>
-          </footer>
+      <footer class="site-footer">
+        <div class="site-footer-links">
+          <span>Also available on:</span>
+          <a href="https://www.kgivler.com/">Clearnet</a>
+          <a href="http://site.ygg.kgivler.com/">Yggdrasil</a>
+          <a href="https://kgivler.dn42/">DN42</a>
+          <a href="http://bmhbwuvcvdof5aenq2ocow4rsqzfwxttdy4o6tbro2kohzxyytfq.b32.i2p/">I2P</a>
+        </div>
+        <div class="site-footer-links">
+          <a href="https://github.com/JoyfulReaper/kgivler_com">Project / Source</a>
+        </div>
+        <div class="site-footer-links">
+          <span>Network projects:</span>
+          <a href="https://yggdrasil-network.github.io/">Yggdrasil</a>
+          <a href="https://dn42.dev/Home">DN42</a>
+          <a href="https://i2p.net/">I2P</a>
+        </div>
+        <div class="site-footer-links">
+          <span>© Kyle Givler</span>
+          <span aria-hidden="true">·</span>
+          <a href="https://dev.kgivler.com/">Development Services</a>
+          <span aria-hidden="true">·</span>
+          <a href="/vps-reviews/">VPS Reviews</a>
+        </div>
+        <div class="site-footer-links" data-hosting-promotion hidden>
+          <span>VPS hosting I use:</span>
+          <a href="https://greencloudvps.com/billing/aff.php?aff=10295" target="_blank" rel="sponsored noopener noreferrer">GreenCloud VPS</a>
+        </div>
+        <div class="site-footer-note" data-hosting-promotion hidden>GreenCloud link is an affiliate link — I may earn a commission if you sign up through it.</div>
+      </footer>
     </div>
     <script type="module" src="./js/main.js"></script>
     <script type="module" src="/js/network-presentation.js"></script>
