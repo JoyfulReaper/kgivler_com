@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Happy Protocols | Kyle Givler</title>
+
+    <meta
+      name="description"
+      content="The Happy Protocols are Kyle Givler's collection of real .NET implementations of Gopher, Gemini, Finger, Echo, Discard, Daytime, Quote of the Day, and Time, including public services on classic protocol ports." />
+
+    <link rel="canonical" href="https://www.kgivler.com/projects/happy-protocols/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Happy Protocols | Kyle Givler" />
+    <meta
+      property="og:description"
+      content="A collection of real Gopher, Gemini, Finger, Echo, Discard, Daytime, QOTD, and Time services built mostly because old Internet protocols are fun when they actually run." />
+    <meta property="og:url" content="https://www.kgivler.com/projects/happy-protocols/" />
+    <meta property="og:site_name" content="Kyle Givler" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Happy Protocols | Kyle Givler" />
+    <meta
+      name="twitter:description"
+      content="Real implementations of old and small Internet protocols, running on the ports they were actually assigned." />
+
+    <link
+      href="/vendor/bootstrap-5.3.3/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous" />
+
+    <link
+      rel="stylesheet"
+      href="/vendor/fontawesome-6.5.1/css/all.min.css"
+      integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="/styles.css?v=6" />
+    <link rel="stylesheet" href="../projects.css?v=1" />
+    <link rel="stylesheet" href="../project-detail.css?v=1" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+
+  <body class="terminal-theme projects-page project-detail-page">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <div class="projects-container">
+      <header class="projects-header">
+        <a class="projects-brand" href="/">Kyle Givler<span aria-hidden="true">_</span></a>
+
+        <nav class="terminal-nav" aria-label="Main navigation">
+          <a href="/">Home</a>
+          <a href="/projects/" aria-current="page">Projects</a>
+          <a href="/lab/">Lab</a>
+          <a href="/services/">Systems</a>
+          <a href="/vps-reviews/">VPS Reviews</a>
+          <a href="https://dev.kgivler.com/" class="terminal-nav-primary">Hire Me</a>
+        </nav>
+      </header>
+
+      <main id="main-content">
+        <header class="project-detail-hero">
+          <p class="projects-kicker">
+            <span class="prompt" aria-hidden="true">~/</span>projects/happy-protocols
+          </p>
+
+          <h1>Happy Protocols</h1>
+
+          <p class="project-detail-lede">
+            A collection of Gopher, Gemini, Finger, Echo, Discard, Daytime,
+            Quote of the Day, and Time servers that started with one Gopher hole
+            and somehow ended with me running real old Internet services on their
+            real assigned ports like a maniac.
+          </p>
+
+          <div class="projects-actions project-detail-actions">
+            <a
+              href="https://github.com/JoyfulReaper/HappyGopher"
+              class="terminal-btn-inline"
+              target="_blank"
+              rel="noopener noreferrer">
+              HappyGopher
+              <span aria-hidden="true">↗</span>
+            </a>
+
+            <a
+              href="https://github.com/JoyfulReaper/HappyGemini"
+              class="terminal-btn-inline"
+              target="_blank"
+              rel="noopener noreferrer">
+              HappyGemini
+              <span aria-hidden="true">↗</span>
+            </a>
+
+            <a href="/projects/" class="terminal-btn-inline">
+              Projects
+              <span aria-hidden="true">←</span>
+            </a>
+          </div>
+
+          <p class="project-detail-stack">
+            .NET 10 · TCP / UDP · TLS · Gopher · Gemini · classic RFC protocols · Docker
+          </p>
+        </header>
+
+        <section class="project-detail-section" aria-labelledby="start-heading">
+          <h2 id="start-heading">It started with Gopher</h2>
+
+          <p>
+            I do not remember exactly how I wandered into Gopher, but Gopher was
+            the thing that started all of this. I built HappyGopher, put an actual
+            Gopher site on the Internet, and discovered that implementing old
+            protocols is much more fun when the result is a real service instead
+            of a localhost demo you throw away afterward.
+          </p>
+
+          <p>
+            Gemini came up in the same small-web spaces, so naturally I had to try
+            that too. After that the question gradually stopped being "why would I
+            implement another obsolete or tiny protocol?" and became "well, why
+            wouldn't I?"
+          </p>
+
+          <p>
+            Somewhere along the way the <strong>Happy</strong> prefix stuck, and
+            separate experiments turned into a loose family of protocol servers.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="ports-heading">
+          <h2 id="ports-heading">Real protocols on real ports</h2>
+
+          <p>
+            Part of the appeal is that these are not just protocol-shaped unit
+            tests. Several of them are publicly reachable services, and the
+            implementations use the ports the protocols were actually assigned.
+          </p>
+
+          <div class="project-decision-grid">
+            <article class="project-decision-card">
+              <h3>Echo · port 7</h3>
+              <p>
+                TCP and UDP. Send bytes, get exactly those bytes back. There is a
+                real Echo server on the real Echo port because apparently that is
+                the sort of infrastructure I operate now.
+              </p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>Discard · port 9</h3>
+              <p>
+                TCP and optional UDP. Send bytes and receive the satisfaction of
+                knowing that they were professionally thrown away.
+              </p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>Daytime · port 13</h3>
+              <p>
+                RFC 867 over TCP and UDP. Ask for the time and get one readable
+                UTC timestamp back.
+              </p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>QOTD · port 17</h3>
+              <p>
+                Quote of the Day over TCP and UDP, backed by the same daily quote
+                data used by its small HTTP API.
+              </p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>Time · port 37</h3>
+              <p>
+                RFC 868 over TCP and UDP. Four big-endian bytes containing the
+                number of seconds since January 1, 1900. Yes, it wraps in 2036.
+              </p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>Finger · port 79</h3>
+              <p>
+                Plain-text public records, a traditional <code>.plan</code>, and
+                some deliberately non-traditional integrations.
+              </p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>Gopher · port 70</h3>
+              <p>
+                Static content, menus, dynamic pages, search/input selectors,
+                plugins, and the Gopher hole that started the whole mess.
+              </p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>Gemini · port 1965</h3>
+              <p>
+                TLS, virtual hosts, static Gemtext and files, dynamic pages, SNI,
+                and external page plugins.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="gopher-heading">
+          <h2 id="gopher-heading">Gopher became more than a toy server</h2>
+
+          <p>
+            HappyGopher can serve plain files, generated directory menus, custom
+            <code>gophermap</code> files, images and binary downloads, but the part
+            that made it interesting was adding compiled dynamic pages.
+          </p>
+
+          <p>
+            Dynamic selectors can implement things such as server time, Quote of
+            the Day, random quotes, search-style input, and a guestbook while still
+            speaking ordinary Gopher to the client. External page plugins can add
+            more selectors without being compiled into the host application.
+          </p>
+
+          <p>
+            The public Gopher hole at <code>gopher.kgivler.com</code> is the
+            practical test bed. It is intentionally phone-friendly, mostly plain
+            text, and weird enough to justify keeping a Gopher client installed.
+          </p>
+
+          <div class="projects-actions">
+            <a
+              href="gopher://gopher.kgivler.com/"
+              class="terminal-btn-inline">
+              gopher.kgivler.com
+              <span aria-hidden="true">↗</span>
+            </a>
+
+            <a
+              href="https://github.com/JoyfulReaper/HappyGopher"
+              class="terminal-btn-inline"
+              target="_blank"
+              rel="noopener noreferrer">
+              HappyGopher source
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="gemini-heading">
+          <h2 id="gemini-heading">Gemini was the obvious next rabbit hole</h2>
+
+          <p>
+            Gemini showed up in the same small-web conversations as Gopher, so I
+            checked it out and ended up writing HappyGemini.
+          </p>
+
+          <p>
+            The protocol is still small, but TLS makes the server architecture
+            meaningfully different. HappyGemini handles TLS 1.2/1.3, SNI,
+            certificate selection, virtual hosts, strict request parsing, static
+            content, dynamic pages, and per-plugin assembly loading.
+          </p>
+
+          <p>
+            That makes Gopher and Gemini useful bookends for the collection:
+            Gopher is wonderfully bare TCP and tab-separated menus; Gemini stays
+            intentionally small while still bringing certificates, host routing,
+            status codes, and TLS into the picture.
+          </p>
+
+          <div class="projects-actions">
+            <a
+              href="https://github.com/JoyfulReaper/HappyGemini"
+              class="terminal-btn-inline"
+              target="_blank"
+              rel="noopener noreferrer">
+              HappyGemini source
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="shared-heading">
+          <h2 id="shared-heading">Eventually I stopped rewriting the same TCP server</h2>
+
+          <p>
+            The first few services each had slightly different versions of the
+            same infrastructure: bind a listener, limit concurrent connections,
+            handle cancellation, time out bad clients, shut down cleanly, wire in
+            dependency injection, and try not to invent a new bug in every repo.
+          </p>
+
+          <p>
+            That drift was getting silly, so the common server behavior moved into
+            <code>JoyfulReaperLib.TcpServer</code>. The shared host provides bounded,
+            dependency-injected TCP server infrastructure while each Happy service
+            keeps the protocol-specific part small.
+          </p>
+
+          <p>
+            It simplified the individual projects and, more importantly, made fixes
+            to the boring networking machinery apply consistently instead of
+            requiring the same repair in a pile of nearly-identical listeners.
+          </p>
+
+          <div
+            class="project-architecture"
+            role="img"
+            aria-label="Happy Protocol architecture: several small protocol applications use shared JoyfulReaperLib TCP server infrastructure for listener hosting, connection limits, dependency injection, timeouts, and shutdown. Each application implements its own protocol behavior, and some also add UDP handling, Mission Control telemetry, storage, TLS, dynamic pages, or plugins.">
+            <div class="project-architecture-row">
+              <div class="project-architecture-box project-architecture-accent">
+                <strong>JoyfulReaperLib.TcpServer</strong>
+                <span>listener host · bounds · DI · cancellation · shutdown</span>
+              </div>
+            </div>
+
+            <span class="project-architecture-arrow" aria-hidden="true">↓</span>
+
+            <div class="project-architecture-row project-architecture-split">
+              <div class="project-architecture-box">
+                <strong>Tiny RFC services</strong>
+                <span>Echo · Discard · Daytime · QOTD · Time</span>
+              </div>
+
+              <div class="project-architecture-box">
+                <strong>Interactive services</strong>
+                <span>Finger · Gopher · Gemini</span>
+              </div>
+            </div>
+
+            <span class="project-architecture-arrow" aria-hidden="true">↓</span>
+
+            <div class="project-architecture-row project-architecture-split">
+              <div class="project-architecture-box">
+                <strong>Optional extras</strong>
+                <span>UDP · TLS · SQLite · plugins · APIs</span>
+              </div>
+
+              <div class="project-architecture-box">
+                <strong>Operations</strong>
+                <span>Docker · Mission Control · health monitoring</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="finger-heading">
+          <h2 id="finger-heading">Finger got weird in a different direction</h2>
+
+          <p>
+            HappyFinger is still recognizable as a Finger server: send a small
+            query and receive a plain-text record. It serves a public directory,
+            profile/project/service records, and a traditional <code>.plan</code>
+            file for the <code>now</code> record.
+          </p>
+
+          <p>
+            It also has the most ridiculous integration in the family. Query it
+            with a public 17-digit Steam ID and HappyFinger calls Random Steam Game
+            and returns a randomly selected game from that person's public library.
+          </p>
+
+          <p>
+            That feature has almost nothing to do with the historical purpose of
+            Finger, which is precisely why I like it.
+          </p>
+
+          <pre><code>finger 10000000000000000@finger.kgivler.com</code></pre>
+
+          <p>
+            Finger could still use more love, but it is already a nice example of
+            taking an old protocol seriously enough to implement it correctly and
+            not seriously enough to leave it alone.
+          </p>
+
+          <div class="projects-actions">
+            <a
+              href="https://github.com/JoyfulReaper/HappyFinger"
+              class="terminal-btn-inline"
+              target="_blank"
+              rel="noopener noreferrer">
+              HappyFinger source
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="modern-heading">
+          <h2 id="modern-heading">Old protocols, modern operational habits</h2>
+
+          <p>
+            I do not treat "the RFC is from the 1980s" as an excuse to make the
+            server sloppy. The implementations use explicit byte/request limits,
+            connection timeouts, bounded concurrency, graceful shutdown, IPv4/IPv6
+            support where appropriate, and tests around the wire behavior.
+          </p>
+
+          <p>
+            Several of the services also publish best-effort events into Mission
+            Control, but protocol payloads stay out of telemetry when they do not
+            belong there. HappyEcho, for example, returns bytes unchanged without
+            decoding, storing, logging, or publishing the echoed content. Discard
+            accepts bytes and throws them away just as aggressively.
+          </p>
+
+          <p>
+            That mix is part of the fun: the protocol might be tiny enough to fit
+            on a page, while the implementation still gets the same operational
+            care I would give a modern network service.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="try-heading">
+          <h2 id="try-heading">A few of them are actually out there</h2>
+
+          <p>
+            Some of the family can be reached directly on their classic ports.
+            Depending on your client tools, examples include:
+          </p>
+
+          <pre><code>curl.exe gopher://gopher.kgivler.com/
+finger kyle@finger.kgivler.com
+nc qotd.kgivler.com 17
+nc echo.kgivler.com 7
+nc discard.kgivler.com 9</code></pre>
+
+          <p class="project-detail-note">
+            Running a real Echo server on TCP port 7 is objectively unnecessary.
+            This has not stopped me.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="repos-heading">
+          <h2 id="repos-heading">The family</h2>
+
+          <div class="project-decision-grid">
+            <article class="project-decision-card">
+              <h3>HappyGopher</h3>
+              <p>Gopher server, Gopher hole, dynamic selectors, plugins, and guestbook.</p>
+              <p><a href="https://github.com/JoyfulReaper/HappyGopher">Source ↗</a></p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>HappyGemini</h3>
+              <p>TLS Gemini server with virtual hosts, static content, pages, and plugins.</p>
+              <p><a href="https://github.com/JoyfulReaper/HappyGemini">Source ↗</a></p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>HappyFinger</h3>
+              <p>Finger records, <code>.plan</code>, and Random Steam Game integration.</p>
+              <p><a href="https://github.com/JoyfulReaper/HappyFinger">Source ↗</a></p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>HappyEcho</h3>
+              <p>RFC-style TCP/UDP byte echoing on the classic Echo service.</p>
+              <p><a href="https://github.com/JoyfulReaper/HappyEcho">Source ↗</a></p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>HappyDiscard</h3>
+              <p>A carefully engineered service whose main feature is deleting your bytes.</p>
+              <p><a href="https://github.com/JoyfulReaper/HappyDiscard">Source ↗</a></p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>HappyDaytime</h3>
+              <p>RFC 867 readable UTC time over TCP and UDP.</p>
+              <p><a href="https://github.com/JoyfulReaper/HappyDaytime">Source ↗</a></p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>HappyQOTD</h3>
+              <p>Quote of the Day over TCP/UDP plus a small shared HTTP API.</p>
+              <p><a href="https://github.com/JoyfulReaper/HappyQOTD">Source ↗</a></p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>HappyTime</h3>
+              <p>RFC 868's delightfully inconvenient four-byte time format.</p>
+              <p><a href="https://github.com/JoyfulReaper/HappyTime">Source ↗</a></p>
+            </article>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="stack-heading">
+          <h2 id="stack-heading">Technology</h2>
+
+          <div class="project-tech-list" aria-label="Happy Protocols technology stack">
+            <span>.NET 10</span>
+            <span>C#</span>
+            <span>TCP</span>
+            <span>UDP</span>
+            <span>TLS</span>
+            <span>JoyfulReaperLib.TcpServer</span>
+            <span>Native AOT</span>
+            <span>Docker</span>
+            <span>Mission Control</span>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="status-heading">
+          <h2 id="status-heading">Current status</h2>
+
+          <p>
+            This is not one product with a roadmap. It is a collection that grows
+            when I run into another protocol that looks fun enough to implement.
+            Gopher and Gemini are the richer servers; the smaller RFC services are
+            useful little laboratories for network behavior and shared server code.
+          </p>
+
+          <p>
+            I may add more eventually. The selection criterion is not complicated:
+            if an old or unusual protocol makes me think "I should run one of
+            those," that is usually enough.
+          </p>
+
+          <div class="projects-actions project-detail-footer-actions">
+            <a href="/projects/" class="terminal-btn-inline">
+              <span aria-hidden="true">←</span>
+              Back to projects
+            </a>
+
+            <a
+              href="https://github.com/JoyfulReaper/HappyGopher"
+              class="terminal-btn-inline"
+              target="_blank"
+              rel="noopener noreferrer">
+              HappyGopher
+              <span aria-hidden="true">↗</span>
+            </a>
+
+            <a
+              href="https://github.com/JoyfulReaper/HappyGemini"
+              class="terminal-btn-inline"
+              target="_blank"
+              rel="noopener noreferrer">
+              HappyGemini
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="site-footer-links">
+          <span>Also available on:</span>
+          <a href="https://www.kgivler.com/">Clearnet</a>
+          <a href="http://site.ygg.kgivler.com/">Yggdrasil</a>
+          <a href="https://kgivler.dn42/">DN42</a>
+          <a href="http://bmhbwuvcvdof5aenq2ocow4rsqzfwxttdy4o6tbro2kohzxyytfq.b32.i2p/">I2P</a>
+        </div>
+
+        <div class="site-footer-links">
+          <a href="https://github.com/JoyfulReaper/kgivler_com">Project / Source</a>
+        </div>
+
+        <div class="site-footer-links">
+          <span>Network projects:</span>
+          <a href="https://yggdrasil-network.github.io/">Yggdrasil</a>
+          <a href="https://dn42.dev/Home">DN42</a>
+          <a href="https://i2p.net/">I2P</a>
+        </div>
+
+        <div class="site-footer-links">
+          <span>© Kyle Givler</span>
+          <span aria-hidden="true">·</span>
+          <a href="https://dev.kgivler.com/">Development Services</a>
+          <span aria-hidden="true">·</span>
+          <a href="/vps-reviews/">VPS Reviews</a>
+        </div>
+
+        <p class="site-footer-note" data-i2p-note hidden>
+          This is the I2P deployment. Browser assets are local; some optional
+          integrations may be unavailable.
+        </p>
+      </footer>
+    </div>
+
+    <script type="module" src="/js/network-presentation.js"></script>
+  </body>
+</html>
