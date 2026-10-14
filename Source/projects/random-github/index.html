@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Random GitHub | Kyle Givler</title>
+
+    <meta
+      name="description"
+      content="Random GitHub is Kyle Givler's web app for stumbling into random public GitHub repositories, with README rendering, fork filtering, pooled API access, optional personal tokens, and lightweight usage statistics." />
+
+    <link rel="canonical" href="https://www.kgivler.com/projects/random-github/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Random GitHub | Kyle Givler" />
+    <meta
+      property="og:description"
+      content="A small web app for stumbling into random corners of GitHub you probably had no reason to ever find." />
+    <meta property="og:url" content="https://www.kgivler.com/projects/random-github/" />
+    <meta property="og:site_name" content="Kyle Givler" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Random GitHub | Kyle Givler" />
+    <meta
+      name="twitter:description"
+      content="A web app for finding random public GitHub repositories, rendered READMEs included." />
+
+    <link
+      href="/vendor/bootstrap-5.3.3/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous" />
+
+    <link
+      rel="stylesheet"
+      href="/vendor/fontawesome-6.5.1/css/all.min.css"
+      integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="/styles.css?v=6" />
+    <link rel="stylesheet" href="../projects.css?v=1" />
+    <link rel="stylesheet" href="../project-detail.css?v=1" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+
+  <body class="terminal-theme projects-page project-detail-page">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <div class="projects-container">
+      <header class="projects-header">
+        <a class="projects-brand" href="/">Kyle Givler<span aria-hidden="true">_</span></a>
+
+        <nav class="terminal-nav" aria-label="Main navigation">
+          <a href="/">Home</a>
+          <a href="/projects/" aria-current="page">Projects</a>
+          <a href="/lab/">Lab</a>
+          <a href="/services/">Systems</a>
+          <a href="/vps-reviews/">VPS Reviews</a>
+          <a href="https://dev.kgivler.com/" class="terminal-nav-primary">Hire Me</a>
+        </nav>
+      </header>
+
+      <main id="main-content">
+        <header class="project-detail-hero">
+          <p class="projects-kicker">
+            <span class="prompt" aria-hidden="true">~/</span>projects/random-github
+          </p>
+
+          <h1>Random GitHub</h1>
+
+          <p class="project-detail-lede">
+            A small web app for stumbling into random public GitHub repositories
+            and seeing whatever strange, empty, useful, abandoned, or mildly cursed
+            thing happens to be there.
+          </p>
+
+          <div class="projects-actions project-detail-actions">
+            <a
+              href="https://randomgit.kgivler.com/"
+              class="terminal-btn-inline"
+              target="_blank"
+              rel="noopener noreferrer">
+              Live
+              <span aria-hidden="true">↗</span>
+            </a>
+
+            <a
+              href="https://github.com/JoyfulReaper/Random_Github"
+              class="terminal-btn-inline"
+              target="_blank"
+              rel="noopener noreferrer">
+              Source
+              <span aria-hidden="true">↗</span>
+            </a>
+
+            <a href="/projects/" class="terminal-btn-inline">
+              Projects
+              <span aria-hidden="true">←</span>
+            </a>
+          </div>
+
+          <p class="project-detail-stack">
+            .NET 10 · ASP.NET Core Razor Pages · GitHub REST API · SQLite · HTML sanitization
+          </p>
+        </header>
+
+        <section class="project-detail-section" aria-labelledby="why-heading">
+          <h2 id="why-heading">Why I built it</h2>
+
+          <p>
+            The first version was a little project from 2021 based on a simple
+            question: if I could jump to random public GitHub repositories, would I
+            ever stumble into something genuinely interesting that I would never
+            have searched for?
+          </p>
+
+          <p>
+            The answer is occasionally yes. The more common answers are empty repos,
+            abandoned experiments, generated junk, and various forms of Git abuse.
+            That is still part of the fun.
+          </p>
+
+          <p>
+            Years later the idea still seemed amusing, and it made more sense as a
+            web app than the original project ever did. So I revived it as a small
+            public site instead of leaving it as an old curiosity.
+          </p>
+        </section>
+
+        <figure class="project-screenshot">
+          <a
+            href="./images/random-repository.png"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Open full Random GitHub screenshot">
+            <img
+              src="./images/random-repository.png"
+              alt="Random GitHub showing a randomly selected public repository, repository metadata, rendered README, public usage statistics, and an optional personal GitHub token form."
+              loading="lazy"
+              decoding="async" />
+          </a>
+
+          <figcaption>
+            A random pick includes enough repository metadata and README content to
+            tell whether the result is interesting, abandoned, empty, or just weird.
+          </figcaption>
+        </figure>
+
+        <section class="project-detail-section" aria-labelledby="random-heading">
+          <h2 id="random-heading">Random enough</h2>
+
+          <p>
+            GitHub does not provide a convenient "give me one random repository"
+            endpoint. Random GitHub instead chooses repository IDs across a
+            configured range and asks GitHub for public repositories after those
+            positions.
+          </p>
+
+          <p>
+            Several API batches are mixed into an in-memory pool, de-duplicated,
+            shuffled, and then served from that pool. As it drains, the application
+            occasionally refills it rather than making another GitHub API request
+            for every click.
+          </p>
+
+          <p>
+            It is not mathematically uniform across every repository on GitHub.
+            Repository IDs have gaps, which introduces some bias. For this project,
+            that is fine. The goal is discovery, not cryptographic repository
+            roulette.
+          </p>
+
+          <p class="project-detail-note">
+            It is random enough that I still find plenty of empty repositories and
+            Git abuse, so the spirit of the experiment appears intact.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="readme-heading">
+          <h2 id="readme-heading">A repository name usually is not enough</h2>
+
+          <p>
+            The selected repository page shows the obvious metadata — language,
+            stars, forks, creation and update dates — but the README is usually the
+            part that tells you what you actually found.
+          </p>
+
+          <p>
+            Random GitHub fetches the repository README when one is available,
+            renders it, sanitizes the resulting HTML, and displays it directly on
+            the result page. That makes a random pick useful without immediately
+            sending the visitor back out to GitHub just to understand the project.
+          </p>
+
+          <p>
+            Forks can also be skipped when I want a better chance of landing on
+            something that is at least pretending to be its own project.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="token-heading">
+          <h2 id="token-heading">If my GitHub allowance runs out, bring your own</h2>
+
+          <p>
+            The site normally uses a shared GitHub API token. That makes the normal
+            experience frictionless, but it also means every visitor ultimately
+            shares the same API allowance.
+          </p>
+
+          <p>
+            If that allowance is exhausted, a visitor can optionally provide a
+            fine-grained GitHub personal access token that only needs public
+            repository access. The token is kept in the server-side ASP.NET Core
+            session and is not persisted as normal application data.
+          </p>
+
+          <p>
+            That keeps the site usable without turning "the shared token hit its
+            limit" into a site-wide outage, while avoiding any need for GitHub
+            account sign-in or broader permissions.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="stats-heading">
+          <h2 id="stats-heading">I also wanted to know if anybody uses it</h2>
+
+          <p>
+            Random GitHub keeps a small amount of public usage data: total visits,
+            unique visitors, and the number of random repositories served.
+          </p>
+
+          <p>
+            Mission Control telemetry can also record successful repository picks,
+            but it does not send raw visitor IP addresses. When visitor correlation
+            is enabled, the normalized address is converted into an HMAC-based
+            identifier using a server-side secret before it leaves the application.
+          </p>
+
+          <p>
+            That gives me enough information to answer the useful question —
+            "is anybody actually using this?" — without turning a silly random-repo
+            site into a raw-IP analytics database.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="self-heading">
+          <h2 id="self-heading">The statistically rude easter egg</h2>
+
+          <p>
+            If Random GitHub naturally selects its own repository, the application
+            records a special self-pick event.
+          </p>
+
+          <p>
+            It does not cheat. There is no increased weighting and no secret branch
+            that forces the joke. Random GitHub has to genuinely stumble into itself.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="architecture-heading">
+          <h2 id="architecture-heading">Keeping API calls off the hot path</h2>
+
+          <p>
+            The selection pool is the main thing that keeps the experience from
+            becoming "click button, wait on GitHub, repeat." A pick usually comes
+            from already-fetched repository metadata, while refills happen
+            separately as the pool gets smaller.
+          </p>
+
+          <div
+            class="project-architecture"
+            role="img"
+            aria-label="Random GitHub flow: the application requests public repository batches from the GitHub API using random repository ID positions, de-duplicates and shuffles them into an in-memory pool, serves random picks from that pool, fetches repository details and README content, sanitizes the README, and renders the result page.">
+            <div class="project-architecture-row">
+              <div class="project-architecture-box">
+                <strong>Random repository ID positions</strong>
+                <span>seed public repository batches</span>
+              </div>
+            </div>
+
+            <span class="project-architecture-arrow" aria-hidden="true">↓</span>
+
+            <div class="project-architecture-row">
+              <div class="project-architecture-box project-architecture-accent">
+                <strong>GitHub REST API</strong>
+                <span>shared token or optional visitor token</span>
+              </div>
+            </div>
+
+            <span class="project-architecture-arrow" aria-hidden="true">↓</span>
+
+            <div class="project-architecture-row">
+              <div class="project-architecture-box">
+                <strong>In-memory pool</strong>
+                <span>de-duplicate · shuffle · refill over time</span>
+              </div>
+            </div>
+
+            <span class="project-architecture-arrow" aria-hidden="true">↓</span>
+
+            <div class="project-architecture-row project-architecture-split">
+              <div class="project-architecture-box">
+                <strong>Repository metadata</strong>
+                <span>language · stars · forks · dates</span>
+              </div>
+
+              <div class="project-architecture-box">
+                <strong>README</strong>
+                <span>fetch · render · sanitize</span>
+              </div>
+            </div>
+
+            <span class="project-architecture-arrow" aria-hidden="true">↓</span>
+
+            <div class="project-architecture-row">
+              <div class="project-architecture-box project-architecture-accent">
+                <strong>Random result page</strong>
+                <span>something you probably had no reason to find</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="decisions-heading">
+          <h2 id="decisions-heading">A few decisions that ended up mattering</h2>
+
+          <div class="project-decision-grid">
+            <article class="project-decision-card">
+              <h3>Do not call GitHub on every click</h3>
+              <p>
+                The shuffled repository pool keeps most picks cheap and reduces
+                pressure on the shared API allowance.
+              </p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>README HTML is untrusted</h3>
+              <p>
+                Repository README content is rendered for convenience but sanitized
+                before being placed into the site.
+              </p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>Personal tokens stay server-side</h3>
+              <p>
+                A visitor can use their own GitHub allowance without the token
+                becoming normal persisted application data.
+              </p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>Good enough randomness is good enough</h3>
+              <p>
+                The picker is intentionally biased by GitHub's ID space. Interesting
+                discovery matters more here than theoretical uniformity.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="stack-heading">
+          <h2 id="stack-heading">Technology</h2>
+
+          <div class="project-tech-list" aria-label="Random GitHub technology stack">
+            <span>.NET 10</span>
+            <span>ASP.NET Core Razor Pages</span>
+            <span>GitHub REST API</span>
+            <span>SQLite</span>
+            <span>ASP.NET Core session</span>
+            <span>HTML sanitization</span>
+            <span>Mission Control telemetry</span>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="status-heading">
+          <h2 id="status-heading">Current status</h2>
+
+          <p>
+            Random GitHub is deployed and basically does what I wanted it to do.
+            Unless it breaks, it may stay exactly this small.
+          </p>
+
+          <p>
+            I could imagine improving the randomness or adding more discovery
+            filters such as topics someday, but that is firmly in the
+            "if I get very bored" category.
+          </p>
+
+          <div class="projects-actions project-detail-footer-actions">
+            <a href="/projects/" class="terminal-btn-inline">
+              <span aria-hidden="true">←</span>
+              Back to projects
+            </a>
+
+            <a
+              href="https://randomgit.kgivler.com/"
+              class="terminal-btn-inline"
+              target="_blank"
+              rel="noopener noreferrer">
+              Try it
+              <span aria-hidden="true">↗</span>
+            </a>
+
+            <a
+              href="https://github.com/JoyfulReaper/Random_Github"
+              class="terminal-btn-inline"
+              target="_blank"
+              rel="noopener noreferrer">
+              Source
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="site-footer-links">
+          <span>Also available on:</span>
+          <a href="https://www.kgivler.com/">Clearnet</a>
+          <a href="http://site.ygg.kgivler.com/">Yggdrasil</a>
+          <a href="https://kgivler.dn42/">DN42</a>
+          <a href="http://bmhbwuvcvdof5aenq2ocow4rsqzfwxttdy4o6tbro2kohzxyytfq.b32.i2p/">I2P</a>
+        </div>
+
+        <div class="site-footer-links">
+          <a href="https://github.com/JoyfulReaper/kgivler_com">Project / Source</a>
+        </div>
+
+        <div class="site-footer-links">
+          <span>Network projects:</span>
+          <a href="https://yggdrasil-network.github.io/">Yggdrasil</a>
+          <a href="https://dn42.dev/Home">DN42</a>
+          <a href="https://i2p.net/">I2P</a>
+        </div>
+
+        <div class="site-footer-links">
+          <span>© Kyle Givler</span>
+          <span aria-hidden="true">·</span>
+          <a href="https://dev.kgivler.com/">Development Services</a>
+          <span aria-hidden="true">·</span>
+          <a href="/vps-reviews/">VPS Reviews</a>
+        </div>
+
+        <p class="site-footer-note" data-i2p-note hidden>
+          This is the I2P deployment. Browser assets are local; some optional
+          integrations may be unavailable.
+        </p>
+      </footer>
+    </div>
+
+    <script type="module" src="/js/network-presentation.js"></script>
+  </body>
+</html>
