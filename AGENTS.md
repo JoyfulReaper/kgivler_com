@@ -1,139 +1,305 @@
 # AGENTS.md
 
 ## Purpose
+
 This repository powers Kyle Givler's personal site at `kgivler.com` and the related development-services site at `dev.kgivler.com`.
 
-The main site should feel personal, technical, playful, and recognizably Kyle. The development-services site should be intentionally conventional, light-themed, clear, and easy for a potential client to understand.
+The main site should feel personal, technical, playful, and recognizably Kyle. The development-services site should remain intentionally conventional, light-themed, clear, and easy for a potential client to understand.
 
 Do not turn either site into a generic AI-written portfolio or an over-engineered web application.
 
+## Branch / working context
+
+Check `dev` first unless Kyle explicitly says otherwise.
+
+Inspect the existing implementation before changing it.
+
+Make the smallest coherent change needed for the current task. Do not opportunistically rewrite unrelated pages, styles, or infrastructure.
+
 ## Working rules
-- Preserve the terminal/systems-lab identity of the main site.
+
+- Preserve the terminal / systems-lab identity of the main site.
 - Prefer plain HTML, CSS, and native JavaScript for static frontend work.
-- Prefer .NET for server-side functionality when a server component is actually needed.
+- Prefer .NET when a server-side component is actually needed.
 - Do not introduce React, Vue, or another SPA framework.
 - Keep dependencies small and intentional.
 - Preserve accessibility and graceful no-JavaScript behavior.
 - Preserve graceful degradation when optional self-hosted services are unavailable.
-- Never expose private service URLs, WireGuard addresses, credentials, API keys, secrets, or administrative endpoints to the browser.
 - Keep public telemetry deliberately sanitized.
-- Make the smallest coherent change needed for the current task.
-- Do not opportunistically rewrite unrelated code.
-- Inspect the existing implementation before changing it.
-- Run relevant build/tests and verify static pages after meaningful changes.
+- Run relevant checks after meaningful changes.
 
 ## Copy and tone
-Visible copy should sound natural and specific.
 
-Avoid repetitive `Problem / Built / Decisions / Stack / Result` templates, inflated résumé language, generic marketing filler, and repeated claims about designing/deploying/operating systems.
+Visible copy should sound natural, specific, and human.
 
-Prefer short explanations, specific technical details where interesting, plain language, first-person explanations, and humor where it fits.
+Avoid:
 
-SEO metadata can be more conventional than visible body copy.
+- generic portfolio / résumé language
+- repetitive `Problem / Built / Decisions / Stack / Result` templates
+- generic marketing filler
+- architecture prose that reads like internal documentation
+- unnecessary phrases such as `supporting infrastructure`, `operational capabilities`, or `provides` when simpler wording works
+- repeating that Kyle designed, deployed, operates, or maintains something when the page already makes that obvious
+
+Prefer:
+
+- short explanations
+- concrete technical details
+- first-person language where natural
+- plain wording
+- humor where it fits
+- dry technical lists when a list is actually the clearest format
+
+SEO metadata may be more conventional than visible body copy.
 
 ## Main-site structure
-The homepage is in a stable enough state that project-detail work should not repeatedly churn it.
 
-Current homepage progression:
-1. short human introduction / `whoami`
-2. small Steam presence
-3. Featured Projects
-4. infrastructure / hosting Kyle uses
-5. Development Services / Hire Me
-6. current / recent work
-7. Lab teaser
-8. interactive shell
-9. contact / elsewhere
-10. footer
+Primary navigation:
 
-Featured Projects are Mission Control, Random Steam Game, and What Should I Work On Today?.
+- Home
+- Projects
+- Lab
+- Systems
+- VPS Reviews
+- Hire Me
 
-Do not let the homepage become a full operations dashboard. Detailed live widgets belong on `/lab/`.
+The homepage is stable enough that unrelated work should not churn it.
 
-The interactive shell should also appear at the bottom of `/lab/`.
+Do not let Home become a monitoring dashboard. Detailed live widgets belong on `/lab/`.
 
 ## Lab
-`/lab/` is the home for larger live/experimental features:
-- detailed host telemetry
-- Random Steam demo
-- service/system status views
+
+`/lab/` is the interactive / weird part of the site.
+
+It currently includes:
+
+- host telemetry
+- Random Steam mini-demo
+- service preview
+- Noise Observatory recent events
 - QOTD
+- public IRC chat
+- public Matrix room
 - recent Git activity
 - visitor BBS
-- other live infrastructure experiments
-- the interactive shell at the bottom
+- interactive shell
+
+Keep Lab focused on things a visitor can interact with or watch live.
+
+Project case studies can be linked from Lab widgets where that helps, but do not turn Lab into another project directory.
 
 ## Projects
-Use `/projects/` as a curated project directory, not a repository dump.
 
-Clean project-detail routes include:
+Use `/projects/` as a curated directory, not a repository dump.
+
+Completed detail pages:
+
 - `/projects/mission-control/`
 - `/projects/random-steam/`
 - `/projects/wsiwot/`
-- `/projects/reapershell/`
+- `/projects/dn42atlas/`
 - `/projects/tcpnoise/`
+- `/projects/reapershell/`
+- `/projects/pluto-ad-detector/`
+- `/projects/random-github/`
+- `/projects/happy-protocols/`
 
-Project detail pages should be human-facing case studies, not README copies. Reuse `Source/projects/project-detail.css` where practical, but do not force every project into identical headings or structure.
+Project detail pages are human-facing case studies, not README copies.
 
-Completed detail pages on `dev`:
-- Mission Control
-- Random Steam Game
-- What Should I Work On Today?
+Reuse:
 
-Rough next-page order:
-1. DN42Atlas
-2. tcpnoise / Noise Observatory as one combined page
-3. ReaperShell
-4. PlutoAdDetector
-5. Random GitHub
-6. SmolSearch
-7. Happy protocol projects as one combined page
-8. RimWorld modding as one combined page
+- `Source/projects/projects.css`
+- `Source/projects/project-detail.css`
 
-Build and review project detail pages one by one. Do not keep editing the `/projects/` index merely to add one new detail link after each page. After the planned detail-page batch is complete, do one catalog cleanup pass that adds `Details →` links and other needed index changes.
+where practical, but do not force every case study into identical headings.
 
-Mycelium belongs in the curated Networking / protocols catalog once that index pass happens, but it should not get a detail page yet. Wait for a stronger completed vertical slice such as recursive crawling, a second protocol, or behavioral protocol recognition.
+The current project-detail batch is complete.
 
-Do not add planning-stage projects simply because repositories exist. Internet Noise FM, ShareShit, HappyPortal, and B.L.O.A.T. should be reconsidered when they have useful implemented behavior.
+Do not add detail pages now for:
 
-Leave the dedicated DN42 / Yggdrasil infrastructure case study until late in the project-page pass. Review the Systems page first and revisit the case study after the planned clearnet-facing peering / DN42-mirror presentation work.
-
-Consolidate related work when that tells a clearer story:
-- tcpnoise + Noise Observatory
-- Happy protocol servers
+- SmolSearch
 - RimWorld modding
+- DN42 / Yggdrasil infrastructure
+- Mycelium
 
-Do not dump tutorials, forks, scratchpads, archives, learning repos, landing-page repos, or abandoned experiments into the public project directory.
+Mycelium should be present in the curated Networking / protocols index if it is still missing, but it does not deserve a detail page yet.
+
+Do not associate the iMule modernization project with Kyle or this public site.
+
+Do not add planning-stage projects simply because repositories exist. Revisit Internet Noise FM, ShareShit, HappyPortal, and B.L.O.A.T. only when they have useful implemented behavior.
+
+## Systems
+
+`/services/` is the current Systems page.
+
+Systems should document what Kyle runs without exposing the private management plane.
+
+The current page is improved but not yet certified complete.
+
+Do not claim completeness until a later full inventory audit has reconciled the page against the actual hosts.
+
+### Inventory vs telemetry
+
+Declared inventory is authoritative for whether a service exists.
+
+Mission Control Agents are telemetry sources, not inventory sources.
+
+A known service may remain listed even when no Agent is available. Do not hide it or move it to a different host to make telemetry look cleaner.
+
+### Systems copy
+
+Some Systems prose still sounds too much like documentation.
+
+A future cleanup should preserve the structure and facts while rewriting only the human-facing prose.
+
+Do not replace useful technical lists with fluffy paragraphs.
+
+### Full audit later
+
+When asked to perform the real Systems audit, go host by host:
+
+- Clanker
+- ScopeCreep
+- Wurstcase
+- FrontDesk
+- Molasses
+- hbg1
+- Ryzenshine
+
+Reconcile, as applicable:
+
+- listening sockets
+- system services
+- Docker / compose workloads
+- nginx / IIS sites and bindings
+- DNS zones
+- routing daemons and policies
+- WireGuard / Yggdrasil connectivity
+- scheduled jobs / timers / tasks
+- backups
+- public APIs
+- classic protocol listeners
+- Hyper-V workloads on Ryzenshine
+
+Classify each discovered item as:
+
+- public service
+- alternate-network service
+- internal operations
+- infrastructure component
+- experiment
+- intentionally omitted
+
+Do not expose secrets or unnecessary attack-surface detail just to make the inventory feel complete.
+
+## DN42 peering
+
+Kyle operates `AS4242420425`.
+
+Systems should contain a short DN42 introduction and a `Peer with me on DN42` link, but should not duplicate full routing policy.
+
+Planned clearnet peering hostname:
+
+`https://dn42.kgivler.com/`
+
+That hostname does not exist yet.
+
+The next implementation task is to make it a clearnet mirror / proxy of the existing DN42Landing content.
+
+DN42Landing is the detailed source for current:
+
+- POPs
+- prefixes
+- tunnel options
+- BGP policy
+- transit policy
+- Looking Glass links
+- contact information
+
+Avoid maintaining two separate hand-written copies of peering policy.
+
+## Yggdrasil peering
+
+Use the existing Yggdrasil landing page for detailed peering information:
+
+`http://landing.ygg.kgivler.com/`
+
+Systems may briefly explain Yggdrasil and that public peering is available, but the landing page should carry the current peer URIs, ports, node details, and locations.
+
+## Happy Protocols
+
+Treat the Happy* protocol servers as one larger project story.
+
+The Systems page may list individual deployed protocol services.
+
+HappyTime / RFC 868 is not currently deployed. Do not present it as a live service until Kyle says that changed.
+
+## Public communication
+
+Public communication currently includes:
+
+- IRC web chat: `https://chat.kgivler.com/`
+- Matrix room: `#joyfulreaper-dev:kgivler.com`
+- Matrix link: `https://matrix.to/#/#joyfulreaper-dev:kgivler.com`
+
+It is fine for both Lab and Systems to link these.
+
+## Future DN42 / Yggdrasil case study
+
+Do not build the dedicated alternate-network infrastructure case study yet.
+
+Wait until:
+
+1. Systems has settled
+2. `dn42.kgivler.com` exists
+3. the peering presentation is working
+4. the full Systems inventory audit has been done
+
+Then decide whether the story belongs under Projects, Systems, or both.
 
 ## Blog
+
 Blogging remains a future decision.
 
-Do not add Blog navigation, empty Latest Writing sections, or a publishing system before there is actual content and an implementation decision.
-
-If blogging proceeds, `https://kgivler.com/blog/` is a useful candidate canonical location. Stable URLs, dates, metadata, RSS, and sitemap coverage would be useful. Avoid CMS complexity, browser WYSIWYG editors, login/admin systems, databases, or separate APIs without a real need.
+Do not add Blog navigation, placeholders, or a publishing system before actual content exists and Kyle has chosen an implementation.
 
 ## Development services
-`dev.kgivler.com` is intentionally visually separate from the main site.
+
+`dev.kgivler.com` is intentionally visually separate.
 
 It should:
-- use a light, conventional, professional visual style
-- identify the service provider as Kyle Givler
+
+- use a light, conventional, professional style
+- identify Kyle Givler as the provider
 - avoid fake-company branding
 - communicate breadth without becoming an unreadable list
-- avoid publishing invented legal, tax, licensing, SLA, or business terms
+- avoid invented legal, tax, licensing, SLA, or business terms
 
-Do not opportunistically redesign `dev.kgivler.com` while working on main-site project pages.
-
-## Service inventory
-The operational service catalog must not treat Mission Control Agent availability as the source of truth for whether a service exists.
-
-Inventory and telemetry are separate concepts.
-
-A service may be known to exist on a host even when that host has no Agent. In that case show a clear state such as `NO AGENT` or `STATUS UNAVAILABLE` rather than hiding the service or assigning it to the wrong host.
+Do not opportunistically redesign `dev.kgivler.com` while working on the main site.
 
 ## Security and privacy
+
 - Never commit real credentials.
-- Never put private Agent/WireGuard endpoints in frontend files.
+- Never put private Agent endpoints in frontend files.
+- Never publish private WireGuard addresses unless Kyle explicitly intends them to be public.
 - Do not expose administrative controls from public pages.
+- Do not expose private management URLs simply because they appear in inventory or configuration.
 - Treat User-Agent and similar request metadata as untrusted claims.
 - Do not expand public telemetry simply because the backend can collect it.
+- Keep public service descriptions accurate without publishing unnecessary attack-surface details.
+
+## Validation
+
+For static changes:
+
+- inspect the existing page first
+- check duplicate DOM IDs
+- check internal routes and asset paths
+- check external links
+- check responsive behavior
+- preserve keyboard / accessibility behavior
+- preserve useful no-JavaScript behavior
+- run `git diff --check` when practical
+- report any browser-testing limitation
+
+For Systems changes specifically, check that private endpoints, credentials, API keys, private network addresses, and administrative URLs were not accidentally added.
