@@ -6,19 +6,19 @@
 
     <title>Systems | Kyle Givler</title>
 
-    <meta name="description" content="Kyle Givler's infrastructure inventory: seven audited systems — Clanker, ScopeCreep, Wurstcase, FrontDesk, Molasses, hbg1, and Ryzenshine — with hardware specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
+    <meta name="description" content="Kyle Givler's infrastructure inventory: seven audited systems — Clanker, ScopeCreep, Wurstcase, FrontDesk, Molasses, hbg1, and Ryzenshine — with hardware specs, public services, DN42 and Yggdrasil networks, operations, peering, and experiments." />
 
     <link rel="canonical" href="https://www.kgivler.com/services/" />
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Systems | Kyle Givler" />
-    <meta property="og:description" content="Kyle Givler's infrastructure inventory: seven audited systems — Clanker, ScopeCreep, Wurstcase, FrontDesk, Molasses, hbg1, and Ryzenshine — with hardware specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
+    <meta property="og:description" content="Kyle Givler's infrastructure inventory: seven audited systems — Clanker, ScopeCreep, Wurstcase, FrontDesk, Molasses, hbg1, and Ryzenshine — with hardware specs, public services, DN42 and Yggdrasil networks, operations, peering, and experiments." />
     <meta property="og:url" content="https://www.kgivler.com/services/" />
     <meta property="og:site_name" content="Kyle Givler" />
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Systems | Kyle Givler" />
-    <meta name="twitter:description" content="Kyle Givler's infrastructure inventory: seven audited systems — Clanker, ScopeCreep, Wurstcase, FrontDesk, Molasses, hbg1, and Ryzenshine — with hardware specs, public services, DN42 and Yggdrasil networks, operations, and experiments." />
+    <meta name="twitter:description" content="Kyle Givler's infrastructure inventory: seven audited systems — Clanker, ScopeCreep, Wurstcase, FrontDesk, Molasses, hbg1, and Ryzenshine — with hardware specs, public services, DN42 and Yggdrasil networks, operations, peering, and experiments." />
 
     <link href="/vendor/bootstrap-5.3.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
 
@@ -27,11 +27,8 @@
     <link rel="stylesheet" href="/styles.css?v=6" />
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-
     <link rel="manifest" href="/site.webmanifest" />
 
     <link rel="stylesheet" href="./systems.css?v=2" />
@@ -51,15 +48,26 @@
           <a href="https://dev.kgivler.com/" class="terminal-nav-primary" target="_blank" rel="noopener noreferrer">Hire Me</a>
         </nav>
       </header>
+
       <main id="main-content" class="systems-intro">
         <p class="systems-command"><span aria-hidden="true">$</span> inventory --host Clanker --host ScopeCreep --host Wurstcase --host FrontDesk --host Molasses --host hbg1 --host Ryzenshine</p>
         <h1>Systems</h1>
         <p class="systems-lead">The stuff I run.</p>
         <p class="systems-description">Seven audited systems: Clanker, ScopeCreep, Wurstcase, FrontDesk, Molasses, hbg1, and Ryzenshine. This inventory covers my VPSes, home infrastructure, residential router VM, and Windows development workstation: where things run, how they’re reachable, and what they do.</p>
         <p class="systems-audit">Clanker: <time datetime="2026-10-07">audited October 7, 2026</time> · ScopeCreep, Wurstcase, FrontDesk, Molasses, hbg1, and Ryzenshine: <time datetime="2026-10-08">audited October 8, 2026</time> · Inventory snapshots, not real-time monitoring.</p>
+
+        <div class="systems-actions" aria-label="Network presence">
+          <a href="#public-services" class="terminal-btn-inline">Clearnet</a>
+          <a href="#networks" class="terminal-btn-inline">DN42 · AS4242420425</a>
+          <a href="#networks" class="terminal-btn-inline">Yggdrasil</a>
+          <a href="#public-services" class="terminal-btn-inline">I2P</a>
+          <a href="#public-services" class="terminal-btn-inline">Gopher / Gemini</a>
+        </div>
+
         <nav class="systems-actions" aria-label="Inventory sections">
           <a href="#hosts" class="terminal-btn-inline">Systems</a>
           <a href="#networks" class="terminal-btn-inline">Networks</a>
+          <a href="#peering" class="terminal-btn-inline">Peer with me</a>
           <a href="#public-services" class="terminal-btn-inline">Public services</a>
           <a href="#operations" class="terminal-btn-inline">Operations</a>
           <a href="#experiments" class="terminal-btn-inline">Experiments</a>
@@ -67,6 +75,7 @@
 
         <section class="inventory-section" aria-labelledby="hosts">
           <h2 id="hosts">Systems</h2>
+
           <article class="host-card" aria-labelledby="clanker">
             <div class="inventory-card-heading"><h3 id="clanker">Clanker</h3><span class="inventory-badge">Audited system</span></div>
             <p>Application host, public Internet services, DN42 router / BGP node, Yggdrasil node, and monitoring / operations host.</p>
@@ -78,6 +87,7 @@
               <div><dt>Storage</dt><dd>33 GiB root disk</dd></div>
             </dl>
           </article>
+
           <article class="host-card infrastructure-card" aria-labelledby="scopecreep">
             <div class="inventory-card-heading"><h3 id="scopecreep">ScopeCreep</h3><span class="inventory-badge">Audited system</span></div>
             <p>Public VPS edge, DN42 routing node, Yggdrasil node, secondary authoritative DN42 DNS, Looking Glass backend, monitoring / backup node, and personal privacy-VPN gateway.</p>
@@ -90,6 +100,7 @@
               <div><dt>Storage</dt><dd>35 GiB root disk</dd></div>
             </dl>
           </article>
+
           <article class="host-card infrastructure-card" aria-labelledby="wurstcase">
             <div class="inventory-card-heading"><h3 id="wurstcase">Wurstcase</h3><span class="inventory-badge">Audited system</span></div>
             <p>A small Frankfurt, Germany POP: DN42 POP / router, Yggdrasil node, Looking Glass backend, and monitoring infrastructure.</p>
@@ -103,6 +114,7 @@
               <div><dt>Location</dt><dd>Frankfurt, Germany</dd></div>
             </dl>
           </article>
+
           <article class="host-card infrastructure-card" aria-labelledby="frontdesk">
             <div class="inventory-card-heading"><h3 id="frontdesk">FrontDesk</h3><span class="inventory-badge">Audited system</span></div>
             <p>A clean client-facing host for static websites and .NET APIs, with private SMB file storage, encrypted Restic backup storage, and monitoring. Bulk storage holds files moved off my workstation to free up local disk space.</p>
@@ -116,6 +128,7 @@
               <div><dt>Storage disk</dt><dd>1 TB</dd></div>
             </dl>
           </article>
+
           <article class="host-card infrastructure-card" aria-labelledby="molasses">
             <div class="inventory-card-heading"><h3 id="molasses">Molasses</h3><span class="inventory-badge">Audited system</span></div>
             <p>Home infrastructure and DNS server, Docker host, monitoring, and private Restic backup infrastructure. Also hosts the FreeBSD virtual machine <code>hbg1</code>, a residential DN42 POP.</p>
@@ -128,6 +141,7 @@
               <div><dt>Uplink</dt><dd>Residential Wi-Fi</dd></div>
             </dl>
           </article>
+
           <article class="host-card infrastructure-card" aria-labelledby="hbg1">
             <div class="inventory-card-heading"><h3 id="hbg1">hbg1</h3><span class="inventory-badge">Audited system</span></div>
             <p>A FreeBSD virtual machine on Molasses: residential DN42 POP / router, internal iBGP router, external DN42 peering point, and native residential IPv6 test point. Also a FreeBSD routing / BIRD experiment.</p>
@@ -140,6 +154,7 @@
               <div><dt>Storage</dt><dd>8 GiB virtual disk</dd></div>
             </dl>
           </article>
+
           <article class="host-card infrastructure-card" aria-labelledby="ryzenshine">
             <div class="inventory-card-heading"><h3 id="ryzenshine">Ryzenshine</h3><span class="inventory-badge">Audited system</span></div>
             <p>Windows development / build workstation, Hyper-V lab host, and Docker container build host. Runs networking / lab VMs and the IIS origin for RandomSteamBeta.</p>
@@ -157,41 +172,69 @@
         <section class="inventory-section" aria-labelledby="networks">
           <h2 id="networks">Networks</h2>
           <p class="section-description">Public Internet services, private infrastructure, and DN42 / Yggdrasil connectivity across the systems below. Overlay hostnames require connectivity to their respective networks.</p>
+
           <h3 class="inventory-subheading">Clanker</h3>
-          <article class="inventory-card"><div class="inventory-card-heading"><h3>Public Internet</h3><span class="inventory-badge">Public</span></div><p>Web applications and small Internet protocols, reached through the public hostnames listed below.</p></article>
+          <article class="inventory-card">
+            <div class="inventory-card-heading"><h3>Public Internet</h3><span class="inventory-badge">Public</span></div>
+            <p>Web applications and small Internet protocols, reached through the public hostnames listed below.</p>
+          </article>
+
           <div class="inventory-grid network-grid">
             <article class="inventory-card">
               <div class="inventory-card-heading"><h3>DN42</h3><span class="inventory-badge">DN42</span></div>
               <p><code>AS4242420425</code></p>
               <p>BGP routing, authoritative DNS, web/service ingress, a Looking Glass, and peers/transit relationships connecting additional JoyfulReaper POPs.</p>
               <h4>External BGP peers</h4>
-              <ul class="peer-list"><li>Baragoon <code>AS4242421732</code></li><li>RoutedBits <code>AS4242420207</code></li><li>HEADSCARF <code>AS4242420842</code></li></ul>
+              <ul class="peer-list">
+                <li>Baragoon <code>AS4242421732</code></li>
+                <li>RoutedBits <code>AS4242420207</code></li>
+                <li>HEADSCARF <code>AS4242420842</code></li>
+              </ul>
               <h4>Within AS4242420425</h4>
               <p>Routing relationships with ScopeCreep, Wurstcase, the hbg1 residential POP, and the overlay gateway.</p>
+              <div class="systems-actions">
+                <a href="/projects/dn42atlas/" class="terminal-btn-inline">DN42Atlas project</a>
+              </div>
               <details class="network-details">
                 <summary>DN42 services and hostnames</summary>
                 <ul class="endpoint-list">
-                  <li><a href="https://joyfulreaper.dn42/" target="_blank" rel="noopener noreferrer"><code>joyfulreaper.dn42</code></a></li><li><a href="https://kgivler.dn42/" target="_blank" rel="noopener noreferrer"><code>kgivler.dn42</code></a></li><li><a href="https://api.kgivler.dn42/" target="_blank" rel="noopener noreferrer"><code>api.kgivler.dn42</code></a></li>
-                  <li><a href="https://randomsteam.dn42/" target="_blank" rel="noopener noreferrer"><code>randomsteam.dn42</code></a></li><li><a href="https://randomgit.dn42/" target="_blank" rel="noopener noreferrer"><code>randomgit.dn42</code></a></li><li><a href="https://dn42atlas.dn42/" target="_blank" rel="noopener noreferrer"><code>dn42atlas.dn42</code></a></li>
-                  <li><a href="https://qotd.kgivler.dn42/" target="_blank" rel="noopener noreferrer"><code>qotd.kgivler.dn42</code></a></li><li><a href="https://tools.joyfulreaper.dn42/" target="_blank" rel="noopener noreferrer"><code>tools.joyfulreaper.dn42</code></a></li><li><a href="https://lg.joyfulreaper.dn42/" target="_blank" rel="noopener noreferrer"><code>lg.joyfulreaper.dn42</code></a> — Looking Glass</li>
-                  <li><a href="https://verymad.dn42/" target="_blank" rel="noopener noreferrer"><code>verymad.dn42</code></a></li><li><a href="https://pipes.verymad.dn42/" target="_blank" rel="noopener noreferrer"><code>pipes.verymad.dn42</code></a></li><li><a href="gemini://gemini.kgivler.dn42/"><code>gemini.kgivler.dn42</code></a> — Gemini</li>
+                  <li><a href="https://joyfulreaper.dn42/" target="_blank" rel="noopener noreferrer"><code>joyfulreaper.dn42</code></a></li>
+                  <li><a href="https://kgivler.dn42/" target="_blank" rel="noopener noreferrer"><code>kgivler.dn42</code></a></li>
+                  <li><a href="https://api.kgivler.dn42/" target="_blank" rel="noopener noreferrer"><code>api.kgivler.dn42</code></a></li>
+                  <li><a href="https://randomsteam.dn42/" target="_blank" rel="noopener noreferrer"><code>randomsteam.dn42</code></a></li>
+                  <li><a href="https://randomgit.dn42/" target="_blank" rel="noopener noreferrer"><code>randomgit.dn42</code></a></li>
+                  <li><a href="https://dn42atlas.dn42/" target="_blank" rel="noopener noreferrer"><code>dn42atlas.dn42</code></a></li>
+                  <li><a href="https://qotd.kgivler.dn42/" target="_blank" rel="noopener noreferrer"><code>qotd.kgivler.dn42</code></a></li>
+                  <li><a href="https://tools.joyfulreaper.dn42/" target="_blank" rel="noopener noreferrer"><code>tools.joyfulreaper.dn42</code></a></li>
+                  <li><a href="https://lg.joyfulreaper.dn42/" target="_blank" rel="noopener noreferrer"><code>lg.joyfulreaper.dn42</code></a> — Looking Glass</li>
+                  <li><a href="https://verymad.dn42/" target="_blank" rel="noopener noreferrer"><code>verymad.dn42</code></a></li>
+                  <li><a href="https://pipes.verymad.dn42/" target="_blank" rel="noopener noreferrer"><code>pipes.verymad.dn42</code></a></li>
+                  <li><a href="gemini://gemini.kgivler.dn42/"><code>gemini.kgivler.dn42</code></a> — Gemini</li>
                   <li><a href="gopher://gopher.kgivler.dn42"><code>gopher.kgivler.dn42</code></a> — Gopher</li>
                 </ul>
               </details>
             </article>
+
             <article class="inventory-card">
               <div class="inventory-card-heading"><h3>Yggdrasil</h3><span class="inventory-badge">Yggdrasil</span></div>
               <p>Clanker is a Yggdrasil node with its own routed subnet, giving services another way to be reached.</p>
               <details class="network-details">
                 <summary>Yggdrasil services and hostnames</summary>
                 <ul class="endpoint-list">
-                  <li><a href="http://site.ygg.kgivler.com/" target="_blank" rel="noopener noreferrer"><code>site.ygg.kgivler.com</code></a></li><li><a href="http://api.ygg.kgivler.com/" target="_blank" rel="noopener noreferrer"><code>api.ygg.kgivler.com</code></a></li><li><a href="https://steam.ygg.kgivler.com/" target="_blank" rel="noopener noreferrer"><code>steam.ygg.kgivler.com</code></a></li><li><a href="http://git.ygg.kgivler.com/" target="_blank" rel="noopener noreferrer"><code>git.ygg.kgivler.com</code></a></li>
-                  <li><a href="http://qotd.ygg.kgivler.com/" target="_blank" rel="noopener noreferrer"><code>qotd.ygg.kgivler.com</code></a></li><li><a href="http://tools.ygg.kgivler.com/" target="_blank" rel="noopener noreferrer"><code>tools.ygg.kgivler.com</code></a></li><li><a href="gemini://gemini.ygg.kgivler.com/"><code>gemini.ygg.kgivler.com</code></a> — Gemini</li><li><a href="http://verymad.ygg.kgivler.com/" target="_blank" rel="noopener noreferrer"><code>verymad.ygg.kgivler.com</code></a></li>
+                  <li><a href="http://site.ygg.kgivler.com/" target="_blank" rel="noopener noreferrer"><code>site.ygg.kgivler.com</code></a></li>
+                  <li><a href="http://api.ygg.kgivler.com/" target="_blank" rel="noopener noreferrer"><code>api.ygg.kgivler.com</code></a></li>
+                  <li><a href="https://steam.ygg.kgivler.com/" target="_blank" rel="noopener noreferrer"><code>steam.ygg.kgivler.com</code></a></li>
+                  <li><a href="http://git.ygg.kgivler.com/" target="_blank" rel="noopener noreferrer"><code>git.ygg.kgivler.com</code></a></li>
+                  <li><a href="http://qotd.ygg.kgivler.com/" target="_blank" rel="noopener noreferrer"><code>qotd.ygg.kgivler.com</code></a></li>
+                  <li><a href="http://tools.ygg.kgivler.com/" target="_blank" rel="noopener noreferrer"><code>tools.ygg.kgivler.com</code></a></li>
+                  <li><a href="gemini://gemini.ygg.kgivler.com/"><code>gemini.ygg.kgivler.com</code></a> — Gemini</li>
+                  <li><a href="http://verymad.ygg.kgivler.com/" target="_blank" rel="noopener noreferrer"><code>verymad.ygg.kgivler.com</code></a></li>
                   <li><a href="gopher://gopher.ygg.kgivler.com"><code>gopher.ygg.kgivler.com</code></a> — Gopher</li>
                 </ul>
               </details>
             </article>
           </div>
+
           <h3 class="inventory-subheading">ScopeCreep</h3>
           <div class="inventory-grid network-grid">
             <article class="inventory-card">
@@ -212,6 +255,7 @@
               <p>ScopeCreep participates in Yggdrasil and offers public Yggdrasil peering.</p>
             </article>
           </div>
+
           <h3 class="inventory-subheading">Wurstcase</h3>
           <div class="inventory-grid network-grid">
             <article class="inventory-card">
@@ -228,6 +272,7 @@
               <p>Wurstcase is a Yggdrasil node and overlay router, with public peering on TCP 54321.</p>
             </article>
           </div>
+
           <h3 class="inventory-subheading">hbg1</h3>
           <article class="inventory-card">
             <div class="inventory-card-heading"><h3>Residential POP</h3><span class="inventory-badge">DN42</span></div>
@@ -238,6 +283,7 @@
             <h4>Within AS4242420425</h4>
             <p>Internal iBGP with Clanker and ScopeCreep over WireGuard links. hbg1 uses native residential IPv6 and does not provide general DN42 transit.</p>
           </article>
+
           <h3 class="inventory-subheading">Ryzenshine</h3>
           <article class="inventory-card">
             <div class="inventory-card-heading"><h3>Private infrastructure &amp; DN42</h3><span class="inventory-badge">Private</span><span class="inventory-badge">DN42</span></div>
@@ -245,14 +291,48 @@
           </article>
         </section>
 
+        <section class="inventory-section" aria-labelledby="peering">
+          <h2 id="peering">Peer with me</h2>
+          <p class="section-description">I run a few routes to the weird Internet and I am open to peering where it makes sense. The detailed landing pages are the source of truth for current endpoints and peering information.</p>
+
+          <div class="inventory-grid network-grid">
+            <article class="inventory-card">
+              <div class="inventory-card-heading">
+                <h3>DN42</h3>
+                <span class="inventory-badge">AS4242420425</span>
+              </div>
+              <p>DN42 is a community-run overlay network built with the same kinds of routing protocols used on the public Internet. I operate <code>AS4242420425</code> across several POPs, including Clanker, ScopeCreep, Wurstcase, and hbg1.</p>
+              <p>The full peering page includes current POPs, tunnel details, prefixes, routing policy, Looking Glass links, and contact information.</p>
+              <div class="systems-actions">
+                <a href="https://dn42.kgivler.com/" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer">Peer with me on DN42 <span aria-hidden="true">↗</span></a>
+              </div>
+              <p class="section-description"><small><code>dn42.kgivler.com</code> is the planned clearnet mirror of my DN42 landing page.</small></p>
+            </article>
+
+            <article class="inventory-card">
+              <div class="inventory-card-heading">
+                <h3>Yggdrasil</h3>
+                <span class="inventory-badge">Public peering</span>
+              </div>
+              <p>Yggdrasil is an encrypted IPv6 overlay network. I run nodes in multiple locations and offer public peering, including through ScopeCreep and Wurstcase.</p>
+              <p>Current public peer URIs, listening ports, node information, and locations are maintained on the Yggdrasil landing page.</p>
+              <div class="systems-actions">
+                <a href="http://landing.ygg.kgivler.com/" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer">Yggdrasil peering information <span aria-hidden="true">↗</span></a>
+              </div>
+            </article>
+          </div>
+        </section>
+
         <section class="inventory-section" aria-labelledby="public-services">
           <h2 id="public-services">Public services &amp; protocols</h2>
-          <p class="section-description">Applications, protocol services, and supporting infrastructure on the audited systems. These are audited inventory entries, not availability checks. Non-HTTP endpoints need a suitable client.</p>
+          <p class="section-description">Applications, protocol services, and supporting infrastructure on the audited systems. These are inventory entries, not availability checks. Non-HTTP endpoints need a suitable client.</p>
+
           <article class="service-card" data-search="noise observatory tcpnoise nats internet noise network telemetry aspnet asp.net core razor pages dotnet .net 10 dn42 yggdrasil i2p public https">
             <h3>Noise Observatory <span class="inventory-badge">Public</span> <span class="inventory-badge">HTTPS web application</span></h3>
             <p>A sanitized live view of unsolicited TCP activity collected by TCPNoise sensors. Also available over DN42, Yggdrasil, and I2P.</p>
             <div class="systems-actions">
               <a class="terminal-btn-inline" href="https://noise.kgivler.com/" target="_blank" rel="noopener noreferrer" aria-label="Open Noise Observatory">Open</a>
+              <a class="terminal-btn-inline" href="/projects/tcpnoise/">Project details</a>
               <a class="terminal-btn-inline" href="https://github.com/JoyfulReaper/NoiseObservatory" target="_blank" rel="noopener noreferrer" aria-label="Noise Observatory source on GitHub">Source</a>
             </div>
             <details class="network-details">
@@ -270,15 +350,56 @@
               </ul>
             </details>
           </article>
+
+          <article class="inventory-card infrastructure-card">
+            <div class="inventory-card-heading"><h3>kgivler.com mirrors</h3><span class="inventory-badge">Multi-network</span></div>
+            <p>The personal site is intentionally reachable over several networks instead of only the clearnet.</p>
+            <ul class="endpoint-list">
+              <li>Clearnet: <a href="https://www.kgivler.com/" target="_blank" rel="noopener noreferrer"><code>www.kgivler.com</code></a></li>
+              <li>DN42: <a href="https://kgivler.dn42/" target="_blank" rel="noopener noreferrer"><code>kgivler.dn42</code></a></li>
+              <li>Yggdrasil: <a href="http://site.ygg.kgivler.com/" target="_blank" rel="noopener noreferrer"><code>site.ygg.kgivler.com</code></a></li>
+              <li>I2P: <a href="http://bmhbwuvcvdof5aenq2ocow4rsqzfwxttdy4o6tbro2kohzxyytfq.b32.i2p/" target="_blank" rel="noopener noreferrer"><code>b32.i2p mirror</code></a></li>
+            </ul>
+          </article>
+
           <h3 class="inventory-subheading">Clanker</h3>
           <h3 class="inventory-subheading">Web applications <span class="inventory-badge">Public</span></h3>
           <div class="inventory-grid">
-            <article class="service-card"><h4>Random Steam Game</h4><p>A random pick from a Steam library.</p><a href="https://randomsteam.kgivler.com/" target="_blank" rel="noopener noreferrer">randomsteam.kgivler.com</a><a class="source-link" href="https://github.com/JoyfulReaper/RandomSteamGame" target="_blank" rel="noopener noreferrer">Source</a></article>
-            <article class="service-card"><h4>Random GitHub</h4><p>Random GitHub browsing.</p><a href="https://randomgit.kgivler.com/" target="_blank" rel="noopener noreferrer">randomgit.kgivler.com</a></article>
-            <article class="service-card"><h4>IT-Tools</h4><p>A collection of developer utilities.</p><a href="https://tools.kgivler.com/" target="_blank" rel="noopener noreferrer">tools.kgivler.com</a></article>
-            <article class="service-card"><h4>DN42 Looking Glass</h4><p>Inspect DN42 routing through the Looking Glass.</p><a href="https://lg.kgivler.com/" target="_blank" rel="noopener noreferrer">lg.kgivler.com</a></article>
+            <article class="service-card">
+              <h4>Random Steam Game</h4>
+              <p>A random pick from a Steam library.</p>
+              <div class="systems-actions">
+                <a class="terminal-btn-inline" href="https://randomsteam.kgivler.com/" target="_blank" rel="noopener noreferrer">Open</a>
+                <a class="terminal-btn-inline" href="/projects/random-steam/">Project details</a>
+                <a class="terminal-btn-inline" href="https://github.com/JoyfulReaper/RandomSteamGame" target="_blank" rel="noopener noreferrer">Source</a>
+              </div>
+            </article>
+
+            <article class="service-card">
+              <h4>Random GitHub</h4>
+              <p>Random GitHub browsing.</p>
+              <div class="systems-actions">
+                <a class="terminal-btn-inline" href="https://randomgit.kgivler.com/" target="_blank" rel="noopener noreferrer">Open</a>
+                <a class="terminal-btn-inline" href="/projects/random-github/">Project details</a>
+                <a class="terminal-btn-inline" href="https://github.com/JoyfulReaper/Random_Github" target="_blank" rel="noopener noreferrer">Source</a>
+              </div>
+            </article>
+
+            <article class="service-card">
+              <h4>IT-Tools</h4>
+              <p>A collection of developer utilities.</p>
+              <a href="https://tools.kgivler.com/" target="_blank" rel="noopener noreferrer">tools.kgivler.com</a>
+            </article>
+
+            <article class="service-card">
+              <h4>DN42 Looking Glass</h4>
+              <p>Inspect DN42 routing through the Looking Glass.</p>
+              <a href="https://lg.kgivler.com/" target="_blank" rel="noopener noreferrer">lg.kgivler.com</a>
+            </article>
           </div>
+
           <h3 class="inventory-subheading">Small Internet protocols <span class="inventory-badge">Protocol</span></h3>
+          <p class="section-description">The Happy* services are tiny protocol servers I run because old Internet protocols are fun, useful for learning, and still perfectly capable of doing one small job.</p>
           <dl class="protocol-list">
             <div><dt>HappyGopher <a href="https://github.com/JoyfulReaper/HappyGopher" target="_blank" rel="noopener noreferrer">Source</a></dt><dd><span>Gopher · TCP 70</span><a href="gopher://gopher.kgivler.com:70/"><code>gopher.kgivler.com:70</code></a></dd></div>
             <div><dt>HappyGemini <a href="https://github.com/JoyfulReaper/HappyGemini" target="_blank" rel="noopener noreferrer">Source</a></dt><dd><span>Gemini · TLS 1965</span><a href="gemini://gemini.kgivler.com:1965/"><code>gemini.kgivler.com:1965</code></a></dd></div>
@@ -288,6 +409,24 @@
             <div><dt>HappyEcho <a href="https://github.com/JoyfulReaper/HappyEcho" target="_blank" rel="noopener noreferrer">Source</a></dt><dd><span>Echo · TCP 7</span><code>echo.kgivler.com:7</code></dd></div>
             <div><dt>HappyDiscard <a href="https://github.com/JoyfulReaper/HappyDiscard" target="_blank" rel="noopener noreferrer">Source</a></dt><dd><span>Discard · TCP + UDP 9</span><code>discard.kgivler.com:9</code></dd></div>
           </dl>
+          <div class="systems-actions">
+            <a href="/projects/happy-protocols/" class="terminal-btn-inline">Happy Protocols project details</a>
+          </div>
+
+          <h3 class="inventory-subheading">Communication <span class="inventory-badge">Public</span></h3>
+          <div class="inventory-grid">
+            <article class="service-card">
+              <h4>IRC web chat</h4>
+              <p>The public web chat provides access to the project / programmer IRC channels linked from the Lab.</p>
+              <a href="https://chat.kgivler.com/" target="_blank" rel="noopener noreferrer">chat.kgivler.com</a>
+            </article>
+            <article class="service-card">
+              <h4>Matrix</h4>
+              <p>A public development / project room on my self-hosted Matrix setup.</p>
+              <a href="https://matrix.to/#/#joyfulreaper-dev:kgivler.com" target="_blank" rel="noopener noreferrer"><code>#joyfulreaper-dev:kgivler.com</code></a>
+            </article>
+          </div>
+
           <h3 class="inventory-subheading">ScopeCreep</h3>
           <div class="inventory-grid">
             <article class="inventory-card">
@@ -299,6 +438,7 @@
               <p>Supplies routing information to the Looking Glass frontend on Clanker. Backend access is private/internal.</p>
             </article>
           </div>
+
           <h3 class="inventory-subheading">FrontDesk</h3>
           <div class="inventory-grid">
             <article class="service-card">
@@ -312,6 +452,7 @@
               <p>A separate .NET application supporting the site’s API functionality.</p>
             </article>
           </div>
+
           <h3 class="inventory-subheading">Ryzenshine</h3>
           <article class="service-card">
             <h4>RandomSteamBeta</h4>
@@ -322,32 +463,45 @@
 
         <section class="inventory-section" aria-labelledby="operations">
           <h2 id="operations">Internal &amp; operations</h2>
-          <p class="section-description">Hosting, home infrastructure, development, and operations tooling. Private/internal components are listed by role, without management endpoints.</p>
+          <p class="section-description">Hosting, home infrastructure, development, and operations tooling. Private/internal components are listed by role, without management endpoints, private addresses, credentials, or administrative URLs.</p>
+
           <h3 class="inventory-subheading">Clanker</h3>
           <div class="inventory-grid">
             <article class="inventory-card">
               <div class="inventory-card-heading"><h3>Mission Control</h3><span class="inventory-badge">Private</span></div>
               <p>Dashboard, Gateway, Archive, GitActivity, and the host Agent handle monitoring, telemetry, and activity. NATS JetStream provides messaging and persistence.</p>
-              <a href="https://github.com/JoyfulReaper/MissionControl" target="_blank" rel="noopener noreferrer">Source</a>
+              <div class="systems-actions">
+                <a href="/projects/mission-control/" class="terminal-btn-inline">Project details</a>
+                <a href="https://github.com/JoyfulReaper/MissionControl" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer">Source</a>
+              </div>
             </article>
             <article class="inventory-card">
               <div class="inventory-card-heading"><h3>Operations tooling</h3><span class="inventory-badge">Private</span></div>
               <ul class="operations-list">
-                <li><strong>Beszel + Beszel Agent</strong> — host monitoring.</li><li><strong>Restic REST Server</strong> — backup storage service.</li>
-                <li><strong>Dozzle</strong> — container log viewing.</li><li><strong>Dockge</strong> — container stack management.</li>
-                <li><strong>WSIWOT</strong> — What Should I Work On Today.</li><li><strong>SmolSearch backend</strong> — search backend.</li>
+                <li><strong>Beszel + Beszel Agent</strong> — host monitoring.</li>
+                <li><strong>Restic REST Server</strong> — backup storage service.</li>
+                <li><strong>Dozzle</strong> — container log viewing.</li>
+                <li><strong>Dockge</strong> — container stack management.</li>
+                <li><strong>WSIWOT</strong> — What Should I Work On Today. <a href="/projects/wsiwot/">Project details</a></li>
+                <li><strong>SmolSearch backend</strong> — search backend.</li>
                 <li><strong>Automated backups / maintenance jobs</strong> — routine upkeep.</li>
               </ul>
             </article>
           </div>
+
           <article class="inventory-card infrastructure-card">
             <h3>Infrastructure components</h3>
             <ul class="operations-list component-list">
-              <li><strong>nginx</strong> — web serving / reverse proxy.</li><li><strong>BIRD</strong> — BGP routing.</li>
-              <li><strong>NSD</strong> — authoritative DNS.</li><li><strong>Unbound</strong> — DNS resolution.</li>
-              <li><strong>Cloudflare Tunnel</strong> — service ingress.</li><li><strong>WireGuard</strong> — network tunnels.</li><li><strong>Yggdrasil</strong> — overlay networking.</li>
+              <li><strong>nginx</strong> — web serving / reverse proxy.</li>
+              <li><strong>BIRD</strong> — BGP routing.</li>
+              <li><strong>NSD</strong> — authoritative DNS.</li>
+              <li><strong>Unbound</strong> — DNS resolution.</li>
+              <li><strong>Cloudflare Tunnel</strong> — service ingress.</li>
+              <li><strong>WireGuard</strong> — network tunnels.</li>
+              <li><strong>Yggdrasil</strong> — overlay networking.</li>
             </ul>
           </article>
+
           <h3 class="inventory-subheading">ScopeCreep</h3>
           <div class="inventory-grid">
             <article class="inventory-card">
@@ -366,6 +520,7 @@
               <p>A personal WireGuard privacy-VPN gateway for my devices on untrusted / public Wi-Fi. Access is private/internal.</p>
             </article>
           </div>
+
           <h3 class="inventory-subheading">Wurstcase</h3>
           <div class="inventory-grid">
             <article class="inventory-card">
@@ -383,6 +538,7 @@
               <p>A deliberately small network POP with native services. Docker is not installed, and there are no container workloads or general web applications.</p>
             </article>
           </div>
+
           <h3 class="inventory-subheading">FrontDesk</h3>
           <div class="inventory-grid">
             <article class="inventory-card">
@@ -402,6 +558,7 @@
               </ul>
             </article>
           </div>
+
           <h3 class="inventory-subheading">Molasses</h3>
           <div class="inventory-grid">
             <article class="inventory-card">
@@ -423,6 +580,7 @@
               <p>Matrix history and uploaded media are intentionally excluded from Molasses’s configuration-focused backup. This backup scope does not cover full-machine recovery; restoration has not been verified.</p>
             </article>
           </div>
+
           <h3 class="inventory-subheading">hbg1</h3>
           <div class="inventory-grid">
             <article class="inventory-card">
@@ -440,6 +598,7 @@
               <p>Backup image integrity and transfer were verified during the audit; a full recovery boot has not been tested.</p>
             </article>
           </div>
+
           <h3 class="inventory-subheading">Ryzenshine</h3>
           <div class="inventory-grid">
             <article class="inventory-card">
@@ -455,6 +614,7 @@
               <p>Windows host backup / recovery coverage was not fully audited and remains to be reviewed.</p>
             </article>
           </div>
+
           <h3 class="inventory-subheading" data-hosting-promotion hidden>Infrastructure / Hosting</h3>
           <article class="inventory-card" data-hosting-promotion hidden>
             <h4>VPS providers I use</h4>
@@ -472,13 +632,24 @@
             <article class="inventory-card">
               <div class="inventory-card-heading"><h3>VeryMad / Pipes</h3><span class="inventory-badge">Experiment</span></div>
               <p>A weird Internet experiment on Clanker, with web, Gopher, and Gemini variants across multiple networks.</p>
-              <ul class="endpoint-list"><li><a href="https://pipes.verymad.net/" target="_blank" rel="noopener noreferrer"><code>pipes.verymad.net</code></a></li><li><a href="https://verymad.dn42/" target="_blank" rel="noopener noreferrer"><code>verymad.dn42</code></a></li><li><a href="https://pipes.verymad.dn42/" target="_blank" rel="noopener noreferrer"><code>pipes.verymad.dn42</code></a></li><li><a href="http://verymad.ygg.kgivler.com/" target="_blank" rel="noopener noreferrer"><code>verymad.ygg.kgivler.com</code></a></li></ul>
+              <ul class="endpoint-list">
+                <li><a href="https://pipes.verymad.net/" target="_blank" rel="noopener noreferrer"><code>pipes.verymad.net</code></a></li>
+                <li><a href="https://verymad.dn42/" target="_blank" rel="noopener noreferrer"><code>verymad.dn42</code></a></li>
+                <li><a href="https://pipes.verymad.dn42/" target="_blank" rel="noopener noreferrer"><code>pipes.verymad.dn42</code></a></li>
+                <li><a href="http://verymad.ygg.kgivler.com/" target="_blank" rel="noopener noreferrer"><code>verymad.ygg.kgivler.com</code></a></li>
+              </ul>
             </article>
+
             <article class="inventory-card">
               <div class="inventory-card-heading"><h3>tcpnoise</h3><span class="inventory-badge">Experiment</span></div>
-              <p>A manually launched network-noise / connection experiment on Clanker. The live playground lives in the Lab.</p>
-              <div class="systems-actions"><a href="/lab/" class="terminal-btn-inline">Enter the Lab <span aria-hidden="true">→</span></a><a href="https://github.com/JoyfulReaper/tcpnoise" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer">Source</a></div>
+              <p>Network-noise sensors on my infrastructure collect unsolicited connections and feed the sanitized public Noise Observatory.</p>
+              <div class="systems-actions">
+                <a href="/projects/tcpnoise/" class="terminal-btn-inline">Project details</a>
+                <a href="/lab/" class="terminal-btn-inline">Enter the Lab <span aria-hidden="true">→</span></a>
+                <a href="https://github.com/JoyfulReaper/tcpnoise" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer">Source</a>
+              </div>
             </article>
+
             <article class="inventory-card">
               <div class="inventory-card-heading"><h3>tcpnoise on ScopeCreep</h3><span class="inventory-badge">Experiment</span></div>
               <p>A public network-noise / connection experiment on ScopeCreep.</p>
@@ -487,40 +658,41 @@
           </div>
         </section>
       </main>
-          <footer class="site-footer">
-            <div class="site-footer-links">
-              <span>Also available on:</span>
-              <a href="https://www.kgivler.com/">Clearnet</a>
-              <a href="http://site.ygg.kgivler.com/">Yggdrasil</a>
-              <a href="https://kgivler.dn42/">DN42</a>
-              <a href="http://bmhbwuvcvdof5aenq2ocow4rsqzfwxttdy4o6tbro2kohzxyytfq.b32.i2p/">I2P</a>
-            </div>
-            <div class="site-footer-links">
-              <a href="https://github.com/JoyfulReaper/kgivler_com">Project / Source</a>
-            </div>
-            <div class="site-footer-links">
-              <span>Network projects:</span>
-              <a href="https://yggdrasil-network.github.io/">Yggdrasil</a>
-              <a href="https://dn42.dev/Home">DN42</a>
-              <a href="https://i2p.net/">I2P</a>
-            </div>
-            <div class="site-footer-links">
-              <span>© Kyle Givler</span>
-              <span aria-hidden="true">·</span>
-              <a href="https://dev.kgivler.com/">Development Services</a>
-              <span aria-hidden="true">·</span>
-              <a href="/vps-reviews/">VPS Reviews</a>
-            </div>
-            <div class="site-footer-links" data-hosting-promotion hidden>
-              <span>VPS hosting I use:</span>
-              <a href="https://greencloudvps.com/billing/aff.php?aff=10295" target="_blank" rel="sponsored noopener noreferrer">GreenCloud VPS</a>
-            </div>
-            <div class="site-footer-note" data-hosting-promotion hidden>
-              GreenCloud link is an affiliate link — I may earn a commission
-              if you sign up through it.
-            </div>
-            <p class="site-footer-note" data-i2p-note hidden>This is the I2P deployment. Browser assets are local; some optional integrations may be unavailable.</p>
-          </footer>
+
+      <footer class="site-footer">
+        <div class="site-footer-links">
+          <span>Also available on:</span>
+          <a href="https://www.kgivler.com/">Clearnet</a>
+          <a href="http://site.ygg.kgivler.com/">Yggdrasil</a>
+          <a href="https://kgivler.dn42/">DN42</a>
+          <a href="http://bmhbwuvcvdof5aenq2ocow4rsqzfwxttdy4o6tbro2kohzxyytfq.b32.i2p/">I2P</a>
+        </div>
+        <div class="site-footer-links">
+          <a href="https://github.com/JoyfulReaper/kgivler_com">Project / Source</a>
+        </div>
+        <div class="site-footer-links">
+          <span>Network projects:</span>
+          <a href="https://yggdrasil-network.github.io/">Yggdrasil</a>
+          <a href="https://dn42.dev/Home">DN42</a>
+          <a href="https://i2p.net/">I2P</a>
+        </div>
+        <div class="site-footer-links">
+          <span>© Kyle Givler</span>
+          <span aria-hidden="true">·</span>
+          <a href="https://dev.kgivler.com/">Development Services</a>
+          <span aria-hidden="true">·</span>
+          <a href="/vps-reviews/">VPS Reviews</a>
+        </div>
+        <div class="site-footer-links" data-hosting-promotion hidden>
+          <span>VPS hosting I use:</span>
+          <a href="https://greencloudvps.com/billing/aff.php?aff=10295" target="_blank" rel="sponsored noopener noreferrer">GreenCloud VPS</a>
+        </div>
+        <div class="site-footer-note" data-hosting-promotion hidden>
+          GreenCloud link is an affiliate link — I may earn a commission
+          if you sign up through it.
+        </div>
+        <p class="site-footer-note" data-i2p-note hidden>This is the I2P deployment. Browser assets are local; some optional integrations may be unavailable.</p>
+      </footer>
     </div>
     <script type="module" src="/js/network-presentation.js"></script>
   </body>
