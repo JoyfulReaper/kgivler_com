@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Projects | Kyle Givler</title>
+
+    <meta name="description" content="A curated selection of Kyle Givler's .NET applications, C networking experiments, developer tools, Internet protocol servers, and RimWorld mods." />
+
+    <link rel="canonical" href="https://www.kgivler.com/projects/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Projects | Kyle Givler" />
+    <meta property="og:description" content="A curated selection of Kyle Givler's .NET applications, C networking experiments, developer tools, Internet protocol servers, and RimWorld mods." />
+    <meta property="og:url" content="https://www.kgivler.com/projects/" />
+    <meta property="og:site_name" content="Kyle Givler" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Projects | Kyle Givler" />
+    <meta name="twitter:description" content="A curated selection of Kyle Givler's .NET applications, C networking experiments, developer tools, Internet protocol servers, and RimWorld mods." />
+
+    <link href="/vendor/bootstrap-5.3.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+
+    <link rel="stylesheet" href="/vendor/fontawesome-6.5.1/css/all.min.css" integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="/styles.css?v=6" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <link rel="stylesheet" href="./projects.css?v=1" />
+  </head>
+
+  <body class="terminal-theme projects-page">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <div class="projects-container">
+      <header class="projects-header">
+        <a class="projects-brand" href="/">Kyle Givler<span aria-hidden="true">_</span></a>
+        <nav class="terminal-nav" aria-label="Main navigation">
+          <a href="/">Home</a>
+          <a href="/projects/" aria-current="page">Projects</a>
+          <a href="/lab/">Lab</a>
+          <a href="/services/">Systems</a>
+          <a href="/vps-reviews/">VPS Reviews</a>
+          <a href="https://dev.kgivler.com/" class="terminal-nav-primary">Hire Me</a>
+        </nav>
+      </header>
+      <main id="main-content">
+        <header class="projects-intro">
+          <p class="projects-kicker"><span class="prompt" aria-hidden="true">~/</span>projects</p>
+          <h1>Projects &amp; experiments</h1>
+          <p>A selection of things I’ve built, run, and tinkered with. Backend applications, small Internet protocols, developer tools, and mods — not every repository I’ve ever created.</p>
+          <nav class="projects-categories" aria-label="Project categories">
+            <a href="#featured">Featured</a>
+            <a href="#applications">Applications / infrastructure</a>
+            <a href="#tools">Developer tools</a>
+            <a href="#networking">Networking / protocols</a>
+            <a href="#modding">Game / modding</a>
+          </nav>
+        </header>
+
+        <section class="projects-section" id="featured" aria-labelledby="featured-heading">
+          <h2 id="featured-heading">Featured projects</h2>
+          <div class="projects-featured-grid">
+            <article class="projects-card">
+              <p class="projects-kicker">Infrastructure / applications</p>
+              <h3>Mission Control</h3>
+              <p>A self-hosted operations system combining durable event history with live host, container, and protocol monitoring across multiple machines.</p>
+              <p>Agents collect current state while NATS JetStream carries operational events to the archive and shared web/mobile clients.</p>
+              <p class="projects-stack">.NET · NATS JetStream · SQLite · Blazor / MAUI</p>
+              <div class="projects-actions">
+                <a href="/projects/mission-control/" class="terminal-btn-inline">Details <span aria-hidden="true">→</span></a>
+                <a href="https://github.com/JoyfulReaper/MissionControl" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer" aria-label="Mission Control source on GitHub">Source <span aria-hidden="true">↗</span></a>
+              </div>
+            </article>
+            <article class="projects-card">
+              <p class="projects-kicker">Games / applications</p>
+              <h3>Random Steam Game</h3>
+              <p>A fast Steam backlog picker and library exporter built for people with too many games and not enough desire to choose one.</p>
+              <p>It supports unplayed filtering, local exclusions, aggressive caching, and CSV exports with playtime and Steam Deck compatibility.</p>
+              <p class="projects-stack">.NET · Blazor · Steam API · HybridCache · SQLite</p>
+              <div class="projects-actions">
+                <a href="/projects/random-steam/" class="terminal-btn-inline">Details <span aria-hidden="true">→</span></a>
+                <a href="https://randomsteam.kgivler.com/" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer" aria-label="Try Random Steam Game">Live <span aria-hidden="true">↗</span></a>
+                <a href="https://github.com/JoyfulReaper/RandomSteamGame" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer" aria-label="Random Steam Game source on GitHub">Source <span aria-hidden="true">↗</span></a>
+              </div>
+            </article>
+            <article class="projects-card">
+              <p class="projects-kicker">Planning / applications</p>
+              <h3>What Should I Work On Today?</h3>
+              <p>A self-hosted planning tool for deciding what to work on when time and energy are limited.</p>
+              <p>It filters todos by available energy and effort, then favors useful work based on project neglect and priority instead of always sending me back to whatever I touched most recently.</p>
+              <p class="projects-stack">.NET · Blazor · EF Core · SQLite · GitHub API</p>
+              <div class="projects-actions">
+                <a href="/projects/wsiwot/" class="terminal-btn-inline">Details <span aria-hidden="true">→</span></a>
+                <a href="https://github.com/JoyfulReaper/WhatShouldIWorkOnToday" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer" aria-label="What Should I Work On Today source on GitHub">Source <span aria-hidden="true">↗</span></a>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="projects-section" id="applications" aria-labelledby="applications-heading">
+          <h2 id="applications-heading">Applications / infrastructure</h2>
+          <article class="projects-entry">
+            <div>
+              <h3>PlutoAdDetector</h3>
+              <p>An experimental .NET browser-automation tool that watches Pluto TV for ad breaks and switches to YouTube instead. It combines DOM detection, learned visual signatures, queue/resume behavior, and a Windows GUI.</p>
+              <p class="projects-stack">.NET · Playwright · WinForms · Browser automation</p>
+            </div>
+            <div class="projects-actions">
+              <a href="/projects/pluto-ad-detector/" class="terminal-btn-inline">Details <span aria-hidden="true">→</span></a>
+              <a href="https://github.com/JoyfulReaper/PlutoAdDetector" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer" aria-label="PlutoAdDetector source on GitHub">Source <span aria-hidden="true">↗</span></a>
+            </div>
+          </article>
+          <article class="projects-entry">
+            <div>
+              <h3>Random GitHub</h3>
+              <p>A public repository-discovery app that drops you into a random corner of GitHub. It keeps a shuffled repository pool, renders sanitized READMEs, handles API limits, and supports an optional bring-your-own token.</p>
+              <p class="projects-stack">.NET · ASP.NET Core · GitHub API · SQLite · Mission Control</p>
+            </div>
+            <div class="projects-actions">
+              <a href="/projects/random-github/" class="terminal-btn-inline">Details <span aria-hidden="true">→</span></a>
+              <a href="https://randomgit.kgivler.com/" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer" aria-label="Try Random GitHub">Live <span aria-hidden="true">↗</span></a>
+              <a href="https://github.com/JoyfulReaper/Random_Github" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer" aria-label="Random GitHub source on GitHub">Source <span aria-hidden="true">↗</span></a>
+            </div>
+          </article>
+        </section>
+
+        <section class="projects-section" id="tools" aria-labelledby="tools-heading">
+          <h2 id="tools-heading">Developer tools</h2>
+          <article class="projects-entry">
+            <div>
+              <h3>ReaperShell</h3>
+              <p>An experimental .NET shell for local developer tooling. Write command packs in C#, F#, or VB.NET, then rebuild and reload them while working. Git-backed pack management, completion, history, and line editing keep that workflow inside the shell.</p>
+              <p class="projects-stack">.NET · Command packs · Live rebuild / reload · Git</p>
+            </div>
+            <div class="projects-actions">
+              <a href="/projects/reapershell/" class="terminal-btn-inline">Details <span aria-hidden="true">→</span></a>
+              <a href="https://github.com/JoyfulReaper/ReaperShell" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer" aria-label="ReaperShell source on GitHub">Source <span aria-hidden="true">↗</span></a>
+            </div>
+          </article>
+        </section>
+
+        <section class="projects-section" id="networking" aria-labelledby="networking-heading">
+          <h2 id="networking-heading">Networking / protocols</h2>
+          <article class="projects-entry">
+            <div>
+              <h3>DN42Atlas</h3>
+              <p>A .NET tool for discovering and browsing public services on DN42. It starts from registry data, resolves .dn42 names, conservatively probes web services, respects exclusions and robots.txt, and builds a self-contained viewer from the results.</p>
+              <p class="projects-stack">.NET · DN42 · DNS · HTTP probing · SQLite</p>
+            </div>
+            <div class="projects-actions">
+              <a href="/projects/dn42atlas/" class="terminal-btn-inline">Details <span aria-hidden="true">→</span></a>
+              <a href="https://github.com/JoyfulReaper/DN42Atlas" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer" aria-label="DN42Atlas source on GitHub">Source <span aria-hidden="true">↗</span></a>
+            </div>
+          </article>
+          <article class="projects-entry">
+            <div>
+              <h3>tcpnoise / Noise Observatory</h3>
+              <p>Small C sensors watch exposed TCP ports for unsolicited scanners, bots, probes, and payloads. A separate .NET observatory turns that stream into sanitized recent activity and aggregate Internet-noise statistics.</p>
+              <p class="projects-stack">C · POSIX sockets · NATS · .NET · FreeBSD / Linux</p>
+            </div>
+            <div class="projects-actions">
+              <a href="/projects/tcpnoise/" class="terminal-btn-inline">Details <span aria-hidden="true">→</span></a>
+              <a href="https://github.com/JoyfulReaper/tcpnoise" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer" aria-label="tcpnoise source on GitHub">tcpnoise <span aria-hidden="true">↗</span></a>
+              <a href="https://noise.kgivler.com/" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer" aria-label="Open Noise Observatory">Observatory <span aria-hidden="true">↗</span></a>
+              <a href="https://github.com/JoyfulReaper/NoiseObservatory" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer" aria-label="Noise Observatory source on GitHub">Source <span aria-hidden="true">↗</span></a>
+            </div>
+          </article>
+          <article class="projects-entry">
+            <div>
+              <h3>SmolSearch</h3>
+              <p>A small search engine for Geminispace. The crawler writes a local SQLite/FTS5 index while the query path stays separate and read-only, so search never depends on a live Gemini request.</p>
+              <p class="projects-stack">.NET · Gemini · SQLite FTS5 · TLS / TOFU</p>
+            </div>
+            <a href="https://github.com/JoyfulReaper/SmolSearch" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer" aria-label="SmolSearch source on GitHub">Source <span aria-hidden="true">↗</span></a>
+          </article>
+          <article class="projects-entry">
+            <div>
+              <h3>HappyGopher</h3>
+              <p>A .NET Gopher server for static content, dynamic pages, and plugins. Part of my ongoing interest in Internet protocols smaller than the modern web.</p>
+              <p class="projects-stack">.NET · TCP :70 · Gopher · Plugins</p>
+            </div>
+            <div class="projects-actions">
+              <a href="/projects/happy-protocols/" class="terminal-btn-inline">Details <span aria-hidden="true">→</span></a>
+              <a href="https://github.com/JoyfulReaper/HappyGopher" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer" aria-label="HappyGopher source on GitHub">Source <span aria-hidden="true">↗</span></a>
+            </div>
+          </article>
+          <article class="projects-entry">
+            <div>
+              <h3>HappyGemini</h3>
+              <p>A .NET Gemini server with static content, dynamic pages, and plugin support. Another way to publish things without bringing an entire browser application along.</p>
+              <p class="projects-stack">.NET · TLS :1965 · Gemini · Plugins</p>
+            </div>
+            <div class="projects-actions">
+              <a href="/projects/happy-protocols/" class="terminal-btn-inline">Details <span aria-hidden="true">→</span></a>
+              <a href="https://github.com/JoyfulReaper/HappyGemini" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer" aria-label="HappyGemini source on GitHub">Source <span aria-hidden="true">↗</span></a>
+            </div>
+          </article>
+          <article class="projects-entry">
+            <div>
+              <h3>The smaller Happy protocols</h3>
+              <p>Echo, Discard, Daytime, Time, QOTD, and Finger: small .NET services for classic protocols. Sometimes a service really can do one tiny thing.</p>
+              <p class="projects-stack">.NET · TCP/IP · Shared server infrastructure</p>
+            </div>
+            <div class="projects-actions">
+              <a href="/projects/happy-protocols/" class="terminal-btn-inline">Details <span aria-hidden="true">→</span></a>
+              <a href="/services/" class="terminal-btn-inline">Systems catalog <span aria-hidden="true">→</span></a>
+            </div>
+          </article>
+          <article class="projects-entry">
+            <div>
+              <h3>DN42 / Yggdrasil</h3>
+              <p>Ongoing routing and overlay-network experiments, including a multi-POP DN42 network and services reachable across alternative networks. This is infrastructure work rather than one neatly packaged repository.</p>
+              <p class="projects-stack">BGP / BIRD · WireGuard · IPv4 / IPv6 · DNS · Overlay networks</p>
+            </div>
+            <a href="/services/" class="terminal-btn-inline">Systems <span aria-hidden="true">→</span></a>
+          </article>
+        </section>
+
+        <section class="projects-section" id="modding" aria-labelledby="modding-heading">
+          <h2 id="modding-heading">Game / modding</h2>
+          <article class="projects-entry">
+            <div>
+              <h3>RimWorld Modding</h3>
+              <p>Performance work, quality-of-life changes, and new ways to interfere with a colony. Representative projects include Replace Stuff: Performance Edition, Better Trade Colors, MiniMap performance work, Panic Zone Toggler, and The Gods Are Real.</p>
+              <p class="projects-stack">C# · RimWorld · Performance / gameplay</p>
+            </div>
+            <a href="https://steamcommunity.com/id/Mister_God/myworkshopfiles/?appid=294100" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer">RimWorld Workshop <span aria-hidden="true">↗</span></a>
+          </article>
+        </section>
+      </main>
+      <footer class="site-footer">
+        <div class="site-footer-links">
+          <span>Also available on:</span>
+          <a href="https://www.kgivler.com/">Clearnet</a>
+          <a href="http://site.ygg.kgivler.com/">Yggdrasil</a>
+          <a href="https://kgivler.dn42/">DN42</a>
+          <a href="http://bmhbwuvcvdof5aenq2ocow4rsqzfwxttdy4o6tbro2kohzxyytfq.b32.i2p/">I2P</a>
+        </div>
+        <div class="site-footer-links">
+          <a href="https://github.com/JoyfulReaper/kgivler_com">Project / Source</a>
+        </div>
+        <div class="site-footer-links">
+          <span>Network projects:</span>
+          <a href="https://yggdrasil-network.github.io/">Yggdrasil</a>
+          <a href="https://dn42.dev/Home">DN42</a>
+          <a href="https://i2p.net/">I2P</a>
+        </div>
+        <div class="site-footer-links">
+          <span>© Kyle Givler</span>
+          <span aria-hidden="true">·</span>
+          <a href="https://dev.kgivler.com/">Development Services</a>
+          <span aria-hidden="true">·</span>
+          <a href="/vps-reviews/">VPS Reviews</a>
+        </div>
+        <div class="site-footer-links" data-hosting-promotion hidden>
+          <span>VPS hosting I use:</span>
+          <a href="https://greencloudvps.com/billing/aff.php?aff=10295" target="_blank" rel="sponsored noopener noreferrer">GreenCloud VPS</a>
+        </div>
+        <div class="site-footer-note" data-hosting-promotion hidden>
+          GreenCloud link is an affiliate link — I may earn a commission
+          if you sign up through it.
+        </div>
+        <p class="site-footer-note" data-i2p-note hidden>This is the I2P deployment. Browser assets are local; some optional integrations may be unavailable.</p>
+      </footer>
+    </div>
+    <script type="module" src="/js/network-presentation.js"></script>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+{{define "detail"}}{{template "header"}}
+    <h1>Contact #{{.Contact.ID}}</h1>
+    <dl>
+        <dt>Status</dt><dd><span class="status">{{.Contact.Status}}</span></dd>
+        <dt>Received (UTC)</dt><dd><time datetime="{{.Contact.CreatedUtc}}">{{.Contact.CreatedUtc}}</time></dd>
+        <dt>Name</dt><dd>{{.Contact.Name}}</dd>
+        <dt>Email</dt><dd>{{.Contact.Email}}</dd>
+        <dt>Phone</dt><dd>{{if .Contact.Phone}}{{.Contact.Phone}}{{else}}—{{end}}</dd>
+        <dt>Subject</dt><dd>{{if .Contact.Subject}}{{.Contact.Subject}}{{else}}(no subject){{end}}</dd>
+    </dl>
+    <h2>Message</h2>
+    <div class="message">{{.Contact.Message}}</div>
+    <form method="post" action="/admin/contact/{{.Contact.ID}}/status" aria-label="Change contact status">
+        <input type="hidden" name="csrf_token" value="{{.Token}}">
+        <button name="status" value="new">Mark New</button>
+        <button name="status" value="read">Mark Read</button>
+        <button name="status" value="archived">Archive</button>
+        <button name="status" value="spam">Mark Spam</button>
+    </form>
+{{template "footer"}}{{end}}

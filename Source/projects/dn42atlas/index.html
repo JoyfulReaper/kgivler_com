@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>DN42Atlas | Kyle Givler</title>
+
+    <meta
+      name="description"
+      content="DN42Atlas is Kyle Givler's .NET tool for discovering, safely probing, and browsing public services on DN42, with static publication, conservative network validation, and self-service exclusions." />
+
+    <link rel="canonical" href="https://www.kgivler.com/projects/dn42atlas/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DN42Atlas | Kyle Givler" />
+    <meta
+      property="og:description"
+      content="A .NET discovery and publication tool for browsing public services on DN42 without turning the project into a vulnerability scanner or a database-backed search platform." />
+    <meta property="og:url" content="https://www.kgivler.com/projects/dn42atlas/" />
+    <meta property="og:site_name" content="Kyle Givler" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="DN42Atlas | Kyle Givler" />
+    <meta
+      name="twitter:description"
+      content="A conservative DN42 service-discovery tool that turns registry and probe results into a browseable static atlas." />
+
+    <link
+      href="/vendor/bootstrap-5.3.3/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous" />
+
+    <link
+      rel="stylesheet"
+      href="/vendor/fontawesome-6.5.1/css/all.min.css"
+      integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="/styles.css?v=6" />
+    <link rel="stylesheet" href="../projects.css?v=1" />
+    <link rel="stylesheet" href="../project-detail.css?v=1" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+
+  <body class="terminal-theme projects-page project-detail-page">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <div class="projects-container">
+      <header class="projects-header">
+        <a class="projects-brand" href="/">Kyle Givler<span aria-hidden="true">_</span></a>
+
+        <nav class="terminal-nav" aria-label="Main navigation">
+          <a href="/">Home</a>
+          <a href="/projects/" aria-current="page">Projects</a>
+          <a href="/lab/">Lab</a>
+          <a href="/services/">Systems</a>
+          <a href="/vps-reviews/">VPS Reviews</a>
+          <a href="https://dev.kgivler.com/" class="terminal-nav-primary">Hire Me</a>
+        </nav>
+      </header>
+
+      <main id="main-content">
+        <header class="project-detail-hero">
+          <p class="projects-kicker">
+            <span class="prompt" aria-hidden="true">~/</span>projects/dn42atlas
+          </p>
+
+          <h1>DN42Atlas</h1>
+
+          <p class="project-detail-lede">
+            A discovery and browsing tool for public services on DN42. It starts
+            with registry data, resolves registered names, conservatively probes
+            reachable web services, and turns the results into a static atlas that
+            is easy to browse without needing a database-backed search platform.
+          </p>
+
+          <div class="projects-actions project-detail-actions">
+            <a
+              href="https://github.com/JoyfulReaper/DN42Atlas"
+              class="terminal-btn-inline"
+              target="_blank"
+              rel="noopener noreferrer">
+              Source
+              <span aria-hidden="true">↗</span>
+            </a>
+
+            <a href="/projects/" class="terminal-btn-inline">
+              Projects
+              <span aria-hidden="true">←</span>
+            </a>
+          </div>
+
+          <p class="project-detail-stack">
+            .NET 10 · DNS · HTTP probing · JSON · static HTML · ASP.NET Core · Auth42
+          </p>
+        </header>
+
+        <section class="project-detail-section" aria-labelledby="why-heading">
+          <h2 id="why-heading">Why I built it</h2>
+
+          <p>
+            DN42 has a lot of small websites, tools, looking glasses, personal
+            pages, and strange little services scattered around it. There are
+            existing discovery tools, but I kept running into two problems: one
+            of the better-known options was unavailable often enough to be
+            frustrating, and its index still missed plenty of things.
+          </p>
+
+          <p>
+            I wanted something I could run myself that started from the DN42
+            registry and built a fresh picture of what was actually reachable.
+            The goal was not to make a scanner for scanner's sake. I wanted to
+            end up with something I could casually browse and use to discover
+            corners of the network I would otherwise never see.
+          </p>
+
+          <p>
+            Some other discovery projects go further and render or screenshot the
+            pages they find, which is undeniably cooler. DN42Atlas takes a more
+            boring route: collect enough metadata to make discovery useful, keep
+            the probing bounded, and make the result simple to publish.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="pipeline-heading">
+          <h2 id="pipeline-heading">From registry data to something browseable</h2>
+
+          <p>
+            Atlas starts with registered <code>.dn42</code> names, resolves them
+            through a DN42-aware resolver, and probes a curated set of HTTP and
+            HTTPS endpoints. For reachable services it can record basic metadata
+            such as page titles, redirects, content types, discovered links, and
+            referenced <code>.dn42</code> hostnames.
+          </p>
+
+          <p>
+            The scan output is written as JSON. Publication then filters that raw
+            result and turns it into a self-contained HTML viewer. That separation
+            keeps network activity out of the publication step: generating or
+            regenerating the public atlas does not need to resolve names or probe
+            services again.
+          </p>
+
+          <div
+            class="project-architecture"
+            role="img"
+            aria-label="DN42Atlas flow: registry DNS objects are parsed, registered DN42 names are resolved, exclusions and DN42 address validation are applied, approved addresses are pinned and conservatively probed, raw scan results are written to JSON, publication filters and redacts the data, and a static HTML atlas is generated.">
+            <div class="project-architecture-row">
+              <div class="project-architecture-box">
+                <strong>DN42 registry</strong>
+                <span>registered DNS objects</span>
+              </div>
+            </div>
+
+            <span class="project-architecture-arrow" aria-hidden="true">↓</span>
+
+            <div class="project-architecture-row">
+              <div class="project-architecture-box">
+                <strong>DN42-aware DNS</strong>
+                <span>resolve registered .dn42 names</span>
+              </div>
+            </div>
+
+            <span class="project-architecture-arrow" aria-hidden="true">↓</span>
+
+            <div class="project-architecture-row project-architecture-split">
+              <div class="project-architecture-box">
+                <strong>Exclusion policy</strong>
+                <span>hosts · prefixes · runtime opt-outs</span>
+              </div>
+
+              <div class="project-architecture-box">
+                <strong>Address guard</strong>
+                <span>DN42 ranges only · reject mixed/unsafe results</span>
+              </div>
+            </div>
+
+            <span class="project-architecture-arrow" aria-hidden="true">↓</span>
+
+            <div class="project-architecture-row">
+              <div class="project-architecture-box project-architecture-accent">
+                <strong>Pinned HTTP probing</strong>
+                <span>robots.txt · bounded homepage reads · no recursive crawl</span>
+              </div>
+            </div>
+
+            <span class="project-architecture-arrow" aria-hidden="true">↓</span>
+
+            <div class="project-architecture-row">
+              <div class="project-architecture-box">
+                <strong>Raw JSON snapshot</strong>
+                <span>historical scan evidence · kept private</span>
+              </div>
+            </div>
+
+            <span class="project-architecture-arrow" aria-hidden="true">↓</span>
+
+            <div class="project-architecture-row">
+              <div class="project-architecture-box project-architecture-accent">
+                <strong>Publication filter</strong>
+                <span>exclude · redact · remove private provenance</span>
+              </div>
+            </div>
+
+            <span class="project-architecture-arrow" aria-hidden="true">↓</span>
+
+            <div class="project-architecture-row">
+              <div class="project-architecture-box">
+                <strong>Static atlas</strong>
+                <span>self-contained HTML + public JSON</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="static-heading">
+          <h2 id="static-heading">The static site was an accident, then a feature</h2>
+
+          <p>
+            I did not start the project with "make the whole thing static" as a
+            requirement. That fell out of the architecture naturally.
+          </p>
+
+          <p>
+            Once the crawler was producing a complete scan snapshot, there was no
+            good reason for the public viewer to query a live database. The report
+            step could take the saved JSON, filter it, and generate everything the
+            browser needed ahead of time.
+          </p>
+
+          <p>
+            That makes the public listing cheap and boring to host. There is no
+            database in the crawler-to-publication path, no query service required
+            just to browse the results, and no reason for a page view to trigger
+            more DN42 traffic.
+          </p>
+
+          <p class="project-detail-note">
+            The separate operator/opt-out service keeps its own private state, but
+            the discovery and public browsing pipeline does not depend on a live
+            database.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="polite-heading">
+          <h2 id="polite-heading">Polite discovery, not a vulnerability scanner</h2>
+
+          <p>
+            Atlas deliberately does less than a general-purpose crawler or scanner.
+            It checks a curated set of web endpoints, requests
+            <code>/robots.txt</code>, and fetches the homepage only when policy
+            allows it. It does not recursively follow links, brute-force paths,
+            attempt authentication, or run vulnerability checks.
+          </p>
+
+          <p>
+            Concurrency, timeouts, response sizes, and link counts are bounded.
+            If robots rules cannot be evaluated safely, the homepage is not fetched.
+            Discovered links are useful metadata for the atlas, not instructions to
+            immediately crawl deeper.
+          </p>
+
+          <p>
+            That keeps the project aligned with what I actually wanted: discover
+            public DN42 services without behaving like I am trying to audit them.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="pinning-heading">
+          <h2 id="pinning-heading">DNS is input, not authority</h2>
+
+          <p>
+            A scanner that accepts hostnames from outside itself needs to be careful
+            about where those names can send it. DN42Atlas therefore does not simply
+            resolve a hostname and hand it to a normal HTTP client.
+          </p>
+
+          <p>
+            Before probing, the saved addresses must fall inside expected DN42
+            address space. A hostname with mixed DN42 and external results is
+            rejected. The HTTP connection is then pinned to the validated address
+            set while still using the hostname for the HTTP Host header and TLS SNI.
+          </p>
+
+          <p>
+            That means a later DNS change cannot silently redirect an existing scan
+            job somewhere outside the intended network. A stale resolution file is
+            allowed to fail rather than quietly becoming permission to probe a new
+            destination.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="optout-heading">
+          <h2 id="optout-heading">Opt-out became its own engineering problem</h2>
+
+          <p>
+            The exclusion system started as simple hostname and CIDR files, but it
+            grew into one of the more interesting technical parts of the project.
+            Exclusions need to apply before probing, during publication, and when
+            old raw scans are regenerated into new public output.
+          </p>
+
+          <p>
+            Manual host and prefix rules fail closed: malformed or missing required
+            policy stops network work rather than silently continuing without
+            exclusions. Public output also removes excluded references and strips
+            private destination provenance before publication.
+          </p>
+
+          <p>
+            The self-service path adds Auth42 identity and registry ownership checks
+            so a maintainer can request exclusion for resources they actually
+            control. Approved changes update runtime policy and can regenerate the
+            current public artifacts from the recorded raw scan without requiring a
+            fresh crawl.
+          </p>
+
+          <p>
+            That is more machinery than a tiny hobby-network directory strictly
+            needs, but it created a useful design constraint: discovery policy has
+            to remain enforceable even after collection has already happened.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="decisions-heading">
+          <h2 id="decisions-heading">A few decisions that ended up mattering</h2>
+
+          <div class="project-decision-grid">
+            <article class="project-decision-card">
+              <h3>Raw scans stay separate from public output</h3>
+              <p>
+                Historical crawl data is evidence, not something to serve directly.
+                Publication gets its own filtering and redaction step.
+              </p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>Unsafe ambiguity fails closed</h3>
+              <p>
+                Missing policy, malformed CIDRs, invalid provenance, or mixed
+                address results stop the relevant operation instead of being waved
+                through.
+              </p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>Publication does not touch the network</h3>
+              <p>
+                Reports are generated from recorded scan data. Rebuilding the atlas
+                does not resolve names or probe hosts again.
+              </p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>Static is enough</h3>
+              <p>
+                The public atlas is generated ahead of time, which keeps the browsing
+                path simple even though the collection and policy logic behind it
+                are not.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="stack-heading">
+          <h2 id="stack-heading">Technology</h2>
+
+          <div class="project-tech-list" aria-label="DN42Atlas technology stack">
+            <span>.NET 10</span>
+            <span>DNS</span>
+            <span>HTTP / HTTPS</span>
+            <span>JSON</span>
+            <span>Static HTML</span>
+            <span>ASP.NET Core</span>
+            <span>Auth42</span>
+            <span>systemd</span>
+            <span>nginx</span>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="status-heading">
+          <h2 id="status-heading">Current status</h2>
+
+          <p>
+            The crawler, publication pipeline, exclusion handling, self-service
+            operator flow, and static viewer are implemented and being prepared for
+            public launch. The remaining work is mostly final validation and the
+            practical question of what turns up once real people start browsing the
+            atlas and asking it to include or exclude things I did not anticipate.
+          </p>
+
+          <div class="projects-actions project-detail-footer-actions">
+            <a href="/projects/" class="terminal-btn-inline">
+              <span aria-hidden="true">←</span>
+              Back to projects
+            </a>
+
+            <a
+              href="https://github.com/JoyfulReaper/DN42Atlas"
+              class="terminal-btn-inline"
+              target="_blank"
+              rel="noopener noreferrer">
+              Source
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="site-footer-links">
+          <span>Also available on:</span>
+          <a href="https://www.kgivler.com/">Clearnet</a>
+          <a href="http://site.ygg.kgivler.com/">Yggdrasil</a>
+          <a href="https://kgivler.dn42/">DN42</a>
+          <a href="http://bmhbwuvcvdof5aenq2ocow4rsqzfwxttdy4o6tbro2kohzxyytfq.b32.i2p/">I2P</a>
+        </div>
+
+        <div class="site-footer-links">
+          <a href="https://github.com/JoyfulReaper/kgivler_com">Project / Source</a>
+        </div>
+
+        <div class="site-footer-links">
+          <span>Network projects:</span>
+          <a href="https://yggdrasil-network.github.io/">Yggdrasil</a>
+          <a href="https://dn42.dev/Home">DN42</a>
+          <a href="https://i2p.net/">I2P</a>
+        </div>
+
+        <div class="site-footer-links">
+          <span>© Kyle Givler</span>
+          <span aria-hidden="true">·</span>
+          <a href="https://dev.kgivler.com/">Development Services</a>
+          <span aria-hidden="true">·</span>
+          <a href="/vps-reviews/">VPS Reviews</a>
+        </div>
+
+        <p class="site-footer-note" data-i2p-note hidden>
+          This is the I2P deployment. Browser assets are local; some optional
+          integrations may be unavailable.
+        </p>
+      </footer>
+    </div>
+
+    <script type="module" src="/js/network-presentation.js"></script>
+  </body>
+</html>

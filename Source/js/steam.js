@@ -101,8 +101,7 @@ function renderSteamPresenceBadge(presence) {
           in-game
         </span>
         <span><strong>[STEAM]</strong> ${actorName} is in-game: ${gameName}</span>
-      </div>
-      <div class="text-warning small mt-1">[NOTICE] Local AI review may be unavailable while the workstation is busy.</div>`;
+      </div>`;
     return;
   }
 

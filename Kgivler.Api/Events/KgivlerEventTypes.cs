@@ -8,9 +8,6 @@ public static class KgivlerEventTypes
     public const string BbsMessagesRetrieved =
         "kgivler.bbs.message.retrieved";
 
-    public const string CodeReviewCompleted =
-        "kgivler.code-review.completed";
-
     public const string SteamPresenceRequestCompleted =
         "kgivler.steam-presence.request.completed";
 

@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>tcpnoise &amp; Noise Observatory | Kyle Givler</title>
+
+    <meta
+      name="description"
+      content="tcpnoise is Kyle Givler's small C network-noise collector, which grew from a FreeBSD socket-programming exercise into a multi-sensor NATS event stream, Windows sound companion, and public sanitized Noise Observatory." />
+
+    <link rel="canonical" href="https://www.kgivler.com/projects/tcpnoise/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="tcpnoise &amp; Noise Observatory | Kyle Givler" />
+    <meta
+      property="og:description"
+      content="A FreeBSD/C socket-programming experiment that grew into a multi-sensor Internet-noise collector, live NATS stream, Windows clicker, and public sanitized observatory." />
+    <meta property="og:url" content="https://www.kgivler.com/projects/tcpnoise/" />
+    <meta property="og:site_name" content="Kyle Givler" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="tcpnoise &amp; Noise Observatory | Kyle Givler" />
+    <meta
+      name="twitter:description"
+      content="A terminal Geiger counter for unsolicited Internet traffic that escaped into NATS, Windows sounds, and a public observatory." />
+
+    <link
+      href="/vendor/bootstrap-5.3.3/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous" />
+
+    <link
+      rel="stylesheet"
+      href="/vendor/fontawesome-6.5.1/css/all.min.css"
+      integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="/styles.css?v=6" />
+    <link rel="stylesheet" href="../projects.css?v=1" />
+    <link rel="stylesheet" href="../project-detail.css?v=1" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+
+  <body class="terminal-theme projects-page project-detail-page">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <div class="projects-container">
+      <header class="projects-header">
+        <a class="projects-brand" href="/">Kyle Givler<span aria-hidden="true">_</span></a>
+
+        <nav class="terminal-nav" aria-label="Main navigation">
+          <a href="/">Home</a>
+          <a href="/projects/" aria-current="page">Projects</a>
+          <a href="/lab/">Lab</a>
+          <a href="/services/">Systems</a>
+          <a href="/vps-reviews/">VPS Reviews</a>
+          <a href="https://dev.kgivler.com/" class="terminal-nav-primary">Hire Me</a>
+        </nav>
+      </header>
+
+      <main id="main-content">
+        <header class="project-detail-hero">
+          <p class="projects-kicker">
+            <span class="prompt" aria-hidden="true">~/</span>projects/tcpnoise
+          </p>
+
+          <h1>tcpnoise &amp; Noise Observatory</h1>
+
+          <p class="project-detail-lede">
+            A small C socket-programming exercise that turned into a distributed
+            collection of Internet-noise sensors, a live NATS event stream, a
+            Windows app that makes scanners literally make noise, and a public
+            sanitized observatory for watching the background Internet misbehave.
+          </p>
+
+          <div class="projects-actions project-detail-actions">
+            <a
+              href="https://noise.kgivler.com/"
+              class="terminal-btn-inline"
+              target="_blank"
+              rel="noopener noreferrer">
+              Observatory
+              <span aria-hidden="true">↗</span>
+            </a>
+
+            <a
+              href="https://github.com/JoyfulReaper/tcpnoise"
+              class="terminal-btn-inline"
+              target="_blank"
+              rel="noopener noreferrer">
+              tcpnoise source
+              <span aria-hidden="true">↗</span>
+            </a>
+
+            <a
+              href="https://github.com/JoyfulReaper/NoiseObservatory"
+              class="terminal-btn-inline"
+              target="_blank"
+              rel="noopener noreferrer">
+              Observatory source
+              <span aria-hidden="true">↗</span>
+            </a>
+
+            <a href="/projects/" class="terminal-btn-inline">
+              Projects
+              <span aria-hidden="true">←</span>
+            </a>
+          </div>
+
+          <p class="project-detail-stack">
+            C · POSIX sockets · poll() · SQLite · NATS · .NET 10 · Razor Pages · FreeBSD / Linux
+          </p>
+        </header>
+
+        <section class="project-detail-section" aria-labelledby="why-heading">
+          <h2 id="why-heading">It started as a C exercise</h2>
+
+          <p>
+            tcpnoise began as a project for learning lower-level socket programming
+            in C on FreeBSD. The first idea was deliberately small: open a few TCP
+            listeners, wait for unsolicited connections, and see what wandered in.
+          </p>
+
+          <p>
+            That immediately gives you surprisingly interesting test data. Public
+            ports do not stay quiet for long. Scanners, bots, broken clients, probes,
+            and things speaking completely the wrong protocol eventually arrive and
+            start sending bytes.
+          </p>
+
+          <p>
+            The collector stayed intentionally low-level: POSIX sockets,
+            <code>poll()</code>, bounded payload capture, per-port logs, and SQLite
+            for persistent seen counts. It became a useful way to learn the boring
+            parts of network programming using traffic I did not have to invent.
+          </p>
+        </section>
+
+        <figure class="project-screenshot">
+          <a
+            href="./images/tcpnoise-terminal.png"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Open full tcpnoise terminal screenshot">
+            <img
+              src="./images/tcpnoise-terminal.png"
+              alt="tcpnoise running in a terminal and showing repeated unsolicited TCP connections, source addresses, seen counts, banners, timeouts, and escaped payload data."
+              loading="lazy"
+              decoding="async" />
+          </a>
+
+          <figcaption>
+            The original experience is still there: exposed listeners, real
+            unsolicited connections, and whatever bytes the Internet decides to
+            throw at them.
+          </figcaption>
+        </figure>
+
+        <section class="project-detail-section" aria-labelledby="nats-heading">
+          <h2 id="nats-heading">Then I added NATS and the project escaped</h2>
+
+          <p>
+            At first I considered sending tcpnoise events into Mission Control.
+            I was already using NATS there, so the integration path was obvious.
+            The problem was that raw connection noise is exactly that: noisy.
+            Feeding every scanner hit into the normal operational event stream
+            would have turned useful infrastructure telemetry into a wall of junk.
+          </p>
+
+          <p>
+            Instead, tcpnoise got its own NATS subject. That was the point where it
+            stopped feeling like only a C-learning exercise. Once the collector
+            could publish a small event and continue doing its job even when NATS
+            was unavailable, the possibilities became much larger than the
+            terminal process itself.
+          </p>
+
+          <p>
+            Multiple sensors can now publish into the same event stream while
+            identifying their site or logical network. The collector does not need
+            to know whether the consumer is a tray app, a public website, a future
+            statistics service, or something much stranger.
+          </p>
+
+          <div
+            class="project-architecture"
+            role="img"
+            aria-label="tcpnoise architecture: unsolicited traffic reaches multiple tcpnoise sensors. Each sensor writes terminal output, logs and SQLite statistics while also publishing connection events to NATS. NATS feeds independent consumers including TcpNoiseClicker, Noise Observatory, and possible future experiments.">
+            <div class="project-architecture-row project-architecture-split">
+              <div class="project-architecture-box">
+                <strong>Public Internet</strong>
+                <span>scanners · bots · probes · confused clients</span>
+              </div>
+
+              <div class="project-architecture-box">
+                <strong>Alternate networks</strong>
+                <span>DN42 · Yggdrasil · other exposed listeners</span>
+              </div>
+            </div>
+
+            <span class="project-architecture-arrow" aria-hidden="true">↓</span>
+
+            <div class="project-architecture-row">
+              <div class="project-architecture-box project-architecture-accent">
+                <strong>tcpnoise sensors</strong>
+                <span>C · sockets · poll() · bounded payload capture</span>
+              </div>
+            </div>
+
+            <span class="project-architecture-arrow" aria-hidden="true">↓</span>
+
+            <div class="project-architecture-row project-architecture-split">
+              <div class="project-architecture-box">
+                <strong>Local state</strong>
+                <span>terminal · logs · SQLite seen counts</span>
+              </div>
+
+              <div class="project-architecture-box project-architecture-accent">
+                <strong>NATS</strong>
+                <span>tcpnoise.connection</span>
+              </div>
+            </div>
+
+            <span class="project-architecture-arrow" aria-hidden="true">↓</span>
+
+            <div class="project-architecture-row project-architecture-split">
+              <div class="project-architecture-box">
+                <strong>TcpNoiseClicker</strong>
+                <span>Windows tray sounds + history</span>
+              </div>
+
+              <div class="project-architecture-box">
+                <strong>Noise Observatory</strong>
+                <span>sanitized public view</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="clicker-heading">
+          <h2 id="clicker-heading">Making Internet background noise actual background noise</h2>
+
+          <p>
+            The first especially unnecessary consumer was TcpNoiseClicker, a small
+            .NET Windows tray application that subscribes to the live event stream
+            and plays a sound whenever a sensor receives a connection.
+          </p>
+
+          <p>
+            It also keeps a history view with the sensor, remote endpoint,
+            destination port, IP version, banner state, bounded payload text, and
+            persistent seen count from the collector. Muting stops the sounds
+            without stopping event counting.
+          </p>
+
+          <p>
+            Some events get different sounds, including IPv6 traffic and a few
+            deliberately special ports. Once NATS existed, adding that kind of
+            consumer no longer required making the C collector responsible for
+            desktop UI or audio behavior.
+          </p>
+        </section>
+
+        <figure class="project-screenshot">
+          <a
+            href="./images/clicker-history.png"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Open full TcpNoiseClicker history screenshot">
+            <img
+              src="./images/clicker-history.png"
+              alt="TcpNoiseClicker history window showing events from several sensors with remote endpoints, destination ports, IP version, seen counts, randomized banners, and captured payload data."
+              loading="lazy"
+              decoding="async" />
+          </a>
+
+          <figcaption>
+            TcpNoiseClicker turns the same event stream into a live desktop
+            experience without adding desktop concerns to the collector.
+          </figcaption>
+        </figure>
+
+        <section class="project-detail-section" aria-labelledby="observatory-heading">
+          <h2 id="observatory-heading">The public Noise Observatory</h2>
+
+          <p>
+            The traffic was interesting enough that I wanted a way to show it
+            publicly without exposing the raw collector data or turning Mission
+            Control into a public security dashboard.
+          </p>
+
+          <p>
+            Noise Observatory is a deliberately small, read-only view over the
+            event stream. It shows recent sanitized activity, short-window counts,
+            approved sensor names, destination ports, repeat-seen counts, and a
+            derived "weather" label for how noisy the Internet currently feels.
+          </p>
+
+          <p>
+            The application is available over the normal Internet as well as DN42,
+            Yggdrasil, and I2P. The core page remains server-rendered and uses local
+            assets, so the alternate-network deployments do not depend on a pile of
+            public frontend CDNs.
+          </p>
+        </section>
+
+        <figure class="project-screenshot">
+          <a
+            href="./images/noise-observatory.png"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Open full Noise Observatory screenshot">
+            <img
+              src="./images/noise-observatory.png"
+              alt="TCPNoise Observatory showing Heavy Rain conditions, recent connection counts, and a sanitized activity table with sensor names, destination ports, seen counts, and masked source addresses."
+              loading="lazy"
+              decoding="async" />
+          </a>
+
+          <figcaption>
+            Noise Observatory exposes the interesting shape of the traffic while
+            intentionally withholding the raw data that does not need to be public.
+          </figcaption>
+        </figure>
+
+        <section class="project-detail-section" aria-labelledby="privacy-heading">
+          <h2 id="privacy-heading">The public boundary is intentional</h2>
+
+          <p>
+            tcpnoise itself can observe more than the public site should expose.
+            The Observatory therefore maps raw transport events into a deliberately
+            smaller public model before they enter public-facing state.
+          </p>
+
+          <p>
+            Source addresses are deterministically masked. Raw captured payloads,
+            source ports, internal/private addresses, credentials, and other fields
+            that are not needed for the public view are discarded rather than
+            merely hidden by the page.
+          </p>
+
+          <p>
+            That boundary also matters for the I2P deployment. The I2P Observatory
+            instance does not get access to the private NATS broker or raw event
+            contract. It polls the source Observatory's already-sanitized snapshot
+            API and serves that public state locally inside I2P.
+          </p>
+
+          <p class="project-detail-note">
+            The remote mirror gets the public product, not the private plumbing.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="decisions-heading">
+          <h2 id="decisions-heading">A few decisions that ended up mattering</h2>
+
+          <div class="project-decision-grid">
+            <article class="project-decision-card">
+              <h3>Keep collecting when NATS is down</h3>
+              <p>
+                Messaging is an integration path, not a dependency on whether the
+                sensor can continue accepting and recording connections.
+              </p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>Do not archive every hit as operational telemetry</h3>
+              <p>
+                Internet background noise deserves its own stream instead of
+                drowning higher-value Mission Control events.
+              </p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>One event stream, many consumers</h3>
+              <p>
+                The C collector stays small while desktop audio, public views, and
+                future experiments evolve independently.
+              </p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>Sanitize before public storage</h3>
+              <p>
+                Public-facing state receives the reduced model. Raw payloads and
+                complete source addresses never need to reach the public layer.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="future-heading">
+          <h2 id="future-heading">Where the noise might go next</h2>
+
+          <p>
+            Noise Observatory is intentionally lightweight today, but the event
+            stream leaves room for richer history and APIs later. I may eventually
+            keep longer-term aggregate data or offer deeper access, but I have not
+            committed to a public or paid historical-data product yet.
+          </p>
+
+          <p>
+            There are also less sensible directions. Internet Noise FM is an idea
+            for turning the live connection stream into one continuous ambient
+            radio station, while PacketGarden explores mapping sanitized network
+            events into plants, fungi, weeds, and other things growing in a browser
+            garden. Both are still early experiments rather than current features.
+          </p>
+
+          <p>
+            That is the part I like most about adding NATS to tcpnoise: the original
+            C program can stay a small sensor while increasingly questionable ideas
+            subscribe downstream.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="stack-heading">
+          <h2 id="stack-heading">Technology</h2>
+
+          <div class="project-tech-list" aria-label="tcpnoise and Noise Observatory technology stack">
+            <span>C</span>
+            <span>POSIX sockets</span>
+            <span>poll()</span>
+            <span>SQLite</span>
+            <span>NATS C client</span>
+            <span>.NET 10</span>
+            <span>ASP.NET Core Razor Pages</span>
+            <span>WinForms</span>
+            <span>Docker</span>
+            <span>FreeBSD / Linux / Windows</span>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="status-heading">
+          <h2 id="status-heading">Current status</h2>
+
+          <p>
+            tcpnoise is actively collecting real traffic from multiple sensors.
+            TcpNoiseClicker consumes the live stream on Windows, and Noise
+            Observatory is deployed publicly with a deliberately sanitized view of
+            that same activity.
+          </p>
+
+          <p>
+            What started as a reason to practice C sockets on FreeBSD now has enough
+            downstream consumers that the little listener is probably stuck being a
+            real project.
+          </p>
+
+          <div class="projects-actions project-detail-footer-actions">
+            <a href="/projects/" class="terminal-btn-inline">
+              <span aria-hidden="true">←</span>
+              Back to projects
+            </a>
+
+            <a
+              href="https://noise.kgivler.com/"
+              class="terminal-btn-inline"
+              target="_blank"
+              rel="noopener noreferrer">
+              Observatory
+              <span aria-hidden="true">↗</span>
+            </a>
+
+            <a
+              href="https://github.com/JoyfulReaper/tcpnoise"
+              class="terminal-btn-inline"
+              target="_blank"
+              rel="noopener noreferrer">
+              tcpnoise source
+              <span aria-hidden="true">↗</span>
+            </a>
+
+            <a
+              href="https://github.com/JoyfulReaper/NoiseObservatory"
+              class="terminal-btn-inline"
+              target="_blank"
+              rel="noopener noreferrer">
+              Observatory source
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="site-footer-links">
+          <span>Also available on:</span>
+          <a href="https://www.kgivler.com/">Clearnet</a>
+          <a href="http://site.ygg.kgivler.com/">Yggdrasil</a>
+          <a href="https://kgivler.dn42/">DN42</a>
+          <a href="http://bmhbwuvcvdof5aenq2ocow4rsqzfwxttdy4o6tbro2kohzxyytfq.b32.i2p/">I2P</a>
+        </div>
+
+        <div class="site-footer-links">
+          <a href="https://github.com/JoyfulReaper/kgivler_com">Project / Source</a>
+        </div>
+
+        <div class="site-footer-links">
+          <span>Network projects:</span>
+          <a href="https://yggdrasil-network.github.io/">Yggdrasil</a>
+          <a href="https://dn42.dev/Home">DN42</a>
+          <a href="https://i2p.net/">I2P</a>
+        </div>
+
+        <div class="site-footer-links">
+          <span>© Kyle Givler</span>
+          <span aria-hidden="true">·</span>
+          <a href="https://dev.kgivler.com/">Development Services</a>
+          <span aria-hidden="true">·</span>
+          <a href="/vps-reviews/">VPS Reviews</a>
+        </div>
+
+        <p class="site-footer-note" data-i2p-note hidden>
+          This is the I2P deployment. Browser assets are local; some optional
+          integrations may be unavailable.
+        </p>
+      </footer>
+    </div>
+
+    <script type="module" src="/js/network-presentation.js"></script>
+  </body>
+</html>

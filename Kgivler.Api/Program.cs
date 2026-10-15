@@ -7,7 +7,6 @@
 
 using JoyfulReaperLib.MissionControl;
 using JoyfulReaperLib.Sqlite;
-using Kgivler.Api.CodeReview;
 using Kgivler.Api.Extensions;
 using Kgivler.Api.Routes;
 using Kgivler.Api.ServicesStatus;
@@ -34,7 +33,6 @@ builder.Services.AddApplicationServices(connectionString, builder.Environment);
 builder.Services.Configure<TelemetryOptions>(builder.Configuration.GetSection(TelemetryOptions.SectionName));
 builder.Services.AddSingleton<VisitorIdProvider>();
 
-builder.Services.AddScoped<QwenCoderReviewService>();
 builder.Services.AddMemoryCache();
 builder.Services.Configure<ServicesStatusOptions>(
     builder.Configuration.GetSection(ServicesStatusOptions.SectionName));
@@ -53,12 +51,6 @@ builder.Services.AddRateLimiter(options =>
         opt.PermitLimit = 5;
     });
 
-    options.AddFixedWindowLimiter("CodeReviewPolicy", opt =>
-    {
-        opt.Window = TimeSpan.FromMinutes(1);
-        opt.PermitLimit = 3;
-        opt.QueueLimit = 0;
-    });
     options.AddFixedWindowLimiter("TelemetryPolicy", opt =>
     {
         opt.Window = TimeSpan.FromMinutes(1);
@@ -72,16 +64,6 @@ builder.Services.AddRateLimiter(options =>
         opt.PermitLimit = 20;
         opt.QueueLimit = 0;
     });
-});
-
-// HttpClient for LM Studio
-builder.Services.AddHttpClient("LmStudio", client =>
-{
-    var baseUrl = builder.Configuration["LmStudio:BaseUrl"]
-        ?? "http://127.0.0.1:1234/v1/";
-
-    client.BaseAddress = new Uri(baseUrl);
-    client.Timeout = TimeSpan.FromSeconds(90);
 });
 
 // HttpClient for Git Activity
@@ -136,7 +118,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapGitActivityRoutes();
-app.MapCodeReviewRoutes();
 app.MapSteamRoutes();
 app.MapBbsRoutes();
 app.MapTelemetryRoutes();

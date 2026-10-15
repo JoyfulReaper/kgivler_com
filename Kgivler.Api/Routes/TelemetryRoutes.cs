@@ -69,13 +69,14 @@ public static class TelemetryRoutes
 
                 await missionControlClient.TryPublishAsync(
                     eventType: KgivlerEventTypes.SiteVisitRecorded,
-                    payload: new SiteVisitRecordedEvent(
-                        VisitorId: visitorId,
-                        UserAgent: userAgent,
-                        IsUniqueVisitor: isUniqueVisitor,
-                        TotalHits: hitResults.TotalHits,
-                        UniqueVisitors: hitResults.UniqueVisitors,
-                        DurationMilliseconds: hitStopwatch.ElapsedMilliseconds),
+                    payload: CreateSiteVisitRecordedEvent(
+                        context.Request,
+                        visitorId,
+                        userAgent,
+                        isUniqueVisitor,
+                        hitResults.TotalHits,
+                        hitResults.UniqueVisitors,
+                        hitStopwatch.ElapsedMilliseconds),
                     occurredAt: occurredAt,
                     correlationId: correlationId,
                     cancellationToken: CancellationToken.None);
@@ -151,6 +152,34 @@ public static class TelemetryRoutes
         }).RequireRateLimiting("TelemetryPolicy");
 
         return app;
+    }
+
+    internal static SiteVisitRecordedEvent CreateSiteVisitRecordedEvent(
+        HttpRequest request,
+        string? visitorId,
+        string? userAgent,
+        bool isUniqueVisitor,
+        long totalHits,
+        long uniqueVisitors,
+        long durationMilliseconds)
+    {
+        var forwardedHost = request.Headers["X-Forwarded-Host"]
+            .FirstOrDefault()?
+            .Split(',')[0]
+            .Trim();
+        var ingressHost = string.IsNullOrWhiteSpace(forwardedHost)
+            ? request.Host.Host
+            : forwardedHost;
+        var ingressNetwork = KgivlerIngressNetwork.FromHost(ingressHost);
+
+        return new SiteVisitRecordedEvent(
+            VisitorId: visitorId,
+            UserAgent: userAgent,
+            IngressNetwork: ingressNetwork,
+            IsUniqueVisitor: isUniqueVisitor,
+            TotalHits: totalHits,
+            UniqueVisitors: uniqueVisitors,
+            DurationMilliseconds: durationMilliseconds);
     }
 
     private static string? GetVisitorId(

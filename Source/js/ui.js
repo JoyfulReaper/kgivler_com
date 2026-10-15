@@ -12,15 +12,7 @@ export const elements = {
   gitActivity: document.getElementById('recent-git-activity'),
   gitActivityRefreshButton: document.getElementById('btn-git-activity-refresh'),
 
-  qwenReviewOutput: document.getElementById('qwen-review-output'),
-  qwenHealthBadge: document.getElementById('qwen-health-badge'),
-  qwenCodeInput: document.getElementById('qwenCodeInput'),
-  qwenLanguage: document.getElementById('qwenLanguage'),
-  qwenHealthButton: document.getElementById('btn-qwen-health'),
-  qwenLoadBadSampleButton: document.getElementById('btn-load-bad-sample'),
-  qwenReviewButton: document.getElementById('btn-qwen-review'),
-  qwenClearButton: document.getElementById('btn-qwen-clear'),
-  workstationRefreshButton: document.getElementById('btn-workstation-refresh'),
+  hostRefreshButton: document.getElementById('btn-host-refresh'),
   steamRefreshButton: document.getElementById('btn-steam-refresh')
 };
 
@@ -96,7 +88,7 @@ export function initHostTelemetry(data) {
   if (!data) {
     const offline = document.createElement("div");
     offline.className = "widget-state-unavailable";
-    offline.textContent = "[UNAVAILABLE] Workstation telemetry is temporarily unavailable.";
+    offline.textContent = "[UNAVAILABLE] Host telemetry is temporarily unavailable.";
 
     const detail = document.createElement("div");
     detail.className = "widget-state-detail";

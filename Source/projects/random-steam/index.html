@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Random Steam Game | Kyle Givler</title>
+
+    <meta
+      name="description"
+      content="Random Steam Game is Kyle Givler's fast Steam backlog picker and library exporter, built for instant repeated picks, public-library filtering, CSV export, and Steam Deck compatibility data." />
+
+    <link rel="canonical" href="https://www.kgivler.com/projects/random-steam/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Random Steam Game | Kyle Givler" />
+    <meta property="og:description" content="A fast Steam backlog picker and library exporter built to make repeated game picks feel immediate instead of turning them into a roulette animation." />
+    <meta property="og:url" content="https://www.kgivler.com/projects/random-steam/" />
+    <meta property="og:site_name" content="Kyle Givler" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Random Steam Game | Kyle Givler" />
+    <meta name="twitter:description" content="A fast Steam backlog picker and library exporter built for instant repeated picks, CSV export, and Steam Deck compatibility data." />
+
+    <link href="/vendor/bootstrap-5.3.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+
+    <link
+      rel="stylesheet"
+      href="/vendor/fontawesome-6.5.1/css/all.min.css"
+      integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="/styles.css?v=6" />
+    <link rel="stylesheet" href="../projects.css?v=1" />
+    <link rel="stylesheet" href="../project-detail.css?v=1" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+
+  <body class="terminal-theme projects-page project-detail-page">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <div class="projects-container">
+      <header class="projects-header">
+        <a class="projects-brand" href="/">
+          Kyle Givler
+          <span aria-hidden="true">_</span>
+        </a>
+
+        <nav class="terminal-nav" aria-label="Main navigation">
+          <a href="/">Home</a>
+          <a href="/projects/" aria-current="page">Projects</a>
+          <a href="/lab/">Lab</a>
+          <a href="/services/">Systems</a>
+          <a href="/vps-reviews/">VPS Reviews</a>
+          <a href="https://dev.kgivler.com/" class="terminal-nav-primary">Hire Me</a>
+        </nav>
+      </header>
+
+      <main id="main-content">
+        <header class="project-detail-hero">
+          <p class="projects-kicker">
+            <span class="prompt" aria-hidden="true">~/</span>
+            projects/random-steam
+          </p>
+
+          <h1>Random Steam Game</h1>
+
+          <p class="project-detail-lede">
+            A fast Steam backlog picker and library exporter built for the moment when I have hundreds of games, no idea what to play, and absolutely no patience for waiting eight seconds or watching
+            a fake roulette wheel spin before I can pick again.
+          </p>
+
+          <div class="projects-actions project-detail-actions">
+            <a href="https://randomsteam.kgivler.com/" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer">
+              Live
+              <span aria-hidden="true">↗</span>
+            </a>
+
+            <a href="https://github.com/JoyfulReaper/RandomSteamGame" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer">
+              Source
+              <span aria-hidden="true">↗</span>
+            </a>
+
+            <a href="/projects/" class="terminal-btn-inline">
+              Projects
+              <span aria-hidden="true">←</span>
+            </a>
+          </div>
+
+          <p class="project-detail-stack">.NET 10 · Blazor · ASP.NET Core · Steam Web API · Steam Store API · HybridCache · SQLite</p>
+        </header>
+
+        <section class="project-detail-section" aria-labelledby="why-heading">
+          <h2 id="why-heading">Why I built it</h2>
+
+          <p>
+            Random Steam Game started because the other Steam-library pickers I tried were too slow for the way I wanted to use them. Some took several seconds between picks. Others added roulette
+            animations that made the wait feel even longer.
+          </p>
+
+          <p>
+            I wanted the opposite: hit
+            <strong>Choose Again</strong>
+            , get another game immediately, and keep doing that until something catches my attention. Speed was not an optimization I bolted on later; it was the reason the project existed in the
+            first place.
+          </p>
+
+          <p>The picker only needs a public Steam library. It accepts a numeric Steam ID, vanity name, or Steam Community URL, and it does not require Steam sign-in.</p>
+        </section>
+
+        <figure class="project-screenshot project-screenshot-narrow">
+          <a href="./images/picker-home.png" target="_blank" rel="noopener noreferrer" aria-label="Open full Random Steam Game Picker screenshot">
+            <img
+              src="./images/picker-home.png"
+              alt="Random Steam Game Picker showing Steam ID and vanity URL input, unplayed-only filtering, recent picks, and a link to the library exporter."
+              loading="lazy"
+              decoding="async" />
+          </a>
+
+          <figcaption>The picker is designed around rapid repeated choices instead of making the random-selection animation the product.</figcaption>
+        </figure>
+
+        <section class="project-detail-section" aria-labelledby="picker-heading">
+          <h2 id="picker-heading">How picking works</h2>
+
+          <p>
+            A pick starts with the user's public Steam library. The application resolves vanity input when necessary, loads the library, filters out games that do not match the current options,
+            removes anything blocked in that browser, and chooses from the remaining pool.
+          </p>
+
+          <p>
+            Unplayed-only mode narrows the pool to games with no recorded Steam playtime. Browser-local exclusions make it possible to keep hammering the picker without repeatedly getting something I
+            already know I do not want.
+          </p>
+
+          <div
+            class="project-architecture"
+            role="img"
+            aria-label="Random Steam Game picker flow: user Steam identity is resolved, the public Steam library is loaded through cached Steam API access, browser exclusions and filters are applied, and one eligible game is returned to the picker.">
+            <div class="project-architecture-row">
+              <div class="project-architecture-box">
+                <strong>Steam identity</strong>
+                <span>Steam ID · vanity name · Community URL</span>
+              </div>
+            </div>
+
+            <span class="project-architecture-arrow" aria-hidden="true">↓</span>
+
+            <div class="project-architecture-row">
+              <div class="project-architecture-box project-architecture-accent">
+                <strong>Steam APIs + cache</strong>
+                <span>public library · app data · cached upstream results</span>
+              </div>
+            </div>
+
+            <span class="project-architecture-arrow" aria-hidden="true">↓</span>
+
+            <div class="project-architecture-row project-architecture-split">
+              <div class="project-architecture-box">
+                <strong>Filters</strong>
+                <span>unplayed-only · eligibility</span>
+              </div>
+
+              <div class="project-architecture-box">
+                <strong>Browser exclusions</strong>
+                <span>blocked games stay out of the pool</span>
+              </div>
+            </div>
+
+            <span class="project-architecture-arrow" aria-hidden="true">↓</span>
+
+            <div class="project-architecture-row">
+              <div class="project-architecture-box project-architecture-accent">
+                <strong>Random pick</strong>
+                <span>return one eligible game immediately</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="speed-heading">
+          <h2 id="speed-heading">Why it feels fast</h2>
+
+          <p>
+            Repeated picks should not require another expensive trip through Steam every time. The application caches library and Store API data so the common path can reuse work it has already done
+            instead of treating each click like a brand-new session.
+          </p>
+
+          <p>
+            The current application uses ASP.NET Core HybridCache with memory and SQLite-backed caching, plus rate limiting and bounded upstream access. The result is that once the useful Steam data
+            is available, the picker can spend its time choosing a game rather than waiting on the network.
+          </p>
+
+          <p class="project-detail-note">
+            The design goal is simple: the
+            <strong>Choose Again</strong>
+            button should feel cheap enough to abuse.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="export-heading">
+          <h2 id="export-heading">Library export came later</h2>
+
+          <p>The CSV exporter was added after the picker itself, partly because other Steam-library tools offered exports and I wanted Random Steam Game to be useful for that job too.</p>
+
+          <p>It can export a public library with game names, App IDs, total and recent playtime, per-platform playtime, last-played timestamps, Steam Store links, and Steam Deck compatibility.</p>
+
+          <p>
+            I would like to make the export richer over time, but that has a real cost. The more per-game metadata I add, the more upstream Steam work the export needs to do. On a library with
+            thousands of games, a feature that sounds like "just add another column" can turn into a large number of API requests, more rate-limit pressure, and a much longer export.
+          </p>
+        </section>
+
+        <figure class="project-screenshot">
+          <a href="./images/library-export.png" target="_blank" rel="noopener noreferrer" aria-label="Open full Steam library export screenshot">
+            <img
+              src="./images/library-export.png"
+              alt="Random Steam Game library export page showing Steam ID and vanity URL input and the data included in the CSV export."
+              loading="lazy"
+              decoding="async" />
+          </a>
+
+          <figcaption>
+            Library export turns the same public Steam-library data into a more useful offline dataset, including playtime, last-played dates, platform playtime, Steam Store links, and Steam Deck
+            compatibility.
+          </figcaption>
+        </figure>
+
+        <section class="project-detail-section" aria-labelledby="decisions-heading">
+          <h2 id="decisions-heading">A few decisions that ended up mattering</h2>
+
+          <div class="project-decision-grid">
+            <article class="project-decision-card">
+              <h3>No Steam login required</h3>
+              <p>The public picker and exporter work from public library data. That keeps the basic utility simple and avoids asking for account access just to choose a game.</p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>Browser state is enough for lightweight preferences</h3>
+              <p>Steam identity, picker preferences, and blocked games can live in browser cookies without pretending they are synchronized, account-backed profiles.</p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>Upstream failures should degrade, not explode</h3>
+              <p>Export data such as Steam Deck compatibility can fall back to an unknown state instead of throwing away the entire library export.</p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>Protect the expensive paths</h3>
+              <p>
+                The picker should stay quick, while heavier operations such as bulk exports have their own concurrency and cooldown rules so one feature cannot casually burn through Steam API
+                capacity.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="networks-heading">
+          <h2 id="networks-heading">It also escaped the normal web</h2>
+
+          <p>
+            Random Steam Game is primarily a normal public web application, but I also use it as one of my experiments in deploying the same application across alternate networks such as DN42,
+            Yggdrasil, and I2P.
+          </p>
+
+          <p>
+            Those deployments use an alternate-network mode that can disable remote browser assets, adjust canonical metadata and cookie behavior, and avoid assuming a conventional public HTTPS
+            ingress. Steam API access still happens server-side.
+          </p>
+
+          <div class="projects-actions">
+            <a href="/services/" class="terminal-btn-inline">
+              Systems / networks
+              <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="stack-heading">
+          <h2 id="stack-heading">Technology</h2>
+
+          <div class="project-tech-list" aria-label="Random Steam Game technology stack">
+            <span>.NET 10</span>
+            <span>ASP.NET Core</span>
+            <span>Blazor Interactive Auto</span>
+            <span>Steam Web API</span>
+            <span>Steam Store API</span>
+            <span>HybridCache</span>
+            <span>SQLite</span>
+            <span>Docker</span>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="support-heading">
+          <h2 id="support-heading">Support / sponsorship</h2>
+
+          <p>Random Steam Game is free to use. I am open to one-time support and feature sponsorship if somebody wants to help fund development or put more weight behind something on the roadmap.</p>
+
+          <p>Sponsorship can help prioritize work, but it does not buy control of the project or guarantee an exact delivery date unless we explicitly agree on a separate custom scope.</p>
+
+          <div class="projects-actions">
+            <a href="https://randomsteam.kgivler.com/support" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer">
+              Support / sponsor
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="status-heading">
+          <h2 id="status-heading">Current status</h2>
+
+          <p>
+            Random Steam Game is actively deployed and used. The picker is stable, while the library exporter and surrounding features continue to grow as I find useful additions that do not turn
+            every large Steam library into an API stress test.
+          </p>
+
+          <div class="projects-actions project-detail-footer-actions">
+            <a href="/projects/" class="terminal-btn-inline">
+              <span aria-hidden="true">←</span>
+              Back to projects
+            </a>
+
+            <a href="https://randomsteam.kgivler.com/" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer">
+              Try it
+              <span aria-hidden="true">↗</span>
+            </a>
+
+            <a href="https://github.com/JoyfulReaper/RandomSteamGame" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer">
+              Source
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="site-footer-links">
+          <span>Also available on:</span>
+          <a href="https://www.kgivler.com/">Clearnet</a>
+          <a href="http://site.ygg.kgivler.com/">Yggdrasil</a>
+          <a href="https://kgivler.dn42/">DN42</a>
+          <a href="http://bmhbwuvcvdof5aenq2ocow4rsqzfwxttdy4o6tbro2kohzxyytfq.b32.i2p/">I2P</a>
+        </div>
+
+        <div class="site-footer-links">
+          <a href="https://github.com/JoyfulReaper/kgivler_com">Project / Source</a>
+        </div>
+
+        <div class="site-footer-links">
+          <span>Network projects:</span>
+          <a href="https://yggdrasil-network.github.io/">Yggdrasil</a>
+          <a href="https://dn42.dev/Home">DN42</a>
+          <a href="https://i2p.net/">I2P</a>
+        </div>
+
+        <div class="site-footer-links">
+          <span>© Kyle Givler</span>
+          <span aria-hidden="true">·</span>
+          <a href="https://dev.kgivler.com/">Development Services</a>
+          <span aria-hidden="true">·</span>
+          <a href="/vps-reviews/">VPS Reviews</a>
+        </div>
+
+        <p class="site-footer-note" data-i2p-note hidden>This is the I2P deployment. Browser assets are local; some optional integrations may be unavailable.</p>
+      </footer>
+    </div>
+
+    <script type="module" src="/js/network-presentation.js"></script>
+  </body>
+</html>

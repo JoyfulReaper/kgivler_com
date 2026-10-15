@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>ReaperShell | Kyle Givler</title>
+
+    <meta
+      name="description"
+      content="ReaperShell is Kyle Givler's experimental .NET shell with hot-loadable command packs, live rebuild/reload, Git-backed tooling repos, and commands written as normal C#, F#, or VB.NET projects." />
+
+    <link rel="canonical" href="https://www.kgivler.com/projects/reapershell/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="ReaperShell | Kyle Givler" />
+    <meta
+      property="og:description"
+      content="An experimental .NET shell built around the idea that you should be able to change and extend your shell while you are using it." />
+    <meta property="og:url" content="https://www.kgivler.com/projects/reapershell/" />
+    <meta property="og:site_name" content="Kyle Givler" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="ReaperShell | Kyle Givler" />
+    <meta
+      name="twitter:description"
+      content="A .NET developer shell with hot-loadable command packs, live rebuild/reload, and Git-backed tooling repos." />
+
+    <link
+      href="/vendor/bootstrap-5.3.3/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous" />
+
+    <link
+      rel="stylesheet"
+      href="/vendor/fontawesome-6.5.1/css/all.min.css"
+      integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="/styles.css?v=6" />
+    <link rel="stylesheet" href="../projects.css?v=1" />
+    <link rel="stylesheet" href="../project-detail.css?v=1" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+
+  <body class="terminal-theme projects-page project-detail-page">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <div class="projects-container">
+      <header class="projects-header">
+        <a class="projects-brand" href="/">Kyle Givler<span aria-hidden="true">_</span></a>
+
+        <nav class="terminal-nav" aria-label="Main navigation">
+          <a href="/">Home</a>
+          <a href="/projects/" aria-current="page">Projects</a>
+          <a href="/lab/">Lab</a>
+          <a href="/services/">Systems</a>
+          <a href="/vps-reviews/">VPS Reviews</a>
+          <a href="https://dev.kgivler.com/" class="terminal-nav-primary">Hire Me</a>
+        </nav>
+      </header>
+
+      <main id="main-content">
+        <header class="project-detail-hero">
+          <p class="projects-kicker">
+            <span class="prompt" aria-hidden="true">~/</span>projects/reapershell
+          </p>
+
+          <h1>ReaperShell</h1>
+
+          <p class="project-detail-lede">
+            An experimental .NET shell built around one idea I liked from systems
+            such as TempleOS: what if the environment you are using is also
+            something you can keep changing while you use it?
+          </p>
+
+          <div class="projects-actions project-detail-actions">
+            <a
+              href="https://github.com/JoyfulReaper/ReaperShell"
+              class="terminal-btn-inline"
+              target="_blank"
+              rel="noopener noreferrer">
+              Source
+              <span aria-hidden="true">↗</span>
+            </a>
+
+            <a href="/projects/" class="terminal-btn-inline">
+              Projects
+              <span aria-hidden="true">←</span>
+            </a>
+          </div>
+
+          <p class="project-detail-stack">
+            .NET 10 · C# · command packs · live rebuild / reload · Git
+          </p>
+        </header>
+
+        <section class="project-detail-section" aria-labelledby="why-heading">
+          <h2 id="why-heading">Why I built it</h2>
+
+          <p>
+            The original inspiration was less "I need another shell" and more the
+            idea of a programmable environment that can change while it is running.
+            TempleOS takes that idea much further than ReaperShell does, but the
+            part that stuck with me was the feeling that the environment itself
+            should be hackable.
+          </p>
+
+          <p>
+            I wanted a shell where adding a new capability did not mean writing a
+            throwaway script, restarting the host, or waiting for the feature to
+            become part of some permanent built-in command set.
+          </p>
+
+          <p>
+            In ReaperShell, commands can live in external command packs as normal
+            .NET projects. I can edit one, rebuild it, reload it, and keep using the
+            same shell session.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="code-heading">
+          <h2 id="code-heading">I wanted code, not a scripting language</h2>
+
+          <p>
+            I have never particularly liked scripting. For small automation it is
+            convenient, but I wanted a richer environment with normal project
+            structure, types, libraries, tooling, and room for a command to grow
+            beyond a few lines without changing ecosystems.
+          </p>
+
+          <p>
+            A ReaperShell command pack is therefore made from ordinary SDK-style
+            .NET projects rather than a custom script format. Commands implement a
+            small host abstraction and compile into assemblies that the shell can
+            load.
+          </p>
+
+          <p>
+            C# is the language I actually care about using, but the command-pack
+            model also supports F# and VB.NET because once the boundary is a normal
+            .NET project there is little reason to arbitrarily forbid them.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="reload-heading">
+          <h2 id="reload-heading">Change it while it is running</h2>
+
+          <p>
+            The live rebuild/reload loop is the part that makes ReaperShell
+            interesting to me. A trusted command pack can be unloaded, rebuilt from
+            its current source, and loaded again without restarting the shell.
+          </p>
+
+          <p>
+            That turns the shell into both the place where I use a tool and the
+            place where I iterate on that tool. If a command is missing something,
+            I can open its source, change it, rebuild the pack, reload it, and try
+            the new behavior immediately.
+          </p>
+
+          <div
+            class="project-architecture"
+            role="img"
+            aria-label="ReaperShell workflow: the running shell loads a trusted command pack from a normal .NET project. The user edits the command source, rebuilds the pack, unloads and reloads the assembly, then runs the changed command in the same shell session.">
+            <div class="project-architecture-row">
+              <div class="project-architecture-box project-architecture-accent">
+                <strong>Running ReaperShell</strong>
+                <span>interactive session</span>
+              </div>
+            </div>
+
+            <span class="project-architecture-arrow" aria-hidden="true">↓</span>
+
+            <div class="project-architecture-row">
+              <div class="project-architecture-box">
+                <strong>Trusted command pack</strong>
+                <span>normal .NET project + shellpack.json</span>
+              </div>
+            </div>
+
+            <span class="project-architecture-arrow" aria-hidden="true">↓</span>
+
+            <div class="project-architecture-row project-architecture-split">
+              <div class="project-architecture-box">
+                <strong>Edit source</strong>
+                <span>C# · F# · VB.NET</span>
+              </div>
+
+              <div class="project-architecture-box">
+                <strong>Build</strong>
+                <span>regular SDK-style project</span>
+              </div>
+            </div>
+
+            <span class="project-architecture-arrow" aria-hidden="true">↓</span>
+
+            <div class="project-architecture-row">
+              <div class="project-architecture-box project-architecture-accent">
+                <strong>Unload → rebuild → reload</strong>
+                <span>same shell session, new command code</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="real-heading">
+          <h2 id="real-heading">The first useful command pack</h2>
+
+          <p>
+            The first thing I used ReaperShell for was a log viewer, before Mission
+            Control existed. I had previously used a small PowerShell script for
+            log searching, lost it, and rebuilt the idea as a C# command.
+          </p>
+
+          <p>
+            That became the <code>iis-tools</code> command pack and forced the shell
+            to solve problems that toy examples do not expose: loading external
+            commands, rebuilding quickly, proving which DLL is actually loaded,
+            switching branches, and surfacing enough diagnostics to understand what
+            the shell is doing.
+          </p>
+
+          <p>
+            That was the point where the plugin model stopped being a demo of a
+            plugin model and started being shaped by something I actually wanted
+            to use.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="git-heading">
+          <h2 id="git-heading">Command packs became Git repositories</h2>
+
+          <p>
+            Once commands lived outside the shell, treating those command packs as
+            normal Git repositories made the workflow much more convenient.
+          </p>
+
+          <p>
+            ReaperShell can register a local pack or clone a Git-backed one, mark
+            it trusted, build it, load it, switch branches, pull updates, commit
+            changes, and publish a local pack to GitHub. If I trust a command-pack
+            repository, adding it is close to "clone this and now those commands
+            exist in my shell."
+          </p>
+
+          <p>
+            Git operations stay explicit. Reloading a command pack does not
+            silently fetch, pull, rebase, or switch branches. The shell also shows
+            branch and commit information around builds so it is harder to wonder
+            which version of the tool is actually running.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="shell-heading">
+          <h2 id="shell-heading">It still behaves like a shell</h2>
+
+          <p>
+            ReaperShell also has the ordinary things that make an interactive shell
+            usable: file operations, history, aliases, environment overrides,
+            command lookup, completion, profiles, hooks, scripts, and commands for
+            inspecting where loaded commands came from.
+          </p>
+
+          <p>
+            Commands such as <code>which</code>, <code>describe</code>, and
+            <code>source</code> are especially useful in a system where behavior can
+            come from external packs. The point is not just to make commands
+            dynamic; it is to make that dynamism understandable.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="trust-heading">
+          <h2 id="trust-heading">Dynamic does not mean sandboxed</h2>
+
+          <p>
+            ReaperShell command packs are trusted code. They run in-process with
+            the same user privileges as the shell itself. There is no attempt to
+            pretend an arbitrary command repository is safe merely because it has a
+            manifest and a friendly command name.
+          </p>
+
+          <p>
+            The explicit trust step is therefore part of the design. The project is
+            optimized for local developer tooling I control or deliberately choose
+            to run, not for executing random plugins from the Internet in a secure
+            sandbox.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="decisions-heading">
+          <h2 id="decisions-heading">A few decisions that ended up mattering</h2>
+
+          <div class="project-decision-grid">
+            <article class="project-decision-card">
+              <h3>Commands are normal projects</h3>
+              <p>
+                Tooling can use the normal .NET ecosystem instead of being trapped
+                inside a purpose-built scripting language.
+              </p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>Reload never changes branches</h3>
+              <p>
+                Rebuilding code and changing source history are separate actions.
+                Branch switches, pulls, and reloads stay explicit.
+              </p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>Trust is explicit</h3>
+              <p>
+                External command packs run with real user privileges, so loading
+                them is treated as a deliberate trust decision.
+              </p>
+            </article>
+
+            <article class="project-decision-card">
+              <h3>Introspection matters</h3>
+              <p>
+                A dynamic shell should make it easy to answer where a command came
+                from, what is loaded, and which branch/commit is being rebuilt.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="stack-heading">
+          <h2 id="stack-heading">Technology</h2>
+
+          <div class="project-tech-list" aria-label="ReaperShell technology stack">
+            <span>.NET 10</span>
+            <span>C#</span>
+            <span>F# support</span>
+            <span>VB.NET support</span>
+            <span>AssemblyLoadContext</span>
+            <span>Git</span>
+            <span>GitHub CLI</span>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="status-heading">
+          <h2 id="status-heading">Current status</h2>
+
+          <p>
+            ReaperShell is an experimental developer-tooling project rather than
+            something with a grand product roadmap. It grew out of a programming
+            idea I wanted to explore, and it ended up useful enough that real
+            command packs now shape how the shell evolves.
+          </p>
+
+          <p>
+            It may never need to become more ambitious than that. The interesting
+            part is the loop: use the shell, find something missing, change the
+            shell while it is running, and keep going.
+          </p>
+
+          <div class="projects-actions project-detail-footer-actions">
+            <a href="/projects/" class="terminal-btn-inline">
+              <span aria-hidden="true">←</span>
+              Back to projects
+            </a>
+
+            <a
+              href="https://github.com/JoyfulReaper/ReaperShell"
+              class="terminal-btn-inline"
+              target="_blank"
+              rel="noopener noreferrer">
+              Source
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="site-footer-links">
+          <span>Also available on:</span>
+          <a href="https://www.kgivler.com/">Clearnet</a>
+          <a href="http://site.ygg.kgivler.com/">Yggdrasil</a>
+          <a href="https://kgivler.dn42/">DN42</a>
+          <a href="http://bmhbwuvcvdof5aenq2ocow4rsqzfwxttdy4o6tbro2kohzxyytfq.b32.i2p/">I2P</a>
+        </div>
+
+        <div class="site-footer-links">
+          <a href="https://github.com/JoyfulReaper/kgivler_com">Project / Source</a>
+        </div>
+
+        <div class="site-footer-links">
+          <span>Network projects:</span>
+          <a href="https://yggdrasil-network.github.io/">Yggdrasil</a>
+          <a href="https://dn42.dev/Home">DN42</a>
+          <a href="https://i2p.net/">I2P</a>
+        </div>
+
+        <div class="site-footer-links">
+          <span>© Kyle Givler</span>
+          <span aria-hidden="true">·</span>
+          <a href="https://dev.kgivler.com/">Development Services</a>
+          <span aria-hidden="true">·</span>
+          <a href="/vps-reviews/">VPS Reviews</a>
+        </div>
+
+        <p class="site-footer-note" data-i2p-note hidden>
+          This is the I2P deployment. Browser assets are local; some optional
+          integrations may be unavailable.
+        </p>
+      </footer>
+    </div>
+
+    <script type="module" src="/js/network-presentation.js"></script>
+  </body>
+</html>

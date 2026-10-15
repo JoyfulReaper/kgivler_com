@@ -14,7 +14,7 @@ function renderLoading() {
     </div>`;
 }
 
-function renderError(message) {
+function renderError(message, disabled = false) {
   if (!elements.qotdOutput) return;
 
   const unavailable = document.createElement("div");
@@ -23,7 +23,9 @@ function renderError(message) {
 
   const detail = document.createElement("div");
   detail.className = "widget-state-detail";
-  detail.textContent = "Only the Quote of the Day service is affected. Use Refresh Quote to retry.";
+  detail.textContent = disabled
+    ? 'No Quote of the Day endpoint is configured for this network.'
+    : 'Only the Quote of the Day service is affected. Use Refresh Quote to retry.';
 
   elements.qotdOutput.replaceChildren(unavailable, detail);
 }
@@ -67,12 +69,14 @@ export async function refreshQotd() {
   }
 
   renderLoading();
+  let disabled = false;
 
   try {
     const result = await getQuoteOfTheDay();
 
     if (!result.ok) {
-      renderError(result.error || "Quote of the day is unavailable.");
+      disabled = result.disabled === true;
+      renderError(result.error || "Quote of the day is unavailable.", disabled);
       return;
     }
 
@@ -84,7 +88,7 @@ export async function refreshQotd() {
     isRefreshingQotd = false;
 
     if (elements.qotdRefreshButton) {
-      elements.qotdRefreshButton.disabled = false;
+      elements.qotdRefreshButton.disabled = disabled;
     }
   }
 }

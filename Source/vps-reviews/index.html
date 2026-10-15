@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>VPS Reviews &amp; Impressions | Kyle Givler</title>
+
+  <meta
+    name="description"
+    content="First-hand VPS reviews and impressions: my detailed GreenCloud experience and early Servitro IPv6 latency tests from Pennsylvania to Frankfurt."
+  />
+
+  <link rel="canonical" href="https://www.kgivler.com/vps-reviews/" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="VPS Reviews &amp; Impressions | Kyle Givler" />
+  <meta
+    property="og:description"
+    content="First-hand VPS reviews and impressions: my detailed GreenCloud experience and early Servitro IPv6 latency tests from Pennsylvania to Frankfurt."
+  />
+  <meta property="og:url" content="https://www.kgivler.com/vps-reviews/" />
+
+  <link rel="stylesheet" href="/vps-reviews/reviews.css?v=1" />
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/">Kyle Givler</a>
+
+      <nav aria-label="Primary navigation">
+        <a href="/">Portfolio</a>
+        <a href="/services/">Infrastructure</a>
+        <a href="https://dev.kgivler.com/">Development Services</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container article-width">
+        <p class="eyebrow">VPS Reviews</p>
+
+        <h1>VPS Reviews &amp; Impressions</h1>
+
+        <p class="hero-copy" data-hosting-promotion hidden>
+          Reviews and early impressions of VPSes I actually use. GreenCloud has
+          the detailed review below; Servitro is a new addition I’m still evaluating.
+        </p>
+
+        <p data-i2p-note hidden>This is the I2P deployment. Browser assets are local; some optional integrations may be unavailable.</p>
+
+        <p class="updated">Last updated: October 7, 2026</p>
+
+        <div class="disclosure" data-hosting-promotion hidden>
+          <strong>Affiliate disclosure:</strong>
+          GreenCloud links on this page may be affiliate links. I may earn a
+          commission if you sign up through them. The review is based on my own
+          experience running their VPSes.
+        </div>
+
+        <div class="pricing-callout" data-hosting-promotion hidden>
+          <div>
+            <span class="pricing-label">GreenCloud · Current budget pricing</span>
+            <strong class="pricing-price">$25/year</strong>
+          </div>
+
+          <p>
+            GreenCloud's Budget KVM sale plans currently start at
+            <strong>$25 per year</strong> in several locations. At the time of
+            writing, some $25/year plans include around 4 GB RAM, 2 CPU cores,
+            35 GB SSD or NVMe storage, one IPv4 address, IPv6, and several TB
+            of transfer. Exact hardware, bandwidth, IPv6 allocation, location,
+            and availability vary by plan.
+          </p>
+
+          <a
+            href="https://greencloudvps.com/billing/aff.php?aff=10295&gid=68"
+            target="_blank"
+            rel="sponsored noopener noreferrer"
+          >
+            View current Budget KVM plans →
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <article>
+      <section class="section" data-hosting-promotion hidden>
+        <div class="container article-width">
+          <h2>My experience with GreenCloud</h2>
+
+          <p>
+            I currently use
+            <a
+              href="https://greencloudvps.com/billing/aff.php?aff=10295"
+              target="_blank"
+              rel="sponsored noopener noreferrer"
+            >GreenCloud VPS</a>
+            for multiple public Linux VPS nodes, including
+            <strong>Clanker</strong> and <strong>ScopeCreep</strong>.
+          </p>
+
+          <p>
+            These are not idle test machines. I use them for Docker services,
+            monitoring, web applications, DN42 routing, WireGuard, DNS, small
+            Internet-protocol servers, and networking experiments.
+          </p>
+
+          <p>
+            GreenCloud has been a good fit for the kind of inexpensive Linux
+            infrastructure I run: enough resources to do useful work, cheap
+            enough that keeping multiple locations online is practical, and
+            support that has responded quickly when I have hit provider-side
+            network problems.
+          </p>
+        </div>
+      </section>
+
+      <section class="section section-alt" data-hosting-promotion hidden>
+        <div class="container article-width">
+          <h2>What I run on them</h2>
+
+          <div class="card">
+            <ul class="workload-list">
+              <li>Docker and Docker Compose workloads</li>
+              <li>ASP.NET Core / .NET applications</li>
+              <li>Mission Control monitoring and telemetry</li>
+              <li>Random Steam Game and Random GitHub</li>
+              <li>Gopher, Gemini, QOTD, Finger, and other small services</li>
+              <li>WireGuard tunnels</li>
+              <li>BIRD and DN42 BGP routing</li>
+              <li>IPv4 and IPv6 networking experiments</li>
+              <li>Authoritative DNS and HTTPS services</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" data-hosting-promotion hidden>
+        <div class="container article-width">
+          <h2>Support experience</h2>
+
+          <p>
+            I have had a couple of network problems worth mentioning. I think
+            those incidents are more useful in a review than pretending nothing
+            has ever gone wrong, because they show what support does when the
+            infrastructure is actually broken.
+          </p>
+
+          <article class="case-card">
+            <div class="case-meta">August 2026</div>
+            <h3>IPv6 provisioning issue</h3>
+
+            <p>
+              After enabling IPv6 on one VPS, Neighbor Discovery to the supplied
+              gateway worked and outbound packets left the VM, but nothing came
+              back. Packet captures indicated that the problem was upstream of
+              the guest.
+            </p>
+
+            <p>
+              I opened a ticket at 07:30. Support replied at 07:32, investigated
+              the VPS, and at 07:48 asked me to retry after making a change.
+              I confirmed IPv6 was working at 07:54.
+            </p>
+
+            <p class="case-result">
+              About <strong>24 minutes from opening the ticket to confirmed
+              working IPv6.</strong>
+            </p>
+          </article>
+
+          <article class="case-card">
+            <div class="case-meta">September 2026</div>
+            <h3>Unsolicited IPv6 multicast traffic</h3>
+
+            <p>
+              On another VPS I noticed inbound bandwidth increasing even though
+              my applications were not receiving that amount of traffic.
+            </p>
+
+            <p>
+              A packet capture showed unsolicited ICMPv6 / MLDv2 multicast
+              listener reports from another device on the provider-side network.
+              During a 300-second capture I measured roughly
+              <strong>72,007 frames</strong>, about <strong>107 MB</strong>,
+              or approximately <strong>2.85 Mbps</strong> of sustained inbound
+              traffic from that conversation.
+            </p>
+
+            <p>
+              I opened a support ticket at 01:16. GreenCloud replied at 01:19
+              and began investigating the provider-side source.
+            </p>
+
+            <p>
+              The unwanted multicast traffic stopped after they investigated
+              the issue, so the underlying problem was fixed. The bandwidth
+              that had already been recorded in the control panel was not
+              removed afterward.
+            </p>
+
+            <p class="case-result">
+              The initial technical response came in roughly
+              <strong>three minutes</strong>, and the unwanted traffic was
+              subsequently stopped.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section section-alt" data-hosting-promotion hidden>
+        <div class="container article-width">
+          <h2>What I like and what to know</h2>
+
+          <div class="two-column">
+            <div class="card">
+              <h3>What I like</h3>
+
+              <ul>
+                <li>Cheap enough for hobby and small-service infrastructure</li>
+                <li>KVM VPSes work well for normal Linux workloads</li>
+                <li>IPv6 is available</li>
+                <li>Multiple locations make multi-node experiments practical</li>
+                <li>Support has responded quickly when I have reported problems</li>
+                <li>No special platform required for normal Docker and networking work</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h3>Things to know</h3>
+
+              <ul>
+                <li>I have encountered provider-side IPv6/networking issues</li>
+                <li>These are inexpensive VPSes, not managed enterprise infrastructure</li>
+                <li>I monitor CPU, memory, bandwidth, and service health myself</li>
+                <li>I still keep backups and plan around the possibility of a VPS failing</li>
+                <li>Plans, locations, and pricing can change</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" data-hosting-promotion hidden>
+        <div class="container article-width">
+          <h2>Who I think GreenCloud fits</h2>
+
+          <p>
+            GreenCloud makes the most sense to me if you are comfortable
+            administering your own Linux server and want inexpensive compute for
+            small applications, personal infrastructure, Docker workloads,
+            networking experiments, or geographically separate nodes.
+          </p>
+
+          <div class="card">
+            <h3>Want the VPS without doing all the server work?</h3>
+
+            <p>
+              If you need help setting up or operating the server, I also do
+              deployment and self-hosting work: Linux VPS setup, Docker,
+              HTTPS, monitoring, backups, application deployment, and related
+              infrastructure.
+            </p>
+
+            <a
+              class="button secondary"
+              href="https://dev.kgivler.com/"
+            >
+              Development &amp; deployment help
+            </a>
+          </div>
+
+          <div class="actions">
+            <a
+              class="button primary"
+              href="https://greencloudvps.com/billing/aff.php?aff=10295"
+              target="_blank"
+              rel="sponsored noopener noreferrer"
+            >
+              View GreenCloud VPS
+            </a>
+
+            <a
+              class="button secondary"
+              href="https://greencloudvps.com/billing/aff.php?aff=10295&gid=68"
+              target="_blank"
+              rel="sponsored noopener noreferrer"
+            >
+              View Budget KVM Plans
+            </a>
+          </div>
+
+          <p class="small-note">
+            The GreenCloud VPS button is an affiliate link. I may earn a
+            commission if you purchase through it.
+          </p>
+        </div>
+      </section>
+
+      <section class="section section-alt" aria-labelledby="servitro-heading">
+        <div class="container article-width">
+          <p class="eyebrow">Early impressions · Currently evaluating</p>
+          <h2 id="servitro-heading">Servitro — Frankfurt, Germany</h2>
+
+          <p>
+            I only recently brought this VPS online, so this is not a full review
+            yet. I’m using it as <strong>Wurstcase</strong>, a European node for
+            DN42, Yggdrasil, WireGuard, and other networking/infrastructure experiments.
+          </p>
+
+          <p>
+            What immediately surprised me was the network latency. Initial IPv6
+            latency from my connection in Pennsylvania to Frankfurt has been
+            around <strong>90–95 ms</strong>, which is better than I expected for
+            a transatlantic VPS. My first two ordinary Windows ping runs to
+            <code>wurstcase.kgivler.com</code> averaged 92 and 94 ms.
+          </p>
+
+          <p>
+            Those eight ICMP replies are a very small sample, not a serious
+            network benchmark. The lack of packet loss in those samples and the
+            latency are simply a very encouraging first impression for a low-cost
+            European VPS.
+          </p>
+
+          <p>
+            More testing to come: I’ll expand this section after I’ve had enough
+            time to evaluate uptime, routing, sustained performance, and support.
+          </p>
+
+          <div class="card">
+            <h3>First IPv6 ping samples</h3>
+            <ul>
+              <li>First run: 90 ms minimum, 96 ms maximum, 92 ms average; 0% packet loss.</li>
+              <li>Second run: 89 ms minimum, 103 ms maximum, 94 ms average; 0% packet loss.</li>
+            </ul>
+          </div>
+
+          <div class="actions">
+            <a
+              class="button primary"
+              href="https://my.servitro.com/aff.php?aff=229"
+              target="_blank"
+              rel="sponsored noopener noreferrer"
+            >
+              View Servitro →
+            </a>
+          </div>
+
+          <p class="small-note">
+            The Servitro button is an affiliate link. I may earn a commission if
+            you purchase through it.
+          </p>
+        </div>
+      </section>
+
+      <section class="section provider-section">
+        <div class="container article-width">
+          <p class="eyebrow">For VPS Providers</p>
+          <h2>Want me to review your VPS?</h2>
+
+          <p>
+            I'm open to reviewing other VPS providers, especially inexpensive
+            KVM VPSes, IPv6 deployments, unusual locations, interesting network
+            configurations, and services aimed at self-hosters or developers.
+          </p>
+
+          <p>
+            Providing free or discounted service does
+            <strong>not</strong> guarantee a positive review. If a provider
+            supplies the service being reviewed, I will disclose that.
+          </p>
+
+          <a
+            class="button secondary"
+            href="https://dev.kgivler.com/"
+          >
+            Contact me
+          </a>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <footer>
+    <div class="container footer-network-links">
+      <span>Also available on:</span>
+      <a href="https://www.kgivler.com/">Clearnet</a>
+      <a href="http://site.ygg.kgivler.com/">Yggdrasil</a>
+      <a href="https://kgivler.dn42/">DN42</a>
+      <a href="http://bmhbwuvcvdof5aenq2ocow4rsqzfwxttdy4o6tbro2kohzxyytfq.b32.i2p/">I2P</a>
+    </div>
+    <div class="container footer-network-links">
+      <a href="https://github.com/JoyfulReaper/kgivler_com">Project / Source</a>
+    </div>
+    <div class="container footer-network-links">
+      <span>Network projects:</span>
+      <a href="https://yggdrasil-network.github.io/">Yggdrasil</a>
+      <a href="https://dn42.dev/Home">DN42</a>
+      <a href="https://i2p.net/">I2P</a>
+    </div>
+    <div class="container footer-inner">
+      <span>© Kyle Givler</span>
+
+      <div>
+        <a href="/">Portfolio</a>
+        <a href="/services/">Infrastructure</a>
+        <a href="https://dev.kgivler.com/">Development Services</a>
+      </div>
+    </div>
+  </footer>
+  <script type="module" src="/js/network-presentation.js"></script>
+</body>
+</html>
