@@ -41,6 +41,7 @@ echo "==> Installing and restarting devsite on Frontdesk"
 ssh -t "$REMOTE_HOST" "
     set -e
 
+    sudo cp -a '$REMOTE_BINARY' '${REMOTE_BINARY}.backup'
     sudo install -m 0755 '$REMOTE_TMP' '${REMOTE_BINARY}.new'
     sudo mv '${REMOTE_BINARY}.new' '$REMOTE_BINARY'
 
