@@ -18,8 +18,6 @@ mySecrets.txt
 # Mono auto generated files
 mono_crash.*
 
-examples/
-
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
