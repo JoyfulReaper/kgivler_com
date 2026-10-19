@@ -1161,3 +1161,170 @@ h2 {
     }
 
 }
+
+
+/* Interior page hero */
+
+.page-hero {
+    padding: 105px 0 115px;
+    background: var(--forest);
+    color: var(--white);
+}
+
+.page-hero .eyebrow {
+    color: #d4d6c4;
+}
+
+.page-hero h1 {
+    max-width: 1000px;
+    margin-bottom: 30px;
+    font-size: clamp(3.4rem, 7vw, 6.5rem);
+    line-height: 1.1;
+    color: var(--white);
+}
+
+.page-hero h1 em {
+    color: #e3e0cc;
+}
+
+.page-hero p:not(.eyebrow) {
+    max-width: 550px;
+    color: #dce5da;
+    font-size: 1.05rem;
+    line-height: 1.85;
+}
+
+/* About story */
+
+.about-story {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 90px;
+}
+
+.about-story-image {
+    min-height: 580px;
+    background:
+        url("assets/images/about-garden.jpg")
+        center / cover no-repeat,
+        var(--forest-light);
+}
+
+.about-story-content h2 {
+    font-size: clamp(2.3rem, 4vw, 3.7rem);
+}
+
+.about-story-content p:not(.eyebrow) {
+    color: var(--body);
+}
+
+/* Values */
+
+.about-values-heading {
+    margin-bottom: 55px;
+}
+
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 30px;
+}
+
+.value-card {
+    padding-top: 22px;
+    border-top: 1px solid #b6bbaf;
+}
+
+.value-number {
+    color: var(--forest-light);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+}
+
+.value-card h3 {
+    margin: 28px 0 14px;
+    font-family: Georgia, serif;
+    font-size: 1.7rem;
+}
+
+.value-card p {
+    max-width: 310px;
+    color: var(--body);
+    font-size: 0.92rem;
+}
+
+/* About process */
+
+.process-list {
+    border-top: 1px solid var(--line);
+}
+
+.process-item {
+    display: grid;
+    grid-template-columns: 90px minmax(0, 1fr);
+    gap: 35px;
+    padding: 30px 0;
+    border-bottom: 1px solid var(--line);
+}
+
+.process-number {
+    color: var(--forest-light);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+}
+
+.process-item h3 {
+    margin-bottom: 10px;
+    font-family: Georgia, serif;
+    font-size: 1.7rem;
+}
+
+.process-item p {
+    max-width: 620px;
+    margin-bottom: 0;
+    color: var(--body);
+}
+
+/* Interior page responsive layout */
+
+@media (max-width: 900px) {
+    .about-story {
+        grid-template-columns: 1fr;
+        gap: 45px;
+    }
+
+    .about-story-image {
+        min-height: 450px;
+    }
+}
+
+@media (max-width: 600px) {
+    .page-hero {
+        padding: 75px 0 80px;
+    }
+
+    .page-hero h1 {
+        font-size: clamp(3rem, 12vw, 4.4rem);
+    }
+
+    .about-story-image {
+        min-height: 310px;
+    }
+
+    .values-grid {
+        grid-template-columns: 1fr;
+        gap: 22px;
+    }
+
+    .value-card {
+        padding-top: 25px;
+    }
+
+    .process-item {
+        grid-template-columns: 45px minmax(0, 1fr);
+        gap: 16px;
+    }
+}
