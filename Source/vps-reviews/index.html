@@ -303,159 +303,288 @@
         </div>
       </section>
 
-      <section class="section section-alt" aria-labelledby="servitro-heading">
-		  <div class="container article-width">
-			<p class="eyebrow">Not recommended · October 2026</p>
-			<h2 id="servitro-heading">Servitro — Frankfurt, Germany</h2>
+      
+<section class="section section-alt" aria-labelledby="servitro-heading">
+  <div class="container article-width">
+    <p class="eyebrow">Not recommended · Updated October 19, 2026</p>
+    <h2 id="servitro-heading">Servitro — Frankfurt, Germany</h2>
 
-			<p>
-			  My experience with Servitro started out promising and then deteriorated
-			  badly enough that I can no longer recommend the service.
-			</p>
+    <p>
+      I purchased a VPS from Servitro to diversify my infrastructure
+      across multiple hosting providers. Unfortunately, it has become
+      one of the worst VPS experiences I've had.
+    </p>
 
-			<p>
-			  I brought up a Frankfurt VPS named <strong>Wurstcase</strong> for DN42,
-			  Yggdrasil, WireGuard, and other networking experiments. Initial network
-			  latency from Pennsylvania to Frankfurt was genuinely good: my first IPv6
-			  tests were around <strong>90–95 ms</strong> with no packet loss in the
-			  small samples I ran.
-			</p>
+    <p>
+      I brought up a Frankfurt VPS named <strong>Wurstcase</strong>
+      for DN42, Yggdrasil, WireGuard, and other networking experiments.
+      Initial network latency from Pennsylvania to Frankfurt was
+      genuinely good: my first IPv6 tests were around
+      <strong>90–95 ms</strong> with no packet loss in the small
+      samples I ran.
+    </p>
 
-			<p>
-			  Unfortunately, the actual VPS performance later became severely degraded
-			  by persistent CPU steal time. Repeated <code>mpstat 1 10</code> samples
-			  taken across the evening, overnight, and the following morning showed
-			  sustained <code>%steal</code> averages around <strong>14–24%</strong>,
-			  with individual one-second samples reaching as high as
-			  <strong>74%</strong>.
-			</p>
+    <p>
+      Unfortunately, the actual VPS performance later became severely
+      degraded by persistent CPU steal time. Repeated
+      <code>mpstat 1 10</code> samples taken across the evening,
+      overnight, and the following morning showed sustained
+      <code>%steal</code> averages around <strong>14–24%</strong>,
+      with individual one-second samples reaching as high as
+      <strong>74%</strong>.
+    </p>
 
-			<div class="card">
-			  <h3>CPU steal samples</h3>
-			  <ul>
-				<li>19.01% average steal</li>
-				<li>18.65% average steal</li>
-				<li>18.64% average steal</li>
-				<li>18.86% average steal</li>
-				<li>22.93% average steal</li>
-				<li>23.67% average steal</li>
-				<li>20.26% average steal</li>
-				<li>19.66% average steal</li>
-			  </ul>
-			</div>
+    <div class="card">
+      <h3>CPU steal samples</h3>
+      <ul>
+        <li>19.01% average steal</li>
+        <li>18.65% average steal</li>
+        <li>18.64% average steal</li>
+        <li>18.86% average steal</li>
+        <li>22.93% average steal</li>
+        <li>23.67% average steal</li>
+        <li>20.26% average steal</li>
+        <li>19.66% average steal</li>
+      </ul>
+    </div>
 
-			<p>
-			  Guest CPU usage itself remained relatively low and
-			  <code>%iowait</code> was effectively zero in the samples I collected.
-			  The combination of low guest workload and high CPU steal strongly
-			  indicated host-side CPU contention rather than a workload problem inside
-			  my VM.
-			</p>
+    <p>
+      Guest CPU usage itself remained relatively low and
+      <code>%iowait</code> was effectively zero in the samples
+      I collected. The combination of low guest workload and high
+      CPU steal strongly indicated host-side CPU contention rather
+      than a workload problem inside my VM.
+    </p>
 
-			<p>
-			  I opened support ticket <strong>#FHO-567811</strong> on
-			  <strong>October 14, 2026 at 22:54</strong> and included multiple
-			  <code>mpstat</code> captures showing the problem.
-			</p>
+    <p>
+      I opened support ticket <strong>#FHO-567811</strong> on
+      <strong>October 14, 2026 at 22:54</strong> and included
+      multiple <code>mpstat</code> captures showing the problem.
+    </p>
 
-			<p>
-			  I followed up on October 15 after the issue persisted for more than
-			  twelve hours, providing additional measurements showing average CPU steal
-			  around 20–24% and individual spikes as high as 74%. I specifically asked
-			  Servitro to investigate the host node and migrate the VM if necessary.
-			</p>
+    <p>
+      I followed up on October 15 after the issue persisted for
+      more than twelve hours, providing additional measurements
+      showing average CPU steal around 20–24% and individual
+      spikes as high as 74%. I specifically asked Servitro to
+      investigate the host node and migrate the VM if necessary.
+    </p>
 
-			<p>
-			  By <strong>October 16 at 14:25</strong>, the ticket had been open for
-			  approximately <strong>39 hours and 31 minutes</strong>. In the ticket
-			  history I reviewed, every visible message during that period was one of
-			  my own updates; I had not received a visible response from Servitro
-			  support.
-			</p>
+    <p>
+      By <strong>October 16 at 14:25</strong>, the ticket had
+      been open for approximately <strong>39 hours and 31
+      minutes</strong>. In the ticket history I reviewed,
+      every visible message during that period was one of my
+      own updates; I had not received a visible response from
+      Servitro support.
+    </p>
 
-			<p>
-			  During that time the VPS continued to deteriorate. By my final update,
-			  performance had become poor enough that I was having difficulty even
-			  establishing an SSH session long enough to collect additional
-			  diagnostics.
-			</p>
+    <p>
+      During that time the VPS continued to deteriorate.
+      Performance became poor enough that I was having difficulty
+      even establishing an SSH session long enough to collect
+      additional diagnostics.
+    </p>
 
-			<p>
-			  At that point I asked Servitro to either migrate the VM to a healthy host
-			  immediately or confirm that I could cancel the service and receive an
-			  appropriate refund or credit.
-			</p>
+    <p>
+      I requested either an immediate migration to a healthy host
+      or cancellation with an appropriate refund or credit.
+    </p>
 
-			<article class="case-card">
-			  <div class="case-meta">October 2026 · Ticket #FHO-567811</div>
-			  <h3>My conclusion</h3>
+    <article class="case-card">
+      <div class="case-meta">October 19, 2026 · Incident update</div>
+      <h3>Update: It keeps getting worse</h3>
 
-			  <p>
-				Cheap VPS hosting inevitably involves shared resources, and a single
-				overloaded host would not by itself make me write off a provider.
-				Infrastructure problems happen.
-			  </p>
+      <p>
+        Following the original CPU steal complaints, Servitro
+        migrated my VPS to another host node. CPU steal appeared
+        to improve significantly after the migration.
+        Unfortunately, the migration introduced new problems.
+      </p>
 
-			  <p>
-				What changed my opinion was the combination of severe, persistent host
-				contention and the lack of a visible support response for roughly
-				forty hours after I supplied detailed diagnostic information.
-			  </p>
+      <p>
+        First, SSH access failed following the migration,
+        requiring recovery through the VNC console. After
+        restoring access, I discovered that the server's
+        <strong>public IPv6 connectivity was completely broken</strong>.
+      </p>
 
-			  <p>
-				That distinction matters to me. I have encountered provider-side
-				networking problems with other inexpensive VPS providers where support
-				acknowledged the issue within minutes and began investigating it.
-				Problems are inevitable; how a provider responds to them is a major
-				part of the service.
-			  </p>
+      <p>
+        I investigated the issue and captured network traffic
+        showing that the configured IPv6 gateway was not
+        responding to Neighbor Discovery requests.
+        Public IPv4 connectivity was still working at this point.
+      </p>
 
-			  <p class="case-result">
-				Based on this experience,
-				<strong>I do not recommend Servitro</strong> for workloads where
-				predictable performance or timely support matters.
-			  </p>
-			</article>
+      <p>
+        I was able to restore an affected DN42 BGP peering session
+        by switching its WireGuard transport to IPv4. I reported
+        the IPv6 failure to Servitro support.
+      </p>
 
-			<div class="card">
-			  <h3>Ticket timeline</h3>
-			  <ul>
-				<li>
-				  <strong>October 14, 22:54:</strong>
-				  Ticket opened with multiple <code>mpstat</code> captures showing
-				  approximately 19% average CPU steal and spikes up to 40%.
-				</li>
-				<li>
-				  <strong>October 15, 15:16:</strong>
-				  Follow-up with additional samples showing sustained averages around
-				  20–24% and spikes as high as 74%.
-				</li>
-				<li>
-				  <strong>October 16, 14:23:</strong>
-				  Reported that the VPS had become so slow that even SSH access was
-				  unreliable.
-				</li>
-				<li>
-				  <strong>October 16, 14:25:</strong>
-				  Requested either immediate migration to a healthy host or
-				  cancellation with an appropriate refund or credit.
-				</li>
-			  </ul>
-			</div>
+      <p>
+        <strong>Then the VPS became completely inaccessible.</strong>
+      </p>
 
-			<p class="small-note">
-			  This review documents my experience with one Servitro VPS and the support
-			  ticket associated with that incident. It does not imply that every
-			  Servitro customer or host node will have the same experience.
-			</p>
+      <p>
+        Later on October 19, the server stopped responding over
+        public IPv4 as well. The VNC console also stopped
+        connecting, leaving me unable to access the VPS through
+        either the network or the provider's console.
+      </p>
 
-			<p class="small-note">
-			  I previously linked to Servitro through an affiliate program. I have
-			  removed the promotional link because I am no longer comfortable
-			  recommending the service based on this experience.
-			</p>
-		  </div>
-	  </section>
+      <p>
+        The control panel reported 0% CPU utilization,
+        unavailable memory information, and zero network traffic.
+        Although the service continued to be listed as
+        <strong>Active</strong>, I could not determine whether
+        the virtual machine was actually powered on.
+      </p>
+
+      <p>
+        At <strong>12:10 PM on October 19</strong>, I attempted
+        to start the VPS using the control panel's Boot function.
+        The operation was cancelled after approximately 20 seconds
+        with the following error:
+      </p>
+
+      <blockquote>
+        <p>
+          The system failed to respond to the action request.
+          Further attempts are likely to be cancelled until the
+          system is responding normally. Try again in five minutes.
+        </p>
+      </blockquote>
+
+      <p>
+        This points toward a possible problem with the underlying
+        host or VPS management infrastructure. I cannot
+        independently confirm the cause without access to
+        the hypervisor.
+      </p>
+
+      <p>
+        I escalated the complete outage through support.
+        As of this update, the VPS remains inaccessible,
+        and I have not received an explanation or estimated
+        restoration time.
+      </p>
+
+      <p>
+        I originally purchased this VPS to improve redundancy
+        by spreading my services across independent providers.
+        Instead, I have spent days troubleshooting what was
+        supposed to be an additional reliable network location.
+      </p>
+    </article>
+
+    <article class="case-card">
+      <div class="case-meta">October 2026 · Ticket #FHO-567811</div>
+      <h3>My conclusion</h3>
+
+      <p>
+        Cheap VPS hosting inevitably involves shared resources,
+        and a single overloaded host would not by itself make
+        me write off a provider. Infrastructure problems happen.
+      </p>
+
+      <p>
+        What changed my opinion was the combination of severe,
+        persistent host contention, poor communication, and
+        further failures following the host migration.
+        What began as a performance problem progressed to
+        broken IPv6 connectivity and eventually a completely
+        inaccessible VPS.
+      </p>
+
+      <p>
+        I have encountered provider-side networking problems
+        with other inexpensive VPS providers where support
+        acknowledged the issue within minutes and began
+        investigating. Problems are inevitable; how a provider
+        responds to them is a major part of the service.
+      </p>
+
+      <p>
+        I understand that budget VPS hosting does not include
+        enterprise-level support. However, expecting timely
+        acknowledgment of an unusable service and meaningful
+        updates during a complete outage is not unreasonable.
+      </p>
+
+      <p>
+        <strong>I will not be renewing my service with Servitro.</strong>
+        The low price is not worth the instability, repeated
+        troubleshooting, and lack of timely communication.
+      </p>
+
+      <p class="case-result">
+        Based on this experience,
+        <strong>I do not recommend Servitro</strong> for workloads
+        where predictable performance, availability, or timely
+        support matters.
+      </p>
+    </article>
+
+    <div class="card">
+      <h3>Incident timeline</h3>
+      <ul>
+        <li>
+          <strong>October 14, 22:54:</strong>
+          Opened ticket #FHO-567811 with CPU steal measurements.
+        </li>
+        <li>
+          <strong>October 15, 15:16:</strong>
+          Followed up with sustained steal averages of 20–24%
+          and spikes reaching 74%.
+        </li>
+        <li>
+          <strong>October 16, 14:23:</strong>
+          Reported that SSH access had become unreliable
+          because of poor VPS performance.
+        </li>
+        <li>
+          <strong>October 16, 14:25:</strong>
+          Requested migration or cancellation with an
+          appropriate refund or credit.
+        </li>
+        <li>
+          <strong>October 19:</strong>
+          Following migration, discovered that public IPv6
+          was unusable because the gateway was not responding
+          to Neighbor Discovery requests.
+        </li>
+        <li>
+          <strong>October 19, later:</strong>
+          Public IPv4 became unreachable, and the VNC console
+          stopped connecting.
+        </li>
+        <li>
+          <strong>October 19, 12:10 PM:</strong>
+          Attempted Boot from the control panel. The operation
+          was cancelled after 20 seconds because the system
+          failed to respond.
+        </li>
+      </ul>
+    </div>
+
+    <p class="small-note">
+      This review documents my experience with one Servitro VPS
+      and its associated support incidents. It does not imply
+      that every Servitro customer or host node will have the
+      same experience. I will update this review if the provider
+      supplies additional information or resolves the outage.
+    </p>
+
+    <p class="small-note">
+      I previously linked to Servitro through an affiliate
+      program. I removed the promotional link because I am no
+      longer comfortable recommending the service based on
+      this experience.
+    </p>
+  </div>
+</section>
+
 
       <section class="section provider-section">
         <div class="container article-width">
