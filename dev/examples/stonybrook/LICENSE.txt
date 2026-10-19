@@ -1,0 +1,48 @@
+Copyright © 2026 Kyle Givler. All rights reserved.
+
+STONYBROOK LANDSCAPING DEMONSTRATION
+RESTRICTED EVALUATION LICENSE
+
+This directory and its contents are NOT licensed under the MIT License applicable to other portions of this repository.
+
+This license applies specifically to the Stonybrook Landscaping demonstration project located at:
+
+dev/examples/stonybrook/
+
+**1. Permitted Use**
+
+You are granted a limited, non-exclusive, non-transferable permission to view, read, and inspect the source code solely for the purpose of evaluating Kyle Givler's programming competence, code quality, and technical capabilities when considering hiring or contracting with him.
+
+Incidental copies technically necessary to view the repository or inspect the code for this permitted purpose are allowed.
+
+**2. Prohibited Use**
+
+Without prior written permission from Kyle Givler, you may NOT:
+
+- Use this code, design, or its substantial portions in your own website, product, or project.
+- Copy, modify, adapt, or create derivative works from the project for any purpose other than the limited evaluation described above.
+- Redistribute, sublicense, sell, publish, or incorporate the project into another repository or template collection.
+- Deploy or operate a website based on this project.
+- Use this project as a starter template for personal, commercial, nonprofit, or other development work.
+
+**3. No General Open-Source License**
+
+Public availability of this project's source code does not constitute permission to reuse it.
+
+Neither the MIT License found elsewhere in the repository nor any other repository-wide license is intended to grant additional rights to this demonstration project.
+
+**4. Third-Party Materials**
+
+Photographs, fonts, and other third-party materials, if present, remain subject to their respective owners' rights and licenses. This license does not grant rights to third-party content.
+
+**5. No Warranty**
+
+This demonstration is provided "AS IS", without warranty of any kind, express or implied, to the extent permitted by applicable law.
+
+**6. Additional Permissions**
+
+For permission to reuse, adapt, license, or commission work based on this project, contact:
+
+https://dev.kgivler.com/
+
+All rights not expressly granted are reserved.
