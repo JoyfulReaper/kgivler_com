@@ -1,0 +1,270 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Contact Us | Stonybrook Landscaping</title>
+    <meta name="description"
+          content="Tell Stonybrook Landscaping about your outdoor project. Explore landscape design, garden planting, hardscaping, and outdoor living consultations.">
+
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="demo-banner">
+        Fictional business — portfolio demonstration by
+        <a href="https://dev.kgivler.com/">Kyle Givler</a>
+    </div>
+
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="../" class="brand" aria-label="Stonybrook Landscaping home">
+                <span class="brand-mark" aria-hidden="true">S<span>.</span></span>
+                <span class="brand-name">
+                    STONYBROOK
+                    <small>LANDSCAPING</small>
+                </span>
+            </a>
+
+            <nav class="nav" aria-label="Primary navigation">
+                <a href="../">Home</a>
+                <a href="../about/">About</a>
+                <a href="../services/">Services</a>
+                <a href="../portfolio/">Our Work</a>
+                <a href="./" class="nav-cta" aria-current="page">
+                    Request a Consultation <span aria-hidden="true">↗</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="page-hero contact-page-hero">
+            <div class="container">
+                <p class="eyebrow">Let's Talk</p>
+                <h1>Something beautiful<br><em>starts here.</em></h1>
+                <p>
+                    Have a vision for your outdoor space?
+                    We'd love to hear about it. Tell us what
+                    you have in mind, and let's explore what's possible.
+                </p>
+            </div>
+        </section>
+
+        <section class="section contact-section">
+            <div class="container contact-layout">
+
+                <div class="contact-form-column">
+                    <p class="eyebrow">Start a Conversation</p>
+                    <h2>Tell us about<br><em>your project.</em></h2>
+                    <p class="contact-form-intro">
+                        A few details will help us understand your
+                        space, your goals, and the kind of experience
+                        you'd like to create.
+                    </p>
+
+                    <div class="contact-demo-notice" role="note">
+                        <strong>Portfolio demonstration</strong>
+                        <p>
+                            Stonybrook is a fictional business.
+                            This example form is not connected to a
+                            submission service and does not collect inquiries.
+                        </p>
+                    </div>
+
+                    <!--
+                        Demonstration only.
+                        Backend integration will be implemented separately.
+                        No personal data is sent or stored by this form.
+                    -->
+                    <form class="contact-form" aria-label="Demonstration consultation form">
+                        <div class="contact-field-row">
+                            <div class="contact-field">
+                                <label for="contact-name">Your Name <span>*</span></label>
+                                <input type="text"
+                                       id="contact-name"
+                                       name="name"
+                                       autocomplete="name"
+                                       placeholder="Your full name"
+                                       required>
+                            </div>
+
+                            <div class="contact-field">
+                                <label for="contact-email">Email Address <span>*</span></label>
+                                <input type="email"
+                                       id="contact-email"
+                                       name="email"
+                                       autocomplete="email"
+                                       placeholder="you@example.com"
+                                       required>
+                            </div>
+                        </div>
+
+                        <div class="contact-field-row">
+                            <div class="contact-field">
+                                <label for="contact-phone">Phone Number</label>
+                                <input type="tel"
+                                       id="contact-phone"
+                                       name="phone"
+                                       autocomplete="tel"
+                                       placeholder="Optional">
+                            </div>
+
+                            <div class="contact-field">
+                                <label for="contact-service">Interested In</label>
+                                <select id="contact-service" name="service">
+                                    <option value="">Select a service</option>
+                                    <option value="landscape-design">Landscape Design</option>
+                                    <option value="hardscaping">Patios &amp; Hardscaping</option>
+                                    <option value="planting">Gardens &amp; Planting</option>
+                                    <option value="outdoor-living">Outdoor Living</option>
+                                    <option value="other">Not Sure Yet / Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="contact-field">
+                            <label for="contact-location">Project Location</label>
+                            <input type="text"
+                                   id="contact-location"
+                                   name="location"
+                                   placeholder="Town or neighborhood">
+                        </div>
+
+                        <div class="contact-field">
+                            <label for="contact-message">Tell Us About Your Project <span>*</span></label>
+                            <textarea id="contact-message"
+                                      name="message"
+                                      rows="6"
+                                      placeholder="What would you love to create? Tell us about your space and any ideas you have."
+                                      required></textarea>
+                        </div>
+
+                        <div class="contact-submit">
+                            <button class="button contact-submit-button"
+                                    type="submit"
+                                    disabled>
+                                Send Your Inquiry
+                                <span aria-hidden="true">↗</span>
+                            </button>
+                            <p>
+                                Demo only — submissions are currently disabled.
+                            </p>
+                        </div>
+                    </form>
+                </div>
+
+                <aside class="contact-sidebar">
+                    <div class="contact-sidebar-inner">
+                        <p class="eyebrow eyebrow-light">Our Approach</p>
+                        <h2>Good things<br><em>grow together.</em></h2>
+
+                        <p class="contact-sidebar-lead">
+                            The best outdoor spaces begin with a conversation.
+                            We're here to listen, understand your ideas,
+                            and help shape what's next.
+                        </p>
+
+                        <div class="contact-sidebar-divider"></div>
+
+                        <div class="contact-info-item">
+                            <span class="contact-info-number">01</span>
+                            <div>
+                                <h3>Share Your Vision</h3>
+                                <p>
+                                    Tell us what you're imagining, from a
+                                    small garden refresh to a complete
+                                    landscape transformation.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="contact-info-item">
+                            <span class="contact-info-number">02</span>
+                            <div>
+                                <h3>Explore the Possibilities</h3>
+                                <p>
+                                    We'll discuss your goals, how you use
+                                    your outdoor space, and what matters
+                                    most to you.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="contact-info-item">
+                            <span class="contact-info-number">03</span>
+                            <div>
+                                <h3>Plan What Comes Next</h3>
+                                <p>
+                                    Together, we'll explore a thoughtful
+                                    direction for your project.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="contact-sidebar-divider"></div>
+
+                        <p class="contact-sidebar-note">
+                            Every landscape has potential. Sometimes
+                            all it takes is a fresh perspective.
+                        </p>
+                    </div>
+                </aside>
+
+            </div>
+        </section>
+
+        <section class="section section-muted contact-closing">
+            <div class="container contact-closing-inner">
+                <p class="eyebrow">Thoughtfully Designed</p>
+                <h2>A place to gather.<br><em>A space to unwind.</em></h2>
+                <p>
+                    We believe the spaces outside our homes deserve as
+                    much care and consideration as the ones inside.
+                </p>
+
+                <a href="../portfolio/" class="text-link">
+                    Explore Our Work
+                    <span aria-hidden="true">↗</span>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-main">
+            <div class="footer-about">
+                <div class="footer-brand">
+                    STONYBROOK <span>LANDSCAPING</span>
+                </div>
+                <p>Thoughtful landscapes. Lasting beauty.</p>
+            </div>
+
+            <div class="footer-links">
+                <div>
+                    <h3>Explore</h3>
+                    <a href="../about/">About Us</a>
+                    <a href="../services/">Services</a>
+                    <a href="../portfolio/">Our Work</a>
+                </div>
+                <div>
+                    <h3>Get In Touch</h3>
+                    <a href="./">Request a Consultation</a>
+                    <a href="./">Contact</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="container footer-bottom">
+            <p>
+                © Stonybrook Landscaping — Fictional demonstration website.
+            </p>
+            <p>
+                Created by
+                <a href="https://dev.kgivler.com/">Kyle Givler</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
