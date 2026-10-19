@@ -294,3 +294,12 @@ The repository includes a filesystem publish profile for the API but no complete
 Copyright (c) 2026 Kyle Givler.
 
 Licensed under the MIT License. See [LICENSE.md](LICENSE.md).
+
+### Licensing exception
+
+Most of this repository is licensed under the MIT License.
+
+**Exception:** `dev/examples/stonybrook/` is NOT MIT licensed.
+It is available for prospective-client code evaluation only.
+See [Stonybrook LICENSE.txt](dev/examples/stonybrook/LICENSE.txt)
+for the applicable terms.
