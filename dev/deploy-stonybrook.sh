@@ -2,18 +2,23 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Deploy the Stonybrook static demonstration site on Frontdesk.
+# Deploy Stonybrook Landscaping to Nginx on Frontdesk.
 #
-# Run after updating the local dev branch:
-#
+# Usage:
+#   cd /opt/kgivler_com
 #   git pull --ff-only
 #   ./dev/deploy-stonybrook.sh
+#
+# Deploys the current committed dev branch.
+# Does not pull, commit, push, or reload Nginx.
 
 REPO_DIR="/opt/kgivler_com"
 SOURCE_DIR="$REPO_DIR/dev/examples/stonybrook"
 DEST_DIR="/var/www/stonybrook"
 
 SITE_URL="http://127.0.0.1:8088"
+PUBLIC_URL="https://stonybrook-demo.kgivler.com/"
+
 EXPECTED_BRANCH="dev"
 
 echo "==> Checking repository"
@@ -24,6 +29,15 @@ CURRENT_BRANCH="$(git branch --show-current)"
 
 if [[ "$CURRENT_BRANCH" != "$EXPECTED_BRANCH" ]]; then
     echo "ERROR: Expected branch '$EXPECTED_BRANCH', found '$CURRENT_BRANCH'."
+    exit 1
+fi
+
+# Refuse to deploy uncommitted modifications, staged changes,
+# or untracked files within the Stonybrook source directory.
+if [[ -n "$(git status --porcelain --untracked-files=all -- dev/examples/stonybrook/)" ]]; then
+    echo "ERROR: Stonybrook has uncommitted or untracked changes."
+    echo "Commit or discard them before deploying."
+    git status --short -- dev/examples/stonybrook/
     exit 1
 fi
 
@@ -42,9 +56,12 @@ echo
 
 echo "==> Checking dependencies"
 
-for command in rsync curl nginx; do
-    if ! command -v "$command" >/dev/null 2>&1; then
-        echo "ERROR: Missing required command: $command"
+# nginx is commonly installed under /usr/sbin, which
+# may not be included in a normal user's PATH.
+# It is checked separately using sudo below.
+for cmd in rsync curl; do
+    if ! command -v "$cmd" >/dev/null 2>&1; then
+        echo "ERROR: Missing required command: $cmd"
         exit 1
     fi
 done
@@ -56,6 +73,7 @@ sudo nginx -t
 echo
 echo "==> Previewing deployment changes"
 
+# Only operate on this dedicated static-site directory.
 sudo mkdir -p "$DEST_DIR"
 
 sudo rsync -avnc --delete \
@@ -81,11 +99,14 @@ echo
 echo "==> Setting ownership and permissions"
 
 sudo chown -R root:root "$DEST_DIR"
+
 sudo find "$DEST_DIR" -type d -exec chmod 755 {} +
 sudo find "$DEST_DIR" -type f -exec chmod 644 {} +
 
 echo
 echo "==> Verifying local HTTP responses"
+
+FAILED=0
 
 for path in \
     "/" \
@@ -97,24 +118,35 @@ for path in \
     "/portfolio/carousel.js" \
     "/assets/images/about-garden-800.jpg"
 do
-    STATUS="$(curl --silent --output /dev/null \
+    STATUS="$(curl \
+        --silent \
+        --output /dev/null \
         --write-out '%{http_code}' \
         --max-time 10 \
         "$SITE_URL$path")"
 
-    if [[ "$STATUS" != "200" ]]; then
+    if [[ "$STATUS" == "200" ]]; then
+        echo "OK: $path"
+    else
         echo "ERROR: $path returned HTTP $STATUS"
-        exit 1
+        FAILED=1
     fi
-
-    echo "OK: $path"
 done
 
 echo
-echo "==> Deployment complete"
 
+if [[ "$FAILED" -ne 0 ]]; then
+    echo "WARNING: Deployment completed, but verification failed."
+    echo "Check Nginx logs and the deployed files."
+    exit 1
+fi
+
+echo "==> Deployment complete"
+echo
 echo "Git commit: $COMMIT"
+echo "Source:     $SOURCE_DIR"
+echo "Deployed:   $DEST_DIR"
 echo "Local URL:  $SITE_URL"
-echo "Public URL: https://stonybrook-demo.kgivler.com/"
+echo "Public URL: $PUBLIC_URL"
 echo
 echo "No Nginx reload required for static file updates."
