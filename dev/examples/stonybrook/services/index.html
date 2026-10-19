@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <div class="demo-banner">
         Fictional business — portfolio demonstration by
         <a href="https://dev.kgivler.com/">Kyle Givler</a>
@@ -39,7 +40,7 @@
         </div>
     </header>
 
-    <main>
+    <main id="main-content" tabindex="-1">
         <section class="page-hero services-page-hero">
             <div class="container">
                 <p class="eyebrow">What We Do</p>
@@ -169,7 +170,10 @@
                     <article class="services-more-card" id="planting">
                         <div class="services-more-image">
                             <img src="../assets/images/about-garden.jpg"
+                                 srcset="../assets/images/about-garden-800.jpg 800w, ../assets/images/about-garden.jpg 1600w"
+                                 sizes="(max-width: 600px) calc(100vw - 32px), (max-width: 1228px) calc((100vw - 74px) / 2), 577px"
                                  alt="Lush planted garden with flowering shrubs, greenery, and stone steps"
+                                 width="1600" height="1200"
                                  loading="lazy">
                         </div>
                         <div class="services-more-content">
@@ -279,6 +283,8 @@
                 </div>
             </div>
         </div>
+
+        <p class="container imagery-disclosure">AI-generated imagery; all projects are fictional.</p>
 
         <div class="container footer-bottom">
             <p>

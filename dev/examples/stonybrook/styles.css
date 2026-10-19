@@ -53,9 +53,32 @@ a {
 }
 
 a:focus-visible {
-  outline: 3px solid var(--accent);
+  outline: 3px solid var(--forest-light);
 
-  outline-offset: 4px;
+  outline-offset: 3px;
+  /* The cream inner ring stays visible on dark sections and imagery. */
+  box-shadow: 0 0 0 3px var(--cream);
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.skip-link {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 100;
+  max-width: calc(100% - 32px);
+  padding: 12px 20px;
+  background: var(--cream);
+  color: var(--forest);
+  font-weight: 700;
+  transform: translateY(calc(-100% - 32px));
+}
+
+.skip-link:focus {
+  transform: none;
 }
 
 .container {
@@ -210,6 +233,7 @@ h1,
 h2,
 h3 {
   font-weight: 400;
+  overflow-wrap: anywhere;
 }
 
 h1,
@@ -604,7 +628,7 @@ h2 {
 
   width: 100%;
 
-  padding: 34px;
+  padding: 34px 78px 34px 34px;
 }
 
 .project-info > span:first-child {
@@ -777,6 +801,13 @@ h2 {
 
 .footer-bottom a {
   text-decoration: underline;
+}
+
+.imagery-disclosure {
+  margin-block: 0;
+  padding-bottom: 20px;
+  color: #c9d3c8;
+  font-size: 0.8rem;
 }
 
 /* Responsive */
@@ -971,6 +1002,10 @@ h2 {
   background:
     url("assets/images/about-garden.jpg") center / cover no-repeat,
     var(--forest-light);
+  background-image: image-set(
+    url("assets/images/about-garden-800.jpg") 1x,
+    url("assets/images/about-garden.jpg") 2x
+  );
 }
 
 .about-story-content h2 {
@@ -1459,7 +1494,8 @@ h2 {
 
 .contact-field input::placeholder,
 .contact-field textarea::placeholder {
-  color: #787f78;
+  color: var(--body);
+  opacity: 1;
 }
 
 .contact-field input:focus,
@@ -1606,6 +1642,12 @@ h2 {
   .contact-sidebar-inner {
     padding: 48px 40px;
   }
+
+  .contact-field input,
+  .contact-field select,
+  .contact-field textarea {
+    font-size: max(1rem, 16px);
+  }
 }
 
 @media (max-width: 600px) {
@@ -1638,48 +1680,69 @@ h2 {
 }
 
 .portfolio-carousel {
+  --portfolio-image-ratio: 16 / 9;
   width: 100%;
 }
 
 .portfolio-carousel-viewport {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-  background: var(--forest-dark);
 }
 
-/* Slides */
+/* A readable gallery is the default, including when initialization fails. */
 
 .portfolio-slide {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  visibility: hidden;
-  opacity: 0;
-  transition:
-    opacity 450ms ease,
-    visibility 450ms ease;
-}
-
-.portfolio-slide.is-active {
-  z-index: 1;
-  visibility: visible;
-  opacity: 1;
+  margin-bottom: 40px;
 }
 
 .portfolio-slide img {
   display: block;
   width: 100%;
-  height: 100%;
+  height: auto;
   object-fit: cover;
+}
+
+/* All captions share a grid row: even hidden captions reserve their height.
+   This follows text wrapping/zoom without fixed heights or JS measurement. */
+.is-enhanced .portfolio-carousel-viewport {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "image" "indicators" "caption";
+}
+
+.is-enhanced .portfolio-slide {
+  display: contents;
+}
+
+.is-enhanced .portfolio-slide > img {
+  grid-area: image;
+  width: 100%;
+  height: auto;
+  aspect-ratio: var(--portfolio-image-ratio);
+  background: var(--forest-dark);
+}
+
+.is-enhanced .portfolio-carousel-caption {
+  grid-area: caption;
+}
+
+.is-enhanced .portfolio-slide > * {
+  transition:
+    opacity 450ms ease,
+    visibility 450ms ease;
+}
+
+.is-enhanced .portfolio-slide:not(.is-active) > * {
+  visibility: hidden;
+  opacity: 0;
 }
 
 /* Navigation arrows */
 
 .portfolio-carousel-arrow {
-  position: absolute;
-  top: 50%;
+  grid-area: image;
+  align-self: center;
+  position: relative;
   z-index: 3;
   display: flex;
   align-items: center;
@@ -1687,7 +1750,6 @@ h2 {
   width: 54px;
   height: 54px;
   padding: 0;
-  transform: translateY(-50%);
   border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 50%;
   background: rgba(23, 46, 37, 0.9);
@@ -1704,22 +1766,25 @@ h2 {
 
 .portfolio-carousel-arrow:hover {
   background: #365a47;
-  transform: translateY(-50%) scale(1.07);
+  transform: scale(1.07);
 }
 
 
 .portfolio-carousel-arrow:focus-visible {
     outline: 3px solid var(--white);
     outline-offset: 3px;
+    box-shadow: 0 0 0 3px var(--forest-dark);
 }
 
 
 .portfolio-carousel-prev {
-  left: 20px;
+  justify-self: start;
+  margin-left: 20px;
 }
 
 .portfolio-carousel-next {
-  right: 20px;
+  justify-self: end;
+  margin-right: 20px;
 }
 
 
@@ -1820,8 +1885,8 @@ h2 {
 
 
 @media (max-width: 600px) {
-    .portfolio-carousel-viewport {
-        aspect-ratio: 4 / 3;
+    .portfolio-carousel {
+        --portfolio-image-ratio: 4 / 3;
     }
 
     .portfolio-carousel-arrow {
@@ -1831,11 +1896,11 @@ h2 {
     }
 
     .portfolio-carousel-prev {
-        left: 12px;
+        margin-left: 12px;
     }
 
     .portfolio-carousel-next {
-        right: 12px;
+        margin-right: 12px;
     }
 
     .portfolio-carousel-caption {
@@ -1852,6 +1917,7 @@ h2 {
 /* Slide indicators */
 
 .portfolio-carousel-indicators {
+    grid-area: indicators;
     position: static;
     display: flex;
     align-items: center;
@@ -1865,7 +1931,7 @@ h2 {
     height: 16px;
     padding: 0;
     border: 0;
-    border-bottom: 3px solid #b9c2b7;
+    border-bottom: 3px solid #71816f;
     background: transparent;
     cursor: pointer;
 }

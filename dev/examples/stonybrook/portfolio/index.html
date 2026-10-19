@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="../styles.css" />
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <div class="demo-banner">
       Fictional business — portfolio demonstration by
       <a href="https://dev.kgivler.com/">Kyle Givler</a>
@@ -41,7 +42,7 @@
       </div>
     </header>
 
-    <main>
+    <main id="main-content" tabindex="-1">
       <section class="page-hero">
         <div class="container">
           <p class="eyebrow">Our Portfolio</p>
@@ -65,8 +66,8 @@
             </h2>
           </div>
 
-          <div class="portfolio-carousel" id="portfolio-carousel" role="region" aria-roledescription="carousel" aria-label="Illustrative landscaping projects">
-            <div class="portfolio-carousel-hint">
+          <div class="portfolio-carousel" id="portfolio-carousel" role="region" aria-label="Illustrative landscaping projects">
+            <div class="portfolio-carousel-hint" hidden>
               <span>Browse Projects</span>
               <span>
                 Use arrows to explore
@@ -75,51 +76,67 @@
             </div>
 
             <div class="portfolio-carousel-viewport">
-              <div class="portfolio-slide is-active" id="portfolio-slide-1" role="group" aria-roledescription="slide" aria-label="1 of 4" aria-hidden="false">
-                <img src="../assets/images/project-garden.jpg" alt="Landscaped garden with lush planting and a winding pathway" width="1200" height="750" />
+              <div class="portfolio-slide" id="portfolio-slide-1" role="group" aria-label="1 of 4: The Garden Retreat">
+                <img src="../assets/images/project-garden.jpg" alt="Landscaped garden with lush planting and a winding pathway" width="990" height="658" />
+                <div class="portfolio-carousel-caption">
+                  <div>
+                    <span class="portfolio-carousel-count">01 / 04</span>
+                    <h3>The Garden Retreat</h3>
+                    <p>Landscape Design · Garden Planting</p>
+                  </div>
+                  <p class="portfolio-carousel-description">A peaceful garden setting where layered planting, soft greenery, and winding pathways create a welcoming escape from everyday life.</p>
+                </div>
               </div>
 
-              <div class="portfolio-slide" id="portfolio-slide-2" role="group" aria-roledescription="slide" aria-label="2 of 4" aria-hidden="true">
-                <img src="../assets/images/project-patio.jpg" alt="Natural stone patio with landscaped garden surroundings" width="1200" height="750" loading="lazy" />
+              <div class="portfolio-slide" id="portfolio-slide-2" role="group" aria-label="2 of 4: The Stone Terrace">
+                <img src="../assets/images/project-patio.jpg" alt="Natural stone patio with landscaped garden surroundings" width="1248" height="832" loading="lazy" />
+                <div class="portfolio-carousel-caption">
+                  <div>
+                    <span class="portfolio-carousel-count">02 / 04</span>
+                    <h3>The Stone Terrace</h3>
+                    <p>Patios · Hardscaping</p>
+                  </div>
+                  <p class="portfolio-carousel-description">Natural stone and carefully selected planting come together to create an inviting space for relaxing, gathering, and enjoying the outdoors.</p>
+                </div>
               </div>
 
-              <div class="portfolio-slide" id="portfolio-slide-3" role="group" aria-roledescription="slide" aria-label="3 of 4" aria-hidden="true">
-                <img src="../assets/images/hero.jpg" alt="Residential outdoor living space with elegant landscaping" width="1200" height="750" loading="lazy" />
+              <div class="portfolio-slide" id="portfolio-slide-3" role="group" aria-label="3 of 4: Outdoor Living">
+                <img src="../assets/images/hero.jpg" alt="Residential outdoor living space with elegant landscaping" width="1200" height="896" loading="lazy" />
+                <div class="portfolio-carousel-caption">
+                  <div>
+                    <span class="portfolio-carousel-count">03 / 04</span>
+                    <h3>Outdoor Living</h3>
+                    <p>Outdoor Spaces · Entertaining</p>
+                  </div>
+                  <p class="portfolio-carousel-description">An outdoor environment that feels like an extension of the home, balancing comfortable gathering spaces with the beauty of the surrounding landscape.</p>
+                </div>
               </div>
 
-              <div class="portfolio-slide" id="portfolio-slide-4" role="group" aria-roledescription="slide" aria-label="4 of 4" aria-hidden="true">
-                <img src="../assets/images/about-garden.jpg" alt="Lush garden featuring natural stone steps and mature greenery" width="1200" height="750" loading="lazy" />
+              <div class="portfolio-slide" id="portfolio-slide-4" role="group" aria-label="4 of 4: The Woodland Garden">
+                <img src="../assets/images/about-garden.jpg" srcset="../assets/images/about-garden-800.jpg 800w, ../assets/images/about-garden.jpg 1600w" sizes="(max-width: 600px) calc(100vw - 32px), (max-width: 1228px) calc(100vw - 48px), 1180px" alt="Lush garden featuring natural stone steps and mature greenery" width="1600" height="1200" loading="lazy" />
+                <div class="portfolio-carousel-caption">
+                  <div>
+                    <span class="portfolio-carousel-count">04 / 04</span>
+                    <h3>The Woodland Garden</h3>
+                    <p>Garden Design · Planting</p>
+                  </div>
+                  <p class="portfolio-carousel-description">A lush, naturalistic garden that brings together stone steps, layered foliage, and a sense of quiet discovery.</p>
+                </div>
               </div>
 
-              <button class="portfolio-carousel-arrow portfolio-carousel-prev" type="button" aria-label="Previous photograph">
+              <button class="portfolio-carousel-arrow portfolio-carousel-prev" type="button" aria-label="Previous image" hidden>
                 <span aria-hidden="true">‹</span>
               </button>
 
-              <button class="portfolio-carousel-arrow portfolio-carousel-next" type="button" aria-label="Next photograph">
+              <button class="portfolio-carousel-arrow portfolio-carousel-next" type="button" aria-label="Next image" hidden>
                 <span aria-hidden="true">›</span>
               </button>
-            </div>
-
-            <div class="portfolio-carousel-indicators" role="group" aria-label="Choose a photograph">
-              <button class="portfolio-indicator is-active" type="button" aria-label="Show photograph 1" aria-current="true" aria-controls="portfolio-slide-1"></button>
-
-              <button class="portfolio-indicator" type="button" aria-label="Show photograph 2" aria-controls="portfolio-slide-2"></button>
-
-              <button class="portfolio-indicator" type="button" aria-label="Show photograph 3" aria-controls="portfolio-slide-3"></button>
-
-              <button class="portfolio-indicator" type="button" aria-label="Show photograph 4" aria-controls="portfolio-slide-4"></button>
-            </div>
-
-            <div class="portfolio-carousel-caption">
-              <div>
-                <span class="portfolio-carousel-count" id="portfolio-carousel-count">01 / 04</span>
-                <h3 id="portfolio-carousel-title">The Garden Retreat</h3>
-                <p id="portfolio-carousel-category">Landscape Design · Garden Planting</p>
+              <div class="portfolio-carousel-indicators" role="group" aria-label="Choose an image" hidden>
+                <button class="portfolio-indicator" type="button" aria-label="Show image 1" aria-controls="portfolio-slide-1"></button>
+                <button class="portfolio-indicator" type="button" aria-label="Show image 2" aria-controls="portfolio-slide-2"></button>
+                <button class="portfolio-indicator" type="button" aria-label="Show image 3" aria-controls="portfolio-slide-3"></button>
+                <button class="portfolio-indicator" type="button" aria-label="Show image 4" aria-controls="portfolio-slide-4"></button>
               </div>
-
-              <p class="portfolio-carousel-description" id="portfolio-carousel-description">
-                A peaceful garden setting where layered planting, soft greenery, and winding pathways create a welcoming escape from everyday life.
-              </p>
             </div>
 
             <p class="portfolio-carousel-status" id="portfolio-carousel-status" role="status" aria-live="polite" aria-atomic="true"></p>
@@ -193,6 +210,8 @@
           </div>
         </div>
       </div>
+
+      <p class="container imagery-disclosure">AI-generated imagery; all projects are fictional.</p>
 
       <div class="container footer-bottom">
         <p>© Stonybrook Landscaping — Fictional demonstration website.</p>

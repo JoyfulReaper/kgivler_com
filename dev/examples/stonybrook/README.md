@@ -34,9 +34,9 @@ The goal is a professional, responsive, accessible, and maintainable website wit
 
 **Work in progress.**
 
-The homepage has been implemented. Remaining pages, accessibility testing, responsive refinements, and final validation will be completed as development progresses.
+All five pages are implemented. The portfolio is a complete static gallery that becomes a manual carousel when JavaScript initializes successfully.
 
-The contact form will eventually integrate with a separately maintained submission backend. Until then, demonstration forms must not claim to submit real inquiries.
+The contact form is intentionally disabled. Keep this fictional-business demonstration disconnected from submission services; it must not collect inquiries.
 
 ## Design Goals
 
@@ -57,9 +57,19 @@ No compilation or package installation is required.
 
 ## Images and Other Assets
 
-Photography and project imagery are illustrative and do not represent completed work by an actual landscaping company.
+The imagery is AI-generated and does not represent completed work by an actual landscaping company.
+
+`about-garden.jpg` is a progressive JPEG at 1600 × 1200 (705,480 bytes). The 800 × 600 variant, `about-garden-800.jpg`, is 169,977 bytes. Both were resized from the original 2000 × 1500 image with Lanczos resampling and saved at JPEG quality 78 with optimization. HTML uses width-based `srcset`; the About background uses `image-set` with a JPEG fallback. WebP trials were larger than JPEG for this image, so no extra format is shipped.
 
 Third-party images and assets may have separate licenses. Their inclusion in this demonstration does not grant permission to reuse them.
+
+## Accessibility notes
+
+- Link focus uses forest and cream rings so it remains visible on light surfaces, dark surfaces, and imagery. Forest against cream is 7.22:1 and against sand is 6.55:1.
+- Placeholder text is 6.03:1 against white. Inactive gallery indicators are 3.86:1 against cream. These exceed the relevant 4.5:1 text and 3:1 interface contrast targets.
+- The disabled submit button is intentionally inactive and is exempt from minimum contrast requirements. The brand's decorative gold dot is hidden from assistive technology. These are the remaining intentional exceptions; this is not a claim of full WCAG conformance.
+- All pages have a first-focusable skip link. The gallery exposes all four images and descriptions without JavaScript; enhancement alone enables controls and hides inactive projects. Captions share a grid row to reserve enough space as text wraps, without clipping enlarged text.
+- Reduced-motion preferences disable smooth scrolling and reduce transitions. Mobile/tablet form fields use at least 16px text without restricting user zoom.
 
 ## Licensing — Important
 

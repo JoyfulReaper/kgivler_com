@@ -11,49 +11,17 @@
     const previous = carousel.querySelector(".portfolio-carousel-prev");
     const next = carousel.querySelector(".portfolio-carousel-next");
 
-    const count = document.getElementById("portfolio-carousel-count");
-    const title = document.getElementById("portfolio-carousel-title");
-    const category = document.getElementById("portfolio-carousel-category");
-    const description = document.getElementById("portfolio-carousel-description");
+    const hint = carousel.querySelector(".portfolio-carousel-hint");
+    const indicatorGroup = carousel.querySelector(".portfolio-carousel-indicators");
     const status = document.getElementById("portfolio-carousel-status");
 
-    const projects = [
-        {
-            title: "The Garden Retreat",
-            category: "Landscape Design · Garden Planting",
-            description:
-                "A peaceful garden setting where layered planting, " +
-                "soft greenery, and winding pathways create a welcoming " +
-                "escape from everyday life."
-        },
-        {
-            title: "The Stone Terrace",
-            category: "Patios · Hardscaping",
-            description:
-                "Natural stone and carefully selected planting come " +
-                "together to create an inviting space for relaxing, " +
-                "gathering, and enjoying the outdoors."
-        },
-        {
-            title: "Outdoor Living",
-            category: "Outdoor Spaces · Entertaining",
-            description:
-                "An outdoor environment that feels like an extension " +
-                "of the home, balancing comfortable gathering spaces " +
-                "with the beauty of the surrounding landscape."
-        },
-        {
-            title: "The Woodland Garden",
-            category: "Garden Design · Planting",
-            description:
-                "A lush, naturalistic garden that brings together " +
-                "stone steps, layered foliage, and a sense of quiet " +
-                "discovery."
-        }
-    ];
-
-    if (!slides.length || slides.length !== indicators.length ||
-        slides.length !== projects.length) {
+    // Keep the complete HTML gallery if any enhancement prerequisite is missing.
+    const titles = slides.map(slide => slide.querySelector("h3"));
+    if (!viewport || !previous || !next || !hint || !indicatorGroup || !status ||
+        !slides.length || slides.length !== indicators.length ||
+        titles.some(title => !title) ||
+        slides.some(slide => !slide.querySelector("img") ||
+            !slide.querySelector(".portfolio-carousel-description"))) {
         return;
     }
 
@@ -81,19 +49,9 @@
             }
         });
 
-        const project = projects[current];
-
-        count.textContent =
-            `${String(current + 1).padStart(2, "0")} / ` +
-            `${String(slides.length).padStart(2, "0")}`;
-
-        title.textContent = project.title;
-        category.textContent = project.category;
-        description.textContent = project.description;
-
         if (announce) {
             status.textContent =
-                `Photograph ${current + 1} of ${slides.length}: ${project.title}`;
+                `Image ${current + 1} of ${slides.length}: ${titles[current].textContent.trim()}`;
         }
     }
 
@@ -125,7 +83,11 @@
     });
 
     viewport.addEventListener("touchstart", event => {
-        if (event.touches.length !== 1) return;
+        touchStartX = null;
+        touchStartY = null;
+        // Captions now share the viewport grid; swiping remains image-only.
+        if (event.touches.length !== 1 ||
+            !event.target.closest(".portfolio-slide img")) return;
 
         touchStartX = event.touches[0].clientX;
         touchStartY = event.touches[0].clientY;
@@ -155,5 +117,10 @@
         touchStartY = null;
     });
 
+    // Publish the enhanced state only after every control has been wired.
     showSlide(0, false);
+    slides.forEach(slide => slide.setAttribute("aria-roledescription", "slide"));
+    carousel.setAttribute("aria-roledescription", "carousel");
+    carousel.classList.add("is-enhanced");
+    [hint, previous, next, indicatorGroup].forEach(control => { control.hidden = false; });
 })();
