@@ -4,6 +4,7 @@ import { test } from 'node:test';
 
 const read = path => readFileSync(new URL('../Source/' + path, import.meta.url), 'utf8');
 const pages = ['index.html', 'lab/index.html', 'projects/index.html', 'services/index.html', 'vps-reviews/index.html'];
+const editorialReviewPage = 'vps-reviews/index.html';
 const i2p = 'http://bmhbwuvcvdof5aenq2ocow4rsqzfwxttdy4o6tbro2kohzxyytfq.b32.i2p/';
 const deployments = [
   ['Clearnet', 'https://www.kgivler.com/'], ['Yggdrasil', 'http://site.ygg.kgivler.com/'],
@@ -32,7 +33,7 @@ for (const page of pages) {
 
 // Walk the actual static markup to check ancestors, including nested disclosures
 // and affiliate links. This catches an unmarked promotion outside its container.
-function presentationElements(html) {
+function presentationElements(html, { allowEditorialReview = false } = {}) {
   const stack = [];
   const promotions = [];
   const notes = [];
@@ -48,9 +49,9 @@ function presentationElements(html) {
       const element = { tag, hidden: /\shidden(?:\s|>)/.test(value), promotion: value.includes('data-hosting-promotion') };
       if (element.promotion) promotions.push(element);
       if (value.includes('data-i2p-note')) notes.push(element);
-      if (value.includes('greencloudvps.com')) assert.ok(element.promotion || stack.some(parent => parent.promotion), 'Exposed affiliate link');
+      if (value.includes('greencloudvps.com') && !allowEditorialReview) assert.ok(element.promotion || stack.some(parent => parent.promotion), 'Exposed affiliate link');
       if (!voidTags.has(tag)) stack.push(element);
-    } else if (/GreenCloud/i.test(value)) {
+    } else if (/GreenCloud/i.test(value) && !allowEditorialReview) {
       assert.ok(stack.some(parent => parent.promotion), 'Exposed GreenCloud copy: ' + value.trim());
     }
   }
@@ -59,10 +60,11 @@ function presentationElements(html) {
 }
 
 for (const page of pages) {
-  test(page + ': initial HTML hides all GreenCloud content without JavaScript', () => {
+  const isEditorialReview = page === editorialReviewPage;
+  test(page + (isEditorialReview ? ': editorial GreenCloud review remains readable without JavaScript' : ': initial HTML hides all GreenCloud content without JavaScript'), () => {
     const html = read(page);
-    const { promotions, notes } = presentationElements(html);
-    assert.ok(promotions.length > 0);
+    const { promotions, notes } = presentationElements(html, { allowEditorialReview: isEditorialReview });
+    if (!isEditorialReview) assert.ok(promotions.length > 0);
     assert.ok(promotions.every(element => element.hidden));
     assert.equal(notes.length, 1);
     assert.ok(notes[0].hidden);
@@ -70,6 +72,17 @@ for (const page of pages) {
     const styles = [...html.matchAll(/<link[^>]*href="([^"]+\.css)(?:\?[^"]*)?"/g)]
       .map(match => read(new URL(match[1], 'https://test.invalid/' + page).pathname.slice(1))).join('\n');
     assert.match(styles, /\[data-hosting-promotion\]\[hidden\],[\s\S]*?display:\s*none\s*!important/);
+    if (isEditorialReview) {
+      // VPS reviews are editorial content, not hosting promotions. They remain
+      // readable on I2P, but affiliate links still need clear disclosure.
+      const reviewSection = html.match(/<section\b[^>]*id="greencloud-review"[^>]*>/)?.[0];
+      assert.ok(reviewSection, 'Missing GreenCloud review');
+      assert.doesNotMatch(reviewSection, /\shidden(?:\s|>)/);
+      assert.match(html, /<strong>Affiliate disclosure:<\/strong>/);
+      const affiliateLinks = [...html.matchAll(/<a\b[^>]*href="https:\/\/greencloudvps\.com\/billing\/aff\.php[^"]*"[^>]*>/g)];
+      assert.ok(affiliateLinks.length > 0, 'Missing GreenCloud affiliate links');
+      for (const [tag] of affiliateLinks) assert.match(tag, /\brel="[^"]*\bsponsored\b/, 'Affiliate link needs rel=sponsored');
+    }
   });
 }
 
@@ -77,7 +90,7 @@ for (const hostname of ['kgivler.i2p', new URL(i2p).hostname, 'KGIVLER.I2P.', 'w
   test('presentation uses the actual classifier independently of API routing: ' + hostname, async (t) => {
     const previousWindow = globalThis.window;
     const previousDocument = globalThis.document;
-    const all = pages.map(page => presentationElements(read(page)));
+    const all = pages.map(page => presentationElements(read(page), { allowEditorialReview: page === editorialReviewPage }));
     const promotions = all.flatMap(page => page.promotions);
     const notes = all.flatMap(page => page.notes);
     const requests = t.mock.method(globalThis, 'fetch', async () => { throw new Error('Unexpected request'); });
