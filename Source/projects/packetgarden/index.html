@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PacketGarden | Kyle Givler</title>
+    <meta name="description" content="PacketGarden turns real TCPNoise connections into a living garden using .NET, NATS, SSE, PixiJS and Noise Observatory weather." />
+    <link rel="canonical" href="https://www.kgivler.com/projects/packetgarden/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="PacketGarden | Kyle Givler" />
+    <meta property="og:description" content="Real Internet background noise becomes plants, grass, storms, and occasional gnome warfare." />
+    <meta property="og:url" content="https://www.kgivler.com/projects/packetgarden/" />
+    <meta property="og:site_name" content="Kyle Givler" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="PacketGarden | Kyle Givler" />
+    <meta name="twitter:description" content="A tiny live garden powered by unsolicited network traffic and an unnecessary gnome population." />
+    <link href="/vendor/bootstrap-5.3.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+    <link rel="stylesheet" href="/vendor/fontawesome-6.5.1/css/all.min.css" integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/styles.css?v=6" />
+    <link rel="stylesheet" href="../projects.css?v=1" />
+    <link rel="stylesheet" href="../project-detail.css?v=1" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+
+  <body class="terminal-theme projects-page project-detail-page">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <div class="projects-container">
+      <header class="projects-header">
+        <a class="projects-brand" href="/">Kyle Givler<span aria-hidden="true">_</span></a>
+        <nav class="terminal-nav" aria-label="Main navigation">
+          <a href="/">Home</a>
+          <a href="/projects/" aria-current="page">Projects</a>
+          <a href="/lab/">Lab</a>
+          <a href="/services/">Systems</a>
+          <a href="/vps-reviews/">VPS Reviews</a>
+          <a href="https://dev.kgivler.com/" class="terminal-nav-primary">Hire Me</a>
+        </nav>
+      </header>
+
+      <main id="main-content">
+        <header class="project-detail-hero">
+          <p class="projects-kicker"><span class="prompt" aria-hidden="true">~/</span>projects/packetgarden</p>
+          <h1>PacketGarden</h1>
+          <p class="project-detail-lede">
+            I have servers that spend their days being poked by scanners and bots.
+            PacketGarden takes those unsolicited connections and grows something
+            nicer out of them: a little garden you can leave open and watch.
+          </p>
+          <div class="projects-actions project-detail-actions">
+            <a href="https://garden.kgivler.com/" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer">Live garden <span aria-hidden="true">↗</span></a>
+            <a href="https://github.com/JoyfulReaper/PacketGarden" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer">Source <span aria-hidden="true">↗</span></a>
+            <a href="/projects/" class="terminal-btn-inline">Projects <span aria-hidden="true">←</span></a>
+          </div>
+          <p class="project-detail-stack">Public alpha · .NET 10 · C# · NATS · SSE · PixiJS / Canvas</p>
+        </header>
+
+        <section class="project-detail-section" aria-labelledby="why-heading">
+          <h2 id="why-heading">Composting Internet noise</h2>
+          <p>
+            A TCP listener on a public server attracts an endless supply of random
+            connection attempts. Most aren't interesting individually, but together
+            they make a constantly changing stream of activity. I was already collecting
+            that with <a href="/projects/tcpnoise/">tcpnoise and Noise Observatory</a>.
+          </p>
+          <p>
+            Instead of another dashboard, I wanted something worth glancing at.
+            Listening ports become plant species. Repeated sightings affect how
+            substantial the plants look. Sometimes something rare grows.
+            The connections are real; the botanical interpretation is ridiculous.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="pipeline-heading">
+          <h2 id="pipeline-heading">From connection attempt to garden</h2>
+          <p>
+            Small C sensors observe traffic on exposed hosts and publish events to NATS.
+            The ASP.NET Core backend validates incoming messages and turns them into
+            deliberately small growth events. Each connected browser receives them
+            over Server-Sent Events and maintains its own garden locally.
+          </p>
+          <div class="project-architecture" role="img"
+               aria-label="TCPNoise C sensors send observed connections via NATS to PacketGarden's ASP.NET Core server, which sends sanitized Server-Sent Events to a browser running the PixiJS or Canvas garden. Separately, Noise Observatory supplies aggregate weather over an HTTP snapshot.">
+            <div class="project-architecture-row">
+              <div class="project-architecture-box"><strong>TCPNoise sensors</strong><span>real connections · C / Linux / FreeBSD</span></div>
+            </div>
+            <span class="project-architecture-arrow" aria-hidden="true">↓ NATS</span>
+            <div class="project-architecture-row">
+              <div class="project-architecture-box project-architecture-accent"><strong>PacketGarden</strong><span>ASP.NET Core · validation and SSE</span></div>
+            </div>
+            <span class="project-architecture-arrow" aria-hidden="true">↓ SSE</span>
+            <div class="project-architecture-row">
+              <div class="project-architecture-box"><strong>Browser garden</strong><span>PixiJS / WebGL · Canvas alternative</span></div>
+            </div>
+          </div>
+          <p>
+            Weather comes from a different feed. The
+            <a href="https://noise.kgivler.com/" target="_blank" rel="noopener noreferrer">Noise Observatory</a>
+            reports aggregate traffic and a weather level. PacketGarden polls the
+            snapshot for rain, puddles and the occasional lightning strike.
+            A thunderstorm is not a security alert — it's just a dramatic way to
+            show that the network has been busy.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="ecology-heading">
+          <h2 id="ecology-heading">The garden doesn't need a gardener</h2>
+          <p>
+            The 32 × 20 grid has space for 640 plants. They sprout, mature, fade and
+            eventually disappear. A strong newcomer may displace a weaker specimen
+            when the garden is full, although a few rare species are protected.
+            Wild grass grows and spreads on its own, then clears out of the way
+            when a new plant takes its cell.
+          </p>
+          <p>
+            There are tiny visitors, pointless collectibles, occasional mutations,
+            and a Gnome Incident in which four combatants fight over absolutely
+            nothing and leave. Optional synthesized audio adds growth sounds and
+            thunder. Visitors don't need to click anything or keep score.
+          </p>
+          <p>
+            The default garden uses cached PixiJS artwork; the original Canvas
+            version is still available. The visuals — particularly the grass —
+            are a work in progress, but the garden is already growing from live input.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="privacy-heading">
+          <h2 id="privacy-heading">Real input, small public output</h2>
+          <p>
+            Public growth events include a plant type, listening port and vigor,
+            plus an optional bounded sensor label and sighting count. The browser
+            never receives raw source IP addresses, captured payloads or banners.
+            Those aren't needed to draw a flower.
+          </p>
+          <p>
+            Garden state belongs to each browser. Refreshing starts again, and
+            events missed during a disconnect aren't replayed. SSE subscribers
+            have bounded queues so a stalled connection cannot accumulate
+            an unlimited history in the server's memory.
+          </p>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="stack-heading">
+          <h2 id="stack-heading">Technology</h2>
+          <div class="project-tech-list" aria-label="PacketGarden technology stack">
+            <span>.NET 10 / ASP.NET Core</span><span>C#</span><span>C sensors</span>
+            <span>NATS</span><span>Server-Sent Events</span><span>PixiJS / WebGL</span>
+            <span>Canvas</span><span>Web Audio</span><span>Linux / systemd</span>
+          </div>
+        </section>
+
+        <section class="project-detail-section" aria-labelledby="status-heading">
+          <h2 id="status-heading">Live public alpha</h2>
+          <p>
+            PacketGarden's first public alpha is online. It's meant to be watched,
+            not played or managed. Fuller grass, longer-term testing, and perhaps
+            a gnome landscaping crew are still on the wishlist.
+          </p>
+          <p>If it looks quiet when you first open it, give it a little time. The plants arrive with actual network traffic.</p>
+          <div class="projects-actions project-detail-footer-actions">
+            <a href="https://garden.kgivler.com/" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer">Watch PacketGarden <span aria-hidden="true">↗</span></a>
+            <a href="https://github.com/JoyfulReaper/PacketGarden" class="terminal-btn-inline" target="_blank" rel="noopener noreferrer">Source <span aria-hidden="true">↗</span></a>
+            <a href="/projects/" class="terminal-btn-inline"><span aria-hidden="true">←</span> Back to projects</a>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="site-footer-links">
+          <span>Also available on:</span>
+          <a href="https://www.kgivler.com/">Clearnet</a>
+          <a href="http://site.ygg.kgivler.com/">Yggdrasil</a>
+          <a href="https://kgivler.dn42/">DN42</a>
+          <a href="http://bmhbwuvcvdof5aenq2ocow4rsqzfwxttdy4o6tbro2kohzxyytfq.b32.i2p/">I2P</a>
+        </div>
+        <div class="site-footer-links">
+          <a href="https://github.com/JoyfulReaper/kgivler_com">Project / Source</a>
+        </div>
+        <div class="site-footer-links">
+          <span>Network projects:</span>
+          <a href="https://yggdrasil-network.github.io/">Yggdrasil</a>
+          <a href="https://dn42.dev/Home">DN42</a>
+          <a href="https://i2p.net/">I2P</a>
+        </div>
+        <div class="site-footer-links">
+          <span>© Kyle Givler</span><span aria-hidden="true">·</span>
+          <a href="https://dev.kgivler.com/">Development Services</a>
+          <span aria-hidden="true">·</span>
+          <a href="/vps-reviews/">VPS Reviews</a>
+        </div>
+        <p class="site-footer-note" data-i2p-note hidden>
+          This is the I2P deployment. Browser assets are local; some optional
+          integrations may be unavailable.
+        </p>
+      </footer>
+    </div>
+    <script type="module" src="/js/network-presentation.js"></script>
+  </body>
+</html>
