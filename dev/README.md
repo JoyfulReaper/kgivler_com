@@ -4,6 +4,32 @@ Run `go run .` from `dev/src` with Go 1.25 or newer. The service keeps its
 `net/http` server and embedded static frontend; no JavaScript is needed to submit
 the contact form.
 
+## Budget static hosting offer
+
+The public service description is `src/static/hosting/index.html` (served at
+`https://dev.kgivler.com/hosting/`). Homepage, website packages, and FAQ link
+to it. These are **marketing/information pages only**; the Go dev-site process
+is not the planned multi-customer static hosting platform.
+
+The agreed phase-one service boundaries are recorded in
+[HOSTING_PHASE1.md](HOSTING_PHASE1.md), with broader site guidance in
+[DEVELOPMENT_SERVICES_PLAN.md](DEVELOPMENT_SERVICES_PLAN.md). In particular:
+$149/year, static files only, no uptime SLA, no included customer backups,
+14-day renewal grace period, no guaranteed support times or post-termination
+data recovery, and one minor annual content update.
+
+Draft public pages for [hosting terms](src/static/hosting/terms/index.html)
+and [site privacy](src/static/privacy/index.html) now accompany the hosting
+offer. The privacy page documents actual contact-form storage, IP-based
+server logging, homepage telemetry, and optional ntfy notifications.
+
+**Before accepting paid hosting customers**, have these documents reviewed for
+your situation, publish them, ensure customers explicitly accept the hosting
+terms in the sales process, and settle fair-use limits, renewal notices,
+data retention/security, and support/termination procedures. The contact
+database currently has no automatic deletion schedule; do not imply otherwise.
+Do not describe HappyPages or HappyPortal features as live before they exist.
+
 ## Contact storage
 
 `DEV_CONTACT_DB_PATH` selects the SQLite file. The development default is

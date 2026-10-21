@@ -64,7 +64,8 @@ a:hover {
 
 nav {
     display: flex;
-    gap: 24px;
+    flex-wrap: wrap;
+    gap: 8px 24px;
 }
 
 nav a {
@@ -210,6 +211,14 @@ h3 {
 
 .prose .package-list {
     margin-bottom: 16px;
+}
+
+.hosting-card {
+    grid-column: 1 / -1;
+}
+
+.hosting-card p {
+    max-width: 800px;
 }
 
 .card-link {
@@ -367,7 +376,8 @@ footer {
 
 .footer-inner div {
     display: flex;
-    gap: 20px;
+    flex-wrap: wrap;
+    gap: 8px 20px;
 }
 
 .footer-inner a {
