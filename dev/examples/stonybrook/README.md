@@ -20,7 +20,7 @@ The goal is a professional, responsive, accessible, and maintainable website wit
 - Static file hosting (Nginx or another conventional web server)
 - No frontend framework or build system required
 
-## Planned Pages
+## Pages
 
 | Page | Purpose |
 |---|---|
@@ -30,13 +30,35 @@ The goal is a professional, responsive, accessible, and maintainable website wit
 | Portfolio | Illustrative landscaping projects |
 | Contact | Consultation request form |
 
-## Development Status
+## Demonstration Status
 
-**Work in progress.**
+**Ready for portfolio review.** This is a finished static-site example, not an operating landscaping company.
 
 All five pages are implemented. The portfolio is a complete static gallery that becomes a manual carousel when JavaScript initializes successfully.
 
-The contact form is intentionally disabled. Keep this fictional-business demonstration disconnected from submission services; it must not collect inquiries.
+The sample contact form is a **local-only demonstration**. With JavaScript enabled, it shows native browser validation and a confirmation, then clears the fields. It does not transmit submissions or store them on the server. Without JavaScript, the submit button stays disabled. Do not connect this fictional-business demo to a live submission endpoint.
+
+## Search engines and social previews
+
+The demonstration domain intentionally has a `robots.txt` file with
+`Disallow: /` for general crawlers so the fictional landscaping business
+is not promoted as a real local company. Named social-preview bots
+(LinkedIn, X/Twitter, Facebook, and Slack) have explicit exceptions so
+shared links can display the example's Open Graph preview.
+
+This is **not** a guarantee that the URL itself cannot appear in search
+results if another site links to it, and robots rules are voluntary.
+To reliably use `noindex`, crawlers need to be allowed to request
+the pages and read that directive.
+
+The HTML still demonstrates page-specific titles, descriptions, canonical
+URLs, semantic headings, descriptive image text, and Open Graph/social-preview
+metadata. The demo includes a branded favicon. Social cards reuse the
+existing illustrative `hero.jpg` rather than adding another image asset.
+
+For an actual client site, replace the fictional content, canonicals,
+images, and social metadata with real business details, and set crawler
+access according to that site's needs. This demo does not need a sitemap.
 
 ## Design Goals
 
@@ -67,7 +89,7 @@ Third-party images and assets may have separate licenses. Their inclusion in thi
 
 - Link focus uses forest and cream rings so it remains visible on light surfaces, dark surfaces, and imagery. Forest against cream is 7.22:1 and against sand is 6.55:1.
 - Placeholder text is 6.03:1 against white. Inactive gallery indicators are 3.86:1 against cream. These exceed the relevant 4.5:1 text and 3:1 interface contrast targets.
-- The disabled submit button is intentionally inactive and is exempt from minimum contrast requirements. The brand's decorative gold dot is hidden from assistive technology. These are the remaining intentional exceptions; this is not a claim of full WCAG conformance.
+- The disabled submit button (when JavaScript is unavailable) is intentionally inactive and is exempt from minimum contrast requirements. The demo confirmation has a status announcement and receives focus after a successful example submission. The brand's decorative gold dot is hidden from assistive technology. This is not a claim of full WCAG conformance.
 - All pages have a first-focusable skip link. The gallery exposes all four images and descriptions without JavaScript; enhancement alone enables controls and hides inactive projects. Captions share a grid row to reserve enough space as text wraps, without clipping enlarged text.
 - Reduced-motion preferences disable smooth scrolling and reduce transitions. Mobile/tablet form fields use at least 16px text without restricting user zoom.
 
@@ -81,7 +103,7 @@ This project's source code is publicly available solely so prospective clients c
 
 Viewing and inspection for that purpose are permitted. Reuse, redistribution, modification, deployment, and use as a website template are not permitted without prior written authorization.
 
-See [LICENSE.TXT](LICENSE.TXT) for the complete terms.
+See [LICENSE.txt](LICENSE.txt) for the complete terms.
 
 ## Development Services
 

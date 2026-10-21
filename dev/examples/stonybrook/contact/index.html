@@ -9,7 +9,22 @@
     <meta name="description"
           content="Tell Stonybrook Landscaping about your outdoor project. Explore landscape design, garden planting, hardscaping, and outdoor living consultations.">
 
+    <link rel="canonical" href="https://stonybrook-demo.kgivler.com/contact/">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <meta name="theme-color" content="#213f32">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Stonybrook Landscaping — Fictional Demo">
+    <meta property="og:title" content="Stonybrook Contact Form — Fictional Website Demo">
+    <meta property="og:description" content="A sample consultation form for the fictional Stonybrook Landscaping portfolio website; no real inquiries are accepted.">
+    <meta property="og:url" content="https://stonybrook-demo.kgivler.com/contact/">
+    <meta property="og:image" content="https://stonybrook-demo.kgivler.com/assets/images/hero.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="896">
+    <meta property="og:image:alt" content="AI-generated landscaped outdoor space for a fictional business website demo">
+    <meta name="twitter:card" content="summary_large_image">
+
     <link rel="stylesheet" href="../styles.css">
+    <script src="demo-form.js" defer></script>
 </head>
 <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -65,21 +80,19 @@
                         you'd like to create.
                     </p>
 
-                    <div class="contact-demo-notice" role="note">
-                        <strong>Portfolio demonstration</strong>
+                    <div class="contact-demo-notice" role="note" id="demo-form-notice">
+                        <strong>Sample contact form</strong>
                         <p>
-                            Stonybrook is a fictional business.
-                            This example form is not connected to a
-                            submission service and does not collect inquiries.
+                            Stonybrook is a fictional business. You can try this
+                            form, but no information is sent to a server or saved
+                            by this website.
                         </p>
                     </div>
 
-                    <!--
-                        Demonstration only.
-                        Backend integration will be implemented separately.
-                        No personal data is sent or stored by this form.
-                    -->
-                    <form class="contact-form" aria-label="Demonstration consultation form">
+                    <!-- JavaScript enables this local-only sample after installing a submit handler. -->
+                    <form class="contact-form" id="demo-contact-form"
+                          aria-label="Sample consultation form"
+                          aria-describedby="demo-form-notice">
                         <div class="contact-field-row">
                             <div class="contact-field">
                                 <label for="contact-name">Your Name <span>*</span></label>
@@ -146,12 +159,17 @@
                             <button class="button contact-submit-button"
                                     type="submit"
                                     disabled>
-                                Send Your Inquiry
+                                Preview Submission
                                 <span aria-hidden="true">↗</span>
                             </button>
                             <p>
-                                Demo only — submissions are currently disabled.
+                                Sample only. No inquiry will be sent.
                             </p>
+                            <p class="demo-submit-status" id="demo-submit-status"
+                               role="status" tabindex="-1" hidden></p>
+                            <noscript>
+                                <p>The sample form needs JavaScript to show its confirmation.</p>
+                            </noscript>
                         </div>
                     </form>
                 </div>

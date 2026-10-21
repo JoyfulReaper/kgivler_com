@@ -1535,6 +1535,17 @@ h2 {
   font-size: 0.82rem;
 }
 
+/* Visible confirmation for the local-only sample contact form. */
+.contact-submit .demo-submit-status {
+  max-width: 100%;
+  padding: 14px 18px;
+  border-left: 3px solid var(--forest-light);
+  background: var(--sand);
+  color: var(--forest);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
 /* Right-hand consultation panel */
 
 .contact-sidebar {
