@@ -1539,10 +1539,11 @@ h2 {
 .contact-submit .demo-submit-status {
   max-width: 100%;
   padding: 14px 18px;
-  border-left: 3px solid var(--forest-light);
+  border-left: 3px solid #a52626;
   background: var(--sand);
-  color: var(--forest);
-  font-size: 0.9rem;
+  color: #a52626;
+  font-size: 1.1rem;
+  font-weight: 650;
   line-height: 1.6;
 }
 
