@@ -18,10 +18,17 @@ $149/year, static files only, no uptime SLA, no included customer backups,
 14-day renewal grace period, no guaranteed support times or post-termination
 data recovery, and one minor annual content update.
 
-**Before accepting paid hosting customers**, publish/review a basic hosting
-Terms of Service and privacy disclosures and settle fair-use limits,
-renewal notice handling, and support/termination procedures. Do not describe
-HappyPages or HappyPortal features as live before they exist.
+Draft public pages for [hosting terms](src/static/hosting/terms/index.html)
+and [site privacy](src/static/privacy/index.html) now accompany the hosting
+offer. The privacy page documents actual contact-form storage, IP-based
+server logging, homepage telemetry, and optional ntfy notifications.
+
+**Before accepting paid hosting customers**, have these documents reviewed for
+your situation, publish them, ensure customers explicitly accept the hosting
+terms in the sales process, and settle fair-use limits, renewal notices,
+data retention/security, and support/termination procedures. The contact
+database currently has no automatic deletion schedule; do not imply otherwise.
+Do not describe HappyPages or HappyPortal features as live before they exist.
 
 ## Contact storage
 
