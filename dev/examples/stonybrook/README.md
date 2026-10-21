@@ -36,7 +36,7 @@ The goal is a professional, responsive, accessible, and maintainable website wit
 
 All five pages are implemented. The portfolio is a complete static gallery that becomes a manual carousel when JavaScript initializes successfully.
 
-The contact form is intentionally disabled. Keep this fictional-business demonstration disconnected from submission services; it must not collect inquiries.
+The sample contact form is a **local-only demonstration**. With JavaScript enabled, it shows native browser validation and a confirmation, then clears the fields. It does not transmit submissions or store them on the server. Without JavaScript, the submit button stays disabled. Do not connect this fictional-business demo to a live submission endpoint.
 
 ## Search engines and social previews
 
@@ -84,7 +84,7 @@ Third-party images and assets may have separate licenses. Their inclusion in thi
 
 - Link focus uses forest and cream rings so it remains visible on light surfaces, dark surfaces, and imagery. Forest against cream is 7.22:1 and against sand is 6.55:1.
 - Placeholder text is 6.03:1 against white. Inactive gallery indicators are 3.86:1 against cream. These exceed the relevant 4.5:1 text and 3:1 interface contrast targets.
-- The disabled submit button is intentionally inactive and is exempt from minimum contrast requirements. The brand's decorative gold dot is hidden from assistive technology. These are the remaining intentional exceptions; this is not a claim of full WCAG conformance.
+- The disabled submit button (when JavaScript is unavailable) is intentionally inactive and is exempt from minimum contrast requirements. The demo confirmation has a status announcement and receives focus after a successful example submission. The brand's decorative gold dot is hidden from assistive technology. This is not a claim of full WCAG conformance.
 - All pages have a first-focusable skip link. The gallery exposes all four images and descriptions without JavaScript; enhancement alone enables controls and hides inactive projects. Captions share a grid row to reserve enough space as text wraps, without clipping enlarged text.
 - Reduced-motion preferences disable smooth scrolling and reduce transitions. Mobile/tablet form fields use at least 16px text without restricting user zoom.
 
