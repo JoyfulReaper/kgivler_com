@@ -38,3 +38,12 @@
 - Can provide separately billed help choosing and configuring a more suitable commercial host for higher-availability requirements, **without promising to personally supply an SLA**.
 - Resource/fair-use and prohibited-use rules, privacy disclosures, and a plain-language Hosting TOS are **must-do before taking paid hosting customers**. Do not invent numerical quotas or retention guarantees until defined.
 - A dedicated `/hosting/` information page should explain the offer in customer-facing language; a homepage service card, the `/websites/` package page and hosting FAQ should link to it.
+
+## Drafted public legal pages (review before accepting customers)
+
+- [Hosting Terms](src/static/hosting/terms/index.html) — expected URL `/hosting/terms/`.
+- [Privacy Policy](src/static/privacy/index.html) — expected URL `/privacy/`; applies to dev.kgivler.com, not automatically to hosted client sites.
+
+These pages were drafted from the current site code and the agreed phase-one hosting boundaries. They are not a substitute for reviewing applicable consumer protection, privacy, and contract requirements. A website link alone is **not** a reliable substitute for showing terms during checkout and recording customer acceptance. Put the terms in the quote/order or acceptance workflow before taking payment.
+
+**Before the first paid hosting customer:** review the legal wording and any required service-provider identity/contact disclosures; decide how terms are accepted and revisions tracked; establish reasonable operational limits and incident/notice procedures; verify hosting architecture and third-party data flows. The 14-day window is an opportunity to renew, **not guaranteed hosting or file retention**.
