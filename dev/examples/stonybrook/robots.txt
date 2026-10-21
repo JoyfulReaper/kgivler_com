@@ -1,0 +1,5 @@
+# Fictional portfolio demonstration, not a real landscaping business.
+# These rules ask compliant crawlers not to crawl the demo.
+# robots.txt cannot guarantee exclusion of a URL from search results.
+User-agent: *
+Disallow: /

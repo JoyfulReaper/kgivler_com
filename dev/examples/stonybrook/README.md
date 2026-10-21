@@ -20,7 +20,7 @@ The goal is a professional, responsive, accessible, and maintainable website wit
 - Static file hosting (Nginx or another conventional web server)
 - No frontend framework or build system required
 
-## Planned Pages
+## Pages
 
 | Page | Purpose |
 |---|---|
@@ -30,13 +30,30 @@ The goal is a professional, responsive, accessible, and maintainable website wit
 | Portfolio | Illustrative landscaping projects |
 | Contact | Consultation request form |
 
-## Development Status
+## Demonstration Status
 
-**Work in progress.**
+**Ready for portfolio review.** This is a finished static-site example, not an operating landscaping company.
 
 All five pages are implemented. The portfolio is a complete static gallery that becomes a manual carousel when JavaScript initializes successfully.
 
 The contact form is intentionally disabled. Keep this fictional-business demonstration disconnected from submission services; it must not collect inquiries.
+
+## Search engines and social previews
+
+The demonstration domain intentionally has a `robots.txt` file with `Disallow: /`
+so compliant crawlers will not crawl the fictional business. This is **not**
+a guarantee that the URL itself cannot appear in search results if another
+site links to it. To reliably use `noindex`, crawlers need to be allowed
+to request the pages and read the directive.
+
+The HTML still demonstrates page-specific titles, descriptions, canonical
+URLs, semantic headings, descriptive image text, and Open Graph/social-preview
+metadata. The demo includes a branded favicon. Social cards reuse the
+existing illustrative `hero.jpg` rather than adding another image asset.
+
+For an actual client site, replace the fictional content, canonicals,
+images, and social metadata with real business details, and set crawler
+access according to that site's needs. This demo does not need a sitemap.
 
 ## Design Goals
 
@@ -81,7 +98,7 @@ This project's source code is publicly available solely so prospective clients c
 
 Viewing and inspection for that purpose are permitted. Reuse, redistribution, modification, deployment, and use as a website template are not permitted without prior written authorization.
 
-See [LICENSE.TXT](LICENSE.TXT) for the complete terms.
+See [LICENSE.txt](LICENSE.txt) for the complete terms.
 
 ## Development Services
 
