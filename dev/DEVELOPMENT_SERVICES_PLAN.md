@@ -35,14 +35,8 @@ Keep the implementation separable enough that such a move would not be painful.
 
 "Boring" is a feature here.
 
-## Initial call to action
-Primary CTA: LinkedIn.
-
-Use contact-oriented language rather than public fixed pricing.
-
-Do not publish a pricing table yet.
-
-Pricing should be worked out separately after reviewing likely scope, market expectations, taxes/fees, support burden, licensing, and contract terms.
+## Current calls to action and pricing
+Use the on-site contact form and LinkedIn for inquiries. Fixed-scope website package pricing is already published ($299 personal/nonprofit, $499 small business introductory pricing), with optional static hosting at $149/year. Other work may be quoted separately. Do not silently change pricing or add new products without a decision.
 
 ## Service breadth
 Communicate broad capability without becoming a giant undifferentiated checklist.
@@ -111,33 +105,13 @@ Link back to:
 - `https://kgivler.com/projects/`
 - GitHub
 
-## Initial page outline
-1. Header: Kyle Givler, Development Services, short plain-language sentence, LinkedIn CTA
-2. What I can help with
-3. Selected work
-4. How I work
-5. Non-commercial/community note
-6. Contact
+## Current page structure
+Homepage: services, selected work, how I work, community work, contact form/LinkedIn. Supporting pages: website packages, FAQ, and the planned dedicated `/hosting/` page. Hosting should appear as a homepage service card and be cross-linked from `/websites/` and `/faq/`. Do not add premium/business-critical hosting tiers in phase one.
 
-## Not decided yet
-Do not invent answers for these until they are researched and chosen:
-- exact pricing
-- hourly vs fixed-price structure
-- deposits
-- refund policy
-- payment processor
-- invoice workflow
-- contract template
-- support/maintenance terms
-- warranties
-- SLA language
-- intellectual-property/license transfer terms
-- tax handling
-- whether/when to form an LLC
-- insurance
-- hosting liability/acceptable-use terms
+## Hosting decisions and outstanding business work
+Phase-one hosting scope and decisions are specified in [HOSTING_PHASE1.md](HOSTING_PHASE1.md). The hosting service is best-effort static hosting with no uptime SLA, no included backups, 14-day renewal grace period, and normally a few business days for support replies (not guaranteed). Annual hosting fees are nonrefundable except where law requires otherwise. A separate basic hosting Terms of Service and privacy disclosures must be reviewed and published before accepting paying hosting customers.
 
-These belong in later business planning and the Client/Billing Portal plan where relevant.
+Still to define or verify before selling hosting: acceptable-use limits, operational retention/suspension procedure, billing/renewal reminders, agreed scope of contact-form integration, business/legal/tax questions, and any needed contractual notices. No promise of future HappyPortal/HappyPages features.
 
 ## Near-term success condition
 The first version succeeds if a visitor can answer, within roughly a minute:
