@@ -1,5 +1,19 @@
 # Fictional portfolio demonstration, not a real landscaping business.
-# These rules ask compliant crawlers not to crawl the demo.
-# robots.txt cannot guarantee exclusion of a URL from search results.
+# Discourage general search crawlers from crawling this demo.
+# Known social-preview bots are allowed to fetch the Open Graph metadata.
+# These rules are voluntary and cannot guarantee a URL stays out of search.
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Slackbot-LinkExpanding
+Allow: /
+
 User-agent: *
 Disallow: /

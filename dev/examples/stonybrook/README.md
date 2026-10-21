@@ -40,11 +40,16 @@ The sample contact form is a **local-only demonstration**. With JavaScript enabl
 
 ## Search engines and social previews
 
-The demonstration domain intentionally has a `robots.txt` file with `Disallow: /`
-so compliant crawlers will not crawl the fictional business. This is **not**
-a guarantee that the URL itself cannot appear in search results if another
-site links to it. To reliably use `noindex`, crawlers need to be allowed
-to request the pages and read the directive.
+The demonstration domain intentionally has a `robots.txt` file with
+`Disallow: /` for general crawlers so the fictional landscaping business
+is not promoted as a real local company. Named social-preview bots
+(LinkedIn, X/Twitter, Facebook, and Slack) have explicit exceptions so
+shared links can display the example's Open Graph preview.
+
+This is **not** a guarantee that the URL itself cannot appear in search
+results if another site links to it, and robots rules are voluntary.
+To reliably use `noindex`, crawlers need to be allowed to request
+the pages and read that directive.
 
 The HTML still demonstrates page-specific titles, descriptions, canonical
 URLs, semantic headings, descriptive image text, and Open Graph/social-preview
