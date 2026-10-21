@@ -6,7 +6,7 @@
 - $149/year for **basic managed static website hosting**.
 - Customers can bring an existing compatible site, subject to a review; a website build is not required.
 - For personal sites, nonprofits, portfolios, and simple small-business brochure sites. Not for business-critical sites requiring contractual availability.
-- Static HTML/CSS/JavaScript, images and other static assets only. No client-run server processes, databases, WordPress, custom APIs or e-commerce.
+- Static HTML/CSS/JavaScript, images and other static assets only. No client-run server processes, databases, WordPress, PHP, custom APIs or e-commerce.
 - This is a separate hosting offer from the $299/$499 introductory website build packages.
 
 ## Included
@@ -14,7 +14,7 @@
 - Basic uptime/technical monitoring and reasonable maintenance.
 - Where offered and configured, the **operator-run contact form infrastructure** (not general-purpose backend hosting).
 - **One minor content update annually**: change contact details or hours, edit a small amount of existing text, or replace an existing image. No new pages, redesigns, significant copy work, new functionality or integrations.
-- Additional work currently $50/hour, 30-minute minimum where applicable, or a separate quote.
+- **$50/hour, 30-minute minimum applies only to additional content updates for static websites on this basic managed hosting plan.** New pages, custom development, features, integrations, and all other services are separately quoted. Do not advertise $50/hour as a general website-development rate.
 
 ## Availability and support
 - Best effort. **No SLA, guaranteed uptime, guaranteed response/recovery time, uptime credits, or 24/7/emergency support.**
