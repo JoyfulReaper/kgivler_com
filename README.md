@@ -12,6 +12,32 @@ The terminal presentation is intentional, but the site is not only a novelty she
 
 No current UI screenshots are tracked in this repository. Use the [live site](https://www.kgivler.com/) for the current interface.
 
+## Other sites in this repository
+
+### Development services — [dev.kgivler.com](https://dev.kgivler.com/)
+
+The `dev/` directory contains a separate development-services website,
+implemented as a small Go HTTP service with an embedded static frontend.
+It includes a contact form backed by SQLite, information on website
+development and static hosting, and the published hosting terms and site
+privacy policy. See [dev/README.md](dev/README.md) for implementation,
+configuration, and testing details.
+
+### Stonybrook Landscaping — [live demonstration](https://stonybrook-demo.kgivler.com/)
+
+[Stonybrook](dev/examples/stonybrook/README.md) is a **fictional small-business
+website** showing what a static landscaping website could look like.
+It has five pages, responsive layouts, an illustrative project gallery,
+and a sample contact form that does not send inquiries to a server.
+The images and projects are fictional. The demo deliberately discourages
+search-engine crawling; it is not intended to appear as a real landscaping
+business in local search results.
+
+**The Stonybrook source is visible for prospective-client evaluation but
+is not open source or covered by this repository's MIT license.**
+See its [restricted evaluation license](dev/examples/stonybrook/LICENSE.txt)
+before attempting to reuse it.
+
 ## Features
 
 - Professional portfolio, flagship project case studies, and additional project catalog.
@@ -100,6 +126,10 @@ kgivler_com/
 │   ├── Extensions/                 CORS and middleware configuration
 │   └── Kgivler.Api.slnx            .NET solution
 ├── Kgivler.Api.Tests/               Focused API unit tests
+├── dev/
+│   ├── src/                         Go development-services website
+│   ├── examples/stonybrook/         Fictional static-site demonstration
+│   └── README.md                    Development-site setup and notes
 ├── LICENSE.md
 └── README.md
 ```

@@ -3,35 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>VPS Reviews &amp; Impressions | Kyle Givler</title>
-
-  <meta
-    name="description"
-    content="First-hand VPS reviews and impressions: my detailed GreenCloud experience and early Servitro IPv6 latency tests from Pennsylvania to Frankfurt."
-  />
-
+  <meta name="description" content="First-hand VPS reviews of GreenCloud and Servitro covering performance, networking reliability, technical support, and real-world outages." />
   <link rel="canonical" href="https://www.kgivler.com/vps-reviews/" />
-
   <meta property="og:type" content="article" />
   <meta property="og:title" content="VPS Reviews &amp; Impressions | Kyle Givler" />
-  <meta
-    property="og:description"
-    content="First-hand VPS reviews and impressions: my detailed GreenCloud experience and early Servitro IPv6 latency tests from Pennsylvania to Frankfurt."
-  />
+  <meta property="og:description" content="Real-world VPS reviews: GreenCloud reliability and support, plus Servitro CPU contention and outages." />
   <meta property="og:url" content="https://www.kgivler.com/vps-reviews/" />
-
   <link rel="stylesheet" href="/vps-reviews/reviews.css?v=1" />
-
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
 </head>
-
 <body>
   <header class="site-header">
     <div class="container header-inner">
       <a class="brand" href="/">Kyle Givler</a>
-
       <nav aria-label="Primary navigation">
         <a href="/">Portfolio</a>
         <a href="/services/">Infrastructure</a>
@@ -44,31 +30,38 @@
     <section class="hero">
       <div class="container article-width">
         <p class="eyebrow">VPS Reviews</p>
-
         <h1>VPS Reviews &amp; Impressions</h1>
-
-        <p class="hero-copy" data-hosting-promotion hidden>
-          Reviews and early impressions of VPSes I actually use. GreenCloud has
-          the detailed review below; Servitro is a new addition I’m still evaluating.
+        <p class="hero-copy">
+          First-hand reviews of VPS providers I've actually used for self-hosting,
+          development, and networking experiments. The good, the bad, and
+          occasionally the spectacularly broken.
         </p>
+        <p data-i2p-note hidden>
+          This is the I2P deployment. Browser assets are local; some optional
+          integrations may be unavailable.
+        </p>
+        <p class="updated">Last updated: October 19, 2026</p>
 
-        <p data-i2p-note hidden>This is the I2P deployment. Browser assets are local; some optional integrations may be unavailable.</p>
-
-        <p class="updated">Last updated: October 7, 2026</p>
-
-        <div class="disclosure" data-hosting-promotion hidden>
-          <strong>Affiliate disclosure:</strong>
-          GreenCloud links on this page may be affiliate links. I may earn a
-          commission if you sign up through them. The review is based on my own
-          experience running their VPSes.
+        <div class="card" role="navigation" aria-label="Reviewed VPS providers">
+          <h2>Reviewed providers</h2>
+          <ul>
+            <li><a href="#greencloud-review">GreenCloud VPS</a> — Recommended for my use cases</li>
+            <li><a href="#servitro-heading">Servitro</a> — Not recommended</li>
+          </ul>
         </div>
 
-        <div class="pricing-callout" data-hosting-promotion hidden>
+        <div class="disclosure">
+          <strong>Affiliate disclosure:</strong>
+          Some links on this page are affiliate links. I may earn a commission
+          if you purchase through them, at no additional cost to you.
+          Affiliate relationships do not guarantee favorable reviews.
+        </div>
+
+        <div class="pricing-callout">
           <div>
             <span class="pricing-label">GreenCloud · Current budget pricing</span>
             <strong class="pricing-price">$25/year</strong>
           </div>
-
           <p>
             GreenCloud's Budget KVM sale plans currently start at
             <strong>$25 per year</strong> in several locations. At the time of
@@ -77,12 +70,8 @@
             of transfer. Exact hardware, bandwidth, IPv6 allocation, location,
             and availability vary by plan.
           </p>
-
-          <a
-            href="https://greencloudvps.com/billing/aff.php?aff=10295&gid=68"
-            target="_blank"
-            rel="sponsored noopener noreferrer"
-          >
+          <a href="https://greencloudvps.com/billing/aff.php?aff=10295&amp;gid=68"
+             target="_blank" rel="sponsored noopener noreferrer">
             View current Budget KVM plans →
           </a>
         </div>
@@ -90,27 +79,21 @@
     </section>
 
     <article>
-      <section class="section" data-hosting-promotion hidden>
+      <section id="greencloud-review" class="section" aria-labelledby="greencloud-heading">
         <div class="container article-width">
-          <h2>My experience with GreenCloud</h2>
-
+          <h2 id="greencloud-heading">My experience with GreenCloud</h2>
           <p>
             I currently use
-            <a
-              href="https://greencloudvps.com/billing/aff.php?aff=10295"
-              target="_blank"
-              rel="sponsored noopener noreferrer"
-            >GreenCloud VPS</a>
+            <a href="https://greencloudvps.com/billing/aff.php?aff=10295"
+               target="_blank" rel="sponsored noopener noreferrer">GreenCloud VPS</a>
             for multiple public Linux VPS nodes, including
             <strong>Clanker</strong> and <strong>ScopeCreep</strong>.
           </p>
-
           <p>
             These are not idle test machines. I use them for Docker services,
             monitoring, web applications, DN42 routing, WireGuard, DNS, small
             Internet-protocol servers, and networking experiments.
           </p>
-
           <p>
             GreenCloud has been a good fit for the kind of inexpensive Linux
             infrastructure I run: enough resources to do useful work, cheap
@@ -121,10 +104,9 @@
         </div>
       </section>
 
-      <section class="section section-alt" data-hosting-promotion hidden>
+      <section class="section section-alt">
         <div class="container article-width">
           <h2>What I run on them</h2>
-
           <div class="card">
             <ul class="workload-list">
               <li>Docker and Docker Compose workloads</li>
@@ -141,49 +123,41 @@
         </div>
       </section>
 
-      <section class="section" data-hosting-promotion hidden>
+      <section class="section">
         <div class="container article-width">
           <h2>Support experience</h2>
-
           <p>
             I have had a couple of network problems worth mentioning. I think
             those incidents are more useful in a review than pretending nothing
             has ever gone wrong, because they show what support does when the
             infrastructure is actually broken.
           </p>
-
           <article class="case-card">
             <div class="case-meta">August 2026</div>
             <h3>IPv6 provisioning issue</h3>
-
             <p>
               After enabling IPv6 on one VPS, Neighbor Discovery to the supplied
               gateway worked and outbound packets left the VM, but nothing came
               back. Packet captures indicated that the problem was upstream of
               the guest.
             </p>
-
             <p>
               I opened a ticket at 07:30. Support replied at 07:32, investigated
               the VPS, and at 07:48 asked me to retry after making a change.
               I confirmed IPv6 was working at 07:54.
             </p>
-
             <p class="case-result">
               About <strong>24 minutes from opening the ticket to confirmed
               working IPv6.</strong>
             </p>
           </article>
-
           <article class="case-card">
             <div class="case-meta">September 2026</div>
             <h3>Unsolicited IPv6 multicast traffic</h3>
-
             <p>
               On another VPS I noticed inbound bandwidth increasing even though
               my applications were not receiving that amount of traffic.
             </p>
-
             <p>
               A packet capture showed unsolicited ICMPv6 / MLDv2 multicast
               listener reports from another device on the provider-side network.
@@ -192,19 +166,16 @@
               or approximately <strong>2.85 Mbps</strong> of sustained inbound
               traffic from that conversation.
             </p>
-
             <p>
               I opened a support ticket at 01:16. GreenCloud replied at 01:19
               and began investigating the provider-side source.
             </p>
-
             <p>
               The unwanted multicast traffic stopped after they investigated
               the issue, so the underlying problem was fixed. The bandwidth
               that had already been recorded in the control panel was not
               removed afterward.
             </p>
-
             <p class="case-result">
               The initial technical response came in roughly
               <strong>three minutes</strong>, and the unwanted traffic was
@@ -214,14 +185,12 @@
         </div>
       </section>
 
-      <section class="section section-alt" data-hosting-promotion hidden>
+      <section class="section section-alt">
         <div class="container article-width">
           <h2>What I like and what to know</h2>
-
           <div class="two-column">
             <div class="card">
               <h3>What I like</h3>
-
               <ul>
                 <li>Cheap enough for hobby and small-service infrastructure</li>
                 <li>KVM VPSes work well for normal Linux workloads</li>
@@ -231,10 +200,8 @@
                 <li>No special platform required for normal Docker and networking work</li>
               </ul>
             </div>
-
             <div class="card">
               <h3>Things to know</h3>
-
               <ul>
                 <li>I have encountered provider-side IPv6/networking issues</li>
                 <li>These are inexpensive VPSes, not managed enterprise infrastructure</li>
@@ -247,239 +214,292 @@
         </div>
       </section>
 
-      <section class="section" data-hosting-promotion hidden>
+      <section class="section">
         <div class="container article-width">
           <h2>Who I think GreenCloud fits</h2>
-
           <p>
             GreenCloud makes the most sense to me if you are comfortable
             administering your own Linux server and want inexpensive compute for
             small applications, personal infrastructure, Docker workloads,
             networking experiments, or geographically separate nodes.
           </p>
-
           <div class="card">
             <h3>Want the VPS without doing all the server work?</h3>
-
             <p>
               If you need help setting up or operating the server, I also do
               deployment and self-hosting work: Linux VPS setup, Docker,
               HTTPS, monitoring, backups, application deployment, and related
               infrastructure.
             </p>
-
-            <a
-              class="button secondary"
-              href="https://dev.kgivler.com/"
-            >
+            <a class="button secondary" href="https://dev.kgivler.com/">
               Development &amp; deployment help
             </a>
           </div>
-
           <div class="actions">
-            <a
-              class="button primary"
-              href="https://greencloudvps.com/billing/aff.php?aff=10295"
-              target="_blank"
-              rel="sponsored noopener noreferrer"
-            >
+            <a class="button primary"
+               href="https://greencloudvps.com/billing/aff.php?aff=10295"
+               target="_blank" rel="sponsored noopener noreferrer">
               View GreenCloud VPS
             </a>
-
-            <a
-              class="button secondary"
-              href="https://greencloudvps.com/billing/aff.php?aff=10295&gid=68"
-              target="_blank"
-              rel="sponsored noopener noreferrer"
-            >
+            <a class="button secondary"
+               href="https://greencloudvps.com/billing/aff.php?aff=10295&amp;gid=68"
+               target="_blank" rel="sponsored noopener noreferrer">
               View Budget KVM Plans
             </a>
           </div>
-
           <p class="small-note">
-            The GreenCloud VPS button is an affiliate link. I may earn a
-            commission if you purchase through it.
+            The GreenCloud VPS buttons are affiliate links. I may earn a
+            commission if you purchase through them.
           </p>
         </div>
       </section>
 
       <section class="section section-alt" aria-labelledby="servitro-heading">
-		  <div class="container article-width">
-			<p class="eyebrow">Not recommended · October 2026</p>
-			<h2 id="servitro-heading">Servitro — Frankfurt, Germany</h2>
+        <div class="container article-width">
+          <p class="eyebrow">Not recommended · Updated October 19, 2026</p>
+          <h2 id="servitro-heading">Servitro — Frankfurt, Germany</h2>
+          <p>
+            I purchased a VPS from Servitro to diversify my hosting across
+            multiple providers. Unfortunately, it has become one of the worst
+            VPS experiences I've had.
+          </p>
+          <p>
+            I brought up a Frankfurt VPS named <strong>Wurstcase</strong>
+            for DN42, Yggdrasil, WireGuard, and other networking experiments.
+            Initial network latency from Pennsylvania to Frankfurt was
+            genuinely good: my first IPv6 tests were around
+            <strong>90–95 ms</strong>, with no packet loss in the small
+            samples I ran.
+          </p>
+          <p>
+            Unfortunately, the actual VPS performance later became severely
+            degraded by persistent CPU steal time. Repeated
+            <code>mpstat 1 10</code> samples collected across the evening,
+            overnight, and the following morning showed sustained
+            <code>%steal</code> averages around <strong>14–24%</strong>,
+            with individual one-second samples reaching as high as
+            <strong>74%</strong>.
+          </p>
+          <div class="card">
+            <h3>CPU steal samples</h3>
+            <ul>
+              <li>19.01% average steal</li>
+              <li>18.65% average steal</li>
+              <li>18.64% average steal</li>
+              <li>18.86% average steal</li>
+              <li>22.93% average steal</li>
+              <li>23.67% average steal</li>
+              <li>20.26% average steal</li>
+              <li>19.66% average steal</li>
+            </ul>
+          </div>
+          <p>
+            Guest CPU usage itself remained relatively low, and
+            <code>%iowait</code> was effectively zero in the samples I
+            collected. The combination of low guest workload and high CPU
+            steal strongly indicated host-side CPU contention rather than
+            a workload problem inside my VM.
+          </p>
+          <p>
+            I opened support ticket <strong>#FHO-567811</strong> on
+            <strong>October 14, 2026 at 22:54</strong>, including multiple
+            <code>mpstat</code> captures demonstrating the problem.
+          </p>
+          <p>
+            I followed up on October 15 after the issue persisted for more
+            than twelve hours, providing additional measurements showing
+            average CPU steal around 20–24% and individual spikes reaching
+            74%. I requested an investigation of the host node and migration
+            if necessary.
+          </p>
+          <p>
+            By <strong>October 16 at 14:25</strong>, the ticket had been
+            open for approximately <strong>39 hours and 31 minutes</strong>.
+            In the ticket history I reviewed, every visible message during
+            that period was one of my own updates. I had not received a
+            visible response from support.
+          </p>
+          <p>
+            During that time, performance deteriorated enough that
+            establishing an SSH session became difficult. I requested
+            either migration to a healthy host or cancellation with an
+            appropriate refund or credit.
+          </p>
 
-			<p>
-			  My experience with Servitro started out promising and then deteriorated
-			  badly enough that I can no longer recommend the service.
-			</p>
+          <article class="case-card">
+            <div class="case-meta">October 19, 2026 · Incident update</div>
+            <h3>Update: It keeps getting worse</h3>
+            <p>
+              Following the original CPU steal complaints, Servitro
+              migrated my VPS to another host node. CPU steal appeared
+              to improve substantially after the migration.
+              Unfortunately, the migration introduced new problems.
+            </p>
+            <p>
+              First, SSH access failed following the migration, requiring
+              troubleshooting through the VNC console. After restoring
+              access, I discovered that <strong>public IPv6 connectivity
+              was completely broken</strong>.
+            </p>
+            <p>
+              I investigated and captured network traffic showing that the
+              configured IPv6 gateway was not responding to Neighbor Discovery
+              requests. IPv4 was still working at that point, so I restored
+              an affected DN42 BGP peering session by switching its
+              WireGuard transport to IPv4.
+            </p>
+            <p>I reported the IPv6 failure to Servitro support.</p>
+            <p><strong>Then the situation got substantially worse.</strong></p>
+            <p>
+              Later on October 19, the VPS stopped responding over public IPv4
+              as well. The VNC console also stopped connecting, leaving me
+              unable to access the server through either the network or
+              the provider's console.
+            </p>
+            <p>
+              The control panel reported 0% CPU utilization, unavailable
+              memory information, and zero network traffic. Although the
+              service continued to be listed as <strong>Active</strong>,
+              I could not determine whether the virtual machine was running.
+            </p>
+            <p>
+              At <strong>12:10 PM on October 19</strong>, I attempted to
+              start the VPS using the control panel's Boot function.
+              The operation was cancelled after approximately 20 seconds
+              with this message:
+            </p>
+            <blockquote>
+              <p>
+                The system failed to respond to the action request.
+                Further attempts are likely to be cancelled until the
+                system is responding normally. Try again in five minutes.
+              </p>
+            </blockquote>
+            <p>
+              This suggests a possible problem with the host or VPS
+              management infrastructure. I cannot independently confirm
+              the cause without access to the hypervisor.
+            </p>
+            <p>
+              I escalated the complete outage through support. As of this
+              update, the VPS remains inaccessible, and I have not received
+              an explanation or estimated restoration time.
+            </p>
+            <p>
+              I originally purchased this VPS to diversify my infrastructure
+              across independent hosting providers and improve redundancy.
+              Instead, I have spent days troubleshooting a service that
+              was supposed to provide an additional reliable network location.
+            </p>
+          </article>
 
-			<p>
-			  I brought up a Frankfurt VPS named <strong>Wurstcase</strong> for DN42,
-			  Yggdrasil, WireGuard, and other networking experiments. Initial network
-			  latency from Pennsylvania to Frankfurt was genuinely good: my first IPv6
-			  tests were around <strong>90–95 ms</strong> with no packet loss in the
-			  small samples I ran.
-			</p>
+          <article class="case-card">
+            <div class="case-meta">October 2026 · Ticket #FHO-567811</div>
+            <h3>My conclusion</h3>
+            <p>
+              Cheap VPS hosting inevitably involves shared resources, and
+              a single overloaded host would not by itself make me write
+              off a provider. Infrastructure problems happen.
+            </p>
+            <p>
+              What changed my opinion was the combination of severe,
+              persistent host contention, inadequate communication,
+              and further failures following the host migration.
+              What started as a performance issue progressed to broken
+              IPv6 connectivity and eventually a completely inaccessible VPS.
+            </p>
+            <p>
+              I have encountered provider-side networking problems with
+              other inexpensive VPS providers where support acknowledged
+              the issue within minutes and began investigating. Problems
+              are inevitable; how a provider responds is a major part
+              of the service.
+            </p>
+            <p>
+              I understand that budget VPS hosting does not include
+              enterprise-level support. However, expecting timely
+              acknowledgment of an unusable service and meaningful
+              updates during a complete outage is not unreasonable.
+            </p>
+            <p>
+              <strong>I will not be renewing my service with Servitro.</strong>
+              The low price simply is not worth the instability, repeated
+              troubleshooting, and lack of timely communication.
+            </p>
+            <p class="case-result">
+              Based on this experience, <strong>I do not recommend Servitro</strong>
+              for workloads where predictable performance, availability,
+              or timely support matters.
+            </p>
+          </article>
 
-			<p>
-			  Unfortunately, the actual VPS performance later became severely degraded
-			  by persistent CPU steal time. Repeated <code>mpstat 1 10</code> samples
-			  taken across the evening, overnight, and the following morning showed
-			  sustained <code>%steal</code> averages around <strong>14–24%</strong>,
-			  with individual one-second samples reaching as high as
-			  <strong>74%</strong>.
-			</p>
+          <div class="card">
+            <h3>Incident timeline</h3>
+            <ul>
+              <li><strong>October 14, 22:54:</strong> Opened support ticket
+                #FHO-567811 with CPU steal measurements.</li>
+              <li><strong>October 15, 15:16:</strong> Followed up with sustained
+                steal averages around 20–24% and spikes reaching 74%.</li>
+              <li><strong>October 16, 14:23:</strong> Reported that SSH access
+                had become unreliable because of severe performance problems.</li>
+              <li><strong>October 16, 14:25:</strong> Requested migration or
+                cancellation with an appropriate refund or credit.</li>
+              <li><strong>October 19:</strong> Following migration, discovered
+                that the IPv6 gateway did not respond to Neighbor Discovery.</li>
+              <li><strong>October 19, later:</strong> Public IPv4 became
+                unreachable, and the VNC console stopped connecting.</li>
+              <li><strong>October 19, 12:10 PM:</strong> The panel cancelled
+                a boot attempt because the system failed to respond.</li>
+            </ul>
+          </div>
 
-			<div class="card">
-			  <h3>CPU steal samples</h3>
-			  <ul>
-				<li>19.01% average steal</li>
-				<li>18.65% average steal</li>
-				<li>18.64% average steal</li>
-				<li>18.86% average steal</li>
-				<li>22.93% average steal</li>
-				<li>23.67% average steal</li>
-				<li>20.26% average steal</li>
-				<li>19.66% average steal</li>
-			  </ul>
-			</div>
+          <div class="card">
+            <h3>Still want to try Servitro?</h3>
+            <p>
+              I cannot recommend Servitro based on the problems documented
+              above. But if you decide to try the provider anyway,
+              you can use my affiliate link.
+            </p>
+            <div class="actions">
+              <a class="button secondary"
+                 href="https://my.servitro.com/aff.php?aff=229"
+                 target="_blank" rel="sponsored noopener noreferrer">
+                Visit Servitro (affiliate link)
+              </a>
+            </div>
+            <p class="small-note">
+              <strong>Affiliate disclosure:</strong> I may receive a
+              commission if you sign up through this link, at no additional
+              cost to you. This does not change my negative assessment.
+            </p>
+          </div>
 
-			<p>
-			  Guest CPU usage itself remained relatively low and
-			  <code>%iowait</code> was effectively zero in the samples I collected.
-			  The combination of low guest workload and high CPU steal strongly
-			  indicated host-side CPU contention rather than a workload problem inside
-			  my VM.
-			</p>
-
-			<p>
-			  I opened support ticket <strong>#FHO-567811</strong> on
-			  <strong>October 14, 2026 at 22:54</strong> and included multiple
-			  <code>mpstat</code> captures showing the problem.
-			</p>
-
-			<p>
-			  I followed up on October 15 after the issue persisted for more than
-			  twelve hours, providing additional measurements showing average CPU steal
-			  around 20–24% and individual spikes as high as 74%. I specifically asked
-			  Servitro to investigate the host node and migrate the VM if necessary.
-			</p>
-
-			<p>
-			  By <strong>October 16 at 14:25</strong>, the ticket had been open for
-			  approximately <strong>39 hours and 31 minutes</strong>. In the ticket
-			  history I reviewed, every visible message during that period was one of
-			  my own updates; I had not received a visible response from Servitro
-			  support.
-			</p>
-
-			<p>
-			  During that time the VPS continued to deteriorate. By my final update,
-			  performance had become poor enough that I was having difficulty even
-			  establishing an SSH session long enough to collect additional
-			  diagnostics.
-			</p>
-
-			<p>
-			  At that point I asked Servitro to either migrate the VM to a healthy host
-			  immediately or confirm that I could cancel the service and receive an
-			  appropriate refund or credit.
-			</p>
-
-			<article class="case-card">
-			  <div class="case-meta">October 2026 · Ticket #FHO-567811</div>
-			  <h3>My conclusion</h3>
-
-			  <p>
-				Cheap VPS hosting inevitably involves shared resources, and a single
-				overloaded host would not by itself make me write off a provider.
-				Infrastructure problems happen.
-			  </p>
-
-			  <p>
-				What changed my opinion was the combination of severe, persistent host
-				contention and the lack of a visible support response for roughly
-				forty hours after I supplied detailed diagnostic information.
-			  </p>
-
-			  <p>
-				That distinction matters to me. I have encountered provider-side
-				networking problems with other inexpensive VPS providers where support
-				acknowledged the issue within minutes and began investigating it.
-				Problems are inevitable; how a provider responds to them is a major
-				part of the service.
-			  </p>
-
-			  <p class="case-result">
-				Based on this experience,
-				<strong>I do not recommend Servitro</strong> for workloads where
-				predictable performance or timely support matters.
-			  </p>
-			</article>
-
-			<div class="card">
-			  <h3>Ticket timeline</h3>
-			  <ul>
-				<li>
-				  <strong>October 14, 22:54:</strong>
-				  Ticket opened with multiple <code>mpstat</code> captures showing
-				  approximately 19% average CPU steal and spikes up to 40%.
-				</li>
-				<li>
-				  <strong>October 15, 15:16:</strong>
-				  Follow-up with additional samples showing sustained averages around
-				  20–24% and spikes as high as 74%.
-				</li>
-				<li>
-				  <strong>October 16, 14:23:</strong>
-				  Reported that the VPS had become so slow that even SSH access was
-				  unreliable.
-				</li>
-				<li>
-				  <strong>October 16, 14:25:</strong>
-				  Requested either immediate migration to a healthy host or
-				  cancellation with an appropriate refund or credit.
-				</li>
-			  </ul>
-			</div>
-
-			<p class="small-note">
-			  This review documents my experience with one Servitro VPS and the support
-			  ticket associated with that incident. It does not imply that every
-			  Servitro customer or host node will have the same experience.
-			</p>
-
-			<p class="small-note">
-			  I previously linked to Servitro through an affiliate program. I have
-			  removed the promotional link because I am no longer comfortable
-			  recommending the service based on this experience.
-			</p>
-		  </div>
-	  </section>
+          <p class="small-note">
+            This review documents my experience with one Servitro VPS and
+            its associated support incidents. It does not imply every
+            customer or host node has the same experience. I will update
+            this review if Servitro provides additional information
+            or resolves the outage.
+          </p>
+        </div>
+      </section>
 
       <section class="section provider-section">
         <div class="container article-width">
           <p class="eyebrow">For VPS Providers</p>
           <h2>Want me to review your VPS?</h2>
-
           <p>
             I'm open to reviewing other VPS providers, especially inexpensive
-            KVM VPSes, IPv6 deployments, unusual locations, interesting network
-            configurations, and services aimed at self-hosters or developers.
+            KVM VPSes, IPv6 deployments, unusual locations, interesting
+            network configurations, and services aimed at self-hosters
+            or developers.
           </p>
-
           <p>
             Providing free or discounted service does
             <strong>not</strong> guarantee a positive review. If a provider
             supplies the service being reviewed, I will disclose that.
           </p>
-
-          <a
-            class="button secondary"
-            href="https://dev.kgivler.com/"
-          >
-            Contact me
-          </a>
+          <a class="button secondary" href="https://dev.kgivler.com/">Contact me</a>
         </div>
       </section>
     </article>
@@ -504,7 +524,6 @@
     </div>
     <div class="container footer-inner">
       <span>© Kyle Givler</span>
-
       <div>
         <a href="/">Portfolio</a>
         <a href="/services/">Infrastructure</a>
