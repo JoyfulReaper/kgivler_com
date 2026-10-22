@@ -40,7 +40,7 @@
           This is the I2P deployment. Browser assets are local; some optional
           integrations may be unavailable.
         </p>
-        <p class="updated">Last updated: October 19, 2026</p>
+        <p class="updated">Last updated: October 22, 2026</p>
 
         <div class="card" role="navigation" aria-label="Reviewed VPS providers">
           <h2>Reviewed providers</h2>
@@ -256,7 +256,7 @@
 
       <section class="section section-alt" aria-labelledby="servitro-heading">
         <div class="container article-width">
-          <p class="eyebrow">Not recommended · Updated October 19, 2026</p>
+          <p class="eyebrow">Not recommended · Updated October 22, 2026</p>
           <h2 id="servitro-heading">Servitro — Frankfurt, Germany</h2>
           <p>
             I purchased a VPS from Servitro to diversify my hosting across
@@ -381,15 +381,64 @@
               the cause without access to the hypervisor.
             </p>
             <p>
-              I escalated the complete outage through support. As of this
-              update, the VPS remains inaccessible, and I have not received
-              an explanation or estimated restoration time.
+              At the time of this October 19 update, the VPS was still
+              inaccessible and I had no explanation for the outage.
+              Servitro subsequently confirmed that the host node had been
+              shut down because its CPU temperature reached a critical level.
             </p>
             <p>
               I originally purchased this VPS to diversify my infrastructure
               across independent hosting providers and improve redundancy.
               Instead, I have spent days troubleshooting a service that
               was supposed to provide an additional reliable network location.
+            </p>
+          </article>
+
+          <article class="case-card">
+            <div class="case-meta">October 20–22, 2026 · Recovery update</div>
+            <h3>Back online, with another IPv6 problem to solve</h3>
+            <p>
+              On October 20, Servitro restored Wurstcase and confirmed
+              my data was intact. The VPS had been down for
+              <strong>over 20 hours</strong>, substantially longer than
+              their original estimate. CPU steal had improved on the
+              new host, but the networking problems were not over.
+            </p>
+            <p>
+              The IPv6 gateway was initially still unreachable.
+              Servitro acknowledged that problem was on their side
+              and repaired it. Afterward, IPv6 connections to Google
+              and Cloudflare worked, including HTTPS. But Wurstcase
+              and my Clanker VPS still could not reach each other over
+              public IPv6 in either direction.
+            </p>
+            <p>
+              I provided more tests and packet captures showing traffic
+              leaving Wurstcase and replies failing to reach Clanker.
+              Servitro eventually confirmed that their IPv6 range
+              was unreachable from some external networks and said
+              they had escalated the issue to their upstream provider.
+              A control-panel reboot they recommended was delayed
+              in the queue before eventually completing; it did not
+              solve the remaining routing issue.
+            </p>
+            <p>
+              On <strong>October 22</strong>, Servitro reported that
+              its upstream provider had fixed the IPv6 routing.
+              My subsequent tests showed working external IPv6
+              connectivity and restored connectivity between Wurstcase
+              and Clanker. <strong>The VPS and tested IPv6 paths are
+              working again as of this update.</strong>
+            </p>
+            <p>
+              I appreciate the technical fixes, but the communication
+              often felt disconnected from the ticket history.
+              I spent considerable time gathering diagnostics, yet
+              several replies seemed to overlook them. After I
+              explicitly reported that IPv6 was working and said the
+              ticket could be closed, the next response still gave
+              generic instructions for restarting the VPS if IPv6
+              wasn't working.
             </p>
           </article>
 
@@ -407,6 +456,8 @@
               and further failures following the host migration.
               What started as a performance issue progressed to broken
               IPv6 connectivity and eventually a completely inaccessible VPS.
+              These problems have since been repaired, but resolving them
+              involved days of troubleshooting and repeated follow-ups.
             </p>
             <p>
               I have encountered provider-side networking problems with
@@ -422,9 +473,20 @@
               updates during a complete outage is not unreasonable.
             </p>
             <p>
+              Servitro offered compensation for the outage. I requested
+              a three-month service extension on October 20 and followed
+              up on October 22. <strong>I have not received an answer to
+              that request as of this update.</strong> I will update this
+              review if they respond.
+            </p>
+            <p>
               <strong>I will not be renewing my service with Servitro.</strong>
               The low price simply is not worth the instability, repeated
               troubleshooting, and lack of timely communication.
+            </p>
+            <p class="case-result">
+              <strong>Servitro: Managed hosting, except the customer
+              manages the incident response. 💀</strong>
             </p>
             <p class="case-result">
               Based on this experience, <strong>I do not recommend Servitro</strong>
@@ -450,6 +512,19 @@
                 unreachable, and the VNC console stopped connecting.</li>
               <li><strong>October 19, 12:10 PM:</strong> The panel cancelled
                 a boot attempt because the system failed to respond.</li>
+              <li><strong>October 19:</strong> Support explained that the
+                host had been shut down after reaching a critical
+                CPU temperature.</li>
+              <li><strong>October 20:</strong> VPS restored after over
+                20 hours of downtime. IPv6 gateway repaired, but
+                routing to Clanker still failed.</li>
+              <li><strong>October 20:</strong> Requested a three-month
+                service extension after support offered compensation.</li>
+              <li><strong>October 20–22:</strong> Remaining selective
+                IPv6 routing issue investigated and escalated upstream.</li>
+              <li><strong>October 22:</strong> IPv6 connectivity working
+                again after the upstream fix. Followed up on the
+                unanswered compensation request.</li>
             </ul>
           </div>
 
@@ -477,9 +552,9 @@
           <p class="small-note">
             This review documents my experience with one Servitro VPS and
             its associated support incidents. It does not imply every
-            customer or host node has the same experience. I will update
-            this review if Servitro provides additional information
-            or resolves the outage.
+            customer or host node has the same experience. The outage
+            and IPv6 issues have been resolved; the compensation request
+            is still pending as of October 22, 2026.
           </p>
         </div>
       </section>
