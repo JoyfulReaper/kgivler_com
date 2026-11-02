@@ -35,6 +35,7 @@
 
 ## Other offerings and boundaries
 - No paid business-critical/premium managed-hosting tier in phase one.
+- Managed application hosting beyond static websites may be individually quoted as a distinct, separately scoped engagement. It is **not an upgrade tier** of this $149/year hosting plan. Agree on infrastructure, backups, security responsibilities, maintenance, support expectations, and availability terms before accepting work; no default SLA or 24/7 support.
 - Can provide separately billed help choosing and configuring a more suitable commercial host for higher-availability requirements, **without promising to personally supply an SLA**.
 - Resource/fair-use and prohibited-use rules, privacy disclosures, and a plain-language Hosting TOS are **must-do before taking paid hosting customers**. Do not invent numerical quotas or retention guarantees until defined.
 - A dedicated `/hosting/` information page should explain the offer in customer-facing language; a homepage service card, the `/websites/` package page and hosting FAQ should link to it.
