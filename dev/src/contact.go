@@ -39,9 +39,10 @@ func (h *contactHandler) handleContact(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Only use POST body values, never query parameters. Bots get the same PRG flow.
-	if strings.TrimSpace(r.PostForm.Get("website")) != "" {
-		http.Redirect(w, r, "/contact-sent.html", http.StatusSeeOther)
+	// Only use POST body values, never query parameters. A filled honeypot
+	// must not claim the message was delivered: autofill can trip spam traps.
+	if strings.TrimSpace(r.PostForm.Get("contact_guard")) != "" {
+		contactError(w, http.StatusBadRequest, "Your message was not sent. Please try again without autofill, or contact me on LinkedIn.")
 		return
 	}
 	message := contactMessage{
