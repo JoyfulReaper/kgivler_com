@@ -36,7 +36,7 @@ Keep the implementation separable enough that such a move would not be painful.
 "Boring" is a feature here.
 
 ## Current calls to action and pricing
-Use the on-site contact form and LinkedIn for inquiries. Fixed-scope website package pricing is already published ($299 personal/nonprofit, $499 small business introductory pricing), with optional static hosting at $149/year. Other work may be quoted separately. Do not silently change pricing or add new products without a decision.
+Use the on-site contact form and LinkedIn for inquiries. Fixed-scope website package pricing is already published ($299 personal/nonprofit, $499 small business introductory pricing), with optional static hosting at $149/year. The dedicated `/services/` page lists introductory $75/hour pricing for .NET troubleshooting, Linux VPS assistance, automation, and code review/technical guidance. Each engagement has an agreed scope; these hourly rates do not guarantee a fix or fixed total. Larger custom software/API work is quoted individually. Extra static-hosting content updates remain $50/hour, 30-minute minimum, on the basic hosting plan only. Do not silently change pricing or add new products without a decision.
 
 ## Service breadth
 Communicate broad capability without becoming a giant undifferentiated checklist.
@@ -72,7 +72,7 @@ Communicate broad capability without becoming a giant undifferentiated checklist
 - mentoring/tutoring
 - help getting unstuck
 
-Do not offer to complete graded academic work dishonestly.
+Do not offer to complete graded academic work dishonestly. Current students may be considered for free or reduced-rate programming mentoring depending on availability, with reasonable proof of enrollment required before confirming the offer. Do not ask for student IDs through the public contact form or guarantee free sessions.
 
 ### Community / non-commercial work
 Make room for discounted non-commercial projects, volunteer/community work, nonprofits, and interesting small tools or integrations.
@@ -106,7 +106,7 @@ Link back to:
 - GitHub
 
 ## Current page structure
-Homepage: services, selected work, how I work, community work, contact form/LinkedIn. Supporting pages: website packages, FAQ, and the planned dedicated `/hosting/` page. Hosting should appear as a homepage service card and be cross-linked from `/websites/` and `/faq/`. Do not add premium/business-critical hosting tiers in phase one.
+Homepage: services, selected work, how I work, community work, contact form/LinkedIn. Existing service cards link to detailed anchors on `/services/`, except Websites and Static Hosting, which retain their dedicated `/websites/` and `/hosting/` pages. The dedicated services page describes four hourly technical offerings, custom work by quote, student mentoring, and an open-ended contact invitation (referrals only when possible). Supporting pages: website packages, FAQ, and hosting. Do not add premium/business-critical hosting tiers in phase one.
 
 ## Hosting decisions and outstanding business work
 Phase-one hosting scope and decisions are specified in [HOSTING_PHASE1.md](HOSTING_PHASE1.md). Public hosting terms and site privacy text are drafted at `src/static/hosting/terms/index.html` and `src/static/privacy/index.html`. Verify wording, operational data flows, and a mechanism for affirmative acceptance before taking hosting payments. The hosting service is best-effort static hosting with no uptime SLA, no included backups, 14-day renewal grace period, and normally a few business days for support replies (not guaranteed). Annual hosting fees are nonrefundable except where law requires otherwise. A separate basic hosting Terms of Service and privacy disclosures must be reviewed and published before accepting paying hosting customers.
