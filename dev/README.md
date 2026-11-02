@@ -2,7 +2,9 @@
 
 Run `go run .` from `dev/src` with Go 1.25 or newer. The service keeps its
 `net/http` server and embedded static frontend; no JavaScript is needed to submit
-the contact form.
+the contact form. Optional `contact-submit.js` disables the submit button and
+shows a spinner on valid form submission to discourage duplicate sends. The
+button resets on browser back/forward navigation.
 
 ## Budget static hosting offer
 
@@ -156,4 +158,10 @@ gofmt -w *.go
 go mod tidy
 CGO_ENABLED=0 go test -v ./...
 CGO_ENABLED=0 go build ./...
+```
+
+Run the optional frontend submit-state tests from the repository root:
+
+```sh
+node --test dev/tests/contact-submit.test.cjs
 ```
