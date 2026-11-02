@@ -356,6 +356,38 @@ h3 {
     cursor: pointer;
 }
 
+.contact-form .button.primary:disabled {
+    cursor: wait;
+    opacity: 0.85;
+}
+
+.contact-form .button.is-submitting {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.contact-form .button.is-submitting::before {
+    content: "";
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: contact-submit-spin 0.7s linear infinite;
+}
+
+@keyframes contact-submit-spin {
+    to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .contact-form .button.is-submitting::before {
+        animation: none;
+    }
+}
+
 .contact-section :focus-visible {
     outline: 3px solid #9bb7ff;
     outline-offset: 3px;
