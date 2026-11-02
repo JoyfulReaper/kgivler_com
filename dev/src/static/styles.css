@@ -203,6 +203,13 @@ h3 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+/* Keep the longer service descriptions readable without changing package cards. */
+.services-grid .card p + p,
+.services-grid .card p + ul,
+.services-grid .card ul + p {
+    margin-top: 12px;
+}
+
 .package-list {
     margin: 0;
     padding-left: 20px;
