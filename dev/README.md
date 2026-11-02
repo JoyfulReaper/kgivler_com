@@ -71,7 +71,7 @@ attempts per client in a fixed 15-minute window starting with the first attempt.
 The check runs before SQLite writes; a failed write still consumes an attempt.
 Excess attempts receive HTTP 429 with a human-readable page and `Retry-After`
 seconds. Invalid forms retain their validation responses, and honeypot submissions
-retain their fake-success redirect without consuming limiter state.
+return HTTP 400 without consuming limiter state.
 
 Client identification uses the existing `requestRemoteHost` helper, including
 its forwarding-header handling for loopback proxies. Client strings are kept only
