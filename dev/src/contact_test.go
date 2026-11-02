@@ -235,6 +235,16 @@ func TestContactHoneypot(t *testing.T) {
 	}
 }
 
+func TestContactWebsiteAutofillDoesNotDiscardMessage(t *testing.T) {
+	store, _ := newTestContactStore(t)
+	form := validContactForm()
+	// An autofill extension may submit a "website" key even though the form
+	// no longer contains that input. This must not silently discard a lead.
+	form.Set("website", "https://example.com")
+	requireContactSuccess(t, postContact(t, store, form.Encode()))
+	requireContactCount(t, store, 1)
+}
+
 func TestContactStorageFailure(t *testing.T) {
 	store, path := newTestContactStore(t)
 	if err := store.db.Close(); err != nil {
