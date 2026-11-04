@@ -31,7 +31,7 @@ func validContactForm() url.Values {
 
 func postContact(t *testing.T, store *contactStore, body string) *httptest.ResponseRecorder {
 	t.Helper()
-	handler, err := newSiteHandler(store, nil)
+	handler, err := newSiteHandler(store, nil, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -115,7 +115,7 @@ func TestContactValidSubmissionPersists(t *testing.T) {
 	}
 
 	// Follow the redirect as a browser would; refreshing the GET cannot insert again.
-	handler, err := newSiteHandler(reopened, nil)
+	handler, err := newSiteHandler(reopened, nil, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -184,7 +184,7 @@ func TestContactOversizedFields(t *testing.T) {
 		field string
 		limit int
 	}{
-		{"name", 100}, {"email", 254}, {"phone", 50}, {"subject", 200}, {"message", 5000},
+		{"name", 100}, {"email", 254}, {"phone", 40}, {"subject", 200}, {"message", 5000},
 	} {
 		t.Run(tc.field, func(t *testing.T) {
 			store, _ := newTestContactStore(t)
@@ -224,12 +224,12 @@ func TestContactHoneypot(t *testing.T) {
 		}
 		t.Run(name, func(t *testing.T) {
 			store, _ := newTestContactStore(t)
-			form := url.Values{"website": {"  https://example.com  "}}
+			form := url.Values{"contact_guard": {"  https://example.com  "}}
 			if requiredPresent {
 				form = validContactForm()
-				form.Set("website", "  https://example.com  ")
+				form.Set("contact_guard", "  https://example.com  ")
 			}
-			requireContactSuccess(t, postContact(t, store, form.Encode()))
+			requireContactFailure(t, postContact(t, store, form.Encode()), http.StatusBadRequest)
 			requireContactCount(t, store, 0)
 		})
 	}

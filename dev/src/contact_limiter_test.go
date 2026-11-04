@@ -83,7 +83,7 @@ func TestContactLimiterConcurrentAttempts(t *testing.T) {
 
 func TestContactLimiterUsesRemoteHostHelper(t *testing.T) {
 	store, _ := newTestContactStore(t)
-	handler, err := newSiteHandler(store, nil)
+	handler, err := newSiteHandler(store, nil, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -121,10 +121,10 @@ func TestContactInvalidAndHoneypotBypassLimiter(t *testing.T) {
 	invalid := validContactForm()
 	invalid.Del("name")
 	bot := validContactForm()
-	bot.Set("website", "filled")
+	bot.Set("contact_guard", "filled")
 	for range contactAttemptLimit + 1 {
 		requireContactFailure(t, submitContact(handler, invalid, "192.0.2.1:1234"), http.StatusBadRequest)
-		requireContactSuccess(t, submitContact(handler, bot, "192.0.2.1:1234"))
+		requireContactFailure(t, submitContact(handler, bot, "192.0.2.1:1234"), http.StatusBadRequest)
 	}
 	if len(contact.limiter.clients) != 0 {
 		t.Fatal("invalid forms or bots consumed limiter state")
@@ -134,6 +134,6 @@ func TestContactInvalidAndHoneypotBypassLimiter(t *testing.T) {
 	}
 	// Their responses remain unchanged even after this client's quota is exhausted.
 	requireContactFailure(t, submitContact(handler, invalid, "192.0.2.1:1234"), http.StatusBadRequest)
-	requireContactSuccess(t, submitContact(handler, bot, "192.0.2.1:1234"))
+	requireContactFailure(t, submitContact(handler, bot, "192.0.2.1:1234"), http.StatusBadRequest)
 	requireContactCount(t, store, 5)
 }

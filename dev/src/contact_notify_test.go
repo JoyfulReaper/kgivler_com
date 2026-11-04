@@ -63,7 +63,7 @@ func TestContactNotificationPublishedAfterSave(t *testing.T) {
 			}))
 			defer server.Close()
 			notifier := newContactNotifier(server.URL+"/test-topic", tc.token)
-			handler, err := newSiteHandler(store, notifier)
+			handler, err := newSiteHandler(store, notifier, nil)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -125,7 +125,7 @@ func TestContactNotificationsDisabled(t *testing.T) {
 		return nil, errors.New("unexpected request")
 	})
 	defer func() { http.DefaultTransport = original }()
-	handler, err := newSiteHandler(store, notifier)
+	handler, err := newSiteHandler(store, notifier, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -147,7 +147,7 @@ func TestContactNotificationHTTPFailure(t *testing.T) {
 			}))
 			defer server.Close()
 			notifier := newContactNotifier(server.URL+"/test-secret-topic", "test-secret-token")
-			handler, err := newSiteHandler(store, notifier)
+			handler, err := newSiteHandler(store, notifier, nil)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -194,7 +194,7 @@ func TestContactNotificationRequestFailure(t *testing.T) {
 				notifier.url = ":test-secret-topic"
 				wantAttempts = 0
 			}
-			handler, err := newSiteHandler(store, notifier)
+			handler, err := newSiteHandler(store, notifier, nil)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -232,8 +232,8 @@ func TestContactNoNotificationWithoutSave(t *testing.T) {
 				form.Del("name")
 				status = http.StatusBadRequest
 			case "honeypot":
-				form = url.Values{"website": {"filled"}}
-				status = http.StatusSeeOther
+				form = url.Values{"contact_guard": {"filled"}}
+				status = http.StatusBadRequest
 			case "rate-limit":
 				for range contactAttemptLimit {
 					contact.limiter.allow("192.0.2.1")
