@@ -32,6 +32,12 @@ data retention/security, and support/termination procedures. The contact
 database currently has no automatic deletion schedule; do not imply otherwise.
 Do not describe HappyPages or HappyPortal features as live before they exist.
 
+## Planned HappyContact integration (not live yet)
+
+The contact form **still uses the Go `POST /contact` handler, local SQLite store, and optional minimal ntfy notification**. No HappyContact call has been added to the Go service. HappyContact's separate FrontDesk smoke-test deployment has now delivered complete messages via SMTP and sent operator alerts, but that does not switch this website's backend.
+
+See [HAPPYCONTACT-INTEGRATION.md](HAPPYCONTACT-INTEGRATION.md) for the intended same-origin Go-to-HappyContact flow, site-specific setup, visitor-IP/proxy considerations, validation, fail-closed behavior, historical data, privacy-notice update and reversible cutover. Do not point the browser directly at the HappyContact public API or remove the existing contact store until an end-to-end site-specific test passes.
+
 ## Contact storage
 
 `DEV_CONTACT_DB_PATH` selects the SQLite file. The development default is
