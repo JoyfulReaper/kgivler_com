@@ -1,8 +1,8 @@
 # dev.kgivler.com contact form integration with HappyContact
 
-**Status: opt-in Go client implemented; no live cutover performed.** SQLite and
-the optional Go ntfy notification remain the default. The live deployment,
-Cloudflare tunnel, and HappyContact service are unchanged by this work.
+**Status: live on FrontDesk since November 4, 2026.** Go handles the public
+form and forwards accepted submissions to the local HappyContact API. SQLite
+remains the code default and the historical Go submission store is retained.
 
 ## Implemented switch
 
@@ -29,9 +29,10 @@ the newly constructed HappyContact request. Without trust enabled, use the
 socket peer IP; tunneled visitors share the proxy's rate-limit budget. This
 flag does not change the existing SQLite-mode, logging, or telemetry helpers.
 
-Tests use a synthetic site GUID and local HTTP servers, not the deployed
-HappyContact service. No real submission, SMTP delivery, or production proxy
-configuration has been tested by this change.
+Automated tests exercise synthetic site GUIDs and local HTTP servers. A
+separate real production submission through the public Go endpoint and
+HappyContact delivery workers was also verified on November 4, 2026; see
+[Production cutover](#production-cutover-verified-november-4-2026).
 
 ## Input compatibility
 
@@ -52,13 +53,13 @@ records are unaffected. See [the README input rules](README.md#contact-storage)
 for the exact phone behavior and source references. No HappyContact code or
 production configuration was changed.
 
-## Current flow (preserve until validated)
+## Current flow
 
-`POST /contact` is a same-origin, `application/x-www-form-urlencoded` form handled by the Go service in `src/contact.go`. It enforces input limits/validation, rejects the `contact_guard` honeypot with HTTP 400, rate-limits valid attempts, stores data in the Go service's SQLite database by default, optionally sends a minimal ntfy notification, then issues HTTP 303 to `/contact-sent.html`. The form works without JavaScript; the optional frontend script only improves submit-state UX. A separate private WireGuard admin listener lists and manages historical Go contact submissions.
+`POST /contact` is a same-origin, `application/x-www-form-urlencoded` form handled by the Go service in `src/contact.go`. It enforces input limits/validation, rejects the `contact_guard` honeypot with HTTP 400, rate-limits valid attempts, forwards accepted production submissions to HappyContact, then issues HTTP 303 to `/contact-sent.html` only after HTTP 202. SQLite and its optional legacy ntfy notifier remain available when the backend is explicitly reverted. The form works without JavaScript; the optional frontend script only improves submit-state UX. A separate private WireGuard admin listener lists and manages historical Go contact submissions.
 
 Do not remove or bypass these behaviors merely to use HappyContact. The existing Go SQLite database contains historical inquiries; keep it recoverable until any migration/retention decision is made.
 
-## Target flow
+## Production flow
 
 ```text
 Browser --same-origin HTML form--> Go POST /contact
@@ -72,7 +73,7 @@ Browser --same-origin HTML form--> Go POST /contact
 
 Prefer the loopback connection because both applications run on FrontDesk. Do **not** make the browser submit directly to `contact.kgivler.com`: that needlessly adds cross-origin requests/CORS work and changes the no-JavaScript form. Keep the public `/contact` route and the existing success/error pages.
 
-## Before any switch
+## Cutover checklist (completed unless noted)
 
 1. In HappyContact's private admin UI, create a **new site specifically for `dev.kgivler.com`** (do not reuse the `HappyContact Smoke Test` site). Configure and verify at least one SMTP destination that sends the complete message to the intended mailbox. An optional ntfy destination is secondary.
 2. Configure and test the implemented client using the settings above. Keep the base URL and site ID server-side. Do not log submissions or provider credentials.
@@ -80,8 +81,65 @@ Prefer the loopback connection because both applications run on FrontDesk. Do **
 4. **Do not silently dual-write** to Go SQLite and HappyContact or automatically fall back to the old store after an uncertain upstream timeout; either can cause duplicate/misleading messages. Plan an explicit, reversible cutover and preserve the old database for rollback/historical access.
 5. Verify the trusted ingress before enabling `DEV_CONTACT_TRUST_CLOUDFLARE_PROXY`. Confirm distinct visitors reach both limiters under distinct canonical IPs, and direct/non-loopback spoofed headers cannot override the socket peer. HappyContact trusts the Go-generated `CF-Connecting-IP` only from loopback. Browser CORS is not needed for this same-origin form.
 6. Test a real submission end-to-end: browser submit/redirect, HappyContact receipt and SQLite jobs, full SMTP email with correct visitor `Reply-To`, optional ntfy, and failures/timeouts. Test honeypot, duplicate-click behavior, validation errors, and rate limiting before switching traffic.
-7. Review the public privacy policy before cutover: currently it describes **Go-owned SQLite storage** and minimal self-hosted ntfy. Once switched, submission data will be stored by HappyContact, the full message will be delivered through an external email relay, and copies will be in encrypted recovery backups. Update the policy to describe the actual processing and recipients rather than prematurely changing it now.
+7. The public privacy policy was updated and deployed before cutover. It discloses the HappyContact database, full-message delivery via Mailjet, self-hosted ntfy, and encrypted recovery backups.
 8. Retain/restore-test historical Go submissions. Keep the old ntfy settings for rollback; the Go send is automatically bypassed in HappyContact mode so it cannot duplicate HappyContact notifications.
+
+## Production cutover (verified November 4, 2026)
+
+- FrontDesk service: `devsite.service`, binary `/usr/local/bin/devsite`,
+  config `/etc/devsite.env`. HappyContact is `happycontact.service`.
+- Public ingress: Cloudflare-managed Tunnel `dev.kgivler.com` ->
+  `http://127.0.0.1:5196`. The Go private admin binds to
+  `10.99.0.14:5197` over WireGuard. Nginx is not part of this public route.
+- Production settings (no credentials shown):
+
+  ```ini
+  DEV_CONTACT_BACKEND=happycontact
+  DEV_HAPPYCONTACT_BASE_URL=http://127.0.0.1:5290
+  DEV_HAPPYCONTACT_SITE_ID=38f0f400-8e96-4727-a7b2-89bd1aadcc8e
+  DEV_CONTACT_TRUST_CLOUDFLARE_PROXY=true
+  ```
+
+- Dedicated HappyContact site has `DevSite Email` (Mailjet SMTP) and
+  `DevSite ntfy` (topic `happycontact-devsite`, credential reference
+  `DevSite`). Both destinations succeeded in one attempt during initial
+  direct-site tests and in the live Go-to-HappyContact test.
+- Public `POST /contact` returned HTTP 303; submission
+  `B24DA123-8183-4E13-A8E5-385B40B2C123` produced two `Succeeded`
+  delivery jobs, both in one attempt. Operator confirmed receiving both the
+  email and ntfy notification.
+- The same test name produced zero rows in the old Go SQLite database.
+  A pre-cutover submission succeeded in Go SQLite (record 11). Two negative
+  tests (invalid phone, populated `contact_guard`) returned HTTP 400 and
+  produced zero HappyContact rows.
+- Public health, systemd listeners, and the November 4 privacy-policy
+  deployment were checked. A normal tunnel request logged the actual IPv6
+  visitor address, not localhost. A deliberately spoofed `CF-Connecting-IP`
+  request was rejected HTTP 403 before reaching Go; this supports but does
+  not constitute a comprehensive header-spoofing audit.
+- Historical Go SQLite: `/var/lib/devsite/contact.db`.
+  Original binary preserved as
+  `/usr/local/bin/devsite.pre-happycontact-20261104T213248Z`.
+  Original configuration backed up at `/etc/devsite.env.pre-happycontact`,
+  with `DEV_CONTACT_BACKEND` unset. Keep these private; the environment
+  file contains operational configuration and may contain credentials.
+
+### Operational rollback
+
+For a backend-only rollback, set `DEV_CONTACT_BACKEND=sqlite` in
+`/etc/devsite.env`, leaving the original `DEV_CONTACT_DB_PATH` and legacy
+ntfy variables intact, then `sudo systemctl restart devsite.service`. This
+changes **new** intake only. Confirm `/health/live`, send a controlled
+submission, and check the Go SQLite admin/storage. Keep HappyContact's database
+and pending jobs; do not assume uncertain/timed-out submissions are absent.
+Reverting the backend does not require replacing the Go binary.
+
+Only if the application binary itself needs rollback, use the preserved
+timestamped executable after deliberately stopping/replacing the service
+binary. Replacing a live executable or editing `/etc/devsite.env` is a
+production change and should be performed during a controlled maintenance
+step. The standard deployment script also writes
+`/usr/local/bin/devsite.backup`, which can be overwritten by later deploys.
 
 ## Rollback
 
@@ -98,12 +156,14 @@ Prefer the loopback connection because both applications run on FrontDesk. Do **
 
 Both modes open the historical Go database at startup and keep the optional
 private Go admin available. No schema change, database deletion/migration, or
-public admin route is part of this integration. The public privacy page remains
-accurate for the default SQLite deployment; update it for actual recipients,
-storage, SMTP relay, and backups before enabling HappyContact in production.
+public admin route was part of this integration. The public privacy page covers
+both SQLite historical records and HappyContact processing.
 
 ## Current HappyContact facts (verified November 4, 2026)
 
 HappyContact is running on FrontDesk with public smoke endpoint `https://contact.kgivler.com` and a loopback API listener. Its separate WireGuard-only operator admin returned HTTP 404 through the public endpoint. The test site delivered ntfy and full Mailjet SMTP messages (with correct visitor `Reply-To`), and its independently configured operator ntfy worker alerted on a deliberately failed destination. FrontDesk's existing encrypted Restic job backs up the HappyContact database consistently and sends to three VPS destinations; a DeepDish restore of the database passed `PRAGMA integrity_check`.
 
-These successes validate a **test site**, not the `dev.kgivler.com` integration. Both ntfy smoke tokens expire roughly November 11, 2026, so rotate before using for unattended operations.
+The production `dev.kgivler.com` site has since been independently tested end
+to end. Its dedicated permanent ntfy credential and the operator alert token
+were installed and verified; the old temporary operator token was revoked.
+The separate smoke-test destination may still rely on a temporary token.
