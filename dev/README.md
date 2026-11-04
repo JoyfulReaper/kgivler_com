@@ -32,11 +32,62 @@ data retention/security, and support/termination procedures. The contact
 database currently has no automatic deletion schedule; do not imply otherwise.
 Do not describe HappyPages or HappyPortal features as live before they exist.
 
-## Planned HappyContact integration (not live yet)
+## Opt-in HappyContact backend (not deployed)
 
-The contact form **still uses the Go `POST /contact` handler, local SQLite store, and optional minimal ntfy notification**. No HappyContact call has been added to the Go service. HappyContact's separate FrontDesk smoke-test deployment has now delivered complete messages via SMTP and sent operator alerts, but that does not switch this website's backend.
+The Go `POST /contact` handler defaults to **SQLite and the existing optional ntfy
+notification**. Deploying this code without changing configuration keeps that
+behavior. The HTML form, submit script, validation, honeypot, local rate limit,
+no-JavaScript flow, confirmation page, and HTTP 303 redirect are unchanged.
 
-See [HAPPYCONTACT-INTEGRATION.md](HAPPYCONTACT-INTEGRATION.md) for the intended same-origin Go-to-HappyContact flow, site-specific setup, visitor-IP/proxy considerations, validation, fail-closed behavior, historical data, privacy-notice update and reversible cutover. Do not point the browser directly at the HappyContact public API or remove the existing contact store until an end-to-end site-specific test passes.
+Server-side environment settings:
+
+| Setting | Behavior |
+| --- | --- |
+| `DEV_CONTACT_BACKEND` | Unset, empty, or `sqlite` uses the existing store. `happycontact` opts in. Other values stop startup. |
+| `DEV_HAPPYCONTACT_BASE_URL` | Required in HappyContact mode; loopback HTTP(S) origin, e.g. `http://127.0.0.1:5290`. Literal loopback IP only; no credentials, path, query, or fragment. |
+| `DEV_HAPPYCONTACT_SITE_ID` | Required nonzero GUID for a newly provisioned `dev.kgivler.com` site. No default or smoke-test site ID. |
+| `DEV_CONTACT_TRUST_CLOUDFLARE_PROXY` | Defaults to `false`. Enable only after verifying the trusted ingress described below. |
+
+HappyContact receives JSON at `/api/v1/sites/{siteId}/submissions` with the trimmed
+`name`, `email`, optional `phone`/`subject`, and `message`. Empty optional fields
+are omitted; no honeypot value or browser headers are copied. The client makes
+one request with a three-second timeout and the incoming request context, with
+no redirects, retries, or environment HTTP proxy. Only **202 Accepted** triggers
+the existing success redirect; acceptance confirms storage, not SMTP delivery.
+
+Upstream 400/422 returns a generic HTTP 400 page, 429 returns 429 with fixed
+`Retry-After: 60`, and 503 returns 503. Other non-202 statuses return 502;
+unreachable/transport failures return 503, and timeouts return 504. Response
+bodies, raw transport errors, URLs, site IDs, and contact fields are not logged
+by the client or echoed in error pages. A timeout may occur after upstream
+storage: there is **no automatic retry, SQLite fallback, or dual write**.
+In this mode the old Go ntfy notifier is bypassed even if configured;
+HappyContact owns delivery. Failed valid attempts still consume the local limit.
+
+In HappyContact mode, the socket peer IP identifies the visitor for both the
+local limiter and the outbound `CF-Connecting-IP` header. With proxy trust
+enabled, a **single parseable `CF-Connecting-IP` from a loopback peer** overrides
+it. `X-Real-IP`, `X-Forwarded-For`, `Forwarded`, malformed/list/duplicate CF
+headers, and forwarding headers from non-loopback callers are ignored. Enable
+trust only when the Go listener is reachable solely through trusted local
+ingress and cloudflared overwrites the CF header. A loopback connection alone
+does not authenticate a proxy. Without trust enabled, tunneled visitors share
+the proxy IP and its rate-limit budget. Existing SQLite-mode IP handling,
+request logging, and telemetry are unchanged.
+
+HappyContact currently validates phone syntax and limits it to 40 characters;
+the Go form still allows its existing 50-character free-text phone field. An
+upstream rejection returns useful generic guidance without silently dropping or
+rewriting that value. Verify site-specific phone acceptance before cutover.
+
+`DEV_CONTACT_DB_PATH` and `DEV_ADMIN_LISTEN` remain active in both modes: the
+historical SQLite store is still opened at startup and the optional private
+admin can read/change its records. New HappyContact submissions are managed in
+HappyContact's separate private admin, not the Go admin.
+
+See [HAPPYCONTACT-INTEGRATION.md](HAPPYCONTACT-INTEGRATION.md) for the remaining
+site setup, end-to-end checks, privacy update, and explicit rollback procedure.
+This change does not alter deployment, the tunnel, or the HappyContact service.
 
 ## Contact storage
 
@@ -58,9 +109,10 @@ name, email, and message. Maximum Unicode character counts are 100 for name,
 `maxlength` may be stricter for characters represented by UTF-16 surrogate pairs.
 Email must parse as a single bare address; phone is only trimmed and length-bound.
 Invalid input returns HTTP 400, excessive bodies 413, and unsupported form media
-types 415. The hidden `website` honeypot skips storage when filled. Both saved
-messages and honeypot submissions redirect with HTTP 303 to the embedded
-`/contact-sent.html` page. No submitted values are echoed into response HTML.
+types 415. The hidden `contact_guard` honeypot returns HTTP 400 without storage
+when filled. Saved messages redirect with HTTP 303 to the embedded
+`/contact-sent.html` page. An unrelated `website` autofill field is ignored.
+No submitted values are echoed into response HTML.
 
 Before deployment, set an absolute database path on persistent local storage
 outside the checkout and static directory, grant the service user access, and
@@ -76,13 +128,14 @@ Existing `DEV_SITE_LISTEN` and `MISSION_CONTROL_*` settings still apply.
 
 Only valid `POST /contact` submissions consume the in-memory limit: five accepted
 attempts per client in a fixed 15-minute window starting with the first attempt.
-The check runs before SQLite writes; a failed write still consumes an attempt.
+The check runs before either backend call; a failed write/request still consumes an attempt.
 Excess attempts receive HTTP 429 with a human-readable page and `Retry-After`
 seconds. Invalid forms retain their validation responses, and honeypot submissions
 return HTTP 400 without consuming limiter state.
 
-Client identification uses the existing `requestRemoteHost` helper, including
-its forwarding-header handling for loopback proxies. Client strings are kept only
+SQLite-mode client identification uses the existing `requestRemoteHost` helper,
+including its forwarding-header handling for loopback proxies. HappyContact mode
+uses the stricter IP handling described above. Client strings are kept only
 in limiter memory, with expired entries removed on each valid submission attempt.
 The limiter resets at process restart and is local to each service process. No IP
 fields or other schema changes are added to SQLite. Existing request logging and
@@ -99,7 +152,7 @@ Set these in the service environment, never in frontend files or committed
 configuration. Use an HTTPS publish URL for a remote server and restrict access
 to the topic as appropriate. No changes are needed to keep notifications disabled.
 
-After SQLite saves a message, the service makes one plain-text HTTP POST with
+In SQLite mode only, after SQLite saves a message, the service makes one plain-text HTTP POST with
 the fixed `Title: New dev.kgivler.com contact` header. The body includes the saved
 message ID, name, and subject (or `(no subject)`). Control characters in name and
 subject are replaced with spaces; neither value is used in HTTP headers. Email,

@@ -16,9 +16,10 @@ import (
 const maxContactBody = 64 << 10
 
 type contactHandler struct {
-	store    *contactStore
-	limiter  *contactLimiter
-	notifier *contactNotifier
+	store        *contactStore
+	limiter      *contactLimiter
+	notifier     *contactNotifier
+	happyContact *happyContactClient
 }
 
 func (h *contactHandler) handleContact(w http.ResponseWriter, r *http.Request) {
@@ -56,9 +57,28 @@ func (h *contactHandler) handleContact(w http.ResponseWriter, r *http.Request) {
 		contactError(w, http.StatusBadRequest, problem)
 		return
 	}
-	if retryAfter := h.limiter.allow(requestRemoteHost(r)); retryAfter > 0 {
+	clientIP := requestRemoteHost(r)
+	if h.happyContact != nil {
+		clientIP = h.happyContact.visitorIP(r)
+	}
+	if retryAfter := h.limiter.allow(clientIP); retryAfter > 0 {
 		w.Header().Set("Retry-After", strconv.Itoa(int((retryAfter+time.Second-1)/time.Second)))
 		contactError(w, http.StatusTooManyRequests, "You've sent several messages recently. Please wait up to 15 minutes before trying again.")
+		return
+	}
+	if h.happyContact != nil {
+		if status := h.happyContact.submit(r.Context(), message, clientIP); status != 0 {
+			problem := "Your submission could not be confirmed. Please try again later or contact me on LinkedIn."
+			if status == http.StatusBadRequest {
+				problem = "Your message was rejected. Please check your contact details, including the optional phone number, or contact me on LinkedIn."
+			} else if status == http.StatusTooManyRequests {
+				w.Header().Set("Retry-After", "60")
+				problem = "The contact service is busy. Please wait at least a minute before trying again, or contact me on LinkedIn."
+			}
+			contactError(w, status, problem)
+			return
+		}
+		http.Redirect(w, r, "/contact-sent.html", http.StatusSeeOther)
 		return
 	}
 	id, err := h.store.save(r.Context(), message)

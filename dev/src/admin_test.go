@@ -68,7 +68,7 @@ func requireAdminStatus(t *testing.T, store *contactStore, id int64, want string
 
 func TestAdminRouteIsolation(t *testing.T) {
 	store, _ := newTestContactStore(t)
-	public, err := newSiteHandler(store, nil)
+	public, err := newSiteHandler(store, nil, nil)
 	if err != nil {
 		t.Fatal(err)
 	}

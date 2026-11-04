@@ -1,10 +1,41 @@
-# Planned dev.kgivler.com contact form integration with HappyContact
+# dev.kgivler.com contact form integration with HappyContact
 
-**Status: design/transition plan only — not implemented.** The Go contact form, its SQLite store and its optional ntfy notification remain the live implementation until an explicit, tested cutover.
+**Status: opt-in Go client implemented; no live cutover performed.** SQLite and
+the optional Go ntfy notification remain the default. The live deployment,
+Cloudflare tunnel, and HappyContact service are unchanged by this work.
+
+## Implemented switch
+
+Set `DEV_CONTACT_BACKEND=happycontact`, `DEV_HAPPYCONTACT_BASE_URL` to the local
+API origin (normally `http://127.0.0.1:5290`), and `DEV_HAPPYCONTACT_SITE_ID` to
+the new site's GUID in protected server configuration. There is no default site
+ID. Missing/invalid enabled configuration stops startup. Unset/empty backend or
+`DEV_CONTACT_BACKEND=sqlite` keeps the original storage/notification path, even
+if HappyContact settings are present.
+
+The client posts validated JSON once, uses a three-second timeout within the
+server's ten-second write timeout, follows no redirects, and bypasses environment
+HTTP proxies. Only 202 triggers the existing 303 success redirect. It never
+falls back, dual-writes, or calls the old ntfy notifier in HappyContact mode.
+See [README.md](README.md#opt-in-happycontact-backend-not-deployed) for response
+mapping and all configuration names.
+
+`DEV_CONTACT_TRUST_CLOUDFLARE_PROXY=false` is the default. Before setting it to
+`true`, verify that the Go listener is accessible only through trusted local
+ingress and cloudflared overwrites `CF-Connecting-IP`. In that mode, only one
+valid IP in that header from a loopback peer is trusted. All other forwarded
+headers are ignored; the canonical IP is used for both the contact limiter and
+the newly constructed HappyContact request. Without trust enabled, use the
+socket peer IP; tunneled visitors share the proxy's rate-limit budget. This
+flag does not change the existing SQLite-mode, logging, or telemetry helpers.
+
+Tests use a synthetic site GUID and local HTTP servers, not the deployed
+HappyContact service. No real submission, SMTP delivery, or production proxy
+configuration has been tested by this change.
 
 ## Current flow (preserve until validated)
 
-`POST /contact` is a same-origin, `application/x-www-form-urlencoded` form handled by the Go service in `src/contact.go`. It enforces input limits/validation, rejects the `contact_guard` honeypot, rate-limits accepted submissions, stores data in the Go service's SQLite database, optionally sends a minimal ntfy notification, then issues HTTP 303 to `/contact-sent.html`. The form works without JavaScript; the optional frontend script only improves submit-state UX. A separate private WireGuard admin listener lists and manages historical Go contact submissions.
+`POST /contact` is a same-origin, `application/x-www-form-urlencoded` form handled by the Go service in `src/contact.go`. It enforces input limits/validation, rejects the `contact_guard` honeypot with HTTP 400, rate-limits valid attempts, stores data in the Go service's SQLite database by default, optionally sends a minimal ntfy notification, then issues HTTP 303 to `/contact-sent.html`. The form works without JavaScript; the optional frontend script only improves submit-state UX. A separate private WireGuard admin listener lists and manages historical Go contact submissions.
 
 Do not remove or bypass these behaviors merely to use HappyContact. The existing Go SQLite database contains historical inquiries; keep it recoverable until any migration/retention decision is made.
 
@@ -25,13 +56,32 @@ Prefer the loopback connection because both applications run on FrontDesk. Do **
 ## Before any switch
 
 1. In HappyContact's private admin UI, create a **new site specifically for `dev.kgivler.com`** (do not reuse the `HappyContact Smoke Test` site). Configure and verify at least one SMTP destination that sends the complete message to the intended mailbox. An optional ntfy destination is secondary.
-2. Implement a small, bounded-timeout Go-to-HappyContact JSON client behind an explicit server-side opt-in flag/configuration. The exact config names are **not implemented yet**. Store the HappyContact site ID and base URL in protected server config, never in browser scripts. Do not log submissions or provider credentials.
-3. Map existing `name`, `email`, optional `phone`/`subject`, and `message` fields exactly; retain local validation and its useful error UX. Map HappyContact `202` to the same 303 success redirect; handle 4xx, 429, 503, timeouts, and unreachable API without claiming the message was saved. Honor bounded timeouts relative to the Go server's 10-second write timeout.
+2. Configure and test the implemented client using the settings above. Keep the base URL and site ID server-side. Do not log submissions or provider credentials.
+3. Verify the field mapping and failure pages with the provisioned site. Local validation is unchanged; HappyContact currently also validates phone syntax and has a 40-character phone limit versus the Go form's 50-character limit. Such a rejection returns HTTP 400 with guidance to check contact details; values are never silently rewritten or discarded. Test omitted optional fields as well as valid supplied fields.
 4. **Do not silently dual-write** to Go SQLite and HappyContact or automatically fall back to the old store after an uncertain upstream timeout; either can cause duplicate/misleading messages. Plan an explicit, reversible cutover and preserve the old database for rollback/historical access.
-5. Review how the actual visitor IP reaches HappyContact through the loopback Go proxy. HappyContact rate limits by IP/site/global and trusts `CF-Connecting-IP` only from loopback. Do not forward arbitrary untrusted client-supplied IP headers; validate at the trusted ingress boundary. Browser CORS is not needed for a same-origin form.
+5. Verify the trusted ingress before enabling `DEV_CONTACT_TRUST_CLOUDFLARE_PROXY`. Confirm distinct visitors reach both limiters under distinct canonical IPs, and direct/non-loopback spoofed headers cannot override the socket peer. HappyContact trusts the Go-generated `CF-Connecting-IP` only from loopback. Browser CORS is not needed for this same-origin form.
 6. Test a real submission end-to-end: browser submit/redirect, HappyContact receipt and SQLite jobs, full SMTP email with correct visitor `Reply-To`, optional ntfy, and failures/timeouts. Test honeypot, duplicate-click behavior, validation errors, and rate limiting before switching traffic.
 7. Review the public privacy policy before cutover: currently it describes **Go-owned SQLite storage** and minimal self-hosted ntfy. Once switched, submission data will be stored by HappyContact, the full message will be delivered through an external email relay, and copies will be in encrypted recovery backups. Update the policy to describe the actual processing and recipients rather than prematurely changing it now.
-8. Retain/restore-test historical Go submissions and document the rollback procedure. Remove the old Go ntfy send only when HappyContact delivery is proven so a single contact doesn't generate duplicate notifications.
+8. Retain/restore-test historical Go submissions. Keep the old ntfy settings for rollback; the Go send is automatically bypassed in HappyContact mode so it cannot duplicate HappyContact notifications.
+
+## Rollback
+
+1. Set `DEV_CONTACT_BACKEND=sqlite` (or unset it) in the Go service environment
+   and restart the Go service. Keep the original `DEV_CONTACT_DB_PATH` pointing
+   to its existing persistent database; never replace it with HappyContact's DB.
+2. Confirm a test submission is saved in Go SQLite, appears in the existing
+   private admin, redirects to `/contact-sent.html`, and uses the old optional
+   ntfy settings if configured. HappyContact settings are ignored in this mode.
+3. Retain HappyContact's database and inspect its accepted submissions and
+   pending delivery jobs separately. Rollback affects new intake only; it does
+   not migrate records or stop already queued HappyContact deliveries. A timed
+   out request may already be stored there, so reconcile before manual resends.
+
+Both modes open the historical Go database at startup and keep the optional
+private Go admin available. No schema change, database deletion/migration, or
+public admin route is part of this integration. The public privacy page remains
+accurate for the default SQLite deployment; update it for actual recipients,
+storage, SMTP relay, and backups before enabling HappyContact in production.
 
 ## Current HappyContact facts (verified November 4, 2026)
 

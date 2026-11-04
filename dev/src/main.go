@@ -16,6 +16,10 @@ var staticFiles embed.FS
 
 func main() {
 	addr := getenv("DEV_SITE_LISTEN", "127.0.0.1:5196")
+	happyContact, err := happyContactFromEnv()
+	if err != nil {
+		log.Fatal(err)
+	}
 	store, err := openContactStore(getenv("DEV_CONTACT_DB_PATH", "data/contact.db"))
 	if err != nil {
 		log.Fatalf("initialize contact storage: %v", err)
@@ -23,7 +27,7 @@ func main() {
 	defer store.db.Close()
 
 	notifier := newContactNotifier(os.Getenv("DEV_CONTACT_NTFY_URL"), os.Getenv("DEV_CONTACT_NTFY_TOKEN"))
-	mux, err := newSiteHandler(store, notifier)
+	mux, err := newSiteHandler(store, notifier, happyContact)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -66,7 +70,7 @@ func main() {
 	}
 }
 
-func newSiteHandler(store *contactStore, notifier *contactNotifier) (http.Handler, error) {
+func newSiteHandler(store *contactStore, notifier *contactNotifier, happyContact *happyContactClient) (http.Handler, error) {
 	staticFS, err := fs.Sub(staticFiles, "static")
 	if err != nil {
 		return nil, err
@@ -75,7 +79,7 @@ func newSiteHandler(store *contactStore, notifier *contactNotifier) (http.Handle
 	mux := http.NewServeMux()
 
 	mux.Handle("GET /", http.FileServer(http.FS(staticFS)))
-	contact := &contactHandler{store: store, limiter: newContactLimiter(time.Now), notifier: notifier}
+	contact := &contactHandler{store: store, limiter: newContactLimiter(time.Now), notifier: notifier, happyContact: happyContact}
 	mux.HandleFunc("POST /contact", contact.handleContact)
 
 	mux.HandleFunc("GET /health/live", func(w http.ResponseWriter, r *http.Request) {
