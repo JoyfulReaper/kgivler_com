@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>HappyContact — Self-Hosted Contact Form Backend | Kyle Givler</title>
+
+    <meta
+      name="description"
+      content="HappyContact is proprietary self-hosted contact form backend software built with ASP.NET Core, SQLite, SMTP and ntfy. Inquire about licensing." />
+
+    <link rel="canonical" href="https://www.kgivler.com/projects/happycontact/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="HappyContact — Self-Hosted Contact Form Backend | Kyle Givler" />
+    <meta
+      property="og:description"
+      content="A proprietary .NET contact form backend with durable SQLite storage, SMTP delivery, ntfy notifications and private administration." />
+    <meta property="og:url" content="https://www.kgivler.com/projects/happycontact/" />
+    <meta property="og:site_name" content="Kyle Givler" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="HappyContact — Self-Hosted Contact Form Backend | Kyle Givler" />
+    <meta
+      name="twitter:description"
+      content="A proprietary .NET contact form backend with durable SQLite storage, SMTP delivery, ntfy notifications and private administration." />
+
+    <link
+      href="/vendor/bootstrap-5.3.3/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous" />
+
+    <link
+      rel="stylesheet"
+      href="/vendor/fontawesome-6.5.1/css/all.min.css"
+      integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="/styles.css?v=6" />
+    <link rel="stylesheet" href="../projects.css?v=1" />
+    <link rel="stylesheet" href="../project-detail.css?v=1" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+
+  <body class="terminal-theme projects-page project-detail-page">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <div class="projects-container">
+      <header class="projects-header">
+        <a class="projects-brand" href="/">Kyle Givler<span aria-hidden="true">_</span></a>
+
+        <nav class="terminal-nav" aria-label="Main navigation">
+          <a href="/">Home</a>
+          <a href="/projects/" aria-current="page">Projects</a>
+          <a href="/lab/">Lab</a>
+          <a href="/services/">Systems</a>
+          <a href="/vps-reviews/">VPS Reviews</a>
+          <a href="https://dev.kgivler.com/" class="terminal-nav-primary">Hire Me</a>
+        </nav>
+      </header>
+
+      <main id="main-content">
+        <header class="project-detail-hero">
+          <p class="projects-kicker"><span class="prompt" aria-hidden="true">~/</span>projects/happycontact</p>
+          <h1>HappyContact</h1>
+          <p class="project-detail-lede">A self-hosted contact form backend for websites that need reliable submission storage, email delivery, and notifications without rebuilding the plumbing from scratch.</p>
+          <div class="projects-actions project-detail-actions">
+            <a href="https://dev.kgivler.com/#contact" class="terminal-btn-inline">Inquire about HappyContact <span aria-hidden="true">↗</span></a>
+            <a href="/projects/" class="terminal-btn-inline">Projects <span aria-hidden="true">←</span></a>
+          </div>
+          <p class="project-detail-stack">Proprietary software · .NET 10 · ASP.NET Core · EF Core · SQLite · SMTP · ntfy</p>
+        </header>
+        <section class="project-detail-section" aria-labelledby="why-heading">
+          <h2 id="why-heading">Contact forms need more than a POST endpoint</h2>
+          <p>A contact form starts small, then grows validation, abuse controls, persistent storage, notification delivery, and administration. HappyContact takes care of that backend work while letting each website keep its own design and user experience.</p>
+          <p>My own <a href="https://dev.kgivler.com/">development-services website</a> is the first real deployment. Its Go form forwards accepted messages to a local HappyContact instance written in .NET.</p>
+        </section>
+        <section class="project-detail-section" aria-labelledby="features-heading">
+          <h2 id="features-heading">What it does</h2>
+          <div class="project-decision-grid">
+            <article class="project-decision-card"><h3>Validated submissions</h3><p>An ASP.NET Core API handles contact details, validation, and abuse protection before accepting inquiries.</p></article>
+            <article class="project-decision-card"><h3>Durable delivery</h3><p>SQLite stores submissions and per-destination jobs, so a notification is not the only record of an inquiry.</p></article>
+            <article class="project-decision-card"><h3>SMTP and ntfy</h3><p>Background workers deliver complete messages by email and concise notifications through ntfy, with delivery status and failure handling.</p></article>
+            <article class="project-decision-card"><h3>Private administration</h3><p>An access-restricted admin interface manages sites, notification destinations, and received messages.</p></article>
+          </div>
+        </section>
+        <section class="project-detail-section" aria-labelledby="architecture-heading">
+          <h2 id="architecture-heading">How the live setup works</h2>
+          <p>The public form stays on the website domain. The website server forwards the validated submission locally. HappyContact stores it and queues delivery before acknowledging acceptance; notifications run separately in background workers.</p>
+          <div class="project-architecture" role="img" aria-label="A website contact form sends a validated submission to the HappyContact ASP.NET Core API. HappyContact persists submissions and delivery jobs in SQLite. Background workers deliver messages through SMTP and ntfy.">
+            <div class="project-architecture-row"><div class="project-architecture-box"><strong>Website contact form</strong><span>dev.kgivler.com · Go</span></div></div>
+            <span class="project-architecture-arrow" aria-hidden="true">↓ Local HTTP</span>
+            <div class="project-architecture-row"><div class="project-architecture-box project-architecture-accent"><strong>HappyContact API</strong><span>ASP.NET Core · validation · intake</span></div></div>
+            <span class="project-architecture-arrow" aria-hidden="true">↓ Durable jobs</span>
+            <div class="project-architecture-row"><div class="project-architecture-box"><strong>SQLite</strong><span>submissions · destinations · delivery history</span></div></div>
+            <span class="project-architecture-arrow" aria-hidden="true">↓ Background workers</span>
+            <div class="project-architecture-row project-architecture-split">
+              <div class="project-architecture-box"><strong>SMTP email</strong><span>complete inquiry</span></div>
+              <div class="project-architecture-box"><strong>ntfy</strong><span>short notification</span></div>
+            </div>
+          </div>
+          <p>The production deployment also uses operator alerts for permanent delivery failures and encrypted recovery backups. This is self-hosted software, not a publicly available hosted SaaS platform.</p>
+        </section>
+        <section class="project-detail-section" aria-labelledby="proof-heading">
+          <h2 id="proof-heading">Already in production</h2>
+          <p>HappyContact is handling the actual contact form on my development-services site. The production cutover verified a submission flowing through the Go form into HappyContact, where SMTP and ntfy delivery jobs both succeeded. The earlier Go database remains available for historical messages.</p>
+          <p class="project-detail-note">The live form is a working example, not a public demo instance or a customer trial account.</p>
+        </section>
+        <section class="project-detail-section" aria-labelledby="stack-heading">
+          <h2 id="stack-heading">Technology</h2>
+          <div class="project-tech-list" aria-label="HappyContact technology stack">
+            <span>.NET 10</span><span>ASP.NET Core</span><span>C#</span><span>EF Core</span><span>SQLite</span><span>Background workers</span><span>SMTP</span><span>ntfy</span><span>Linux / systemd</span>
+          </div>
+        </section>
+        <section class="project-detail-section" aria-labelledby="availability-heading">
+          <h2 id="availability-heading">Interested in HappyContact for your website?</h2>
+          <p>HappyContact is <strong>proprietary software, not open source</strong>. If you want a contact form backend for your own website, contact me to discuss purchasing or licensing HappyContact, your integration requirements, and deployment options. Pricing and licensing terms are available by inquiry; there is no public checkout or self-service download.</p>
+          <p><strong>Use the contact form on my development-services website</strong> and mention <strong>HappyContact</strong> in the subject or message. That form runs on HappyContact itself.</p>
+          <div class="projects-actions project-detail-footer-actions">
+            <a href="https://dev.kgivler.com/#contact" class="terminal-btn-inline">Ask about licensing HappyContact <span aria-hidden="true">↗</span></a>
+            <a href="/projects/" class="terminal-btn-inline"><span aria-hidden="true">←</span> Back to projects</a>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="site-footer-links">
+          <span>Also available on:</span>
+          <a href="https://www.kgivler.com/">Clearnet</a>
+          <a href="http://site.ygg.kgivler.com/">Yggdrasil</a>
+          <a href="https://kgivler.dn42/">DN42</a>
+          <a href="http://bmhbwuvcvdof5aenq2ocow4rsqzfwxttdy4o6tbro2kohzxyytfq.b32.i2p/">I2P</a>
+        </div>
+
+        <div class="site-footer-links">
+          <a href="https://github.com/JoyfulReaper/kgivler_com">Project / Source</a>
+        </div>
+
+        <div class="site-footer-links">
+          <span>Network projects:</span>
+          <a href="https://yggdrasil-network.github.io/">Yggdrasil</a>
+          <a href="https://dn42.dev/Home">DN42</a>
+          <a href="https://i2p.net/">I2P</a>
+        </div>
+
+        <div class="site-footer-links">
+          <span>© Kyle Givler</span>
+          <span aria-hidden="true">·</span>
+          <a href="https://dev.kgivler.com/">Development Services</a>
+          <span aria-hidden="true">·</span>
+          <a href="/vps-reviews/">VPS Reviews</a>
+        </div>
+
+        <p class="site-footer-note" data-i2p-note hidden>
+          This is the I2P deployment. Browser assets are local; some optional
+          integrations may be unavailable.
+        </p>
+      </footer>
+    </div>
+
+    <script type="module" src="/js/network-presentation.js"></script>
+  </body>
+</html>
