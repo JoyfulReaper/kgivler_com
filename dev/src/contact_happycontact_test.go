@@ -206,7 +206,7 @@ func TestHappyContactValidationAndRateLimit(t *testing.T) {
 	defer server.Close()
 	handler := testHappyContactHandler(t, store, testHappyContactClient(t, server.URL))
 	for _, tc := range []struct{ field, value string }{
-		{"name", ""}, {"email", "invalid"}, {"message", ""}, {"phone", strings.Repeat("1", 51)}, {"contact_guard", "filled"},
+		{"name", ""}, {"email", "invalid"}, {"message", ""}, {"phone", strings.Repeat("1", 41)}, {"contact_guard", "filled"},
 	} {
 		form := validContactForm()
 		form.Set(tc.field, tc.value)

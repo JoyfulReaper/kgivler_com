@@ -36,8 +36,10 @@ Do not describe HappyPages or HappyPortal features as live before they exist.
 
 The Go `POST /contact` handler defaults to **SQLite and the existing optional ntfy
 notification**. Deploying this code without changing configuration keeps that
-behavior. The HTML form, submit script, validation, honeypot, local rate limit,
-no-JavaScript flow, confirmation page, and HTTP 303 redirect are unchanged.
+behavior. The form still posts to `/contact`; its submit script, honeypot, local
+rate limit, no-JavaScript flow, confirmation page, and HTTP 303 redirect remain.
+Phone validation and Unicode subject/email limits now match HappyContact before
+either backend is called; see the input rules below.
 
 Server-side environment settings:
 
@@ -75,10 +77,9 @@ does not authenticate a proxy. Without trust enabled, tunneled visitors share
 the proxy IP and its rate-limit budget. Existing SQLite-mode IP handling,
 request logging, and telemetry are unchanged.
 
-HappyContact currently validates phone syntax and limits it to 40 characters;
-the Go form still allows its existing 50-character free-text phone field. An
-upstream rejection returns useful generic guidance without silently dropping or
-rewriting that value. Verify site-specific phone acceptance before cutover.
+The shared Go validator now checks HappyContact's phone and string-length rules
+locally, including in SQLite mode. This intentionally narrows the previously
+accepted free-text phone field; historical stored records are unchanged.
 
 `DEV_CONTACT_DB_PATH` and `DEV_ADMIN_LISTEN` remain active in both modes: the
 historical SQLite store is still opened at startup and the optional private
@@ -104,10 +105,36 @@ non-null; omitted phone and subject are stored as empty strings. No IP address
 or request metadata is stored in a contact record.
 
 `POST /contact` accepts URL-encoded forms up to 64 KiB, trims values, and requires
-name, email, and message. Maximum Unicode character counts are 100 for name,
-254 for email, 50 for phone, 200 for subject, and 5,000 for message. The browser's
-`maxlength` may be stricter for characters represented by UTF-16 surrogate pairs.
-Email must parse as a single bare address; phone is only trimmed and length-bound.
+name, email, and message. Limits remain 100 Unicode characters for name,
+254 for email, and 5,000 for message. Subject is limited to 200 UTF-16 units,
+matching .NET and HTML `maxlength`: symbols outside the BMP count as two.
+Email also has HappyContact's 320-UTF-16-unit cap. Name/message limits already
+fit HappyContact's 200/10,000-unit caps; those inputs are not further restricted.
+The browser's `maxlength` can still be stricter than the server for name,
+email, and message containing supplementary characters. Email must parse as a
+single bare address, as before.
+
+Phone is optional, with a **40-character maximum** in both HTML and Go (formerly
+50). Validation matches HappyContact's .NET 10 `[Phone]` and `[StringLength(40)]`:
+the main number needs at least one decimal digit and permits Unicode whitespace,
+`-`, `.`, `(`, and `)`. Decimal digits within the BMP, including Arabic and
+fullwidth digits, are accepted; supplementary-plane digits are not. An optional
+case-insensitive `x`, `ext`, or `ext.` suffix must have one or more decimal digits
+after optional leading whitespace, with no spaces/punctuation between those
+extension digits. Plus signs are ignored **only while checking format** and
+still count toward the length limit. There is no country-specific digit count or
+parenthesis-balancing rule. Vanity letters, `/`, `#` extensions, and missing or
+malformed extension digits are rejected locally with an example and the option
+to leave phone blank. Omitted/whitespace-only phone remains optional.
+
+These intentional restrictions apply in both backend modes so rollback keeps
+the same form behavior. Apart from the existing outer-whitespace trimming, no
+phone formatting is rewritten, truncated, or discarded. Rules were checked
+against HappyContact's `dev` [submission contract](https://github.com/JoyfulReaper/HappyContact/blob/dev/src/HappyContact.Core/Contracts/SubmitContactRequest.cs),
+the .NET [PhoneAttribute implementation](https://github.com/dotnet/runtime/blob/v10.0.0/src/libraries/System.ComponentModel.Annotations/src/System/ComponentModel/DataAnnotations/PhoneAttribute.cs),
+and a local .NET 10.0.14 runtime probe. Ordinary upstream site/queue/rate-limit
+rejections can still occur even for valid input.
+
 Invalid input returns HTTP 400, excessive bodies 413, and unsupported form media
 types 415. The hidden `contact_guard` honeypot returns HTTP 400 without storage
 when filled. Saved messages redirect with HTTP 303 to the embedded

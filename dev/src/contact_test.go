@@ -184,7 +184,7 @@ func TestContactOversizedFields(t *testing.T) {
 		field string
 		limit int
 	}{
-		{"name", 100}, {"email", 254}, {"phone", 50}, {"subject", 200}, {"message", 5000},
+		{"name", 100}, {"email", 254}, {"phone", 40}, {"subject", 200}, {"message", 5000},
 	} {
 		t.Run(tc.field, func(t *testing.T) {
 			store, _ := newTestContactStore(t)

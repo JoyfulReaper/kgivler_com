@@ -340,7 +340,8 @@
                     <input id="contact-email" name="email" type="email" autocomplete="email" required maxlength="254">
 
                     <label for="contact-phone">Phone (optional)</label>
-                    <input id="contact-phone" name="phone" type="tel" autocomplete="tel" maxlength="50">
+                    <input id="contact-phone" name="phone" type="tel" autocomplete="tel" maxlength="40" aria-describedby="contact-phone-help">
+                    <p id="contact-phone-help">Up to 40 characters, e.g. +1 (555) 123-4567 ext. 9.</p>
 
                     <label for="contact-subject">Subject (optional)</label>
                     <input id="contact-subject" name="subject" maxlength="200">

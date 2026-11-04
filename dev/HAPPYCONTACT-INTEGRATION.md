@@ -33,6 +33,25 @@ Tests use a synthetic site GUID and local HTTP servers, not the deployed
 HappyContact service. No real submission, SMTP delivery, or production proxy
 configuration has been tested by this change.
 
+## Input compatibility
+
+The shared Go validator and HTML phone limit now enforce HappyContact's
+40-character phone maximum before either backend is called. Phone format rules
+were inspected in HappyContact's `dev` contract and .NET's `PhoneAttribute`, then
+checked with .NET 10.0.14. Spaces, common punctuation, BMP decimal digits, plus
+signs, and supported `x`/`ext`/`ext.` extensions are accepted; malformed values
+receive a local HTTP 400 with guidance, without consuming rate-limit state.
+Omitted/blank phone is still optional, and existing outer-whitespace trimming
+is the only change to a submitted number's representation.
+
+Subject now uses the upstream 200-UTF-16-unit limit, and email keeps its existing
+254-character limit plus the upstream 320-unit cap. Name/message limits already
+fit upstream's UTF-16 caps. These intentional input restrictions apply to SQLite
+mode too, so switching backends does not change accepted formats. Existing stored
+records are unaffected. See [the README input rules](README.md#contact-storage)
+for the exact phone behavior and source references. No HappyContact code or
+production configuration was changed.
+
 ## Current flow (preserve until validated)
 
 `POST /contact` is a same-origin, `application/x-www-form-urlencoded` form handled by the Go service in `src/contact.go`. It enforces input limits/validation, rejects the `contact_guard` honeypot with HTTP 400, rate-limits valid attempts, stores data in the Go service's SQLite database by default, optionally sends a minimal ntfy notification, then issues HTTP 303 to `/contact-sent.html`. The form works without JavaScript; the optional frontend script only improves submit-state UX. A separate private WireGuard admin listener lists and manages historical Go contact submissions.
@@ -57,7 +76,7 @@ Prefer the loopback connection because both applications run on FrontDesk. Do **
 
 1. In HappyContact's private admin UI, create a **new site specifically for `dev.kgivler.com`** (do not reuse the `HappyContact Smoke Test` site). Configure and verify at least one SMTP destination that sends the complete message to the intended mailbox. An optional ntfy destination is secondary.
 2. Configure and test the implemented client using the settings above. Keep the base URL and site ID server-side. Do not log submissions or provider credentials.
-3. Verify the field mapping and failure pages with the provisioned site. Local validation is unchanged; HappyContact currently also validates phone syntax and has a 40-character phone limit versus the Go form's 50-character limit. Such a rejection returns HTTP 400 with guidance to check contact details; values are never silently rewritten or discarded. Test omitted optional fields as well as valid supplied fields.
+3. Verify the field mapping and failure pages with the provisioned site. Local validation now matches the inspected phone and string-length rules; test omitted optional fields, supported phone formats, and Unicode subject/email boundaries. Values are never silently rewritten or discarded. Site enablement, queue capacity, rate limits, and future upstream contract changes can still reject a locally valid submission.
 4. **Do not silently dual-write** to Go SQLite and HappyContact or automatically fall back to the old store after an uncertain upstream timeout; either can cause duplicate/misleading messages. Plan an explicit, reversible cutover and preserve the old database for rollback/historical access.
 5. Verify the trusted ingress before enabling `DEV_CONTACT_TRUST_CLOUDFLARE_PROXY`. Confirm distinct visitors reach both limiters under distinct canonical IPs, and direct/non-loopback spoofed headers cannot override the socket peer. HappyContact trusts the Go-generated `CF-Connecting-IP` only from loopback. Browser CORS is not needed for this same-origin form.
 6. Test a real submission end-to-end: browser submit/redirect, HappyContact receipt and SQLite jobs, full SMTP email with correct visitor `Reply-To`, optional ntfy, and failures/timeouts. Test honeypot, duplicate-click behavior, validation errors, and rate limiting before switching traffic.
