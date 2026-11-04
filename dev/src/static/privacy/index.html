@@ -31,7 +31,7 @@
                     Here's what I collect when you visit my development website
                     or send me a message, and why.
                 </p>
-                <p><strong>Last updated:</strong> October 21, 2026</p>
+                <p><strong>Last updated:</strong> November 4, 2026</p>
             </div>
         </section>
 
@@ -61,7 +61,9 @@
                         The contact form asks for your name, email address, and
                         message. You can also provide a phone number and subject.
                         I store your submission, its date and time, and a status
-                        such as new or read in a database I operate.
+                        such as new or read in databases I operate. Older inquiries
+                        remain in my previous contact database, which I keep for
+                        historical access.
                     </p>
                     <p>
                         I use the information to read and respond to your inquiry,
@@ -71,9 +73,18 @@
                     </p>
                     <p>
                         I use a self-hosted ntfy server for contact notifications.
-                        When notifications are enabled, it receives the message ID,
-                        your name, and the subject you entered. It does not receive
-                        your email address, phone number, or full message.
+                        When enabled, it receives a brief notification about the
+                        inquiry rather than your full contact message.
+                    </p>
+                    <p>
+                        My HappyContact delivery system can also send complete
+                        submissions to my email inbox through Mailjet, a third-party
+                        email delivery provider. When that delivery is used, Mailjet
+                        processes the details needed to relay your message, including
+                        your name, email address, any optional phone number or subject,
+                        and the full message. Your email address may be used as the
+                        reply-to address so I can respond. The older contact-form
+                        backend stores inquiries locally without this email relay.
                     </p>
                 </div>
             </div>
@@ -118,8 +129,10 @@
                         I use hosting, networking, and security providers to keep
                         this site accessible, including Cloudflare for web traffic
                         delivery. Those providers may process connection information
-                        as part of delivering the site. Contact notifications
-                        go to an ntfy server I operate myself.
+                        as part of delivering the site. Brief contact notifications
+                        go to an ntfy server I operate myself. Complete contact
+                        messages may also be relayed through Mailjet as described
+                        above.
                     </p>
                     <p>
                         I don't sell contact messages or use them to build an
@@ -146,6 +159,13 @@
                         You can ask me to review or delete a message, subject
                         to any records I need to keep for legal or legitimate
                         business reasons.
+                    </p>
+                    <p>
+                        Contact submissions may also be included in encrypted
+                        recovery backups stored on other servers I operate.
+                        Backup copies are retained according to backup schedules
+                        and may remain after a message is removed from the live
+                        database until those copies expire.
                     </p>
                     <p>
                         Server logs and monitoring events are kept according to
