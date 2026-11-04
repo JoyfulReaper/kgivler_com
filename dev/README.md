@@ -32,14 +32,19 @@ data retention/security, and support/termination procedures. The contact
 database currently has no automatic deletion schedule; do not imply otherwise.
 Do not describe HappyPages or HappyPortal features as live before they exist.
 
-## Opt-in HappyContact backend (not deployed)
+## HappyContact backend (live on FrontDesk)
 
-The Go `POST /contact` handler defaults to **SQLite and the existing optional ntfy
-notification**. Deploying this code without changing configuration keeps that
-behavior. The form still posts to `/contact`; its submit script, honeypot, local
-rate limit, no-JavaScript flow, confirmation page, and HTTP 303 redirect remain.
-Phone validation and Unicode subject/email limits now match HappyContact before
-either backend is called; see the input rules below.
+**Production status (November 4, 2026):** `dev.kgivler.com` uses HappyContact
+for new form submissions. FrontDesk runs the Go service on `127.0.0.1:5196`
+and HappyContact on `127.0.0.1:5290`; Cloudflare Tunnel routes directly to Go.
+The existing Go SQLite database remains in place for historical inquiries and
+rollback. SQLite remains the **code default** whenever `DEV_CONTACT_BACKEND` is
+unset, but FrontDesk explicitly selects `happycontact` in `/etc/devsite.env`.
+
+The browser form still posts to Go's `/contact`; its submit script, honeypot,
+local rate limit, no-JavaScript flow, confirmation page, and HTTP 303 redirect
+remain. Phone validation and Unicode subject/email limits match HappyContact
+before either backend is called; see the input rules below.
 
 Server-side environment settings:
 
@@ -86,9 +91,10 @@ historical SQLite store is still opened at startup and the optional private
 admin can read/change its records. New HappyContact submissions are managed in
 HappyContact's separate private admin, not the Go admin.
 
-See [HAPPYCONTACT-INTEGRATION.md](HAPPYCONTACT-INTEGRATION.md) for the remaining
-site setup, end-to-end checks, privacy update, and explicit rollback procedure.
-This change does not alter deployment, the tunnel, or the HappyContact service.
+See [HAPPYCONTACT-INTEGRATION.md](HAPPYCONTACT-INTEGRATION.md) for the
+production configuration, verified cutover checks, known limitations, and
+rollback procedure. The public [privacy policy](src/static/privacy/index.html)
+was updated and published before the backend switch.
 
 ## Contact storage
 
